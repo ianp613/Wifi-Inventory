@@ -17,10 +17,13 @@
         <thead>
             <tr>
                 <td class="text-start">ID</td>
-                <td class="text-start">Description</td>
-                <td class="text-start">Model No.</td>
-                <td class="text-start">Barcode (FPOSI)</td>
+                <td class="text-start">IP</td>
+                <td class="text-start">Hostname</td>
+                <td class="text-start">Site/Location</td>
+                <td class="text-start">Server</td>
                 <td class="text-start">Status</td>
+                <td class="text-start">Web Mgmt. Port</td>
+                <td class="text-start">Credentials</td>
                 <td style="width: 100px; !important">Action</td>
             </tr>
         </thead>

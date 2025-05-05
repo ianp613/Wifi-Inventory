@@ -39,6 +39,10 @@ if(document.getElementById("login")){
         }else{
             login_alert.style = "display: flex !important; height: 30px;"
             login_alert.innerText = res.message
+
+            setTimeout(() => {
+                login_alert.style = "display: none !important; height: 30px;"
+            }, 2000);
         }
     }
 }

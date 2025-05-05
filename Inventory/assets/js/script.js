@@ -83,6 +83,8 @@ if(document.getElementById("sidebar")){
     window.addEventListener('load', checkScreenSize);
     window.addEventListener('resize', checkScreenSize);
 }
+
+// PUBLIC
 document.addEventListener('contextmenu', event => {
     event.preventDefault();
 });
@@ -93,3 +95,24 @@ elements.forEach((element) => {
     this.value = this.value.replace(/[']/g, "");
   });
 });
+
+document.getElementById("ip_range_from").addEventListener("input", function() {
+    this.value = this.value.replace(/[^0-9.]/g, "");
+});
+
+document.getElementById("ip_range_to").addEventListener("input", function() {
+    this.value = this.value.replace(/[^0-9.]/g, "");
+});
+
+document.getElementById("ip_subnet").addEventListener("input", function() {
+    this.value = this.value.replace(/[^0-9.]/g, "");
+});
+
+document.getElementById("edit_ip_subnet").addEventListener("input", function() {
+    this.value = this.value.replace(/[^0-9.]/g, "");
+});
+
+let unclose = {
+    backdrop: 'static',
+    keyboard: false
+}

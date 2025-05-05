@@ -3,22 +3,21 @@
     include("../../includes.php");
     $data = json_decode(file_get_contents('php://input'), true);
 
-    if($data["id"]) {
-        $entry = new Equipment_Entry;
+    if($data["nid"]){
+        $ip = new IP_Address;
+        $ip = DB::where($ip,"nid","=",$data["nid"]);
         $response = [
             "status" => true,
-            "type" => "info",
-            "size" => null,
-            "message" => "Edit entry with ID ".$data["id"],
-            "entry" => DB::find($entry,$data["id"])
+            "ip" => $ip
         ];
     }else{
         $response = [
             "status" => false,
-            "type" => "error",
+            "type" => "warning",
             "size" => null,
-            "message" => "Entry not found."
+            "message" => "Please select an network first."
         ];
     }
+        
     echo json_encode($response);
 ?>

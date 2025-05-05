@@ -22,13 +22,13 @@ if(document.getElementById("equipments")){
     });
 
     loadPage();
-
-    const add_equipment_modal = new bootstrap.Modal(document.getElementById('add_equipment'));
-    const edit_equipment_modal = new bootstrap.Modal(document.getElementById('edit_equipment'));
-    const add_entry_modal = new bootstrap.Modal(document.getElementById('add_entry'));
-    const delete_entry_modal = new bootstrap.Modal(document.getElementById('delete_entry'));
-    const edit_entry_modal = new bootstrap.Modal(document.getElementById('edit_entry'));
-    const for_status_modal = new bootstrap.Modal(document.getElementById('for_status'));
+    
+    const add_equipment_modal = new bootstrap.Modal(document.getElementById('add_equipment'),unclose);
+    const edit_equipment_modal = new bootstrap.Modal(document.getElementById('edit_equipment'),unclose);
+    const add_entry_modal = new bootstrap.Modal(document.getElementById('add_entry'),unclose);
+    const delete_entry_modal = new bootstrap.Modal(document.getElementById('delete_entry'),unclose);
+    const edit_entry_modal = new bootstrap.Modal(document.getElementById('edit_entry'),unclose);
+    const for_status_modal = new bootstrap.Modal(document.getElementById('for_status'),unclose);
     var add_entry_title = document.getElementById('add_entry_title');
     // for_status_modal.show()
 
@@ -81,6 +81,7 @@ if(document.getElementById("equipments")){
     var edit_entry = document.getElementById('edit_entry')
     var edit_entry_description_input = document.getElementById('edit_entry_description_input')
     var edit_entry_btn = document.getElementById('edit_entry_btn')
+    var edit_entry_title = document.getElementById('edit_entry_title')
 
     edit_entry.addEventListener('shown.bs.modal', function () {
         edit_entry_description_input.focus()
@@ -243,14 +244,14 @@ if(document.getElementById("equipments")){
                 e["model_no"],
                 e["barcode"],
                 e["status"],
-                " <button id=\"edit_entry_"+ e["id"] +"\" e-id=\""+ e["id"] +"\" class=\"btn btn-sm btn-secondary mb-1\"><i e-id=\""+ e["id"] +"\" class=\"fa fa-edit\"></i></button>"+
-                " <button id=\"delete_entry_"+ e["id"] +"\" e-id=\""+ e["id"] +"\" class=\"btn btn-sm btn-secondary mb-1\"><i e-id=\""+ e["id"] +"\" class=\"fa fa-trash-o\"></i></button>"
+                " <button id=\"edit_entry_"+ e["id"] +"\" e-id=\""+ e["id"] +"\" class=\"edit_entry_row btn btn-sm btn-secondary mb-1\"><i e-id=\""+ e["id"] +"\" class=\"edit_entry_row fa fa-edit\"></i></button>"+
+                " <button id=\"delete_entry_"+ e["id"] +"\" e-id=\""+ e["id"] +"\" class=\"delete_entry_row btn btn-sm btn-secondary mb-1\"><i e-id=\""+ e["id"] +"\" class=\"delete_entry_row fa fa-trash-o\"></i></button>"
             ]).draw(false)   
         });
         for_status_count ? document.getElementById("for_status_count").innerText = for_status_count : document.getElementById("for_status_count").innerText = ""
         
-        res.entry.forEach(e => {
-            document.getElementById('delete_entry_'+e["id"]).addEventListener("click", e=>{
+        document.querySelector('#equipment_table').addEventListener("click", e=>{
+            if (e.target.classList.contains('delete_entry_row')) {
                 let tr = "";
                 if(e.target.tagName == "I"){
                     tr = e.target.parentNode.parentNode.parentNode.children
@@ -268,16 +269,16 @@ if(document.getElementById("equipments")){
                     }).then(res => validateResponse(res,"delete_entry"))
                     delete_entry_modal.hide()
                 })
-            })
-        });
+            }
+        })
         let tr = document.getElementsByClassName("trow");
         for (let i = 0; i < tr.length; i++) {
             tr[i].addEventListener("contextmenu",function(){
                 console.log(tr[i])
             })
         }
-        res.entry.forEach(e => {
-            document.getElementById('edit_entry_'+e["id"]).addEventListener("click", e=>{
+        document.querySelector('#equipment_table').addEventListener("click", e=>{
+            if (e.target.classList.contains('edit_entry_row')) {
                 let tr = "";
                 if(e.target.tagName == "I"){
                     tr = e.target.parentNode.parentNode.parentNode.children
@@ -335,8 +336,8 @@ if(document.getElementById("equipments")){
                     }
                     
                 })
-            })
-        });
+            }
+        })
     }
 
     // SET EDIT ENTRY FORM VALUE

@@ -36,6 +36,44 @@
     </div>
 </div>
 
+<!-- EDIT NETWORK MODAL -->
+<div class="modal fade" id="edit_network" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">Edit Network</h6>
+            </div>
+            <div class="modal-body">
+                <label for="networedit_network_namek_name" class="mb-2">Network Name</label>
+                <input required type="text" name="edit_network_name" id="edit_network_name" class="form-control mb-2">
+                <label for="ip_range_from" class="mb-2">IP Range <i class="f-13 text-danger">(Can't be edited.)</i></label>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <input required disabled type="text" name="edit_ip_range_from" id="edit_ip_range_from" class="form-control" placeholder="FROM">
+                    </div>
+                    <div class="col-md-6">
+                        <input required disabled type="text" name="edit_ip_range_to" id="edit_ip_range_to" class="form-control" placeholder="TO">
+                    </div>
+                </div>
+                <label for="edit_ip_subnet" class="mb-2">Subnet Mask</i></label>
+                <input required type="text" name="edit_ip_subnet" id="edit_ip_subnet" class="form-control mb-2">
+            </div>
+            <div class="modal-footer" style="display: flex;">
+                <div id="edit_ready_state">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
+                    <button id="edit_network_btn" type="button" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>    
+                </div>
+                <div id="edit_saving_state" style="display: none;">
+                    <button class="btn btn-primary btn-sm" type="button">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Saving
+                    </button>    
+                </div>
+            </div>     
+        </div>
+    </div>
+</div>
+
 <!-- EDIT EQUIPMENT MODAL -->
 <!-- <div class="modal fade" id="edit_equipment" tabindex="-1">
     <div class="modal-dialog modal-sm modal-dialog-centered">
@@ -106,18 +144,18 @@
     </div>
 </div> -->
 
-<!-- EDIT ENTRY MODAL -->
-<!-- <div class="modal fade" id="edit_entry" tabindex="-1">
+<!-- EDIT IP MODAL -->
+<div class="modal fade" id="edit_ip" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <div>
-                    <h6 id="edit_entry_title" class="modal-title">Edit Selected Equipment</h6>    
+                    <h6 id="edit_ip_title" class="modal-title">Edit Selected IP</h6>    
                     <div style="color: #ff0000;"><i>*Note: put <b>N/A</b> if not applicable.</i></div>
                 </div>
                 
             </div>
-            <div class="modal-body">
+            <!-- <div class="modal-body">
                 <label for="edit_entry_description_input" class="mb-2">Description</label>
                 <input required type="text" name="" id="edit_entry_description_input" class="form-control">
                 <div class="row mt-2">
@@ -148,14 +186,14 @@
                 </div>
                 <label for="edit_entry_remarks_input" class="mb-2 mt-2">Remarks</label>
                 <textarea maxlength="1000" rows="5" name="" id="edit_entry_remarks_input" class="form-control" placeholder="Aa"></textarea>
-            </div>
+            </div> -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
-                <button id="edit_entry_btn" type="button" data-bs-dismiss="" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>
+                <button id="edit_ip_btn" type="button" data-bs-dismiss="" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>
             </div>
         </div>
     </div>
-</div> -->
+</div>
 
 <!-- DELETE ENTRY MODAL -->
 <!-- <div class="modal fade" id="delete_entry" tabindex="-1">

@@ -27,9 +27,12 @@
                                 $ip_network->subnet = $data["subnet"];
                                 DB::save($ip_network);
 
+                                $nid = DB::where($ip_network,"name","=",$data["name"])[0]["id"];
+
                                 $ip_address = new IP_Address;
                                 
                                 for ($i = $fromParts[3]; $i <= $toParts[3]; $i++) { 
+                                    $ip_address->nid = $nid;
                                     $ip_address->ip = $fromParts[0].".".$fromParts[1].".".$fromParts[2].".".$i;
                                     $ip_address->subnet = $data["subnet"];
                                     $ip_address->hostname = "-";

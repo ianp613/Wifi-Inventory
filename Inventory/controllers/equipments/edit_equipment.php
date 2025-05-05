@@ -8,7 +8,7 @@
         $bol = DB::validate($equipment,"name",$data["name"]);
 
         if($bol){
-            DB::prepare($equipment,$data["id"]);
+            $equipment = DB::prepare($equipment,$data["id"]);
             $equipment->name = $data["name"];
             DB::update($equipment);
             $response = [
