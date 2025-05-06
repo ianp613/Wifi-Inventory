@@ -15,7 +15,7 @@
             "status" => false,
             "type" => "warning",
             "size" => null,
-            "message" => "Please select an network first."
+            "message" => "Please select a network first."
         ];
     }
         

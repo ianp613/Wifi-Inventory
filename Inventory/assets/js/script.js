@@ -1,4 +1,5 @@
-
+const audio = new Audio("../assets/sound/ph.mp3");
+const click = new Audio("../assets/sound/click.wav");
 if(document.getElementById("sidebar")){
     sole.get("../controllers/validate_auth.php").then(res => {
         validateAuth(res);
@@ -13,6 +14,7 @@ if(document.getElementById("sidebar")){
     }
 
     document.getElementById("logout").addEventListener("click",e=>{
+        audio.play()
         var btn_yes = document.createElement("button");
         var btn_no = document.createElement("button");
         var message = document.createElement("div");
@@ -96,23 +98,24 @@ elements.forEach((element) => {
   });
 });
 
-document.getElementById("ip_range_from").addEventListener("input", function() {
-    this.value = this.value.replace(/[^0-9.]/g, "");
-});
-
-document.getElementById("ip_range_to").addEventListener("input", function() {
-    this.value = this.value.replace(/[^0-9.]/g, "");
-});
-
-document.getElementById("ip_subnet").addEventListener("input", function() {
-    this.value = this.value.replace(/[^0-9.]/g, "");
-});
-
-document.getElementById("edit_ip_subnet").addEventListener("input", function() {
-    this.value = this.value.replace(/[^0-9.]/g, "");
-});
 
 let unclose = {
     backdrop: 'static',
     keyboard: false
 }
+
+const originalAddEventListener = EventTarget.prototype.addEventListener;
+
+// Override the method to include the click sound
+EventTarget.prototype.addEventListener = function(type, listener, options) {
+    if (type === "click") {
+        // Wrap the original listener to also play the sound
+        const newListener = function(event) {
+            click.play();
+            listener.call(this, event);
+        };
+        originalAddEventListener.call(this, type, newListener, options);
+    } else {
+        originalAddEventListener.call(this, type, listener, options);
+    }
+};

@@ -1,5 +1,6 @@
 if(document.getElementById("ipaddress")){
     let ipTable = new DataTable('#network_table',{
+        order: [[5, 'asc']],
         rowCallback: function(row) {
             $(row).addClass("trow");
         },
@@ -9,6 +10,10 @@ if(document.getElementById("ipaddress")){
                 visible: false,
                 searchable: false
             },
+            {
+                target: 5,
+                visible: false,
+            },
             { 
                 className: 'dt-left', 
                 targets: '_all' 
@@ -17,6 +22,7 @@ if(document.getElementById("ipaddress")){
         autoWidth: false,
         language: {
            sLengthMenu: "Show _MENU_entries",
+           search: "<button style=\"margin-right: 10px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span class=\" fa fa-download\"></span> Export</button>   Search: "
         }
     });
 
@@ -58,6 +64,7 @@ if(document.getElementById("ipaddress")){
     // var edit_entry_description_input = document.getElementById('edit_entry_description_input')
     var edit_ip_btn = document.getElementById('edit_ip_btn')
     var edit_ip_title = document.getElementById('edit_ip_title')
+    var edit_network_name_temp = "";
 
     edit_ip.addEventListener('shown.bs.modal', function () {
         // edit_entry_description_input.focus()
@@ -69,6 +76,7 @@ if(document.getElementById("ipaddress")){
     })
     // EDIT NETWORK FOCUS
     edit_network.addEventListener('shown.bs.modal', function () {
+        edit_network_name_temp = edit_network_name.value;
         edit_network_name.focus()
     })
 
@@ -81,7 +89,7 @@ if(document.getElementById("ipaddress")){
             id: edit_network_btn.getAttribute("nid"),
             name: edit_network_name.value,
             subnet: edit_ip_subnet.value
-        }).then(res => console.log(res))
+        }).then(res => validateResponse(res,"edit_network"))  
     })
 
     // POST ADD NETWORK
@@ -137,19 +145,28 @@ if(document.getElementById("ipaddress")){
     }
     function loadIP(res){
         ipTable.clear().draw();
+        ip_count = [0,0];
+        var used_ip = document.getElementById("used_ip");
+        var available_ip = document.getElementById("available_ip");
+
         res.ip.forEach(e => {
+            e["status"] == "ASSIGNED" ? ip_count[0]++ : ip_count[1]++
             ipTable.row.add([
                 e["id"],
                 e["ip"],
                 e["hostname"],
                 e["site"],
                 e["server"],
-                e["status"],
+                e["status"] == "UNASSIGNED" ? "USED" : "AVAILABLE",
+                e["status"] == "UNASSIGNED" ? "<div class=\"red-circle mx-auto\"></div>" : "<div class=\"green-circle mx-auto\"></div>",
                 e["webmgmtpt"],
                 e["username"] + " - " + e["password"],
-                " <button id=\"edit_ip_"+ e["id"] +"\" i-id=\""+ e["id"] +"\" class=\"edit_ip_row btn btn-sm btn-secondary mb-1\"><i i-id=\""+ e["id"] +"\" class=\"edit_ip_row fa fa-edit\"></i></button>"
+                " <button id=\"edit_ip_"+ e["id"] +"\" i-id=\""+ e["id"] +"\" class=\"edit_ip_row btn btn-sm btn-secondary\"><i i-id=\""+ e["id"] +"\" class=\"edit_ip_row fa fa-edit\"></i></button>"
             ]).draw(false)   
         });
+
+        used_ip.innerText = "Used IP: " + ip_count[0]
+        available_ip.innerText = "Available IP: " + ip_count[1]
         document.querySelector('#network_table').addEventListener("click", e=>{
             if (e.target.classList.contains('edit_ip_row')) {
                 let tr = "";
@@ -159,7 +176,7 @@ if(document.getElementById("ipaddress")){
                 if(e.target.tagName == "BUTTON"){
                     tr = e.target.parentNode.parentNode.children    
                 }
-                edit_ip_title.innerText = "Edit " + tr[0].innerText
+                edit_ip_title.innerText = "Edit IP: " + tr[0].innerText
                 edit_ip_btn.setAttribute("i-id",e.target.getAttribute("i-id"))
                 sole.post("../../controllers/ipaddress/find_ip.php",{
                     id: e.target.getAttribute("i-id")
@@ -220,7 +237,25 @@ if(document.getElementById("ipaddress")){
     }
 
     function editForm(res){
+        edit_ip_modal.show()
         console.log(res)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     function validateResponse(res, func){
@@ -241,6 +276,15 @@ if(document.getElementById("ipaddress")){
                 ip_range_from.value = ""
                 ip_range_to.value = ""
                 ip_subnet.value = ""
+            }
+            if(func == "edit_network"){
+                if(edit_network_name_temp == localStorage.getItem("selected_network")){
+                    network_dropdown_toggle.innerText = edit_network_name.value
+                    localStorage.setItem("selected_network", edit_network_name.value);
+                    localStorage.setItem("selected_network_id", edit_network_name.getAttribute("id"));
+                }
+                edit_network_modal.hide();
+                sole.get("../../controllers/ipaddress/get_network.php").then(res => loadNetwork(res))
             }
             bs5.toast(res.type,res.message,res.size)
         }else{
@@ -274,5 +318,21 @@ if(document.getElementById("ipaddress")){
             network_dropdown.innerHTML += "<li><a href=\"#\" class=\"dropdown-item\" id=\""+ equipment["id"] +"\" >"+ equipment["name"] +"</a></li>"
         });
     }
+
+    document.getElementById("ip_range_from").addEventListener("input", function() {
+        this.value = this.value.replace(/[^0-9.]/g, "");
+    });
+    
+    document.getElementById("ip_range_to").addEventListener("input", function() {
+        this.value = this.value.replace(/[^0-9.]/g, "");
+    });
+    
+    document.getElementById("ip_subnet").addEventListener("input", function() {
+        this.value = this.value.replace(/[^0-9.]/g, "");
+    });
+    
+    document.getElementById("edit_ip_subnet").addEventListener("input", function() {
+        this.value = this.value.replace(/[^0-9.]/g, "");
+    });
 }
 // validateResponse(res,"add_equipment")

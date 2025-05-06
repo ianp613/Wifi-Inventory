@@ -9,7 +9,7 @@
                 $fromParts = explode('.', $data["from"]);
                 $toParts = explode('.', $data["to"]);
 
-                if (count($fromParts) == 4 || count($toParts) == 4) {
+                if (count($fromParts) == 4 && count($toParts) == 4 && is_int($fromParts[3]) && is_int($toParts[3])) {
                     $trd_octets = true;
                     for ($i = 0; $i < 3; $i++) {
                         if ($fromParts[$i] !== $toParts[$i]) {
@@ -38,7 +38,7 @@
                                     $ip_address->hostname = "-";
                                     $ip_address->site = "-";
                                     $ip_address->server = "-";
-                                    $ip_address->status = "-";
+                                    $ip_address->status = "UNASSIGNED";
                                     $ip_address->remarks = "-";
                                     $ip_address->webmgmtpt = "-";
                                     $ip_address->username = "-";
@@ -84,7 +84,7 @@
                         "status" => false,
                         "type" => "error",
                         "size" => null,
-                        "message" => "Both IP addresses must have exactly 4 octets."
+                        "message" => "Both IP addresses must contain exactly four octets."
                     ];
                 }     
             }else{

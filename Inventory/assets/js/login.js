@@ -13,11 +13,13 @@ if(document.getElementById("login")){
 
     document.addEventListener("keypress", e=>{
         if(e.key == "Enter"){
+            audio.play();
             login()
         }
     })
 
     login_btn.addEventListener("click", e => {
+        audio.play();
         login()
     })
 
@@ -35,7 +37,7 @@ if(document.getElementById("login")){
             bs5.toast(res.type,res.message + " " + res.user[0]["name"],res.size)
             setTimeout(() => {
                 window.location.replace("inventory.php?loc=dashboard");
-            }, 1000);
+            }, 3000);
         }else{
             login_alert.style = "display: flex !important; height: 30px;"
             login_alert.innerText = res.message

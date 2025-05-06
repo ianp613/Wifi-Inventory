@@ -1,7 +1,10 @@
 <div id="ipaddress">
     <div class="d-flex mb-3">
         <div class="col-md-6">
-            <!-- <button data-bs-toggle="modal" data-bs-target="#add_entry" class="btn btn-sm btn-danger" style="margin-bottom: -5px;"><span class="fa fa-plus"></span> Add Entry</button> -->
+            <div class="d-flex">
+                <h6 id="used_ip">Used IP: 0</h6><span class="ms-3 me-3" style="margin-top: -4px;">|</span>
+                <h6 id="available_ip">Available IP: 0</h6>
+            </div>
         </div>
         <div class="col-md-6 d-flex justify-content-end align-items-end">
             <div class="dropdown">
@@ -21,6 +24,7 @@
                 <td class="text-start">Hostname</td>
                 <td class="text-start">Site/Location</td>
                 <td class="text-start">Server</td>
+                <td class="text-start">Status</td>
                 <td class="text-start">Status</td>
                 <td class="text-start">Web Mgmt. Port</td>
                 <td class="text-start">Credentials</td>
