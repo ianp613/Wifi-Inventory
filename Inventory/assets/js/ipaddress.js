@@ -22,7 +22,7 @@ if(document.getElementById("ipaddress")){
         autoWidth: false,
         language: {
            sLengthMenu: "Show _MENU_entries",
-           search: "<button style=\"margin-right: 10px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span class=\" fa fa-download\"></span> Export</button>   Search: "
+           search: "<button id=\"ip_export\" style=\"margin-right: 10px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span class=\" fa fa-download\"></span> Export</button>   Search: "
         }
     });
 
@@ -157,7 +157,7 @@ if(document.getElementById("ipaddress")){
                 e["hostname"],
                 e["site"],
                 e["server"],
-                e["status"] == "UNASSIGNED" ? "USED" : "AVAILABLE",
+                e["status"] != "UNASSIGNED" ? "A - USED" : "B - AVAILABLE",
                 e["status"] == "UNASSIGNED" ? "<div class=\"red-circle mx-auto\"></div>" : "<div class=\"green-circle mx-auto\"></div>",
                 e["webmgmtpt"],
                 e["username"] + " - " + e["password"],
@@ -334,5 +334,38 @@ if(document.getElementById("ipaddress")){
     document.getElementById("edit_ip_subnet").addEventListener("input", function() {
         this.value = this.value.replace(/[^0-9.]/g, "");
     });
+
+    document.getElementById("ip_export").addEventListener("click",function(){
+        sole.post("../../controllers/ipaddress/ip_export.php",{
+            id: localStorage.getItem("selected_network_id")
+        }).then(res => downloadFile("https://example.com/file.xlsx", "downloaded-file.xlsx"))
+
+
+
+
+
+
+
+
+
+
+        
+    })
+
+    function downloadFile(url, filename) {
+        fetch(url)
+            .then(response => response.blob()) // Convert response to a Blob
+            .then(blob => {
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = filename; // Set the filename
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(error => console.error("Download failed:", error));
+    }
+    
+    // Example usage
 }
 // validateResponse(res,"add_equipment")
