@@ -39,8 +39,8 @@ if(document.getElementById("ipaddress")){
 
     const add_network_modal = new bootstrap.Modal(document.getElementById('add_network'),unclose);
     const edit_network_modal = new bootstrap.Modal(document.getElementById('edit_network'),unclose);
+    const delete_network_modal = new bootstrap.Modal(document.getElementById('delete_network'),unclose);
     const edit_ip_modal = new bootstrap.Modal(document.getElementById('edit_ip'),unclose);
-    
 
     var add_network = document.getElementById("add_network")
     var edit_network = document.getElementById("edit_network")
@@ -58,7 +58,11 @@ if(document.getElementById("ipaddress")){
     var edit_network_btn = document.getElementById("edit_network_btn")
     var edit_ready_state = document.getElementById("edit_ready_state")
     var edit_saving_state = document.getElementById("edit_saving_state")
-
+    var delete_network_name = document.getElementById("delete_network_name")
+    var delete_network_btn = document.getElementById("delete_network_btn")
+    var delete_ready_state = document.getElementById("delete_ready_state")
+    var delete_saving_state = document.getElementById("delete_saving_state")
+    
     // EDIT ENTRY FOCUS
     var edit_ip = document.getElementById('edit_ip')
     // var edit_entry_description_input = document.getElementById('edit_entry_description_input')
@@ -85,6 +89,13 @@ if(document.getElementById("ipaddress")){
         !edit_network_name.value ? bs5.toast("warning","Please provide network name.") : null
         !edit_ip_subnet.value ? bs5.toast("warning","Please provide subnet mask.") : null
 
+        edit_ready_state.style = "display: none;"
+        edit_saving_state.style = "display: flex;"
+        edit_network_name.setAttribute("readonly","true")
+        edit_ip_range_from.setAttribute("readonly","true")
+        edit_ip_range_to.setAttribute("readonly","true")
+        edit_ip_subnet.setAttribute("readonly","true")
+
         sole.post("../../controllers/ipaddress/edit_network.php",{
             id: edit_network_btn.getAttribute("nid"),
             name: edit_network_name.value,
@@ -108,6 +119,15 @@ if(document.getElementById("ipaddress")){
         }).then(res => validateResponse(res,"add_network"))
     })
 
+    // POST DELETE NETWOK
+    delete_network_btn.addEventListener("click",function(){
+        delete_ready_state.style = "display: none;"
+        delete_saving_state.style = "display: flex;"
+        sole.post("../../controllers/ipaddress/delete_network.php",{
+            id: this.getAttribute("nid")
+        }).then(res => validateResponse(res,"delete_network"))
+    })
+
     // TOGGLE EDIT NETWORK MODAL
     var network_dropdown = document.getElementById("network_dropdown");
     var network_dropdown_toggle = document.getElementById("network_dropdown_toggle");
@@ -125,6 +145,7 @@ if(document.getElementById("ipaddress")){
             network_dropdown_toggle.innerText = e.target.innerText
             localStorage.setItem("selected_network", e.target.innerText);
             localStorage.setItem("selected_network_id", e.target.getAttribute("id"));
+            ipTable.clear().draw();
             sole.post("../../controllers/ipaddress/get_ip.php", {
                 nid: localStorage.getItem("selected_network_id")
             }).then(res => loadIP(res))
@@ -138,6 +159,8 @@ if(document.getElementById("ipaddress")){
             edit_ip_range_to.value = res.network[0].to
             edit_ip_subnet.value = res.network[0].subnet
             edit_network_btn.setAttribute("nid",res.network[0].id)
+            delete_network_name.innerText = res.network[0].name
+            delete_network_btn.setAttribute("nid",res.network[0].id)
             edit_network_modal.show()
         }else{
             bs5.toast(res.type,res.message,res.size)
@@ -269,6 +292,18 @@ if(document.getElementById("ipaddress")){
             ip_subnet.removeAttribute("readonly")
             add_network_modal.hide();
         }
+        if(func == "edit_network"){
+            edit_ready_state.style = ""
+            edit_saving_state.style = "display: none;"
+            edit_network_name.removeAttribute("readonly")
+            edit_ip_range_from.removeAttribute("readonly")
+            edit_ip_range_to.removeAttribute("readonly")
+            edit_ip_subnet.removeAttribute("readonly")
+        }
+        if(func == "delete_network"){
+            delete_ready_state.style = ""
+            delete_saving_state.style = "display: none;"
+        }
         if(res.status){
             if(func == "add_network"){
                 sole.get("../../controllers/ipaddress/get_network.php").then(res => loadNetwork(res))
@@ -284,6 +319,15 @@ if(document.getElementById("ipaddress")){
                     localStorage.setItem("selected_network_id", edit_network_name.getAttribute("id"));
                 }
                 edit_network_modal.hide();
+                sole.get("../../controllers/ipaddress/get_network.php").then(res => loadNetwork(res))
+            }
+            if(func == "delete_network"){
+                if(delete_network_name.innerText == localStorage.getItem("selected_network")){
+                    network_dropdown_toggle.innerText = "-- Select Network --"
+                    localStorage.removeItem("selected_network");
+                    localStorage.removeItem("selected_network_id");
+                }
+                delete_network_modal.hide();
                 sole.get("../../controllers/ipaddress/get_network.php").then(res => loadNetwork(res))
             }
             bs5.toast(res.type,res.message,res.size)
@@ -336,36 +380,28 @@ if(document.getElementById("ipaddress")){
     });
 
     document.getElementById("ip_export").addEventListener("click",function(){
+        const baseUrl = window.location.origin + window.location.pathname.split('/').slice(0, -1).join('/') + '/';
         sole.post("../../controllers/ipaddress/ip_export.php",{
             id: localStorage.getItem("selected_network_id")
-        }).then(res => downloadFile("https://example.com/file.xlsx", "downloaded-file.xlsx"))
-
-
-
-
-
-
-
-
-
-
-        
+        }).then(res => downloadFile(baseUrl + res[0], res[1]))
     })
 
     function downloadFile(url, filename) {
         fetch(url)
-            .then(response => response.blob()) // Convert response to a Blob
-            .then(blob => {
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = filename; // Set the filename
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            })
-            .catch(error => console.error("Download failed:", error));
+        .then(response => response.blob()) // Convert response to a Blob
+        .then(blob => {
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = filename; // Set the filename
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        })
+        .catch(error => bs5.toast("error", "Export Failed: " + error));
+
+        setTimeout(() => {
+            sole.post("../../controllers/clear_temp.php").then(res => console.log(res));
+        }, 5000);
     }
-    
-    // Example usage
+
 }
-// validateResponse(res,"add_equipment")

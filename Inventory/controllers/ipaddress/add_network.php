@@ -9,7 +9,7 @@
                 $fromParts = explode('.', $data["from"]);
                 $toParts = explode('.', $data["to"]);
 
-                if (count($fromParts) == 4 && count($toParts) == 4 && is_int($fromParts[3]) && is_int($toParts[3])) {
+                if (count($fromParts) == 4 && count($toParts) == 4 && is_numeric($fromParts[3]) && is_numeric($toParts[3])) {
                     $trd_octets = true;
                     for ($i = 0; $i < 3; $i++) {
                         if ($fromParts[$i] !== $toParts[$i]) {
@@ -50,8 +50,7 @@
                                     "status" => true,
                                     "type" => "success",
                                     "size" => null,
-                                    "message" => "Data Saved.",
-                                    "sample" => $ip_address
+                                    "message" => "Network has been saved.",
                                 ]; 
                             }else{
                                 $response = [
@@ -61,8 +60,6 @@
                                     "message" => "Network already exist."
                                 ];    
                             }
-                            
-                            
                         }else{
                             $response = [
                                 "status" => false,

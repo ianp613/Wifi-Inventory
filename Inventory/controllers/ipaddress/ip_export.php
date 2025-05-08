@@ -8,6 +8,7 @@
     require '../../vendor/autoload.php';
     use PhpOffice\PhpSpreadsheet\IOFactory;
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
+    use PhpOffice\PhpSpreadsheet\Style\Color;
 
     // Load an existing Excel file
     $inputFile = '../../assets/files/ip_export.xlsx'; // Change this to your file path
@@ -26,17 +27,52 @@
     ];
 
     if($data["id"]) {
-        $ip = new IP_Network;
-        $ip = DB::find($ip,$data["id"])[0];
+        // Set timezone (optional, change as needed)
+        date_default_timezone_set('Asia/Manila'); // Example: Philippine Time
+
+        // Get current date and time
+        $currentDate = date('F j, Y'); // Format: May 12, 2025
+        $currentTime = date('h:i:s A'); // Format: 01:35:42 AM or 01:35:42 PM
+
+
+        $network = new IP_Network;
+        $network = DB::find($network,$data["id"])[0];
 
         // Edit a cell (Example: Change A1 value)
-        $sheet->setCellValue('B1', 'Sample User');
-        $sheet->setCellValue('B2', 'Sample Date');
+        $sheet->setCellValue('B1', $currentDate);
+        $sheet->setCellValue('B2', $currentTime);
+        $sheet->setCellValue('B3', $network['name']);
+
+        $ip = new IP_Address;
+        $ip = DB::where($ip,"nid","=",$data["id"]);
+
+        $row = 9;
+        $used = 0;
+        $available = 0;
+        foreach ($ip as $i) {
+            $sheet->setCellValue('A'.$row,$i["ip"]);
+            $sheet->setCellValue('B'.$row,$i["subnet"]);
+            $sheet->setCellValue('C'.$row,$i["hostname"]);
+            $sheet->setCellValue('D'.$row,$i["site"]);
+            $sheet->setCellValue('E'.$row,$i["server"]);
+            $sheet->setCellValue('F'.$row,$i["status"]);
+            $sheet->getStyle('F'.$row)->getFont()->getColor()->setARGB($i["status"] == "UNASSIGNED" ? 'FF0000' : '224814');
+            $sheet->setCellValue('G'.$row,$i["webmgmtpt"]);
+            $sheet->setCellValue('H'.$row,$i["username"]);
+            $sheet->setCellValue('I'.$row,$i["password"]);
+            $sheet->setCellValue('J'.$row,$i["remarks"]);
+            $i["status"] == "UNASSIGNED" ? $available++ : $used++;
+            $row++;
+        }
+
+        $sheet->setCellValue('B5',$used);
+        $sheet->setCellValue('B6',$available);
+        $uid = uniqid();
 
         // Save as another file
-        $outputFile = '../../assets/temp/'.$ip['name'].'.xlsx'; // Change this to your desired output file name
+        $outputFile = '../../assets/temp/'.$uid.'.xlsx'; // Change this to your desired output file name
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save($outputFile);
     }
-    echo json_encode($outputFile);
+    echo json_encode([$outputFile, $network['name']."_".date('m-d-Y_Hi').'.xlsx']);
 ?>

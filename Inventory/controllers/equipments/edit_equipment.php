@@ -15,7 +15,7 @@
                 "status" => true,
                 "type" => "success",
                 "size" => null,
-                "message" => "Data Updated"
+                "message" => "Equipment has been updated."
             ]; 
         }else{
             $response = [

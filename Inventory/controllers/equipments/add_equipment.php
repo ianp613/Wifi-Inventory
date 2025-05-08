@@ -14,7 +14,7 @@
                 "status" => true,
                 "type" => "success",
                 "size" => null,
-                "message" => "Data Saved."
+                "message" => "Equipment has been saved."
             ]; 
         }else{
             $response = [

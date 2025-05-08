@@ -41,10 +41,11 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title">Edit Network</h6>
+                <h6 class="modal-title">Network Info</h6>
+                <button class="btn btn-danger btn-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#delete_network"><span class="fa fa-trash"></span></button>
             </div>
             <div class="modal-body">
-                <label for="networedit_network_namek_name" class="mb-2">Network Name</label>
+                <label for="edit_network_name" class="mb-2">Network Name</label>
                 <input required type="text" name="edit_network_name" id="edit_network_name" class="form-control mb-2">
                 <label for="ip_range_from" class="mb-2">IP Range <i class="f-13 text-danger">(Can't be edited.)</i></label>
                 <div class="row mb-2">
@@ -70,6 +71,38 @@
                     </button>    
                 </div>
             </div>     
+        </div>
+    </div>
+</div>
+
+<!-- DELETE NETWORK MODAL -->
+<div class="modal fade" id="delete_network" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <div class="w-100">
+                    <span class="fa fa-exclamation-triangle text-danger h2"></span>
+                    <h5 id="delete_network_title" class="modal-title fw-bolder">Delete Network</h5>    
+                </div>
+            </div>
+            <div class="modal-header text-center">
+                <div class="w-100">
+                    <div>You're going to delete network "<b><span id="delete_network_name">NETWORK</span></b>".</div>
+                    <div>All of the recorded IP address will also be deleted, this can't be undone. Do you wish to proceed?</div>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div id="delete_ready_state">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#edit_network"><span class="fa fa-remove"></span> No</button>
+                    <button id="delete_network_btn" type="button" data-bs-dismiss="" class="btn btn-danger btn-sm"><span class="fa fa-trash-o"></span> Yes</button>
+                </div>
+                <div id="delete_saving_state" style="display: none;">
+                    <button class="btn btn-danger btn-sm" type="button">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Deleting
+                    </button>    
+                </div>
+            </div>
         </div>
     </div>
 </div>

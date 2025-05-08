@@ -4,20 +4,27 @@
     $data = json_decode(file_get_contents('php://input'), true);
 
     if($data["id"]){
-        $entry = new Equipment_Entry;
-        DB::delete($entry,$data["id"]);
+        $ip = new IP_Address;
+        $ip_temp = DB::where($ip,"nid","=",$data["id"]);
+        foreach ($ip_temp as $i) {
+            DB::delete($ip,$i["id"]);
+        }
+
+        $network = new IP_Network;
+        DB::delete($network,$data["id"]);
+
         $response = [
             "status" => true,
             "type" => "info",
             "size" => null,
-            "message" => "Entry has been deleted."
+            "message" => "Network has been deleted."
         ];
     }else{
         $response = [
             "status" => false,
             "type" => "error",
             "size" => null,
-            "message" => "Entry not found."
+            "message" => "Network not found."
         ];
     }
         

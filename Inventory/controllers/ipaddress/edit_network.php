@@ -5,10 +5,8 @@
 
     if($data["name"]) {
         $network = new IP_Network;
-        $bol = DB::validate($network,"name",$data["name"]);
-
-        if($bol){
-            DB::prepare($network,$data["id"]);
+        
+        DB::prepare($network,$data["id"]);
             $network->name = $data["name"];
             $network->subnet = $data["subnet"];
             DB::update($network);
@@ -21,20 +19,22 @@
                 $ip->status = $ip_t["status"];
                 DB::update($ip);
             }
-            $response = [
-                "status" => true,
-                "type" => "success",
-                "size" => null,
-                "message" => "Data Updated",
-            ]; 
-        }else{
-            $response = [
-                "status" => false,
-                "type" => "warning",
-                "size" => null,
-                "message" => "Network already exist."
-            ];    
-        }
+            $net = DB::where($network,"name","=",$data["name"]);
+            if(count($net) > 1){
+                $response = [
+                    "status" => true,
+                    "type" => "warning",
+                    "size" => null,
+                    "message" => "Data has been updated. Please note that the ".$data["name"]." network already exists, which may lead to potential conflicts or data integrity issues."
+                ]; 
+            }else{
+                $response = [
+                    "status" => true,
+                    "type" => "success",
+                    "size" => null,
+                    "message" => "Network has been updated.",
+                ];
+            }
     }else{
         $response = [
             "status" => false,

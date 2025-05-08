@@ -18,7 +18,7 @@
             "status" => true,
             "type" => "success",
             "size" => null,
-            "message" => "Data Saved",
+            "message" => "Entry has been updated.",
             "entry" => DB::all($entry)
         ];
     }else{
