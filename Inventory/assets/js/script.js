@@ -1,6 +1,13 @@
+let unclose = {
+    backdrop: 'static',
+    keyboard: false
+}
 const audio = new Audio("../assets/sound/ph.mp3");
 const click = new Audio("../assets/sound/click.wav");
 if(document.getElementById("sidebar")){
+    
+    const logout_modal = new bootstrap.Modal(document.getElementById('logout_modal'),unclose);
+    const settings_modal = new bootstrap.Modal(document.getElementById('settings_modal'),unclose);
     sole.get("../controllers/validate_auth.php").then(res => {
         validateAuth(res);
     })
@@ -12,33 +19,19 @@ if(document.getElementById("sidebar")){
             window.location.replace("../index.php");
         }
     }
+    
 
-    document.getElementById("logout").addEventListener("click",e=>{
+    document.getElementById("settings").addEventListener("click",function(){
+        settings_modal.show()
+    })
+
+    document.getElementById("switch").addEventListener("click",function(){
+        console.log("switch")
+    })
+
+    document.getElementById("logout").addEventListener("click",function(){
         audio.play()
-        var btn_yes = document.createElement("button");
-        var btn_no = document.createElement("button");
-        var message = document.createElement("div");
-        var wrapper = document.createElement("div");
-
-        btn_yes.setAttribute("class","btn btn-sm btn-danger rounded-pill")
-        btn_yes.setAttribute("id","confirm_logout")
-        btn_yes.setAttribute("style","width: 50px; margin-left: 4px;")
-        btn_yes.innerText = "YES"
-        btn_no.setAttribute("class","btn btn-sm btn-secondary rounded-pill")
-        btn_no.setAttribute("data-bs-dismiss","modal")
-        btn_no.setAttribute("id","alert_button")
-        btn_no.setAttribute("style","width: 50px; margin-right: 4px;")
-        btn_no.innerHTML = "NO"
-        message.setAttribute("class","mb-3 mt-1")
-        message.innerText = "Do you wish to end the current session?"
-        wrapper.setAttribute("class","w-100")
-
-        wrapper.appendChild(message)
-        wrapper.appendChild(btn_no)
-        wrapper.appendChild(btn_yes)
-        
-        bs5.toast("info",wrapper.outerHTML,null,false,false)
-
+        logout_modal.show()
         document.getElementById("confirm_logout").addEventListener("click",function(){
             window.location.replace("../index.php");
         })
@@ -91,18 +84,12 @@ document.addEventListener('contextmenu', event => {
     event.preventDefault();
 });
 
-const elements = document.querySelectorAll("input, textarea");
+const elements = document.querySelectorAll("input[type='text'], textarea");
 elements.forEach((element) => {
   element.addEventListener("input", function() {
     this.value = this.value.replace(/[']/g, "");
   });
 });
-
-
-let unclose = {
-    backdrop: 'static',
-    keyboard: false
-}
 
 const originalAddEventListener = EventTarget.prototype.addEventListener;
 

@@ -77,7 +77,7 @@
                             <!-- User Name -->
                         </div>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#"><span class="fa fa-gears"></span> Settings</a></li>
+                            <li id="settings"><a class="dropdown-item" href="#"><span class="fa fa-gears"></span> Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li id="logout"><a class="dropdown-item"><span class="fa fa-sign-out"></span> Log Out</a></li>
                         </ul>
@@ -100,8 +100,11 @@
                 </div>
             </div>
         </div>
+        <h6 class="copyright f-10 text-secondary"><i>Copyright 2025 @ Wifi Team</i></h6>
         <?php include("modals/equipments.php"); ?>
         <?php include("modals/ipaddress.php"); ?>
+        <?php include("modals/logout.php"); ?>
+        <?php include("modals/settings.php"); ?>
         <script src="../assets/js/jquery/jquery-3.7.1.js"></script>
         <script src="../assets/js/popper/popper.min.js"></script>
         <script src="../assets/js/datatables/datatables.min.js"></script>

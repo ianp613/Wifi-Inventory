@@ -16,6 +16,7 @@
             <button data-bs-target="#add_network" data-bs-toggle="modal" class="btn btn-sm btn-danger" style="margin-bottom: -5px; margin-left: 10px;"><span class="fa fa-plus"></span> Add Network</button>
         </div>
     </div>
+    <input hidden type="file" name="" id="ip_import_input"  accept=".xls, .xlsx">
     <table id="network_table" class="table border table-hover">
         <thead>
             <tr>

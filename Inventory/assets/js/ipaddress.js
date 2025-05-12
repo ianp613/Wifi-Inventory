@@ -22,7 +22,7 @@ if(document.getElementById("ipaddress")){
         autoWidth: false,
         language: {
            sLengthMenu: "Show _MENU_entries",
-           search: "<button id=\"ip_export\" style=\"margin-right: 10px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span class=\" fa fa-download\"></span> Export</button>   Search: "
+           search: "<button id=\"ip_import\" style=\"margin-right: 10px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span class=\" fa fa-upload\"></span> Import</button><button id=\"ip_export\" style=\"margin-right: 10px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span class=\" fa fa-download\"></span> Export</button>   Search: "
         }
     });
 
@@ -41,6 +41,7 @@ if(document.getElementById("ipaddress")){
     const edit_network_modal = new bootstrap.Modal(document.getElementById('edit_network'),unclose);
     const delete_network_modal = new bootstrap.Modal(document.getElementById('delete_network'),unclose);
     const edit_ip_modal = new bootstrap.Modal(document.getElementById('edit_ip'),unclose);
+    const import_modal = new bootstrap.Modal(document.getElementById('import_modal'),unclose);
 
     var add_network = document.getElementById("add_network")
     var edit_network = document.getElementById("edit_network")
@@ -62,6 +63,9 @@ if(document.getElementById("ipaddress")){
     var delete_network_btn = document.getElementById("delete_network_btn")
     var delete_ready_state = document.getElementById("delete_ready_state")
     var delete_saving_state = document.getElementById("delete_saving_state")
+    var ip_import_input = document.getElementById("ip_import_input")
+    var ip_import = document.getElementById("ip_import")
+    var import_message = document.getElementById("import_message")
     
     // EDIT ENTRY FOCUS
     var edit_ip = document.getElementById('edit_ip')
@@ -304,19 +308,23 @@ if(document.getElementById("ipaddress")){
             delete_ready_state.style = ""
             delete_saving_state.style = "display: none;"
         }
+        if(func == "ip_import"){
+            ip_import.removeAttribute("disabled")
+            ip_import_input.value = ""
+        }
         if(res.status){
             if(func == "add_network"){
-                sole.get("../../controllers/ipaddress/get_network.php").then(res => loadNetwork(res))
                 network_name.value = ""
                 ip_range_from.value = ""
                 ip_range_to.value = ""
                 ip_subnet.value = ""
+                sole.get("../../controllers/ipaddress/get_network.php").then(res => loadNetwork(res))
             }
             if(func == "edit_network"){
                 if(edit_network_name_temp == localStorage.getItem("selected_network")){
                     network_dropdown_toggle.innerText = edit_network_name.value
                     localStorage.setItem("selected_network", edit_network_name.value);
-                    localStorage.setItem("selected_network_id", edit_network_name.getAttribute("id"));
+                    localStorage.setItem("selected_network_id", edit_network_btn.getAttribute("nid"));
                 }
                 edit_network_modal.hide();
                 sole.get("../../controllers/ipaddress/get_network.php").then(res => loadNetwork(res))
@@ -324,10 +332,17 @@ if(document.getElementById("ipaddress")){
             if(func == "delete_network"){
                 if(delete_network_name.innerText == localStorage.getItem("selected_network")){
                     network_dropdown_toggle.innerText = "-- Select Network --"
+                    ipTable.clear().draw();
                     localStorage.removeItem("selected_network");
                     localStorage.removeItem("selected_network_id");
                 }
                 delete_network_modal.hide();
+                sole.get("../../controllers/ipaddress/get_network.php").then(res => loadNetwork(res))
+            }
+            if(func == "ip_import"){
+                ip_import.removeAttribute("disabled")
+                import_message.innerHTML = ""
+                import_modal.hide()
                 sole.get("../../controllers/ipaddress/get_network.php").then(res => loadNetwork(res))
             }
             bs5.toast(res.type,res.message,res.size)
@@ -380,10 +395,44 @@ if(document.getElementById("ipaddress")){
     });
 
     document.getElementById("ip_export").addEventListener("click",function(){
-        const baseUrl = window.location.origin + window.location.pathname.split('/').slice(0, -1).join('/') + '/';
-        sole.post("../../controllers/ipaddress/ip_export.php",{
-            id: localStorage.getItem("selected_network_id")
-        }).then(res => downloadFile(baseUrl + res[0], res[1]))
+        if(localStorage.getItem("selected_network")){
+            const baseUrl = window.location.origin + window.location.pathname.split('/').slice(0, -1).join('/') + '/';
+            sole.post("../../controllers/ipaddress/ip_export.php",{
+                id: localStorage.getItem("selected_network_id")
+            }).then(res => downloadFile(baseUrl + res[0], res[1]))    
+        }else{
+            bs5.toast("warning","Nothing to export.")
+        }
+        
+    })
+
+    ip_import.addEventListener("click",function(){
+        ip_import_input.click()
+    })
+    ip_import_input.addEventListener("change",function(){
+        if(this.files.length > 0){
+            ip_import.setAttribute("disabled","")
+            let imp = true;
+            if(this.files[0].name.split('.').pop().toLowerCase() != "xlsx" && this.files[0].name.split('.').pop().toLowerCase() != "xls"){
+                bs5.toast("warning","Invalid file.")
+                ip_import.removeAttribute("disabled")
+                imp = false
+            }
+            if(this.files[0].size > 102400){
+                bs5.toast("warning","File exceed the maximum file size of 100KB only.")
+                ip_import.removeAttribute("disabled")
+                imp = false
+            }
+            if(imp){
+                import_message.innerHTML = "<span class=\"spinner-border spinner-border-sm spinner-primary\" role=\"status\" aria-hidden=\"true\"></span> Importing: " + this.files[0].name
+                import_modal.show()
+                const formData = new FormData();
+                formData.append("file",this.files[0])
+                sole.file("../../controllers/ipaddress/ip_import.php",formData)
+                .then(res => validateResponse(res,"ip_import"))
+            }    
+        }
+        
     })
 
     function downloadFile(url, filename) {

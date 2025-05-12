@@ -228,6 +228,17 @@
     </div>
 </div>
 
+<!-- IMPORT MODAL -->
+<div class="modal" id="import_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <div id="import_message" class="w-100 text-center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- DELETE ENTRY MODAL -->
 <!-- <div class="modal fade" id="delete_entry" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered ">

@@ -1,6 +1,13 @@
 
 class Sole{
     speechsynthesis = new SpeechSynthesisUtterance();
+    file(url,value){
+        var request = fetch(url, {
+            method: "POST",
+            body: value
+        })
+        return request.then(response => response.json())
+    }
     get(url) {
         var request = fetch(url)
         return request.then(response => response.json())

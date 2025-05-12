@@ -26,6 +26,12 @@ class BS5_Toaster {
         this.wrap_5.setAttribute("id","alert_modal")
         this.wrap_5.setAttribute("tabindex","-1")
     }
+    close(){
+        const alertModal = document.getElementById("alert_modal");
+        if(alertModal) {
+            alertModal.remove();
+        }
+    }
     toast(type,message,size = null,button = true,icon = true){
         this.modal_button = button
         if(message){
@@ -57,7 +63,7 @@ class BS5_Toaster {
             this.alert_compile()
             this.alert_attach()
             this.alert_open()
-            this.alert_listen()
+            this.alert_listen(button)
         }
     }
     alert_compile(){
@@ -93,15 +99,17 @@ class BS5_Toaster {
             }
         }
     }
-    alert_listen(){
-        document.getElementById("alert_button").addEventListener("click", function() {
-            setTimeout(() => {
-                const alertModal = document.getElementById("alert_modal");
-                if(alertModal) {
-                    alertModal.remove();
-                }
-            }, 1000);
-        });    
+    alert_listen(button){
+        if(button){
+            document.getElementById("alert_button").addEventListener("click", function() {
+                setTimeout(() => {
+                    const alertModal = document.getElementById("alert_modal");
+                    if(alertModal) {
+                        alertModal.remove();
+                    }
+                }, 1000);
+            });      
+        }
     }
   }
   var bs5 = new BS5_Toaster();
