@@ -20,7 +20,7 @@
                     $DB_CONN = new PDO( 'mysql:host='.DB::$DB_HOST.';dbname='.DB::$DB_DATABASE, DB::$DB_USERNAME, DB::$DB_PASSWORD);
                     $DB_CONN->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 }catch(PDOException $e){
-                    echo "<b>Database Connection Failed: </b>" . $e->getMessage()."<br>";
+                    echo "Database Connection Failed: " . $e->getMessage()."<br>";
                 }
                 $table = $data->table;
                 $fillable = [];
@@ -33,7 +33,7 @@
                 $fillable = $SQL->fetchAll(PDO::FETCH_ASSOC);
                 return $fillable;    
             }catch(Exception $e){
-                echo "<b>Fetch all error: </b>".$e->getMessage().DB::$br;
+                echo "Fetch all error: ".$e->getMessage().DB::$br;
                 $_SESSION["soleexceptionerror"] = $e;
                 exception_handler(0,$e->getMessage(),$e->getFile(),$e->getLine());
             }
@@ -44,7 +44,7 @@
                     $DB_CONN = new PDO( 'mysql:host='.DB::$DB_HOST.';dbname='.DB::$DB_DATABASE, DB::$DB_USERNAME, DB::$DB_PASSWORD);
                     $DB_CONN->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 }catch(PDOException $e){
-                    echo "<b>Database Connection Failed: </b>" . $e->getMessage()."<br>";
+                    echo "Database Connection Failed: " . $e->getMessage()."<br>";
                 }
                 $table = $data->table;
                 $fillable = [];
@@ -65,7 +65,7 @@
                 $fillable = $SQL->fetchAll(PDO::FETCH_ASSOC);
                 return $fillable;    
             }catch(Exception $e){
-                echo "<b>Fetch where error: </b>".$e->getMessage().DB::$br;
+                echo "Fetch where error: ".$e->getMessage().DB::$br;
                 $_SESSION["soleexceptionerror"] = $e;
                 exception_handler(0,$e->getMessage(),$e->getFile(),$e->getLine());
             }
@@ -76,7 +76,7 @@
                     $DB_CONN = new PDO( 'mysql:host='.DB::$DB_HOST.';dbname='.DB::$DB_DATABASE, DB::$DB_USERNAME, DB::$DB_PASSWORD);
                     $DB_CONN->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 }catch(PDOException $e){
-                    echo "<b>Database Connection Failed: </b>" . $e->getMessage()."<br>";
+                    echo "Database Connection Failed: " . $e->getMessage()."<br>";
                 }
                 $table = $data->table;
                 
@@ -85,7 +85,7 @@
                 $fillable = $SQL->fetchAll(PDO::FETCH_ASSOC);
                 return $fillable; 
             }catch(Exception $e){
-                echo "<b>Fetch find error: </b>".$e->getMessage().DB::$br;
+                echo "Fetch find error: ".$e->getMessage().DB::$br;
                 $_SESSION["soleexceptionerror"] = $e;
                 exception_handler(0,$e->getMessage(),$e->getFile(),$e->getLine());
             }
@@ -104,7 +104,7 @@
                     $DB_CONN = new PDO( 'mysql:host='.DB::$DB_HOST.';dbname='.DB::$DB_DATABASE, DB::$DB_USERNAME, DB::$DB_PASSWORD);
                     $DB_CONN->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 }catch(PDOException $e){
-                    echo "<b>Database Connection Failed: </b>" . $e->getMessage()."<br>";
+                    echo "Database Connection Failed: " . $e->getMessage()."<br>";
                 }
                 $fillable = [];
                 $table = $data->table;
@@ -112,7 +112,8 @@
                 $values = "";
                 $temp = "";
                 
-                for ($i=0; $i <= count($data->fillable)-1; $i++) { 
+                for ($i=0; $i <= count($data->fillable)-1; $i++) {
+                    !$data->fillable[$i] ? $data->fillable[$i] = "-" : null;
                     if($i == count($data->fillable)-1){
                         $columns .= "`".$data->fillable[$i]."`";
                         $temp = $data->fillable[$i];
@@ -138,7 +139,7 @@
                     echo $savemessage;
                 } 
             }catch(Exception $e){
-                echo "<b>Save error: </b>".$e->getMessage().DB::$br;
+                echo "Save error: ".$e->getMessage().DB::$br;
                 $_SESSION["soleexceptionerror"] = $e;
                 exception_handler(0,$e->getMessage(),$e->getFile(),$e->getLine());
             }
@@ -154,7 +155,7 @@
                     $DB_CONN = new PDO( 'mysql:host='.DB::$DB_HOST.';dbname='.DB::$DB_DATABASE, DB::$DB_USERNAME, DB::$DB_PASSWORD);
                     $DB_CONN->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 }catch(PDOException $e){
-                    echo "<b>Database Connection Failed: </b>" . $e->getMessage()."<br>";
+                    echo "Database Connection Failed: " . $e->getMessage()."<br>";
                 }
                 $get = DB::find($data, $row);
                 if($get != ""){
@@ -179,7 +180,7 @@
                     return $data;  
                 }
             }catch(Exception $e){
-                echo "<b>Prepare error: </b>".$e->getMessage().DB::$br;
+                echo "Prepare error: ".$e->getMessage().DB::$br;
                 $_SESSION["soleexceptionerror"] = $e;
                 exception_handler(0,$e->getMessage(),$e->getFile(),$e->getLine());
             }
@@ -197,13 +198,14 @@
                     $DB_CONN = new PDO( 'mysql:host='.DB::$DB_HOST.';dbname='.DB::$DB_DATABASE, DB::$DB_USERNAME, DB::$DB_PASSWORD);
                     $DB_CONN->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 }catch(PDOException $e){
-                    echo "<b>Database Connection Failed: </b>" . $e->getMessage()."<br>";
+                    echo "Database Connection Failed: " . $e->getMessage()."<br>";
                 }
                 $table = $data->table;
                 $id = $data->id;
                 $set = "";
                 if($data->status){
-                    for ($i=0; $i <= count($data->fillable)-1; $i++) { 
+                    for ($i=0; $i <= count($data->fillable)-1; $i++) {
+                        !$data->fillable[$i] ? $data->fillable[$i] = "-" : null;
                         if($i == count($data->fillable)-1){
                             $temp = $data->fillable[$i];
                             $set .= "`".$data->fillable[$i]."`"." = "."'".$data->$temp."'";
@@ -231,11 +233,11 @@
                     if($id == ""){
                         $id = "NULL";
                     }
-                    echo "<b>Update error: </b> Could not find a match id.".DB::$br;
-                    echo "<b>Note: </b>ID <i><b>'".$id."'</b></i> doesn't match any row data in column ID inside table <i><b>'".$table."'</i></b>".DB::$br;
+                    echo "Update error:  Could not find a match id.".DB::$br;
+                    echo "Note: ID <i>'".$id."'</i> doesn't match any row data in column ID inside table <i>'".$table."'</i>".DB::$br;
                 } 
             }catch(Exception $e){
-                echo "<b>Update error: </b>".$e->getMessage().DB::$br;
+                echo "Update error: ".$e->getMessage().DB::$br;
                 $_SESSION["soleexceptionerror"] = $e;
                 exception_handler(0,$e->getMessage(),$e->getFile(),$e->getLine());
             }
@@ -251,14 +253,14 @@
                     $DB_CONN = new PDO( 'mysql:host='.DB::$DB_HOST.';dbname='.DB::$DB_DATABASE, DB::$DB_USERNAME, DB::$DB_PASSWORD);
                     $DB_CONN->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 }catch(PDOException $e){
-                    echo "<b>Database Connection Failed: </b>" . $e->getMessage()."<br>";
+                    echo "Database Connection Failed: " . $e->getMessage()."<br>";
                 }
                 $table = $data->table;
                 $id = $row;
                 $SQL = $DB_CONN->prepare("DELETE from `$table` WHERE `$table`.`id`='$id'");
 		        $SQL->execute();
             }catch(Exception $e){
-                echo "<b>Delete error: </b>".$e->getMessage().DB::$br;
+                echo "Delete error: ".$e->getMessage().DB::$br;
                 $_SESSION["soleexceptionerror"] = $e;
                 exception_handler(0,$e->getMessage(),$e->getFile(),$e->getLine());
             }
@@ -274,13 +276,13 @@
                     $DB_CONN = new PDO( 'mysql:host='.DB::$DB_HOST.';dbname='.DB::$DB_DATABASE, DB::$DB_USERNAME, DB::$DB_PASSWORD);
                     $DB_CONN->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 }catch(PDOException $e){
-                    echo "<b>Database Connection Failed: </b>" . $e->getMessage()."<br>";
+                    echo "Database Connection Failed: " . $e->getMessage()."<br>";
                 }
                 $table = $data->table;
                 $SQL = $DB_CONN->prepare("TRUNCATE `$table`");
 		        $SQL->execute();
             }catch(Exception $e){
-                echo "<b>Wipe error: </b>".$e->getMessage().DB::$br;
+                echo "Wipe error: ".$e->getMessage().DB::$br;
                 $_SESSION["soleexceptionerror"] = $e;
                 exception_handler(0,$e->getMessage(),$e->getFile(),$e->getLine());
             }
@@ -296,7 +298,7 @@
                     $DB_CONN = new PDO( 'mysql:host='.DB::$DB_HOST.';dbname='.DB::$DB_DATABASE, DB::$DB_USERNAME, DB::$DB_PASSWORD);
                     $DB_CONN->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 }catch(PDOException $e){
-                    echo "<b>Database Connection Failed: </b>" . $e->getMessage()."<br>";
+                    echo "Database Connection Failed: " . $e->getMessage()."<br>";
                 }
                 $table = $data->table;
                 $fillable = [];
@@ -311,8 +313,8 @@
                 }
                 return $bool;
             }catch(Exception $e){
-                echo "<b>Authenticate error: </b>".$e->getMessage().DB::$br;
-                echo "<b>Note: </b>table should have a default <i>username</i> and <i>password</i> column.".DB::$br;
+                echo "Authenticate error: ".$e->getMessage().DB::$br;
+                echo "Note: table should have a default <i>username</i> and <i>password</i> column.".DB::$br;
                 $_SESSION["soleexceptionerror"] = $e;
                 exception_handler(0,$e->getMessage(),$e->getFile(),$e->getLine());
             }
@@ -328,7 +330,7 @@
                     $DB_CONN = new PDO( 'mysql:host='.DB::$DB_HOST.';dbname='.DB::$DB_DATABASE, DB::$DB_USERNAME, DB::$DB_PASSWORD);
                     $DB_CONN->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 }catch(PDOException $e){
-                    echo "<b>Database Connection Failed: </b>" . $e->getMessage()."<br>";
+                    echo "Database Connection Failed: " . $e->getMessage()."<br>";
                 }
                 $table = $data->table;
                 $fillable = [];
@@ -343,11 +345,78 @@
                 }
                 return $bool;
             }catch(Exception $e){
-                echo "<b>Validate error: </b>".$e->getMessage().DB::$br;
+                echo "Validate error: ".$e->getMessage().DB::$br;
                 $_SESSION["soleexceptionerror"] = $e;
                 exception_handler(0,$e->getMessage(),$e->getFile(),$e->getLine());
             }
         }
-        public static $br = "</br>";
+        /**
+         * --------------------------------------------------------------------------------
+         * Export Database
+         * --------------------------------------------------------------------------------
+         */
+        public static function export($location){
+            try {
+                $filename = DB::$DB_DATABASE."_".uniqid();
+                date_default_timezone_set('Asia/Manila');
+                // Establish database connection
+                try {
+                    $DB_CONN = new PDO(
+                        'mysql:host=' . DB::$DB_HOST . ';dbname=' . DB::$DB_DATABASE,
+                        DB::$DB_USERNAME,
+                        DB::$DB_PASSWORD
+                    );
+                    $DB_CONN->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                } catch (PDOException $e) {
+                    echo "Database Connection Failed: " . $e->getMessage() . "<br>";
+                    return false;
+                }
+
+                // Get all tables
+                $tables = [];
+                $SQL = $DB_CONN->prepare("SHOW TABLES");
+                $SQL->execute();
+                $tables = $SQL->fetchAll(PDO::FETCH_COLUMN);
+
+                // Initialize SQL dump
+                $sqlDump = "-- Date: ".date('F j, Y') . "\n" . "-- Time: ".date('h:i:s A') . "\n" . "-- DB Name: " . DB::$DB_DATABASE . "\n";
+
+                foreach ($tables as $table) {
+                    // Get table structure
+                    $SQL = $DB_CONN->prepare("SHOW CREATE TABLE `$table`");
+                    $SQL->execute();
+                    $row = $SQL->fetch(PDO::FETCH_ASSOC);
+                    $sqlDump .= "\n\n" . $row['Create Table'] . ";\n\n";
+
+                    // Get table data
+                    $SQL = $DB_CONN->prepare("SELECT * FROM `$table`");
+                    $SQL->execute();
+                    $rows = $SQL->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach ($rows as $row) {
+                        $values = array_map(fn($value) => "'" . addslashes($value) . "'", array_values($row));
+                        $sqlDump .= "INSERT INTO `$table` VALUES(" . implode(", ", $values) . ");\n";
+                    }
+                }
+
+                // Ensure backup location ends with a slash
+                if (!str_ends_with($location, '/')) {
+                    $location .= '/';
+                }
+
+                // Define backup file name
+                $backupFile = $location . $filename . ".sql";
+
+                // Save to file
+                file_put_contents($backupFile, $sqlDump);
+                return $backupFile;
+            } catch (Exception $e) {
+                echo "Export error: " . $e->getMessage() . DB::$br;
+                $_SESSION["soleexceptionerror"] = $e;
+                exception_handler(0, $e->getMessage(), $e->getFile(), $e->getLine());
+                return false;
+            }
+        }
+        public static $br = "";
     }
 ?>

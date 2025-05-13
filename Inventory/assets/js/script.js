@@ -8,12 +8,14 @@ if(document.getElementById("sidebar")){
     
     const logout_modal = new bootstrap.Modal(document.getElementById('logout_modal'),unclose);
     const settings_modal = new bootstrap.Modal(document.getElementById('settings_modal'),unclose);
+    const confirm_export_modal = new bootstrap.Modal(document.getElementById('confirm_export_modal'),unclose);
     sole.get("../controllers/validate_auth.php").then(res => {
         validateAuth(res);
     })
 
     function validateAuth(res){
         if(res.status){
+            localStorage.setItem("user_id",res.user[0]["username"])
             document.getElementById("userDropdown").innerHTML = "<span class=\"fa fa-user-circle-o\"></span> " + res.user[0]["name"]
         }else{
             window.location.replace("../index.php");
@@ -36,6 +38,78 @@ if(document.getElementById("sidebar")){
             window.location.replace("../index.php");
         })
     })
+
+    var export_password = document.getElementById("export_password");
+
+    document.getElementById("export_db").addEventListener("click",function(){
+        settings_modal.hide()
+        confirm_export_modal.show()
+    })
+
+    //  // CONFIRM PASSWORD FOCUS
+    // document.getElementById('confirm_export_modal').addEventListener('shown.bs.modal', function () {
+    //     export_password.focus()
+    // })
+
+    document.getElementById("cancel_export").addEventListener("click",function(){
+        settings_modal.show()
+        confirm_export_modal.hide()
+        export_password.value = ""
+    })
+
+    document.getElementById("confirm_export").addEventListener("click",function(){
+        if(localStorage.getItem("user_id")){
+            if(export_password.value){
+                sole.post("../controllers/pass_check.php",{
+                    userid: localStorage.getItem("user_id"),
+                    password: export_password.value
+                })
+                .then(res => exportAssist(res))
+            }else{
+                alert("PLEASE INPUT ACCOUNT PASSWORD")
+            }
+        }else{
+            bs5.toast("warning","Something went wrong, try again.")
+        }
+    })
+
+    function exportAssist(res){
+        if(res.status){
+            sole.get("../controllers/db_export.php")
+            .then(res => exportAssistDownload(res))
+        }else{
+            alert(res.message)
+        }
+    }
+
+    function exportAssistDownload(res){
+        if(res){
+            const filePath = res;
+            const filename = filePath.split('/').pop();
+
+            fetch(res)
+            .then(response => response.blob()) // Convert response to a Blob
+            .then(blob => {
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = filename; // Set the filename
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(error => bs5.toast("error", "Export Failed: " + error));
+
+            settings_modal.show()
+            confirm_export_modal.hide()
+            export_password.value = ""
+
+            setTimeout(() => {
+                sole.post("../../controllers/clear_temp.php").then(res => console.log(res));
+            }, 5000);
+        }else{
+            alert("EXPORT ERROR")
+        }
+    }
 
     const sidebar = document.getElementById('sidebar');
     let collapsed = false;

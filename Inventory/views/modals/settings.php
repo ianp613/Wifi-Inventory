@@ -1,4 +1,4 @@
-<!-- LOGOUT MODAL -->
+<!-- SETTINGS MODAL -->
 <div class="modal" id="settings_modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
@@ -23,8 +23,24 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-sm btn-light rouded-pill"><span class="fa fa-database"></span> DB Export</button>
+                <button id="export_db" class="btn btn-sm btn-light rouded-pill"><span class="fa fa-database"></span> DB Export</button>
                 <button class="btn btn-sm btn-danger rouded-pill">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CONFIRM EXPORT MODAL -->
+<div class="modal" id="confirm_export_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content bg-danger">
+            <div class="modal-body">
+                <label for="export_password" class="text-light"><i><span class="fa fa-key"></span> Account Password: </i></label>
+                <input type="password" id="export_password" class="text-light form-control mt-2 bg-danger">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger rouded-pill" id="cancel_export"><span class="fa fa-close"></span> Cancel</button>
+                <button class="btn btn-sm btn-danger rouded-pill" id="confirm_export"><span class="fa fa-database"></span> Proceed</button>
             </div>
         </div>
     </div>
