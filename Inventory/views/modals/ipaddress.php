@@ -184,9 +184,44 @@
             <div class="modal-header">
                 <div>
                     <h6 id="edit_ip_title" class="modal-title">Edit Selected IP</h6>    
-                    <div style="color: #ff0000;"><i>*Note: put <b>N/A</b> if not applicable.</i></div>
                 </div>
-                
+            </div>
+            <div class="modal-body">
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label for="hostname" class="mb-2">Hostname</label>
+                        <input required type="text" name="" id="hostname" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="site" class="mb-2">Site / Location</label>
+                        <input required type="text" name="" id="site" class="form-control">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label for="server" class="mb-2">Server</label>
+                        <input required type="text" name="" id="server" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="webmgmtpt" class="mb-2">Web Management Port</label>
+                        <input required type="text" name="" id="webmgmtpt" class="form-control">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label for="username" class="mb-2">Username</label>
+                        <input required type="text" name="" id="username" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="password" class="mb-2">Password</label>
+                        <div class="ps-field">
+                            <input type="password" id="password" class="form-control">
+                            <span id="togglePassword" class="fa fa-eye-slash text-secondary"></span>
+                        </div>
+                    </div>
+                </div>
+                <label for="edit_entry_remarks_input" class="mb-2 mt-2">Remarks</label>
+                <textarea maxlength="1000" rows="5" name="" id="edit_entry_remarks_input" class="form-control" placeholder="Aa"></textarea>
             </div>
             <!-- <div class="modal-body">
                 <label for="edit_entry_description_input" class="mb-2">Description</label>

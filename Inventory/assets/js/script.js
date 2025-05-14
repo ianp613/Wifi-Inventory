@@ -153,12 +153,27 @@ if(document.getElementById("sidebar")){
     window.addEventListener('resize', checkScreenSize);
 }
 
+document.getElementsByClassName("ps-field")[0].addEventListener("click",function(e){
+    if(e.target.tagName == "SPAN"){
+        if(e.target.classList.contains("fa-eye-slash")){
+            document.getElementById("password").type = "text"
+            e.target.classList.remove("fa-eye-slash")
+            e.target.classList.add("fa-eye")
+        }else{
+            document.getElementById("password").type = "password"
+            e.target.classList.remove("fa-eye")
+            e.target.classList.add("fa-eye-slash")
+        }
+    }
+})
+
+
 // PUBLIC
 document.addEventListener('contextmenu', event => {
     event.preventDefault();
 });
 
-const elements = document.querySelectorAll("input[type='text'], textarea");
+const elements = document.querySelectorAll("input[type='text'], input[type='password'], textarea");
 elements.forEach((element) => {
   element.addEventListener("input", function() {
     this.value = this.value.replace(/[']/g, "");

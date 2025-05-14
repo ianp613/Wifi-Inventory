@@ -95,6 +95,18 @@ input[readonly] {
     border-radius: 5px;
     pointer-events: none;
 }
+.copyright-1{
+    z-index: 6000;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 5px;
+    padding-right: 15px;
+    border-radius: 5px;
+    pointer-events: none;
+    width: 100%;
+    text-align: end;
+}
 
 /* The switch - the box around the slider */
 .switch {
@@ -142,6 +154,20 @@ input:checked + .slider {
 
 input:focus + .slider {
   box-shadow: 0 0 1px #dc3545;
+}
+
+.ps-field{
+    display: flex;
+}
+
+.ps-field input{
+    padding-right: 40px;
+}
+.ps-field span{
+    position: absolute;
+    right: 0;
+    margin-right: 30px;
+    margin-top: 12px;
 }
 
 input:checked + .slider:before {

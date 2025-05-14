@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
+        <link rel="stylesheet" href="../assets/fontawesome/css/font-awesome.min.css">
     <title>Wifi Team Inventory</title>
     <link rel="shortcut icon" href="../assets/img/hero.png" type="image/x-icon">
 </head>
@@ -25,9 +26,10 @@
                   <label for="userid" class="form-label">User ID</label>
                   <input type="userid" class="form-control" id="userid" placeholder="Enter your user ID">
                 </div>
-                <div class="mb-3">
-                  <label for="password" class="form-label">Password</label>
-                  <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                <label for="userid" class="form-label">Password</label>
+                <div class="ps-field mb-3">
+                    <input type="password" id="password" class="form-control" placeholder="Enter your password">
+                    <span id="togglePassword" class="fa fa-eye-slash text-secondary"></span>
                 </div>
                 <button id="login_btn" type="submit" class="btn btn-danger w-100">Login</button>
             </div>
@@ -35,7 +37,7 @@
         </div>
       </div>
     </div>
-    <h6 class="copyright f-10 text-secondary w-100"><i>Copyright 2025 @ Wifi Team</i></h6>
+    <h6 class="copyright-1 f-10 text-secondary"><i>Copyright 2025 @ Wifi Team</i></h6>
   </body>
   
   <script src="../assets/js/bootstrap/bootstrap.min.js"></script>
