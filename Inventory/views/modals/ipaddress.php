@@ -220,44 +220,12 @@
                         </div>
                     </div>
                 </div>
-                <label for="edit_entry_remarks_input" class="mb-2 mt-2">Remarks</label>
-                <textarea maxlength="1000" rows="5" name="" id="edit_entry_remarks_input" class="form-control" placeholder="Aa"></textarea>
+                <label for="remarks" class="mb-2 mt-2">Remarks</label>
+                <textarea maxlength="1000" rows="5" name="" id="remarks" class="form-control" placeholder="Aa"></textarea>
             </div>
-            <!-- <div class="modal-body">
-                <label for="edit_entry_description_input" class="mb-2">Description</label>
-                <input required type="text" name="" id="edit_entry_description_input" class="form-control">
-                <div class="row mt-2">
-                    <div class="col-md-6">
-                        <label for="edit_entry_model_no_input" class="mb-2">Model No.</label>
-                        <input required style="text-transform: uppercase" type="text" name="" id="edit_entry_model_no_input" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="edit_entry_barcode_input" class="mb-2">Barcode (FPOSI)</label>
-                        <input required style="text-transform: uppercase" type="text" name="" id="edit_entry_barcode_input" class="form-control">
-                    </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-md-6">
-                        <label for="edit_entry_specifications_input" class="mb-2">Specifications</label>
-                        <input required type="text" name="" id="edit_entry_specifications_input" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="edit_entry_status_input" class="mb-2">Status</label>
-                        <select name="" id="edit_entry_status_input" class="form-control">
-                            <option value="" selected disabled>-- Select Status --</option>
-                            <option value="Standby">Standby</option>
-                            <option value="In Use">In Use</option>
-                            <option value="For Status">For Status</option>
-                            <option value="N/A">N/A</option>
-                        </select>
-                    </div>
-                </div>
-                <label for="edit_entry_remarks_input" class="mb-2 mt-2">Remarks</label>
-                <textarea maxlength="1000" rows="5" name="" id="edit_entry_remarks_input" class="form-control" placeholder="Aa"></textarea>
-            </div> -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
-                <button id="edit_ip_btn" type="button" data-bs-dismiss="" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>
+                <button id="edit_ip_btn" type="button" data-bs-dismiss="" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Assign</button>
             </div>
         </div>
     </div>

@@ -113,7 +113,6 @@
                 $temp = "";
                 
                 for ($i=0; $i <= count($data->fillable)-1; $i++) {
-                    !$data->fillable[$i] ? $data->fillable[$i] = "-" : null;
                     if($i == count($data->fillable)-1){
                         $columns .= "`".$data->fillable[$i]."`";
                         $temp = $data->fillable[$i];
@@ -205,7 +204,6 @@
                 $set = "";
                 if($data->status){
                     for ($i=0; $i <= count($data->fillable)-1; $i++) {
-                        !$data->fillable[$i] ? $data->fillable[$i] = "-" : null;
                         if($i == count($data->fillable)-1){
                             $temp = $data->fillable[$i];
                             $set .= "`".$data->fillable[$i]."`"." = "."'".$data->$temp."'";

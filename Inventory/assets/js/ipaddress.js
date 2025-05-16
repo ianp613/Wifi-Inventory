@@ -66,6 +66,14 @@ if(document.getElementById("ipaddress")){
     var ip_import_input = document.getElementById("ip_import_input")
     var ip_import = document.getElementById("ip_import")
     var import_message = document.getElementById("import_message")
+
+    var hostname = document.getElementById("hostname")
+    var site = document.getElementById("site")
+    var server = document.getElementById("server")
+    var webmgmtpt = document.getElementById("webmgmtpt")
+    var username = document.getElementById("username")
+    var password = document.getElementById("password")
+    var remarks = document.getElementById("remarks")
     
     // EDIT ENTRY FOCUS
     var edit_ip = document.getElementById('edit_ip')
@@ -132,6 +140,19 @@ if(document.getElementById("ipaddress")){
         }).then(res => validateResponse(res,"delete_network"))
     })
 
+    edit_ip_btn.addEventListener("click",function(){
+        sole.post("../../controllers/ipaddress/edit_ip.php",{
+            id: this.getAttribute("i-id"),
+            hostname: hostname.value,
+            site: site.value,
+            server: server.value,
+            webmgmtpt: webmgmtpt.value,
+            username: username.value,
+            password: password.value,
+            remarks: remarks.value
+        }).then(res => validateResponse(res,"edit_ip"))
+    })
+
     // TOGGLE EDIT NETWORK MODAL
     var network_dropdown = document.getElementById("network_dropdown");
     var network_dropdown_toggle = document.getElementById("network_dropdown_toggle");
@@ -170,6 +191,21 @@ if(document.getElementById("ipaddress")){
             bs5.toast(res.type,res.message,res.size)
         }
     }
+    function usernameSupport(username){
+        if(username != "-"){
+            return username
+        }else{
+            return ""
+        }
+    }
+    function passwordSupport(password){
+        if(password != "-"){
+            if (password.length <= 2) return password;
+            return password.charAt(0) + '*'.repeat(password.length - 2) + password.charAt(password.length - 1);
+        }else{
+            return ""
+        }
+    }
     function loadIP(res){
         ipTable.clear().draw();
         ip_count = [0,0];
@@ -181,13 +217,13 @@ if(document.getElementById("ipaddress")){
             ipTable.row.add([
                 e["id"],
                 e["ip"],
-                e["hostname"],
-                e["site"],
-                e["server"],
+                e["hostname"] != "-" ? e["hostname"] : "",
+                e["site"] != "-" ? e["site"] : "",
+                e["server"] != "-" ? e["server"] : "",
                 e["status"] != "UNASSIGNED" ? "A - USED" : "B - AVAILABLE",
                 e["status"] == "UNASSIGNED" ? "<div class=\"red-circle mx-auto\"></div>" : "<div class=\"green-circle mx-auto\"></div>",
-                e["webmgmtpt"],
-                e["username"] + " - " + e["password"],
+                e["webmgmtpt"] != "-" ? e["webmgmtpt"] : "",
+                e["username"] != "-" || e["password"] != "-" ? "<div class=\"f-10\"><b>Username: </b>" + usernameSupport(e["username"]) + " <br> " + "<b>Password: </b>" + passwordSupport(e["password"]) + "</div>": "",
                 " <button id=\"edit_ip_"+ e["id"] +"\" i-id=\""+ e["id"] +"\" class=\"edit_ip_row btn btn-sm btn-secondary\"><i i-id=\""+ e["id"] +"\" class=\"edit_ip_row fa fa-edit\"></i></button>"
             ]).draw(false)   
         });
@@ -210,79 +246,27 @@ if(document.getElementById("ipaddress")){
                 }).then(res => editForm(res))
             }
         })
-        // res.ip.forEach(e => {
-        //     document.getElementById('edit_ip_'+e["id"]).addEventListener("click", e=>{
-                
-        //         edit_ip_btn.addEventListener("click", e =>{
-        //             console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOK")
-        //             let invalid = [];
-
-                    // if (!edit_entry_description_input.value) invalid.push('Description');
-                    // if (!edit_entry_model_no_input.value) invalid.push('Model No.');
-                    // if (!edit_entry_barcode_input.value) invalid.push('Barcode');
-                    // if (!edit_entry_specifications_input.value) invalid.push('Specifications');
-                    // if (!edit_entry_status_input.value) invalid.push('Status');
-                    // if (!edit_entry_remarks_input.value) invalid.push('Remarks');
-
-                    // let message = "";
-
-                    // for (let i = 0; i < invalid.length; i++) {
-                    //     if(i != invalid.length-1){
-                    //         message += invalid[i] + ", "
-                    //     }else{
-                    //         if(invalid.length != 1){
-                    //             message += "and " + invalid[i] + " doesn't have a default value. Please put <b class=\"text-warning\"><i>N/A</i></b> if not applicable."
-                    //         }else{
-                    //             message += invalid[i] + " doesn't have a default value. Please put <b class=\"text-warning\"><i>N/A</i></b> if not applicable."
-                    //         }
-                    //     }
-                    // }
-
-                    // if(!message){
-                    //     if(localStorage.getItem("selected_equipment")){
-                    //         var id = null;
-                    //         e.target.tagName == "SPAN" ? id = e.target.parentNode.getAttribute("e-id") : id = e.target.getAttribute("e-id")
-                    //         sole.post("../../controllers/equipments/edit_entry.php",{
-                    //             id: id,
-                    //             description: edit_entry_description_input.value,
-                    //             model_no: edit_entry_model_no_input.value,
-                    //             barcode: edit_entry_barcode_input.value,
-                    //             specifications: edit_entry_specifications_input.value,
-                    //             status: edit_entry_status_input.value,
-                    //             remarks: edit_entry_remarks_input.value
-                    //         }).then(res => validateResponse(res,"edit_entry"))
-                    //     }else{
-                    //         bs5.toast("warning","Please select equipment first.")
-                    //     }
-                    // }else{
-                    //     bs5.toast("warning",message)
-                    // }
-                    
-        //         })
-        //     })
-        // });
     }
 
+    function editFormClear(){
+        hostname.value = ""
+        site.value = ""
+        server.value = ""
+        webmgmtpt.value = ""
+        username.value = ""
+        password.value = ""
+        remarks.value = ""
+    }
+    
     function editForm(res){
+        res.ip[0].hostname != "-" ? hostname.value = res.ip[0].hostname : hostname.value = ""
+        res.ip[0].site != "-" ? site.value = res.ip[0].site : site.value = ""
+        res.ip[0].server != "-" ? server.value = res.ip[0].server : server.value = ""
+        res.ip[0].webmgmtpt != "-" ? webmgmtpt.value = res.ip[0].webmgmtpt : webmgmtpt.value = ""
+        res.ip[0].username != "-" ? username.value = res.ip[0].username : username.value = ""
+        res.ip[0].password != "-" ? password.value = res.ip[0].password : password.value = ""
+        res.ip[0].remarks != "-" ? remarks.value = res.ip[0].remarks : remarks.value = ""
         edit_ip_modal.show()
-        console.log(res)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     function validateResponse(res, func){
@@ -344,6 +328,13 @@ if(document.getElementById("ipaddress")){
                 import_message.innerHTML = ""
                 import_modal.hide()
                 sole.get("../../controllers/ipaddress/get_network.php").then(res => loadNetwork(res))
+            }
+            if(func == "edit_ip"){
+                editFormClear()
+                edit_ip_modal.hide()
+                sole.post("../../controllers/ipaddress/get_ip.php", {
+                    nid: localStorage.getItem("selected_network_id")
+                }).then(res => loadIP(res))
             }
             bs5.toast(res.type,res.message,res.size)
         }else{

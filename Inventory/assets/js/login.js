@@ -32,7 +32,7 @@ if(document.getElementById("login")){
 
     function validateLogin(res){
         if(res.status){
-            bs5.toast(res.type,res.message + " " + res.user[0]["name"],res.size)
+            bs5.toast(res.type,res.message + " " + res.user[0]["name"],res.size, true, false)
             audio.play();
             setTimeout(() => {
                 window.location.replace("inventory.php?loc=dashboard");
