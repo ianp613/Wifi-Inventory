@@ -61,4 +61,29 @@
         ];
     }
 
+    class Routers{
+        public $table = "routers";
+        public $fillable = [
+            "name",
+            "ip",
+            "subnet"
+        ];
+    }
+
+    class ISP{
+        public $table = "isp";
+        public $fillable = [
+            "rid",
+            "int",
+            "isp_name",
+            "name",
+            "wan_ip",
+            "subnet",
+            "gateway",
+            "dns1",
+            "dns2",
+            "webmgmtpt"
+        ];
+    }
+
 ?>

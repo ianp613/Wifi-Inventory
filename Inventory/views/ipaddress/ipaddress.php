@@ -29,7 +29,7 @@
                 <td class="text-start">Status</td>
                 <td class="text-start">Web Mgmt. Port</td>
                 <td class="text-start">Credentials</td>
-                <td style="width: 100px; !important">Action</td>
+                <td style="width: 100px !important;">Action</td>
             </tr>
         </thead>
         <tbody>

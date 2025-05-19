@@ -28,7 +28,7 @@
             "status" => false,
             "type" => "warning",
             "size" => null,
-            "message" => "Please provide equipment name."
+            "message" => "Something went wrong."
         ];
     }
     echo json_encode($response);

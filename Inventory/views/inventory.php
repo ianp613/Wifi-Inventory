@@ -38,13 +38,13 @@
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="?loc=isp" class="nav-link text-white">
-                            <i class="fa fa-gears" style="width: 13px;"></i> <span>ISP</span>
+                        <a href="?loc=routers" class="nav-link text-white">
+                            <i class="fa fa-gears" style="width: 13px;"></i> <span>Routers</span>
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="?loc=fwcisp" class="nav-link text-white">
-                            <i class="fa fa-wifi" style="width: 13px;"></i> <span>Free Wifi ISP</span>
+                        <a href="?loc=isp" class="nav-link text-white">
+                            <i class="fa fa-wifi" style="width: 13px;"></i> <span>ISP</span>
                         </a>
                     </li>
                 </ul>
@@ -60,10 +60,10 @@
                                     echo "<span class=\"fa fa-wrench\"></span> Equipments";
                                 }elseif($_GET["loc"] == "ipaddress"){
                                     echo "<span class=\"fa fa-map-marker\"></span> IP Address";
+                                }elseif($_GET["loc"] == "routers"){
+                                    echo "<span class=\"fa fa-gears\"></span> Routers";
                                 }elseif($_GET["loc"] == "isp"){
-                                    echo "<span class=\"fa fa-gears\"></span> Internet Service Provider";
-                                }elseif($_GET["loc"] == "fwcisp"){
-                                    echo "<span class=\"fa fa-wifi\"></span> Free Wifi Current ISP";
+                                    echo "<span class=\"fa fa-wifi\"></span> Internet Service Provider";
                                 }else{
                                     header("location: ../index.php");
                                 }
@@ -93,8 +93,8 @@
                             include("ipaddress/ipaddress.php");
                         }elseif($_GET["loc"] == "isp"){
                             include("isp/isp.php");
-                        }elseif($_GET["loc"] == "fwcisp"){
-                            include("fwcisp/fwcisp.php");
+                        }elseif($_GET["loc"] == "routers"){
+                            include("routers/routers.php");
                         }
                     ?>
                 </div>
@@ -103,6 +103,7 @@
         <h6 class="copyright f-10 text-secondary"><i>Copyright 2025 @ Wifi Team</i></h6>
         <?php include("modals/equipments.php"); ?>
         <?php include("modals/ipaddress.php"); ?>
+        <?php include("modals/isp.php"); ?>
         <?php include("modals/logout.php"); ?>
         <?php include("modals/settings.php"); ?>
         <script src="../assets/js/jquery/jquery-3.7.1.js"></script>
@@ -114,6 +115,8 @@
         <script src="../assets/js/dashboard.js"></script>
         <script src="../assets/js/equipments.js"></script>
         <script src="../assets/js/ipaddress.js"></script>
+        <script src="../assets/js/routers.js"></script>
+        <script src="../assets/js/isp.js"></script>
         <script src="../assets/js/modal_alert.js"></script>
     </body>
 </html>

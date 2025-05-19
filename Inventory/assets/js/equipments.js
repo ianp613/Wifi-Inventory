@@ -273,7 +273,7 @@ if(document.getElementById("equipments")){
                 e["barcode"],
                 e["status"],
                 " <button id=\"edit_entry_"+ e["id"] +"\" e-id=\""+ e["id"] +"\" class=\"edit_entry_row btn btn-sm btn-secondary mb-1\"><i e-id=\""+ e["id"] +"\" class=\"edit_entry_row fa fa-edit\"></i></button>"+
-                " <button id=\"delete_entry_"+ e["id"] +"\" e-id=\""+ e["id"] +"\" class=\"delete_entry_row btn btn-sm btn-secondary mb-1\"><i e-id=\""+ e["id"] +"\" class=\"delete_entry_row fa fa-trash-o\"></i></button>"
+                " <button id=\"delete_entry_"+ e["id"] +"\" e-id=\""+ e["id"] +"\" class=\"delete_entry_row btn btn-sm btn-danger mb-1\"><i e-id=\""+ e["id"] +"\" class=\"delete_entry_row fa fa-trash-o\"></i></button>"
             ]).draw(false)   
         });
         for_status_count ? document.getElementById("for_status_count").innerText = for_status_count : document.getElementById("for_status_count").innerText = ""
@@ -314,7 +314,7 @@ if(document.getElementById("equipments")){
                 if(e.target.tagName == "BUTTON"){
                     tr = e.target.parentNode.parentNode.children    
                 }
-                edit_entry_title.innerText = "Edit " + tr[0].innerText
+                edit_entry_title.innerText = "Edit Entry: " + tr[0].innerText
                 edit_entry_btn.setAttribute("e-id",e.target.getAttribute("e-id"))
                 sole.post("../../controllers/equipments/find_entry.php",{
                     id: e.target.getAttribute("e-id")

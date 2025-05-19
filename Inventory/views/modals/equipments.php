@@ -31,7 +31,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
-                <button id="edit_equipment_btn" type="button" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>
+                <button id="edit_equipment_btn" type="button" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Update</button>
             </div>
         </div>
     </div>
@@ -157,7 +157,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
-                <button id="edit_entry_btn" type="button" data-bs-dismiss="" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>
+                <button id="edit_entry_btn" type="button" data-bs-dismiss="" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Update</button>
             </div>
         </div>
     </div>

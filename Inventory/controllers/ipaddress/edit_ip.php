@@ -2,13 +2,6 @@
     header('Content-Type: application/json');
     include("../../includes.php");
     $data = json_decode(file_get_contents('php://input'), true);
-    
-    // $response = [
-    //     "status" => false,
-    //     "type" => "error",
-    //     "size" => null,
-    //     "message" => "Entry not found."
-    // ];
 
     $ip = new IP_Address;
     $ip = DB::prepare($ip,$data["id"]);
