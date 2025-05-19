@@ -25,11 +25,15 @@ if(document.getElementById("equipments")){
     
     const add_equipment_modal = new bootstrap.Modal(document.getElementById('add_equipment'),unclose);
     const edit_equipment_modal = new bootstrap.Modal(document.getElementById('edit_equipment'),unclose);
+    const delete_equipment_modal = new bootstrap.Modal(document.getElementById('delete_equipment'),unclose);
     const add_entry_modal = new bootstrap.Modal(document.getElementById('add_entry'),unclose);
     const delete_entry_modal = new bootstrap.Modal(document.getElementById('delete_entry'),unclose);
     const edit_entry_modal = new bootstrap.Modal(document.getElementById('edit_entry'),unclose);
     const for_status_modal = new bootstrap.Modal(document.getElementById('for_status'),unclose);
     var add_entry_title = document.getElementById('add_entry_title');
+    var delete_equipment_btn = document.getElementById('delete_equipment_btn')
+    var delete_equipment_name = document.getElementById('delete_equipment_name')
+    var delete_equipment_btn_proceed = document.getElementById('delete_equipment_btn_proceed')
     // for_status_modal.show()
 
     // FOCUS ADD EQUIPMENT INPUT
@@ -52,7 +56,7 @@ if(document.getElementById("equipments")){
     var edit_equipment = document.getElementById('edit_equipment')
     var edit_equipment_input = document.getElementById('edit_equipment_input')
     var edit_equipment_btn = document.getElementById('edit_equipment_btn')
-    var edit_equipment_input_temp = "";
+    var edit_equipment_input_temp = ""
 
     edit_equipment.addEventListener('shown.bs.modal', function () {
         edit_equipment_input_temp = edit_equipment_input.value
@@ -150,6 +154,8 @@ if(document.getElementById("equipments")){
             edit_equipment_modal.show();
             edit_equipment_input.value = e.target.innerText
             edit_equipment_input.setAttribute("eid",e.target.getAttribute("id"))
+            delete_equipment_name.innerText = e.target.innerText
+            delete_equipment_btn.setAttribute("eid",e.target.getAttribute("id"))
             edit_equipment_input.focus()
         }
     })
@@ -165,6 +171,18 @@ if(document.getElementById("equipments")){
                 eid: localStorage.getItem("selected_equipment_id")
             }).then(res => loadEntry(res))
         }
+    })
+
+    // DELETE EQUIPMENT MODAL
+    delete_equipment_btn.addEventListener("click",function(){
+        delete_equipment_modal.show()
+        edit_equipment_modal.hide()
+    })
+
+    delete_equipment_btn_proceed.addEventListener("click",function(){
+        sole.post("../../controllers/equipments/delete_equipment.php",{
+            id: delete_equipment_btn.getAttribute("eid")
+        }).then(res => validateResponse(res,"delete_equipment"))
     })
 
     // LOAD PAGE DATA
@@ -225,6 +243,16 @@ if(document.getElementById("equipments")){
                     localStorage.setItem("selected_equipment_id", edit_equipment_input.getAttribute("id"));
                 }
                 edit_equipment_modal.hide();
+                sole.get("../../controllers/equipments/get_equipment.php").then(res => loadEquipment(res))
+            }
+            if(func == "delete_equipment"){
+                if(delete_equipment_name.innerText == localStorage.getItem("selected_equipment")){
+                    equipment_dropdown_toggle.innerText = "-- Select Equipment --"
+                    entryTable.clear().draw();
+                    localStorage.removeItem("selected_equipment");
+                    localStorage.removeItem("selected_equipment_id");
+                }
+                delete_equipment_modal.hide()
                 sole.get("../../controllers/equipments/get_equipment.php").then(res => loadEquipment(res))
             }
             bs5.toast(res.type,res.message,res.size)

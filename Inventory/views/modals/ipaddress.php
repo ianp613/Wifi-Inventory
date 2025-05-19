@@ -242,6 +242,24 @@
     </div>
 </div>
 
+<!-- UNASSIGN IP MODAL -->
+<div class="modal fade" id="unassign_ip_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="unassign_ip_name"></h6>
+            </div>
+            <div class="modal-body pe-4 ps-4">
+                <div>You are going to unassign an IP, this can't be undone do you wish to proceed?</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
+                <button class="btn btn-danger btn-sm" id="unassign_ip_btn"><span class="fa fa-ban"></span> Unassign</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- DELETE ENTRY MODAL -->
 <!-- <div class="modal fade" id="delete_entry" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered ">

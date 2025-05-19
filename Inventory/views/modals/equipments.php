@@ -23,6 +23,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title">Edit Equipment</h6>
+                <button id="delete_equipment_btn" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></button>
             </div>
             <div class="modal-body">
                 <label for="edit_equipment_input" class="mb-2">Equipment Name</label>
@@ -30,7 +31,31 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
-                <button id="edit_equipment_btn" type="button" class="btn btn-warning btn-sm"><span class="fa fa-save"></span> Save</button>
+                <button id="edit_equipment_btn" type="button" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE EQUIPMENT MODAL -->
+<div class="modal fade" id="delete_equipment" tabindex="-1">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <div class="w-100">
+                    <span class="fa fa-exclamation-triangle text-danger h2"></span>
+                    <h5 id="delete_network_title" class="modal-title fw-bolder">Delete Equipment</h5>    
+                </div>
+            </div>
+            <div class="modal-body text-center">
+                <div class="w-100">
+                    <div>You're going to delete equipment "<b><span id="delete_equipment_name">EQUIPMENT</span></b>".</div>
+                    <div>All of the entry will also be deleted, this can't be undone. Do you wish to proceed?</div>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#edit_equipment"><span class="fa fa-remove"></span> No</button>
+                <button id="delete_equipment_btn_proceed" type="button" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span> Yes</button>
             </div>
         </div>
     </div>

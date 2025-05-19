@@ -42,6 +42,7 @@ if(document.getElementById("ipaddress")){
     const delete_network_modal = new bootstrap.Modal(document.getElementById('delete_network'),unclose);
     const edit_ip_modal = new bootstrap.Modal(document.getElementById('edit_ip'),unclose);
     const import_modal = new bootstrap.Modal(document.getElementById('import_modal'),unclose);
+    const unassign_ip_modal = new bootstrap.Modal(document.getElementById('unassign_ip_modal'),unclose);
 
     var add_network = document.getElementById("add_network")
     var edit_network = document.getElementById("edit_network")
@@ -80,7 +81,9 @@ if(document.getElementById("ipaddress")){
     // var edit_entry_description_input = document.getElementById('edit_entry_description_input')
     var edit_ip_btn = document.getElementById('edit_ip_btn')
     var edit_ip_title = document.getElementById('edit_ip_title')
-    var edit_network_name_temp = "";
+    var edit_network_name_temp = ""
+
+    var unassign_ip_name = document.getElementById("unassign_ip_name")
 
     edit_ip.addEventListener('shown.bs.modal', function () {
         // edit_entry_description_input.focus()
@@ -140,6 +143,7 @@ if(document.getElementById("ipaddress")){
         }).then(res => validateResponse(res,"delete_network"))
     })
 
+    // POST EDIT IP
     edit_ip_btn.addEventListener("click",function(){
         sole.post("../../controllers/ipaddress/edit_ip.php",{
             id: this.getAttribute("i-id"),
@@ -151,6 +155,13 @@ if(document.getElementById("ipaddress")){
             password: password.value,
             remarks: remarks.value
         }).then(res => validateResponse(res,"edit_ip"))
+    })
+
+    // UNASSIGN IP
+    unassign_ip_btn.addEventListener("click",function(){
+        sole.post("../../controllers/ipaddress/unassign_ip.php",{
+            id: this.getAttribute("i-id")
+        }).then(res => validateResponse(res,"unassign_ip"))
     })
 
     // TOGGLE EDIT NETWORK MODAL
@@ -191,12 +202,20 @@ if(document.getElementById("ipaddress")){
             bs5.toast(res.type,res.message,res.size)
         }
     }
+
     function usernameSupport(username){
         if(username != "-"){
             return username
         }else{
             return ""
         }
+    }
+
+    function setUnassignBtn(e){
+        if(e["status"] == "ASSIGNED"){
+            return " <button id=\"unassign_ip_"+ e["id"] +"\" i-id=\""+ e["id"] +"\" class=\"unassign_ip_row btn btn-sm btn-danger\"><i i-id=\""+ e["id"] +"\" class=\"unassign_ip_row fa fa-ban\"></i></button>"
+        }
+        return ""
     }
     function passwordSupport(password){
         if(password != "-"){
@@ -225,25 +244,31 @@ if(document.getElementById("ipaddress")){
                 e["webmgmtpt"] != "-" ? e["webmgmtpt"] : "",
                 e["username"] != "-" || e["password"] != "-" ? "<div class=\"f-10\"><b>Username: </b>" + usernameSupport(e["username"]) + " <br> " + "<b>Password: </b>" + passwordSupport(e["password"]) + "</div>": "",
                 " <button id=\"edit_ip_"+ e["id"] +"\" i-id=\""+ e["id"] +"\" class=\"edit_ip_row btn btn-sm btn-secondary\"><i i-id=\""+ e["id"] +"\" class=\"edit_ip_row fa fa-edit\"></i></button>"
+                + setUnassignBtn(e)
             ]).draw(false)   
         });
 
         used_ip.innerText = "Used IP: " + ip_count[0]
         available_ip.innerText = "Available IP: " + ip_count[1]
         document.querySelector('#network_table').addEventListener("click", e=>{
-            if (e.target.classList.contains('edit_ip_row')) {
-                let tr = "";
-                if(e.target.tagName == "I"){
-                    tr = e.target.parentNode.parentNode.parentNode.children
-                }
-                if(e.target.tagName == "BUTTON"){
-                    tr = e.target.parentNode.parentNode.children    
-                }
+            let tr = "";
+            if(e.target.tagName == "I"){
+                tr = e.target.parentNode.parentNode.parentNode.children
+            }
+            if(e.target.tagName == "BUTTON"){
+                tr = e.target.parentNode.parentNode.children    
+            }
+            if(e.target.classList.contains('edit_ip_row')) {
                 edit_ip_title.innerText = "Edit IP: " + tr[0].innerText
                 edit_ip_btn.setAttribute("i-id",e.target.getAttribute("i-id"))
                 sole.post("../../controllers/ipaddress/find_ip.php",{
                     id: e.target.getAttribute("i-id")
                 }).then(res => editForm(res))
+            }
+            if(e.target.classList.contains('unassign_ip_row')){
+                unassign_ip_name.innerText = "Unassign IP: " + tr[0].innerText
+                unassign_ip_btn.setAttribute("i-id",e.target.getAttribute("i-id"))
+                unassign_ip_modal.show()
             }
         })
     }
@@ -259,6 +284,7 @@ if(document.getElementById("ipaddress")){
     }
     
     function editForm(res){
+        res.ip[0].status == "ASSIGNED" ? edit_ip_btn.innerHTML = "<span class=\"fa fa-save\"></span> Update" : edit_ip_btn.innerHTML = "<span class=\"fa fa-save\"></span> Assign"
         res.ip[0].hostname != "-" ? hostname.value = res.ip[0].hostname : hostname.value = ""
         res.ip[0].site != "-" ? site.value = res.ip[0].site : site.value = ""
         res.ip[0].server != "-" ? server.value = res.ip[0].server : server.value = ""
@@ -336,6 +362,12 @@ if(document.getElementById("ipaddress")){
                     nid: localStorage.getItem("selected_network_id")
                 }).then(res => loadIP(res))
             }
+            if(func == "unassign_ip"){
+                unassign_ip_modal.hide()
+                sole.post("../../controllers/ipaddress/get_ip.php", {
+                    nid: localStorage.getItem("selected_network_id")
+                }).then(res => loadIP(res))
+            }
             bs5.toast(res.type,res.message,res.size)
         }else{
             bs5.toast(res.type,res.message,res.size)
@@ -394,7 +426,6 @@ if(document.getElementById("ipaddress")){
         }else{
             bs5.toast("warning","Nothing to export.")
         }
-        
     })
 
     ip_import.addEventListener("click",function(){
@@ -423,7 +454,6 @@ if(document.getElementById("ipaddress")){
                 .then(res => validateResponse(res,"ip_import"))
             }    
         }
-        
     })
 
     function downloadFile(url, filename) {
@@ -443,5 +473,4 @@ if(document.getElementById("ipaddress")){
             sole.post("../../controllers/clear_temp.php").then(res => console.log(res));
         }, 5000);
     }
-
 }
