@@ -288,6 +288,21 @@ input:checked + .slider:before {
 .ht-100 {
     height: 100px;
 }
+.ht-110 {
+    height: 110px;
+}
+.ht-120 {
+    height: 120px;
+}
+.ht-130 {
+    height: 130px;
+}
+.ht-150 {
+    height: 150px;
+}
+.ht-160 {
+    height: 160px;
+}
 
 .wd-10 {
     width: 10px;

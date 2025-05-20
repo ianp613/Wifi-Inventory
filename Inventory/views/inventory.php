@@ -111,6 +111,7 @@
         <?php include("modals/equipments.php"); ?>
         <?php include("modals/ipaddress.php"); ?>
         <?php include("modals/isp.php"); ?>
+        <?php include("modals/routers.php"); ?>
         <?php include("modals/logout.php"); ?>
         <?php include("modals/settings.php"); ?>
         <script src="../assets/js/jquery/jquery-3.7.1.js"></script>
