@@ -38,6 +38,7 @@ if(document.getElementById("isp")){
     var dns2 = document.getElementById("dns2")
     var isp_webmgmtpt = document.getElementById("isp_webmgmtpt")
 
+    var edit_isp_icon = document.getElementById("edit_isp_icon")
     var edit_label_name = document.getElementById("edit_name")
     var edit_isp_name = document.getElementById("edit_isp_name")
     var edit_wan_ip = document.getElementById("edit_wan_ip")
@@ -110,6 +111,11 @@ if(document.getElementById("isp")){
         label_name.focus()
     })
 
+    // EDIT ISP FOCUS
+    edit_isp.addEventListener('shown.bs.modal', function () {
+        edit_label_name.focus()
+    })
+
     add_isp_btn.addEventListener("click",function(){
         if(label_name.value){
             if(isp_name.value){
@@ -137,7 +143,7 @@ if(document.getElementById("isp")){
 
     edit_isp_btn.addEventListener("click",function(){
         if(edit_label_name.value){
-            if(isp_name.value){
+            if(edit_isp_name.value){
                 if(edit_wan_ip.value){
                     sole.post("../../controllers/isp/edit_isp.php",{
                         id: this.getAttribute("i-id"),
@@ -177,7 +183,37 @@ if(document.getElementById("isp")){
         }
     })
 
+    edit_isp_name.addEventListener("change",function(){
+        if(this.value == "PLDT Inc."){
+            edit_isp_icon.setAttribute("src","../../assets/img/pldt.png")
+            edit_isp_icon.setAttribute("class","ht-20")
+        }else if(this.value == "Globe Telecom, Inc."){
+            edit_isp_icon.setAttribute("src","../../assets/img/globe.png")
+            edit_isp_icon.setAttribute("class","ht-30")
+        }else if(this.value == "Converge ICT Solutions Inc."){
+            edit_isp_icon.setAttribute("src","../../assets/img/converge.png")
+            edit_isp_icon.setAttribute("class","ht-30")
+        }else{
+            edit_isp_icon.setAttribute("src","../../assets/img/hero.png")
+            edit_isp_icon.setAttribute("class","ht-30")
+        }
+    })
+
     function editForm(res){
+        if(res.isp[0]["isp_name"] == "PLDT Inc."){
+            edit_isp_icon.setAttribute("src","../../assets/img/pldt.png")
+            edit_isp_icon.setAttribute("class","ht-20")
+        }else if(res.isp[0]["isp_name"] == "Globe Telecom, Inc."){
+            edit_isp_icon.setAttribute("src","../../assets/img/globe.png")
+            edit_isp_icon.setAttribute("class","ht-30")
+        }else if(res.isp[0]["isp_name"] == "Converge ICT Solutions Inc."){
+            edit_isp_icon.setAttribute("src","../../assets/img/converge.png")
+            edit_isp_icon.setAttribute("class","ht-30")
+        }else{
+            edit_isp_icon.setAttribute("src","../../assets/img/hero.png")
+            edit_isp_icon.setAttribute("class","ht-30")
+        }
+
         edit_label_name.value = res.isp[0]["name"] != "-" ? res.isp[0]["name"] : ""
         edit_isp_name.value = res.isp[0]["isp_name"] != "-" ? res.isp[0]["isp_name"] : ""
         edit_wan_ip.value = res.isp[0]["wan_ip"] != "-" ? res.isp[0]["wan_ip"] : ""
@@ -192,7 +228,6 @@ if(document.getElementById("isp")){
     function validateResponse(res, func){
         if(res.status){
             if(func == "add_isp"){
-                console.log("sample")
                 label_name.value = ""
                 isp_name.value = ""
                 wan_ip.value = ""
@@ -205,7 +240,6 @@ if(document.getElementById("isp")){
                 sole.get("../../controllers/isp/get_isp.php").then(res => loadISP(res))
             }
             if(func == "edit_isp"){
-                console.log(res)
                 sole.get("../../controllers/isp/get_isp.php").then(res => loadISP(res))
             }
             if(func == "delete_isp"){

@@ -1,3 +1,10 @@
+<?php
+    $dashboard = $_GET["loc"] == "dashboard" ? true : false;
+    $equipments = $_GET["loc"] == "equipments" ? true : false;
+    $isp = $_GET["loc"] == "isp" ? true : false;
+    $routers = $_GET["loc"] == "routers" ? true : false;
+    $ipaddress = $_GET["loc"] == "ipaddress" ? true : false;
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -23,28 +30,28 @@
                 <hr>
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2">
-                        <a href="?loc=dashboard" class="nav-link text-white">
+                        <a href="?loc=dashboard" class="nav-link text-light <?php $dashboard ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-home" style="width: 13px;"></i> <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="?loc=equipments" class="nav-link text-white">
+                        <a href="?loc=equipments" class="nav-link text-light <?php $equipments ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-wrench" style="width: 13px;"></i> <span>Equipments</span>
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="?loc=ipaddress" class="nav-link text-white">
-                            <i class="fa fa-map-marker" style="width: 13px;"></i> <span>IP Address</span>
+                        <a href="?loc=isp" class="nav-link text-light <?php $isp ?  printf("bg-light text-dark rounded") :  null;?>">
+                            <i class="fa fa-wifi" style="width: 13px;"></i> <span>ISP</span>
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="?loc=routers" class="nav-link text-white">
+                        <a href="?loc=routers" class="nav-link text-light <?php $routers ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-gears" style="width: 13px;"></i> <span>Routers</span>
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="?loc=isp" class="nav-link text-white">
-                            <i class="fa fa-wifi" style="width: 13px;"></i> <span>ISP</span>
+                        <a href="?loc=ipaddress" class="nav-link text-light <?php $ipaddress ?  printf("bg-light text-dark rounded") :  null;?>">
+                            <i class="fa fa-map-marker" style="width: 13px;"></i> <span>IP Address</span>
                         </a>
                     </li>
                 </ul>
@@ -58,12 +65,12 @@
                                     echo "<span class=\"fa fa-home\"></span> Dashboard";
                                 }elseif($_GET["loc"] == "equipments"){
                                     echo "<span class=\"fa fa-wrench\"></span> Equipments";
-                                }elseif($_GET["loc"] == "ipaddress"){
-                                    echo "<span class=\"fa fa-map-marker\"></span> IP Address";
-                                }elseif($_GET["loc"] == "routers"){
-                                    echo "<span class=\"fa fa-gears\"></span> Routers";
                                 }elseif($_GET["loc"] == "isp"){
                                     echo "<span class=\"fa fa-wifi\"></span> Internet Service Provider";
+                                }elseif($_GET["loc"] == "routers"){
+                                    echo "<span class=\"fa fa-gears\"></span> Routers";
+                                }elseif($_GET["loc"] == "ipaddress"){
+                                    echo "<span class=\"fa fa-map-marker\"></span> IP Address";
                                 }else{
                                     header("location: ../index.php");
                                 }

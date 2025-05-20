@@ -15,7 +15,7 @@
                     <div class="col-md-6">
                         <label for="isp_name" class="mb-2">ISP</label>
                         <select name="isp_name" id="isp_name" class="form-control">
-                            <option value="" disabled selected>-- Select ISP Name --</option>
+                            <option value="" disabled selected>-- Select ISP --</option>
                             <option value="PLDT Inc.">PLDT Inc.</option>
                             <option value="Globe Telecom, Inc.">Globe Telecom, Inc.</option>
                             <option value="Converge ICT Solutions Inc.">Converge ICT Solutions Inc.</option>
@@ -66,7 +66,7 @@
             <div class="modal-header">
                 <h6 class="modal-title" id="edit_isp_title">EDIT ISP: </h6>
                 <div>
-                    <img id="isp_icon" src="../../assets/img/hero.png" class="ht-30"  style="margin-top: -5px;" alt="" srcset="">
+                    <img id="edit_isp_icon" src="../../assets/img/hero.png" class="ht-30"  style="margin-top: -5px;" alt="" srcset="">
                 </div>
             </div>
             <div class="modal-body">
@@ -76,7 +76,7 @@
                     <div class="col-md-6">
                         <label for="edit_isp_name" class="mb-2">ISP</label>
                         <select name="edit_isp_name" id="edit_isp_name" class="form-control">
-                            <option value="" disabled selected>-- Select ISP Name --</option>
+                            <option value="" disabled selected>-- Select ISP --</option>
                             <option value="PLDT Inc.">PLDT Inc.</option>
                             <option value="Globe Telecom, Inc.">Globe Telecom, Inc.</option>
                             <option value="Converge ICT Solutions Inc.">Converge ICT Solutions Inc.</option>

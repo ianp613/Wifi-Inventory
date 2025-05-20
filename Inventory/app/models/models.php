@@ -66,15 +66,15 @@
         public $fillable = [
             "name",
             "ip",
-            "subnet"
+            "subnet",
+            "wan1",
+            "wan2"
         ];
     }
 
     class ISP{
         public $table = "isp";
         public $fillable = [
-            "rid",
-            "int",
             "isp_name",
             "name",
             "wan_ip",

@@ -1,5 +1,5 @@
 if(document.getElementById("routers")){
-    let ipTable = new DataTable('#router_table',{
+    let routerTable = new DataTable('#router_table',{
         order: [[5, 'asc']],
         rowCallback: function(row) {
             $(row).addClass("trow");
@@ -18,7 +18,29 @@ if(document.getElementById("routers")){
         autoWidth: false,
         language: {
            sLengthMenu: "Show _MENU_entries",
-           search: "Search: "
+           search: "<button data-bs-toggle=\"modal\" data-bs-target=\"#add_router\" class=\"btn btn-sm btn-danger me-3\"><span class=\"fa fa-plus\"></span> Add Router</button> Search: "
         }
+    });
+
+    let routerISPTable = new DataTable('#router_isp_table',{
+        order: [[5, 'asc']],
+        rowCallback: function(row) {
+            $(row).addClass("trow");
+        },
+        columnDefs: [
+            { 
+                className: 'dt-left', 
+                targets: '_all' 
+            }
+        ],
+        autoWidth: false,
+        language: {
+           sLengthMenu: "Show _MENU_entries",
+           search: "Search: ",
+           emptyTable: 'Not yet set'
+        },
+        searching: false,
+        paging: false,
+        info: false
     });
 }
