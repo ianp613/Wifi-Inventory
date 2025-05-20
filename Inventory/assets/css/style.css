@@ -297,6 +297,9 @@ input:checked + .slider:before {
 .ht-130 {
     height: 130px;
 }
+.ht-140 {
+    height: 140px;
+}
 .ht-150 {
     height: 150px;
 }
