@@ -1,4 +1,4 @@
-<!-- ADD Router MODAL -->
+<!-- ADD ROUTER MODAL -->
 <div class="modal fade" id="add_router" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -53,6 +53,66 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
                 <button id="save_router_btn" type="button" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>    
+            </div>     
+        </div>
+    </div>
+</div>
+
+<!-- EDIT ROUTER MODAL -->
+<div class="modal fade" id="edit_router" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 id="edit_router_title" class="modal-title fw-bold">Edit Router: </h6>
+            </div>
+            <div class="modal-body">
+                <label for="edit_router_name" class="mb-2">Name</label>
+                <input required type="text" name="edit_router_name" id="edit_router_name" class="form-control">
+                <div class="row mb-2 mt-2">
+                    <div class="col-md-6">
+                        <label for="edit_router_ip" class="mb-2">IP Address</label>
+                        <input required type="text" name="edit_router_ip" id="edit_router_ip" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="edit_router_subnet" class="mb-2">Subnet Mask</label>
+                        <input required type="text" name="edit_router_subnet" id="edit_router_subnet" class="form-control">
+                    </div>
+                </div>
+                <h6 class="mt-3 fw-bold">WAN Settings</h6>
+                <hr>
+
+
+
+                <div class="w-100 d-flex justify-content-between mb-2">
+                    <label for="edit_router_wan1" class="mb-2"><h6>WAN 1 <i>(Primary)</i></h6></label>
+                    <img hidden id="edit_router_wan1_icon" src="../../assets/img/hero.png" class="ht-30"  style="margin-top: -5px;" alt="" srcset="">
+                </div>
+                <select name="edit_router_wan1" id="edit_router_wan1" class="form-control">
+                    <option value="0" disabled selected>-- Select WAN 1 --</option>
+                </select>
+                <div id="edit_wan1_info" class="ht-150 p-2">
+                    <!-- ISP INFO -->
+                </div>
+
+
+
+                <div class="w-100 d-flex justify-content-between mb-2">
+                    <label for="edit_router_wan2" class="mb-2"><h6>WAN 2 <i>(Secondary)</i></h6></label>
+                    <img hidden id="edit_router_wan2_icon" src="../../assets/img/hero.png" class="ht-30"  style="margin-top: -5px;" alt="" srcset="">
+                </div>
+                <select name="edit_router_wan2" id="edit_router_wan2" class="form-control">
+                    <option value="0" disabled selected>-- Select WAN 2 --</option>
+                </select>
+                <div id="edit_wan2_info" class="ht-150 p-2">
+                    <!-- ISP INFO -->
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
+                <button id="edit_router_btn" type="button" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>    
             </div>     
         </div>
     </div>

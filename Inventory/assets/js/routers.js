@@ -46,8 +46,12 @@ if(document.getElementById("routers")){
 
 
     const add_router_modal = new bootstrap.Modal(document.getElementById('add_router'),unclose)
+    const edit_router_modal = new bootstrap.Modal(document.getElementById('edit_router'),unclose)
 
     var add_router_btn = document.getElementById("add_router_btn")
+    var router_name = document.getElementById("router_name")
+    var router_ip = document.getElementById("router_ip")
+    var router_subnet = document.getElementById("router_subnet")
     var router_wan1 = document.getElementById("router_wan1")
     var router_wan2 = document.getElementById("router_wan2")
     var router_wan1_icon = document.getElementById("router_wan1_icon")
@@ -58,11 +62,18 @@ if(document.getElementById("routers")){
 
     var save_router_btn = document.getElementById("save_router_btn")
 
-    var router_name = document.getElementById("router_name")
-    var router_ip = document.getElementById("router_ip")
-    var router_subnet = document.getElementById("router_subnet")
-    var router_wan1 = document.getElementById("router_wan1")
-    var router_wan2 = document.getElementById("router_wan2")
+    var edit_router_name = document.getElementById("edit_router_name")
+    var edit_router_ip = document.getElementById("edit_router_ip")
+    var edit_router_subnet = document.getElementById("edit_router_subnet")
+    var edit_router_wan1 = document.getElementById("edit_router_wan1")
+    var edit_router_wan2 = document.getElementById("edit_router_wan2")
+    var edit_router_wan1_icon = document.getElementById("edit_router_wan1_icon")
+    var edit_router_wan2_icon = document.getElementById("edit_router_wan2_icon")
+    var edit_wan1_info = document.getElementById("edit_wan1_info")
+    var edit_wan2_info = document.getElementById("edit_wan2_info")
+
+    var edit_router_title = document.getElementById("edit_router_title")
+    var edit_router_btn = document.getElementById("edit_router_btn")
 
     loadPage();
     // LOAD PAGE DATA
@@ -71,7 +82,36 @@ if(document.getElementById("routers")){
     }
 
     function loadRouter(res){
-        console.log(res)
+        routerTable.clear().draw();
+        res.router.forEach(e => {
+            routerTable.row.add([
+                e["id"],
+                e["name"],
+                e["ip"],
+                e["subnet"],
+                "<button id=\"edit_router_"+ e["id"] +"\" i-id=\""+ e["id"] +"\" class=\"edit_router_row btn btn-sm btn-secondary\"><i i-id=\""+ e["id"] +"\" class=\"edit_router_row fa fa-edit\"></i></button>" +
+                "<button id=\"delete_router_"+ e["id"] +"\" i-id=\""+ e["id"] +"\" class=\"delete_router_row btn btn-sm btn-danger ms-1\"><i i-id=\""+ e["id"] +"\" class=\"delete_router_row fa fa-trash\"></i></button>" 
+            ]).draw(false)   
+        });
+        document.querySelector('#router_table').addEventListener("click", e=>{
+            let tr = "";
+            if(e.target.tagName == "I"){
+                tr = e.target.parentNode.parentNode.parentNode.children
+            }
+            if(e.target.tagName == "BUTTON"){
+                tr = e.target.parentNode.parentNode.children    
+            }
+            if(e.target.classList.contains('edit_router_row')) {
+                edit_router_title.innerText = "Edit Router: " + tr[0].innerText
+                edit_router_btn.setAttribute("i-id",e.target.getAttribute("i-id"))
+                sole.post("../../controllers/routers/find_router.php",{
+                    id: e.target.getAttribute("i-id")
+                }).then(res => editForm(res))
+            }
+            // if(e.target.classList.contains('delete_isp_row')) {
+            //     console.log(e.target.getAttribute("i-id"))
+            // }
+        })
     }
 
     // ADD ROUTER FOCUS
@@ -84,19 +124,31 @@ if(document.getElementById("routers")){
         wan2_info.innerText = "NOT SET"
         router_wan1_icon.setAttribute("hidden","")   
         router_wan2_icon.setAttribute("hidden","")   
-        sole.get("../../controllers/routers/get_available_isp.php").then(res => selectDrop(res))
+        sole.get("../../controllers/routers/get_available_isp.php").then(res => selectDrop(res,"add_router"))
     })
 
     router_wan1.addEventListener("change",function(){
         sole.post("../../controllers/routers/find_isp.php",{
             id: this.value
-        }).then(res => setWan(res,"wan1"))
+        }).then(res => setWanAdd(res,"wan1"))
     })
 
     router_wan2.addEventListener("change",function(){
         sole.post("../../controllers/routers/find_isp.php",{
             id: this.value
-        }).then(res => setWan(res,"wan2"))
+        }).then(res => setWanAdd(res,"wan2"))
+    })
+
+    edit_router_wan1.addEventListener("change",function(){
+        sole.post("../../controllers/routers/find_isp.php",{
+            id: this.value
+        }).then(res => setWanEdit(res,"wan1"))
+    })
+
+    edit_router_wan2.addEventListener("change",function(){
+        sole.post("../../controllers/routers/find_isp.php",{
+            id: this.value
+        }).then(res => setWanEdit(res,"wan2"))
     })
 
     save_router_btn.addEventListener("click",function(){
@@ -127,15 +179,134 @@ if(document.getElementById("routers")){
             router_subnet: router_subnet.value,
             router_wan1: router_wan1.value,
             router_wan2: router_wan2.value
-        }).then(res => console.log(res))
-
-        router_name.value = ""
-        router_ip.value = ""
-        router_subnet.value = ""
-        add_router_modal.hide()
+        }).then(res => validateResponse(res,"add_router"))
     }
 
-    function setWan(res,func){
+    function editForm(res){
+        edit_router_name.value = res.router[0]["name"]
+        edit_router_ip.value = res.router[0]["ip"]
+        edit_router_subnet.value = res.router[0]["subnet"]
+
+        edit_wan1_info.innerText = "NOT SET"
+        edit_wan2_info.innerText = "NOT SET"
+        edit_router_wan1_icon.setAttribute("hidden","")   
+        edit_router_wan2_icon.setAttribute("hidden","")
+
+        sole.get("../../controllers/routers/get_available_isp.php").then(res => selectDrop(res,"edit_router"))
+        sole.post("../../controllers/routers/get_current_isp.php",{
+            wan1: res.router[0]["wan1"],
+            wan2: res.router[0]["wan2"]
+        }).then(res => setWanCurrent(res))
+
+        edit_router_modal.show()
+    }
+
+    function setWanCurrent(res){
+        if(res.wan1.length){
+            if(res.wan1[0]["isp_name"] == "PLDT Inc."){
+                edit_router_wan1_icon.setAttribute("src","../../assets/img/pldt.png")
+                edit_router_wan1_icon.setAttribute("class","ht-20")
+                edit_router_wan1_icon.removeAttribute("hidden")
+            }
+            if(res.wan1[0]["isp_name"] == "Globe Telecom, Inc."){
+                edit_router_wan1_icon.setAttribute("src","../../assets/img/globe.png")
+                edit_router_wan1_icon.setAttribute("class","ht-30")
+                edit_router_wan1_icon.removeAttribute("hidden")
+            }
+            if(res.wan1[0]["isp_name"] == "Converge ICT Solutions Inc."){
+                edit_router_wan1_icon.setAttribute("src","../../assets/img/converge.png")
+                edit_router_wan1_icon.setAttribute("class","ht-30")
+                edit_router_wan1_icon.removeAttribute("hidden")
+            }
+
+            edit_wan1_info.innerHTML = "ISP: " + res.wan1[0]["isp_name"] + "<br>" +
+            "Name: " + res.wan1[0]["name"] + "<br>" +
+            "WAN IP: " + res.wan1[0]["wan_ip"] + "<br>" +
+            "<div class=\"row mt-2\">" + 
+                "<div class=\"col-md-6\">" +
+                    "Subnet: " + (res.wan1[0]["subnet"] == "-" ? "" : res.wan1[0]["subnet"]) + "<br>" +
+                "</div>" +
+                "<div class=\"col-md-6\">" +
+                    "Gateway: " + (res.wan1[0]["gateway"] == "-" ? "" : res.wan1[0]["gateway"]) + "<br>" +
+                "</div>" +
+            "</div>" +
+            "<div class=\"row\">" + 
+                "<div class=\"col-md-6\">" +
+                    "DNS 1: " + (res.wan1[0]["dns1"] == "-" ? "" : res.wan1[0]["dns1"]) + "<br>" +
+                "</div>" +
+                "<div class=\"col-md-6\">" +
+                    "DNS 2: " + (res.wan1[0]["dns2"] == "-" ? "" : res.wan1[0]["dns2"]) + "<br>"
+                "</div>" +
+            "</div>"
+
+            var op1 = document.createElement("option")
+            op1.setAttribute("value",res.wan1[0]["id"])
+            op1.innerText = res.wan1[0]["name"]
+            edit_router_wan1.appendChild(op1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+        }
+        if(res.wan2.length){
+            if(res.wan2[0]["isp_name"] == "PLDT Inc."){
+                edit_router_wan2_icon.setAttribute("src","../../assets/img/pldt.png")
+                edit_router_wan2_icon.setAttribute("class","ht-20")
+                edit_router_wan2_icon.removeAttribute("hidden")
+            }
+            if(res.wan2[0]["isp_name"] == "Globe Telecom, Inc."){
+                edit_router_wan2_icon.setAttribute("src","../../assets/img/globe.png")
+                edit_router_wan2_icon.setAttribute("class","ht-30")
+                edit_router_wan2_icon.removeAttribute("hidden")
+            }
+            if(res.wan2[0]["isp_name"] == "Converge ICT Solutions Inc."){
+                edit_router_wan2_icon.setAttribute("src","../../assets/img/converge.png")
+                edit_router_wan2_icon.setAttribute("class","ht-30")
+                edit_router_wan2_icon.removeAttribute("hidden")
+            }
+
+            edit_wan2_info.innerHTML = "ISP: " + res.wan2[0]["isp_name"] + "<br>" +
+            "Name: " + res.wan2[0]["name"] + "<br>" +
+            "WAN IP: " + res.wan2[0]["wan_ip"] + "<br>" +
+            "<div class=\"row mt-2\">" + 
+                "<div class=\"col-md-6\">" +
+                    "Subnet: " + (res.wan2[0]["subnet"] == "-" ? "" : res.wan2[0]["subnet"]) + "<br>" +
+                "</div>" +
+                "<div class=\"col-md-6\">" +
+                    "Gateway: " + (res.wan2[0]["gateway"] == "-" ? "" : res.wan2[0]["gateway"]) + "<br>" +
+                "</div>" +
+            "</div>" +
+            "<div class=\"row\">" + 
+                "<div class=\"col-md-6\">" +
+                    "DNS 1: " + (res.wan2[0]["dns1"] == "-" ? "" : res.wan2[0]["dns1"]) + "<br>" +
+                "</div>" +
+                "<div class=\"col-md-6\">" +
+                    "DNS 2: " + (res.wan2[0]["dns2"] == "-" ? "" : res.wan2[0]["dns2"]) + "<br>"
+                "</div>" +
+            "</div>"
+        }
+    }
+
+    function setWanAdd(res,func){
         if(res.length){
             if(func == "wan1"){
                 if(res[0]["isp_name"] == "PLDT Inc."){
@@ -159,18 +330,18 @@ if(document.getElementById("routers")){
                 "WAN IP: " + res[0]["wan_ip"] + "<br>" +
                 "<div class=\"row mt-2\">" + 
                     "<div class=\"col-md-6\">" +
-                        "Subnet: " + res[0]["subnet"] + "<br>" +
+                        "Subnet: " + (res[0]["subnet"] == "-" ? "" : res[0]["subnet"]) + "<br>" +
                     "</div>" +
                     "<div class=\"col-md-6\">" +
-                        "Gateway: " + res[0]["gateway"] + "<br>" +
+                        "Gateway: " + (res[0]["gateway"] == "-" ? "" : res[0]["gateway"]) + "<br>" +
                     "</div>" +
                 "</div>" +
                 "<div class=\"row\">" + 
                     "<div class=\"col-md-6\">" +
-                        "DNS 1: " + res[0]["dns1"] + "<br>" +
+                        "DNS 1: " + (res[0]["dns1"] == "-" ? "" : res[0]["dns1"]) + "<br>" +
                     "</div>" +
                     "<div class=\"col-md-6\">" +
-                        "DNS 2: " + res[0]["dns2"] + "<br>"
+                        "DNS 2: " + (res[0]["dns2"] == "-" ? "" : res[0]["dns2"]) + "<br>"
                     "</div>" +
                 "</div>"      
             }
@@ -196,20 +367,20 @@ if(document.getElementById("routers")){
                 "WAN IP: " + res[0]["wan_ip"] + "<br>" +
                 "<div class=\"row mt-2\">" + 
                     "<div class=\"col-md-6\">" +
-                        "Subnet: " + res[0]["subnet"] + "<br>" +
+                        "Subnet: " + (res[0]["subnet"] == "-" ? "" : res[0]["subnet"]) + "<br>" +
                     "</div>" +
                     "<div class=\"col-md-6\">" +
-                        "Gateway: " + res[0]["gateway"] + "<br>" +
+                        "Gateway: " + (res[0]["gateway"] == "-" ? "" : res[0]["gateway"]) + "<br>" +
                     "</div>" +
                 "</div>" +
                 "<div class=\"row\">" + 
                     "<div class=\"col-md-6\">" +
-                        "DNS 1: " + res[0]["dns1"] + "<br>" +
+                        "DNS 1: " + (res[0]["dns1"] == "-" ? "" : res[0]["dns1"]) + "<br>" +
                     "</div>" +
                     "<div class=\"col-md-6\">" +
-                        "DNS 2: " + res[0]["dns2"] + "<br>"
+                        "DNS 2: " + (res[0]["dns2"] == "-" ? "" : res[0]["dns2"]) + "<br>"
                     "</div>" +
-                "</div>"
+                "</div>"  
             }    
         }else{
             if(func == "wan1"){
@@ -223,48 +394,193 @@ if(document.getElementById("routers")){
         }
     }
 
-    function selectDrop(res){
-        router_wan1.innerHTML = ""
-        router_wan2.innerHTML = ""
+    function setWanEdit(res,func){
+        if(res.length){
+            if(func == "wan1"){
+                if(res[0]["isp_name"] == "PLDT Inc."){
+                    edit_router_wan1_icon.setAttribute("src","../../assets/img/pldt.png")
+                    edit_router_wan1_icon.setAttribute("class","ht-20")
+                    edit_router_wan1_icon.removeAttribute("hidden")
+                }
+                if(res[0]["isp_name"] == "Globe Telecom, Inc."){
+                    edit_router_wan1_icon.setAttribute("src","../../assets/img/globe.png")
+                    edit_router_wan1_icon.setAttribute("class","ht-30")
+                    edit_router_wan1_icon.removeAttribute("hidden")
+                }
+                if(res[0]["isp_name"] == "Converge ICT Solutions Inc."){
+                    edit_router_wan1_icon.setAttribute("src","../../assets/img/converge.png")
+                    edit_router_wan1_icon.setAttribute("class","ht-30")
+                    edit_router_wan1_icon.removeAttribute("hidden")
+                }
 
-        var op1_sel = document.createElement("option")
-        op1_sel.setAttribute("disabled","")
-        op1_sel.setAttribute("selected","")
-        op1_sel.setAttribute("value","0")
-        op1_sel.innerText = "-- Select WAN 1 --"
-        router_wan1.appendChild(op1_sel)
+                edit_wan1_info.innerHTML = "ISP: " + res[0]["isp_name"] + "<br>" +
+                "Name: " + res[0]["name"] + "<br>" +
+                "WAN IP: " + res[0]["wan_ip"] + "<br>" +
+                "<div class=\"row mt-2\">" + 
+                    "<div class=\"col-md-6\">" +
+                        "Subnet: " + (res[0]["subnet"] == "-" ? "" : res[0]["subnet"]) + "<br>" +
+                    "</div>" +
+                    "<div class=\"col-md-6\">" +
+                        "Gateway: " + (res[0]["gateway"] == "-" ? "" : res[0]["gateway"]) + "<br>" +
+                    "</div>" +
+                "</div>" +
+                "<div class=\"row\">" + 
+                    "<div class=\"col-md-6\">" +
+                        "DNS 1: " + (res[0]["dns1"] == "-" ? "" : res[0]["dns1"]) + "<br>" +
+                    "</div>" +
+                    "<div class=\"col-md-6\">" +
+                        "DNS 2: " + (res[0]["dns2"] == "-" ? "" : res[0]["dns2"]) + "<br>"
+                    "</div>" +
+                "</div>"      
+            }
+            if(func == "wan2"){
+                if(res[0]["isp_name"] == "PLDT Inc."){
+                    edit_router_wan2_icon.setAttribute("src","../../assets/img/pldt.png")
+                    edit_router_wan2_icon.setAttribute("class","ht-20")
+                    edit_router_wan2_icon.removeAttribute("hidden")
+                }
+                if(res[0]["isp_name"] == "Globe Telecom, Inc."){
+                    edit_router_wan2_icon.setAttribute("src","../../assets/img/globe.png")
+                    edit_router_wan2_icon.setAttribute("class","ht-30")
+                    edit_router_wan2_icon.removeAttribute("hidden")
+                }
+                if(res[0]["isp_name"] == "Converge ICT Solutions Inc."){
+                    edit_router_wan2_icon.setAttribute("src","../../assets/img/converge.png")
+                    edit_router_wan2_icon.setAttribute("class","ht-30")
+                    edit_router_wan2_icon.removeAttribute("hidden")
+                }
 
-        var op2_sel = document.createElement("option")
-        op2_sel.setAttribute("disabled","")
-        op2_sel.setAttribute("selected","")
-        op2_sel.setAttribute("value","0")
-        op2_sel.innerText = "-- Select WAN 2 --"
-        router_wan2.appendChild(op2_sel)
+                edit_wan2_info.innerHTML = "ISP: " + res[0]["isp_name"] + "<br>" +
+                "Name: " + res[0]["name"] + "<br>" +
+                "WAN IP: " + res[0]["wan_ip"] + "<br>" +
+                "<div class=\"row mt-2\">" + 
+                    "<div class=\"col-md-6\">" +
+                        "Subnet: " + (res[0]["subnet"] == "-" ? "" : res[0]["subnet"]) + "<br>" +
+                    "</div>" +
+                    "<div class=\"col-md-6\">" +
+                        "Gateway: " + (res[0]["gateway"] == "-" ? "" : res[0]["gateway"]) + "<br>" +
+                    "</div>" +
+                "</div>" +
+                "<div class=\"row\">" + 
+                    "<div class=\"col-md-6\">" +
+                        "DNS 1: " + (res[0]["dns1"] == "-" ? "" : res[0]["dns1"]) + "<br>" +
+                    "</div>" +
+                    "<div class=\"col-md-6\">" +
+                        "DNS 2: " + (res[0]["dns2"] == "-" ? "" : res[0]["dns2"]) + "<br>"
+                    "</div>" +
+                "</div>"  
+            }    
+        }else{
+            if(func == "wan1"){
+                edit_router_wan1_icon.setAttribute("hidden","")    
+                edit_wan1_info.innerText = "NOT SET"
+            }
+            if(func == "wan2"){
+                edit_router_wan2_icon.setAttribute("hidden","")  
+                edit_wan2_info.innerText = "NOT SET"
+            }
+        }
+    }
+
+    function selectDrop(res,func){
+        if(func == "add_router"){
+            router_wan1.innerHTML = ""
+            router_wan2.innerHTML = ""
+
+            var op1_sel = document.createElement("option")
+            op1_sel.setAttribute("disabled","")
+            op1_sel.setAttribute("selected","")
+            op1_sel.setAttribute("value","0")
+            op1_sel.innerText = "-- Select WAN 1 --"
+            router_wan1.appendChild(op1_sel)
+
+            var op2_sel = document.createElement("option")
+            op2_sel.setAttribute("disabled","")
+            op2_sel.setAttribute("selected","")
+            op2_sel.setAttribute("value","0")
+            op2_sel.innerText = "-- Select WAN 2 --"
+            router_wan2.appendChild(op2_sel)
 
 
-        res.isp.forEach(e => {
-            var op1 = document.createElement("option")
-            op1.setAttribute("value",e["id"])
-            op1.innerText = e["name"]
-            router_wan1.appendChild(op1)
-        });
+            res.isp.forEach(e => {
+                var op1 = document.createElement("option")
+                op1.setAttribute("value",e["id"])
+                op1.innerText = e["name"]
+                router_wan1.appendChild(op1)
+            });
 
-        var wan1op = document.createElement("option")
-        wan1op.setAttribute("value","0")
-        wan1op.innerText = "N/A"
+            var wan1op = document.createElement("option")
+            wan1op.setAttribute("value","0")
+            wan1op.innerText = "N/A"
 
-        router_wan1.appendChild(wan1op)
-        
-        res.isp.forEach(e => {
-            var op2 = document.createElement("option")
-            op2.setAttribute("value",e["id"])
-            op2.innerText = e["name"]
-            router_wan2.appendChild(op2)
-        });
+            router_wan1.appendChild(wan1op)
+            
+            res.isp.forEach(e => {
+                var op2 = document.createElement("option")
+                op2.setAttribute("value",e["id"])
+                op2.innerText = e["name"]
+                router_wan2.appendChild(op2)
+            });
 
-        var wan2op = document.createElement("option")
-        wan2op.setAttribute("value","0")
-        wan2op.innerText = "N/A"
-        router_wan2.appendChild(wan2op)
+            var wan2op = document.createElement("option")
+            wan2op.setAttribute("value","0")
+            wan2op.innerText = "N/A"
+            router_wan2.appendChild(wan2op)    
+        }
+        if(func == "edit_router"){
+            edit_router_wan1.innerHTML = ""
+            edit_router_wan2.innerHTML = ""
+
+            var op1_sel = document.createElement("option")
+            op1_sel.setAttribute("disabled","")
+            op1_sel.setAttribute("selected","")
+            op1_sel.setAttribute("value","0")
+            op1_sel.innerText = "-- Select WAN 1 --"
+            edit_router_wan1.appendChild(op1_sel)
+
+            var op2_sel = document.createElement("option")
+            op2_sel.setAttribute("disabled","")
+            op2_sel.setAttribute("selected","")
+            op2_sel.setAttribute("value","0")
+            op2_sel.innerText = "-- Select WAN 2 --"
+            edit_router_wan2.appendChild(op2_sel)
+
+
+            res.isp.forEach(e => {
+                var op1 = document.createElement("option")
+                op1.setAttribute("value",e["id"])
+                op1.innerText = e["name"]
+                edit_router_wan1.appendChild(op1)
+            });
+
+            var wan1op = document.createElement("option")
+            wan1op.setAttribute("value","0")
+            wan1op.innerText = "N/A"
+
+            edit_router_wan1.appendChild(wan1op)
+            
+            res.isp.forEach(e => {
+                var op2 = document.createElement("option")
+                op2.setAttribute("value",e["id"])
+                op2.innerText = e["name"]
+                edit_router_wan2.appendChild(op2)
+            });
+
+            var wan2op = document.createElement("option")
+            wan2op.setAttribute("value","0")
+            wan2op.innerText = "N/A"
+            edit_router_wan2.appendChild(wan2op)  
+        }  
+    }
+    function validateResponse(res, func){
+        if(res.status){
+            if(func == "add_router"){
+                router_name.value = ""
+                router_ip.value = ""
+                router_subnet.value = ""
+                add_router_modal.hide()
+                loadPage()
+            }
+        }
     }
 }

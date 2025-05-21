@@ -68,7 +68,8 @@
             "ip",
             "subnet",
             "wan1",
-            "wan2"
+            "wan2",
+            "active"
         ];
     }
 
