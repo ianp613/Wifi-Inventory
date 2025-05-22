@@ -75,6 +75,9 @@ if(document.getElementById("routers")){
     var edit_router_title = document.getElementById("edit_router_title")
     var edit_router_btn = document.getElementById("edit_router_btn")
 
+    var temp_wan1 = ""
+    var temp_wan2 = ""
+
     loadPage();
     // LOAD PAGE DATA
     function loadPage(){
@@ -192,16 +195,21 @@ if(document.getElementById("routers")){
         edit_router_wan1_icon.setAttribute("hidden","")   
         edit_router_wan2_icon.setAttribute("hidden","")
 
-        sole.get("../../controllers/routers/get_available_isp.php").then(res => selectDrop(res,"edit_router"))
+        temp_wan1 = res.router[0]["wan1"]
+        temp_wan2 = res.router[0]["wan2"]
+
         sole.post("../../controllers/routers/get_current_isp.php",{
             wan1: res.router[0]["wan1"],
             wan2: res.router[0]["wan2"]
         }).then(res => setWanCurrent(res))
+        sole.get("../../controllers/routers/get_available_isp.php").then(res => selectDrop(res,"edit_router"))
 
         edit_router_modal.show()
     }
 
     function setWanCurrent(res){
+        edit_router_wan1.innerHTML = ""
+        edit_router_wan2.innerHTML = ""
         if(res.wan1.length){
             if(res.wan1[0]["isp_name"] == "PLDT Inc."){
                 edit_router_wan1_icon.setAttribute("src","../../assets/img/pldt.png")
@@ -239,33 +247,16 @@ if(document.getElementById("routers")){
                 "</div>" +
             "</div>"
 
-            var op1 = document.createElement("option")
-            op1.setAttribute("value",res.wan1[0]["id"])
-            op1.innerText = res.wan1[0]["name"]
-            edit_router_wan1.appendChild(op1)
+            var edit_op1 = document.createElement("option")
+            edit_op1.setAttribute("value",res.wan1[0]["id"])
+            edit_op1.setAttribute("selected","")
+            edit_op1.innerText = res.wan1[0]["name"]
+            edit_router_wan1.appendChild(edit_op1)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
+            var edit_op1_2 = document.createElement("option")
+            edit_op1_2.setAttribute("value",res.wan1[0]["id"])
+            edit_op1_2.innerText = res.wan1[0]["name"]
+            edit_router_wan2.appendChild(edit_op1_2)
         }
         if(res.wan2.length){
             if(res.wan2[0]["isp_name"] == "PLDT Inc."){
@@ -303,6 +294,16 @@ if(document.getElementById("routers")){
                     "DNS 2: " + (res.wan2[0]["dns2"] == "-" ? "" : res.wan2[0]["dns2"]) + "<br>"
                 "</div>" +
             "</div>"
+            var edit_op2 = document.createElement("option")
+            edit_op2.setAttribute("value",res.wan2[0]["id"])
+            edit_op2.setAttribute("selected","")
+            edit_op2.innerText = res.wan2[0]["name"]
+            edit_router_wan2.appendChild(edit_op2)
+
+            var edit_op2_1 = document.createElement("option")
+            edit_op2_1.setAttribute("value",res.wan2[0]["id"])
+            edit_op2_1.innerText = res.wan2[0]["name"]
+            edit_router_wan1.appendChild(edit_op2_1)
         }
     }
 
@@ -313,14 +314,16 @@ if(document.getElementById("routers")){
                     router_wan1_icon.setAttribute("src","../../assets/img/pldt.png")
                     router_wan1_icon.setAttribute("class","ht-20")
                     router_wan1_icon.removeAttribute("hidden")
-                }
-                if(res[0]["isp_name"] == "Globe Telecom, Inc."){
+                }else if(res[0]["isp_name"] == "Globe Telecom, Inc."){
                     router_wan1_icon.setAttribute("src","../../assets/img/globe.png")
                     router_wan1_icon.setAttribute("class","ht-30")
                     router_wan1_icon.removeAttribute("hidden")
-                }
-                if(res[0]["isp_name"] == "Converge ICT Solutions Inc."){
+                }else if(res[0]["isp_name"] == "Converge ICT Solutions Inc."){
                     router_wan1_icon.setAttribute("src","../../assets/img/converge.png")
+                    router_wan1_icon.setAttribute("class","ht-30")
+                    router_wan1_icon.removeAttribute("hidden")
+                }else if(res[0]["isp_name"] == "Others"){
+                    router_wan1_icon.setAttribute("src","../../assets/img/hero.png")
                     router_wan1_icon.setAttribute("class","ht-30")
                     router_wan1_icon.removeAttribute("hidden")
                 }
@@ -350,17 +353,20 @@ if(document.getElementById("routers")){
                     router_wan2_icon.setAttribute("src","../../assets/img/pldt.png")
                     router_wan2_icon.setAttribute("class","ht-20")
                     router_wan2_icon.removeAttribute("hidden")
-                }
-                if(res[0]["isp_name"] == "Globe Telecom, Inc."){
+                }else if(res[0]["isp_name"] == "Globe Telecom, Inc."){
                     router_wan2_icon.setAttribute("src","../../assets/img/globe.png")
                     router_wan2_icon.setAttribute("class","ht-30")
                     router_wan2_icon.removeAttribute("hidden")
-                }
-                if(res[0]["isp_name"] == "Converge ICT Solutions Inc."){
+                }else if(res[0]["isp_name"] == "Converge ICT Solutions Inc."){
                     router_wan2_icon.setAttribute("src","../../assets/img/converge.png")
                     router_wan2_icon.setAttribute("class","ht-30")
                     router_wan2_icon.removeAttribute("hidden")
+                }else if(res[0]["isp_name"] == "Others"){
+                    router_wan2_icon.setAttribute("src","../../assets/img/hero.png")
+                    router_wan2_icon.setAttribute("class","ht-30")
+                    router_wan2_icon.removeAttribute("hidden")
                 }
+
 
                 wan2_info.innerHTML = "ISP: " + res[0]["isp_name"] + "<br>" +
                 "Name: " + res[0]["name"] + "<br>" +
@@ -401,14 +407,16 @@ if(document.getElementById("routers")){
                     edit_router_wan1_icon.setAttribute("src","../../assets/img/pldt.png")
                     edit_router_wan1_icon.setAttribute("class","ht-20")
                     edit_router_wan1_icon.removeAttribute("hidden")
-                }
-                if(res[0]["isp_name"] == "Globe Telecom, Inc."){
+                }else if(res[0]["isp_name"] == "Globe Telecom, Inc."){
                     edit_router_wan1_icon.setAttribute("src","../../assets/img/globe.png")
                     edit_router_wan1_icon.setAttribute("class","ht-30")
                     edit_router_wan1_icon.removeAttribute("hidden")
-                }
-                if(res[0]["isp_name"] == "Converge ICT Solutions Inc."){
+                }else if(res[0]["isp_name"] == "Converge ICT Solutions Inc."){
                     edit_router_wan1_icon.setAttribute("src","../../assets/img/converge.png")
+                    edit_router_wan1_icon.setAttribute("class","ht-30")
+                    edit_router_wan1_icon.removeAttribute("hidden")
+                }else if(res[0]["isp_name"] == "Others"){
+                    edit_router_wan1_icon.setAttribute("src","../../assets/img/hero.png")
                     edit_router_wan1_icon.setAttribute("class","ht-30")
                     edit_router_wan1_icon.removeAttribute("hidden")
                 }
@@ -438,14 +446,16 @@ if(document.getElementById("routers")){
                     edit_router_wan2_icon.setAttribute("src","../../assets/img/pldt.png")
                     edit_router_wan2_icon.setAttribute("class","ht-20")
                     edit_router_wan2_icon.removeAttribute("hidden")
-                }
-                if(res[0]["isp_name"] == "Globe Telecom, Inc."){
+                }else if(res[0]["isp_name"] == "Globe Telecom, Inc."){
                     edit_router_wan2_icon.setAttribute("src","../../assets/img/globe.png")
                     edit_router_wan2_icon.setAttribute("class","ht-30")
                     edit_router_wan2_icon.removeAttribute("hidden")
-                }
-                if(res[0]["isp_name"] == "Converge ICT Solutions Inc."){
+                }else if(res[0]["isp_name"] == "Converge ICT Solutions Inc."){
                     edit_router_wan2_icon.setAttribute("src","../../assets/img/converge.png")
+                    edit_router_wan2_icon.setAttribute("class","ht-30")
+                    edit_router_wan2_icon.removeAttribute("hidden")
+                }else if(res[0]["isp_name"] == "Others"){
+                    edit_router_wan2_icon.setAttribute("src","../../assets/img/hero.png")
                     edit_router_wan2_icon.setAttribute("class","ht-30")
                     edit_router_wan2_icon.removeAttribute("hidden")
                 }
@@ -510,7 +520,7 @@ if(document.getElementById("routers")){
             });
 
             var wan1op = document.createElement("option")
-            wan1op.setAttribute("value","0")
+            wan1op.setAttribute("value","-")
             wan1op.innerText = "N/A"
 
             router_wan1.appendChild(wan1op)
@@ -523,29 +533,29 @@ if(document.getElementById("routers")){
             });
 
             var wan2op = document.createElement("option")
-            wan2op.setAttribute("value","0")
+            wan2op.setAttribute("value","-")
             wan2op.innerText = "N/A"
             router_wan2.appendChild(wan2op)    
         }
         if(func == "edit_router"){
-            edit_router_wan1.innerHTML = ""
-            edit_router_wan2.innerHTML = ""
-
-            var op1_sel = document.createElement("option")
-            op1_sel.setAttribute("disabled","")
-            op1_sel.setAttribute("selected","")
-            op1_sel.setAttribute("value","0")
-            op1_sel.innerText = "-- Select WAN 1 --"
-            edit_router_wan1.appendChild(op1_sel)
-
-            var op2_sel = document.createElement("option")
-            op2_sel.setAttribute("disabled","")
-            op2_sel.setAttribute("selected","")
-            op2_sel.setAttribute("value","0")
-            op2_sel.innerText = "-- Select WAN 2 --"
-            edit_router_wan2.appendChild(op2_sel)
-
-
+            console.log(temp_wan1)
+            if(temp_wan1 == "-"){
+                var op1_sel = document.createElement("option")
+                op1_sel.setAttribute("disabled","")
+                op1_sel.setAttribute("selected","")
+                op1_sel.setAttribute("value","0")
+                op1_sel.innerText = "-- Select WAN 1 --"
+                edit_router_wan1.insertAdjacentElement("afterbegin",op1_sel)
+            }
+            if(temp_wan2 == "-"){
+                var op2_sel = document.createElement("option")
+                op2_sel.setAttribute("disabled","")
+                op2_sel.setAttribute("selected","")
+                op2_sel.setAttribute("value","0")
+                op2_sel.innerText = "-- Select WAN 2 --"
+                edit_router_wan2.insertAdjacentElement("afterbegin",op2_sel)    
+            }
+ 
             res.isp.forEach(e => {
                 var op1 = document.createElement("option")
                 op1.setAttribute("value",e["id"])
@@ -554,7 +564,7 @@ if(document.getElementById("routers")){
             });
 
             var wan1op = document.createElement("option")
-            wan1op.setAttribute("value","0")
+            wan1op.setAttribute("value","-")
             wan1op.innerText = "N/A"
 
             edit_router_wan1.appendChild(wan1op)
@@ -567,7 +577,7 @@ if(document.getElementById("routers")){
             });
 
             var wan2op = document.createElement("option")
-            wan2op.setAttribute("value","0")
+            wan2op.setAttribute("value","-")
             wan2op.innerText = "N/A"
             edit_router_wan2.appendChild(wan2op)  
         }  
