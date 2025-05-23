@@ -122,18 +122,9 @@ if(document.getElementById("routers")){
                     temp_tr_id = e.target.parentNode.children[3].children[0].getAttribute("r-id")
                     temp_tr.setAttribute("class","bg-secondary text-light")
                 }
-                // sole.post("../../controllers")
-
-
-
-
-
-
-
-
-
-
-
+                sole.post("../../controllers/routers/get_router_wan.php",{
+                    id: temp_tr_id
+                }).then(res => validateResponseWANSettings(res))
             }
             if(e.target.classList.contains('edit_router_row')) {
                 edit_router_title.innerText = "Edit Router: " + tr[0].innerText
@@ -652,6 +643,24 @@ if(document.getElementById("routers")){
             edit_router_wan2.appendChild(wan2op)  
         }  
     }
+
+    function validateResponseWANSettings(res){
+        console.log(res)
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    }
     function validateResponse(res, func){
         if(res.status){
             if(func == "add_router"){
@@ -674,7 +683,7 @@ if(document.getElementById("routers")){
         }
     }
     document.body.addEventListener("click",e => {
-        if(e.target.parentNode.tagName != "TR"){
+        if(e.target.parentNode.tagName != "TR" && temp_tr_id){
             temp_tr.removeAttribute("class")
             temp_tr = null
             temp_tr_id = null
