@@ -19,7 +19,7 @@
         "status" => true,
         "type" => "success",
         "size" => null,
-        "message" => "IP update success.",
+        "message" => "IP has been updated.",
     ];
 
     echo json_encode($response);

@@ -74,6 +74,11 @@ if(document.getElementById("routers")){
 
     var edit_router_title = document.getElementById("edit_router_title")
     var edit_router_btn = document.getElementById("edit_router_btn")
+    
+    var update_router_btn = document.getElementById("update_router_btn")
+
+    var temp_tr = null;
+    var temp_tr_id = null;
 
     var temp_wan1 = ""
     var temp_wan2 = ""
@@ -92,8 +97,8 @@ if(document.getElementById("routers")){
                 e["name"],
                 e["ip"],
                 e["subnet"],
-                "<button id=\"edit_router_"+ e["id"] +"\" i-id=\""+ e["id"] +"\" class=\"edit_router_row btn btn-sm btn-secondary\"><i i-id=\""+ e["id"] +"\" class=\"edit_router_row fa fa-edit\"></i></button>" +
-                "<button id=\"delete_router_"+ e["id"] +"\" i-id=\""+ e["id"] +"\" class=\"delete_router_row btn btn-sm btn-danger ms-1\"><i i-id=\""+ e["id"] +"\" class=\"delete_router_row fa fa-trash\"></i></button>" 
+                "<button id=\"edit_router_"+ e["id"] +"\" r-id=\""+ e["id"] +"\" class=\"edit_router_row btn btn-sm btn-secondary\"><i r-id=\""+ e["id"] +"\" class=\"edit_router_row fa fa-edit\"></i></button>" +
+                "<button id=\"delete_router_"+ e["id"] +"\" r-id=\""+ e["id"] +"\" class=\"delete_router_row btn btn-sm btn-danger ms-1\"><i r-id=\""+ e["id"] +"\" class=\"delete_router_row fa fa-trash\"></i></button>" 
             ]).draw(false)   
         });
         document.querySelector('#router_table').addEventListener("click", e=>{
@@ -104,11 +109,37 @@ if(document.getElementById("routers")){
             if(e.target.tagName == "BUTTON"){
                 tr = e.target.parentNode.parentNode.children    
             }
+            if(e.target.parentNode.tagName == "TR"){
+                if(temp_tr_id){
+                    if(temp_tr_id != e.target.parentNode.children[3].children[0].getAttribute("r-id")){
+                        temp_tr.removeAttribute("class")
+                        temp_tr = e.target.parentNode
+                        temp_tr_id = e.target.parentNode.children[3].children[0].getAttribute("r-id")
+                        temp_tr.setAttribute("class","bg-secondary text-light")
+                    }
+                }else{
+                    temp_tr = e.target.parentNode
+                    temp_tr_id = e.target.parentNode.children[3].children[0].getAttribute("r-id")
+                    temp_tr.setAttribute("class","bg-secondary text-light")
+                }
+                // sole.post("../../controllers")
+
+
+
+
+
+
+
+
+
+
+
+            }
             if(e.target.classList.contains('edit_router_row')) {
                 edit_router_title.innerText = "Edit Router: " + tr[0].innerText
-                edit_router_btn.setAttribute("i-id",e.target.getAttribute("i-id"))
+                update_router_btn.setAttribute("r-id",e.target.getAttribute("r-id"))
                 sole.post("../../controllers/routers/find_router.php",{
-                    id: e.target.getAttribute("i-id")
+                    id: e.target.getAttribute("r-id")
                 }).then(res => editForm(res))
             }
             // if(e.target.classList.contains('delete_isp_row')) {
@@ -128,6 +159,31 @@ if(document.getElementById("routers")){
         router_wan1_icon.setAttribute("hidden","")   
         router_wan2_icon.setAttribute("hidden","")   
         sole.get("../../controllers/routers/get_available_isp.php").then(res => selectDrop(res,"add_router"))
+    })
+
+    update_router_btn.addEventListener("click",function(){
+        var message = ""
+        !edit_router_subnet.value ? message = "Please provide router subnet." : null
+        !edit_router_ip.value ? message = "Please provide router ip." : null
+        !edit_router_name.value ? message = "Please provide router name." : null
+
+        if(!message){
+            if(edit_router_wan1.value && edit_router_wan2.value && edit_router_wan1.value != "-" && edit_router_wan2.value != "-"){
+                if(edit_router_wan1.value != edit_router_wan2.value){
+                    postRouterUpdate(this.getAttribute("r-id"))
+                }else{
+                    if(edit_router_wan1.value == "-" && edit_router_wan2.value == "-"){
+                        postRouterUpdate(this.getAttribute("r-id"))
+                    }else{
+                        bs5.toast("warning","WAN 1 (Primary) should not be the same as WAN 2 (Secondary).")
+                    }
+                }
+            }else{
+                postRouterUpdate(this.getAttribute("r-id"))
+            }
+        }else{
+            bs5.toast("warning",message)
+        }
     })
 
     router_wan1.addEventListener("change",function(){
@@ -161,11 +217,15 @@ if(document.getElementById("routers")){
         !router_name.value ? message = "Please provide router name." : null
 
         if(!message){
-            if(router_wan1.value && router_wan2.value && router_wan1.value != "0" && router_wan2.value != "0"){
+            if(router_wan1.value && router_wan2.value && router_wan1.value != "-" && router_wan2.value != "-"){
                 if(router_wan1.value != router_wan2.value){
                     postRouter()
                 }else{
-                    bs5.toast("warning","WAN 1 (Primary) should not be the same as WAN 2 (Secondary).")
+                    if(router_wan1.value == "-" && router_wan2.value == "-"){
+                        postRouter()
+                    }else{
+                        bs5.toast("warning","WAN 1 (Primary) should not be the same as WAN 2 (Secondary).")
+                    }
                 }
             }else{
                 postRouter()
@@ -183,6 +243,17 @@ if(document.getElementById("routers")){
             router_wan1: router_wan1.value,
             router_wan2: router_wan2.value
         }).then(res => validateResponse(res,"add_router"))
+    }
+
+    function postRouterUpdate(id){
+        sole.post("../../controllers/routers/update_router.php",{
+            id: id,
+            router_name: edit_router_name.value,
+            router_ip: edit_router_ip.value,
+            router_subnet: edit_router_subnet.value,
+            router_wan1: edit_router_wan1.value,
+            router_wan2: edit_router_wan2.value
+        }).then(res => validateResponse(res,"edit_router"))
     }
 
     function editForm(res){
@@ -500,14 +571,14 @@ if(document.getElementById("routers")){
             var op1_sel = document.createElement("option")
             op1_sel.setAttribute("disabled","")
             op1_sel.setAttribute("selected","")
-            op1_sel.setAttribute("value","0")
+            op1_sel.setAttribute("value","-")
             op1_sel.innerText = "-- Select WAN 1 --"
             router_wan1.appendChild(op1_sel)
 
             var op2_sel = document.createElement("option")
             op2_sel.setAttribute("disabled","")
             op2_sel.setAttribute("selected","")
-            op2_sel.setAttribute("value","0")
+            op2_sel.setAttribute("value","-")
             op2_sel.innerText = "-- Select WAN 2 --"
             router_wan2.appendChild(op2_sel)
 
@@ -538,12 +609,11 @@ if(document.getElementById("routers")){
             router_wan2.appendChild(wan2op)    
         }
         if(func == "edit_router"){
-            console.log(temp_wan1)
             if(temp_wan1 == "-"){
                 var op1_sel = document.createElement("option")
                 op1_sel.setAttribute("disabled","")
                 op1_sel.setAttribute("selected","")
-                op1_sel.setAttribute("value","0")
+                op1_sel.setAttribute("value","-")
                 op1_sel.innerText = "-- Select WAN 1 --"
                 edit_router_wan1.insertAdjacentElement("afterbegin",op1_sel)
             }
@@ -551,7 +621,7 @@ if(document.getElementById("routers")){
                 var op2_sel = document.createElement("option")
                 op2_sel.setAttribute("disabled","")
                 op2_sel.setAttribute("selected","")
-                op2_sel.setAttribute("value","0")
+                op2_sel.setAttribute("value","-")
                 op2_sel.innerText = "-- Select WAN 2 --"
                 edit_router_wan2.insertAdjacentElement("afterbegin",op2_sel)    
             }
@@ -591,6 +661,23 @@ if(document.getElementById("routers")){
                 add_router_modal.hide()
                 loadPage()
             }
+            if(func == "edit_router"){
+                edit_router_name.value = ""
+                edit_router_ip.value = ""
+                edit_router_subnet.value = ""
+                edit_router_modal.hide()
+                loadPage()
+            }
+            bs5.toast(res.type,res.message,res.size)
+        }else{
+            bs5.toast(res.type,res.message,res.size)
         }
     }
+    document.body.addEventListener("click",e => {
+        if(e.target.parentNode.tagName != "TR"){
+            temp_tr.removeAttribute("class")
+            temp_tr = null
+            temp_tr_id = null
+        }
+    })
 }

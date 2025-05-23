@@ -112,7 +112,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
-                <button id="edit_router_btn" type="button" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>    
+                <button id="update_router_btn" type="button" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>    
             </div>     
         </div>
     </div>

@@ -19,7 +19,7 @@
         "status" => true,
         "type" => "success",
         "size" => null,
-        "message" => "ISP update success.",
+        "message" => "ISP has been updated.",
     ];
 
     echo json_encode($response);

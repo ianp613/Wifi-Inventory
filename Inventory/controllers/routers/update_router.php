@@ -5,6 +5,7 @@
 
     if($data) {
         $router = new Routers;
+        $router = DB::prepare($router,$data["id"]);
         $router->name = $data["router_name"];
         $router->ip = $data["router_ip"];
         $router->subnet = $data["router_subnet"];
@@ -17,7 +18,7 @@
             "status" => true,
             "type" => "success",
             "size" => null,
-            "message" => "Router has been saved.",
+            "message" => "Router has been updated.",
             "router" => DB::all($router)
         ];
     }else{
