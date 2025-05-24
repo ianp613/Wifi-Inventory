@@ -31,13 +31,14 @@ if(document.getElementById("routers")){
             { 
                 className: 'dt-left', 
                 targets: '_all' 
-            }
+            },
+            { orderable: false, targets: 0 }
         ],
         autoWidth: false,
         language: {
            sLengthMenu: "Show _MENU_entries",
            search: "Search: ",
-           emptyTable: 'Not yet set'
+           emptyTable: 'Select router'
         },
         searching: false,
         paging: false,
@@ -77,8 +78,14 @@ if(document.getElementById("routers")){
     
     var update_router_btn = document.getElementById("update_router_btn")
 
+    var active_wan = document.getElementById("active_wan")
+    var save_active_wan = document.getElementById("save_active_wan")
+    var active_wan_id = null
+    var bol_unset = false
+
     var temp_tr = null;
     var temp_tr_id = null;
+    var temp_btn_edit = null;
 
     var temp_wan1 = ""
     var temp_wan2 = ""
@@ -109,15 +116,26 @@ if(document.getElementById("routers")){
             if(e.target.tagName == "BUTTON"){
                 tr = e.target.parentNode.parentNode.children    
             }
-            if(e.target.parentNode.tagName == "TR"){
+            if(e.target.parentNode.tagName == "TR" && !e.target.parentNode.classList.contains("tr_exclude")){
                 if(temp_tr_id){
                     if(temp_tr_id != e.target.parentNode.children[3].children[0].getAttribute("r-id")){
+                        temp_btn_edit.classList.remove("bg-light")
+                        temp_btn_edit.classList.remove("text-dark")
+                        temp_btn_edit.classList.add("bg-secondary")
+                        temp_btn_edit = e.target.parentNode.children[3].children[0]
+                        temp_btn_edit.classList.add("bg-light")
+                        temp_btn_edit.classList.add("text-dark")
+                        temp_btn_edit.classList.remove("bg-secondary")
                         temp_tr.removeAttribute("class")
                         temp_tr = e.target.parentNode
                         temp_tr_id = e.target.parentNode.children[3].children[0].getAttribute("r-id")
                         temp_tr.setAttribute("class","bg-secondary text-light")
                     }
                 }else{
+                    temp_btn_edit = e.target.parentNode.children[3].children[0]
+                    temp_btn_edit.classList.add("bg-light")
+                    temp_btn_edit.classList.add("text-dark")
+                    temp_btn_edit.classList.remove("bg-secondary")
                     temp_tr = e.target.parentNode
                     temp_tr_id = e.target.parentNode.children[3].children[0].getAttribute("r-id")
                     temp_tr.setAttribute("class","bg-secondary text-light")
@@ -606,7 +624,7 @@ if(document.getElementById("routers")){
                 op1_sel.setAttribute("selected","")
                 op1_sel.setAttribute("value","-")
                 op1_sel.innerText = "-- Select WAN 1 --"
-                edit_router_wan1.insertAdjacentElement("afterbegin",op1_sel)
+                checkOptionIfExist(edit_router_wan1,"-- Select WAN 1 --") ? edit_router_wan1.insertAdjacentElement("afterbegin",op1_sel) : null
             }
             if(temp_wan2 == "-"){
                 var op2_sel = document.createElement("option")
@@ -614,52 +632,147 @@ if(document.getElementById("routers")){
                 op2_sel.setAttribute("selected","")
                 op2_sel.setAttribute("value","-")
                 op2_sel.innerText = "-- Select WAN 2 --"
-                edit_router_wan2.insertAdjacentElement("afterbegin",op2_sel)    
+                checkOptionIfExist(edit_router_wan2,"-- Select WAN 2 --") ? edit_router_wan2.insertAdjacentElement("afterbegin",op2_sel) : null
             }
  
             res.isp.forEach(e => {
                 var op1 = document.createElement("option")
                 op1.setAttribute("value",e["id"])
                 op1.innerText = e["name"]
-                edit_router_wan1.appendChild(op1)
+                checkOptionIfExist(edit_router_wan1,e["name"]) ? edit_router_wan1.appendChild(op1) : null
             });
 
             var wan1op = document.createElement("option")
             wan1op.setAttribute("value","-")
             wan1op.innerText = "N/A"
-
-            edit_router_wan1.appendChild(wan1op)
+            checkOptionIfExist(edit_router_wan1,"N/A") ? edit_router_wan1.appendChild(wan1op) : null
             
             res.isp.forEach(e => {
                 var op2 = document.createElement("option")
                 op2.setAttribute("value",e["id"])
                 op2.innerText = e["name"]
-                edit_router_wan2.appendChild(op2)
+                checkOptionIfExist(edit_router_wan2,e["name"]) ? edit_router_wan2.appendChild(op2) : null
             });
 
             var wan2op = document.createElement("option")
             wan2op.setAttribute("value","-")
             wan2op.innerText = "N/A"
-            edit_router_wan2.appendChild(wan2op)  
+            checkOptionIfExist(edit_router_wan2,"N/A") ? edit_router_wan2.appendChild(wan2op) : null
         }  
     }
 
-    function validateResponseWANSettings(res){
-        console.log(res)
-
-
-
-
-
-
-
-
-
-
-
-
-
+    function checkOptionIfExist(select,option){
+        var ops = [];
+        for (let i = 0; i < select.children.length; i++) {
+            ops.push(select.children[i].innerText)
+        }
+        if(ops.indexOf(option)  !== -1){
+            return false
+        }else{
+            return true
+        }
         
+    }
+
+    function checkActive(active,wan,name){
+        
+        let head = name + ": <b class=\"text-primary\">Standby</b>"
+        let data = ""
+        let icon = ""
+
+        var op = document.createElement("option")
+        op.value = wan[0]["id"]
+        op.innerText = name
+        if(active != "-"){
+            if(active == wan[0]["id"]){
+                head = name + ": <b class=\"text-success\">In Use</b>"
+                op.innerText = name + " (Active)"
+                op.setAttribute("selected","")
+                active_wan_id = wan[0]["id"]
+                bol_unset = true
+            }
+        }
+        active_wan.appendChild(op)
+
+        bol_unset && name == "WAN 2" ? active_wan.insertAdjacentHTML("beforeend","<option value=\"-\">Unset WAN</option>") : null
+
+
+        if(wan[0]["isp_name"] == "PLDT Inc."){
+            icon = "<img class=\"ht-15 mb-2\" src=\"../../assets/img/pldt.png\"><br>"
+        }else if(wan[0]["isp_name"] == "Globe Telecom, Inc."){
+            icon = "<img class=\"ht-25 mb-2\" src=\"../../assets/img/globe.png\"><br>"
+        }else if(wan[0]["isp_name"] == "Converge ICT Solutions Inc."){
+            icon = "<img class=\"ht-25 mb-2\" src=\"../../assets/img/converge.png\"><br>"
+        }else if(wan[0]["isp_name"] == "Others"){
+            icon = "<img class=\"ht-25 mb-2\" src=\"../../assets/img/hero.png\"><br>"
+        }
+
+
+        data = icon + head + "<br>" +
+        "Name: " + wan[0]["name"] + "<br>" +
+        "WAN IP: " + wan[0]["wan_ip"] + "<br>" +
+        "<div class=\"row mt-2\">" + 
+            "<div class=\"col-md-6\">" +
+                "Subnet: " + (wan[0]["subnet"] == "-" ? "" : wan[0]["subnet"]) + "<br>" +
+            "</div>" +
+            "<div class=\"col-md-6\">" +
+                "Gateway: " + (wan[0]["gateway"] == "-" ? "" : wan[0]["gateway"]) + "<br>" +
+            "</div>" +
+        "</div>" +
+        "<div class=\"row\">" + 
+            "<div class=\"col-md-6\">" +
+                "DNS 1: " + (wan[0]["dns1"] == "-" ? "" : wan[0]["dns1"]) + "<br>" +
+            "</div>" +
+            "<div class=\"col-md-6\">" +
+                "DNS 2: " + (wan[0]["dns2"] == "-" ? "" : wan[0]["dns2"]) + "<br>"
+            "</div>" +
+        "</div>"  
+        return data
+    }
+
+    active_wan.addEventListener("change",function(){
+        if(this.value == active_wan_id){
+            save_active_wan.setAttribute("hidden","")
+        }else{
+            save_active_wan.removeAttribute("hidden")
+        }
+    })
+
+    save_active_wan.addEventListener("click",function(){
+        sole.post("../../controllers/routers/set_active_wan.php",{
+            id: temp_tr_id,
+            active_wan: active_wan.value
+        }).then(res => validateResponseWANSettings(res))
+        active_wan_id = null
+    })
+
+    function validateResponseWANSettings(res){
+        var bol = false;
+        bol_unset = false
+        if(res.status){
+            save_active_wan.setAttribute("hidden","")
+            active_wan.innerHTML = "<option disabled selected value=\"-\">-- Select Active WAN --</option>"
+            routerISPTable.clear().draw();
+            if(res.wan1.length){
+                routerISPTable.row.add([
+                    checkActive(res.router["active"],res.wan1,"WAN 1")
+                ]).draw(false)
+                bol = true
+            }
+            if(res.wan2.length){
+                routerISPTable.row.add([
+                    checkActive(res.router["active"],res.wan2,"WAN 2")
+                ]).draw(false)
+                bol = true
+            }
+            if(!bol){
+                routerISPTable.row.add([
+                    "<div class=\"w-100 text-center text-danger fw-bold\">WAN is not set</div>"
+                ]).draw(false)
+            }
+        }else{
+            bs5.toast("warning","Something went wrong.")
+        }    
     }
     function validateResponse(res, func){
         if(res.status){
@@ -675,6 +788,8 @@ if(document.getElementById("routers")){
                 edit_router_ip.value = ""
                 edit_router_subnet.value = ""
                 edit_router_modal.hide()
+                edit_router_wan1.innerHTML = ""
+                edit_router_wan2.innerHTML = ""
                 loadPage()
             }
             bs5.toast(res.type,res.message,res.size)
@@ -682,11 +797,21 @@ if(document.getElementById("routers")){
             bs5.toast(res.type,res.message,res.size)
         }
     }
+
     document.body.addEventListener("click",e => {
-        if(e.target.parentNode.tagName != "TR" && temp_tr_id){
+        let table = document.querySelector("#router_isp_table");
+        if(!table.contains(e.target) && e.target.parentNode.tagName != "TR" && temp_tr_id && !e.target.classList.contains("dt-column-order") && !e.target.classList.contains("dt-column-title") && !e.target.classList.contains("edit_router_row") && !e.target.classList.contains("delete_router_row") && !e.target.classList.contains("save_active_wan")){
             temp_tr.removeAttribute("class")
             temp_tr = null
+            temp_btn_edit.classList.remove("bg-light")
+            temp_btn_edit.classList.remove("text-dark")
+            temp_btn_edit.classList.add("bg-secondary")
+            temp_btn_edit = null
             temp_tr_id = null
+            active_wan_id = null
+            routerISPTable.clear().draw();
+            save_active_wan.setAttribute("hidden","")
+            active_wan.innerHTML = "<option disabled selected value=\"-\">-- Select Active WAN --</option>"
         }
     })
 }

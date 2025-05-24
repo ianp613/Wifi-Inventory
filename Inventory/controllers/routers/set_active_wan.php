@@ -11,6 +11,11 @@
 
     if($data["id"]) {
         $router = new Routers;
+
+        $router = DB::prepare($router,$data["id"]);
+        $router->active = $data["active_wan"];
+        DB::update($router);
+        
         $router = DB::find($router,$data["id"])[0];
         
         $wan1 = [];

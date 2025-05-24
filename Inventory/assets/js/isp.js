@@ -108,6 +108,7 @@ if(document.getElementById("isp")){
 
     // ADD ISP FOCUS
     add_isp.addEventListener('shown.bs.modal', function () {
+        isp_name.value = ""
         label_name.focus()
     })
 
@@ -117,24 +118,21 @@ if(document.getElementById("isp")){
     })
 
     add_isp_btn.addEventListener("click",function(){
+        if(!isp_name.value){ isp_name.value = "Others" }
         if(label_name.value){
-            if(isp_name.value){
-                if(wan_ip.value){
-                    sole.post("../../controllers/isp/add_isp.php",{
-                        name: label_name.value,
-                        isp_name: isp_name.value,
-                        wan_ip: wan_ip.value,
-                        subnet: subnet.value,
-                        gateway: gateway.value,
-                        dns1: dns1.value,
-                        dns2: dns2.value,
-                        webmgmtpt: isp_webmgmtpt.value
-                    }).then(res => validateResponse(res,"add_isp"))   
-                }else{
-                    bs5.toast("warning","Please input WAN IP.")
-                }
+            if(wan_ip.value){
+                sole.post("../../controllers/isp/add_isp.php",{
+                    name: label_name.value,
+                    isp_name: isp_name.value,
+                    wan_ip: wan_ip.value,
+                    subnet: subnet.value,
+                    gateway: gateway.value,
+                    dns1: dns1.value,
+                    dns2: dns2.value,
+                    webmgmtpt: isp_webmgmtpt.value
+                }).then(res => validateResponse(res,"add_isp"))   
             }else{
-                bs5.toast("warning","Please select ISP.")
+                bs5.toast("warning","Please input WAN IP.")
             }
         }else{
             bs5.toast("warning","Please provide name.")
@@ -142,25 +140,22 @@ if(document.getElementById("isp")){
     })
 
     edit_isp_btn.addEventListener("click",function(){
+        if(!edit_isp_name.value){ edit_isp_name.value = "Others" }
         if(edit_label_name.value){
-            if(edit_isp_name.value){
-                if(edit_wan_ip.value){
-                    sole.post("../../controllers/isp/edit_isp.php",{
-                        id: this.getAttribute("i-id"),
-                        name: edit_label_name.value,
-                        isp_name: edit_isp_name.value,
-                        wan_ip: edit_wan_ip.value,
-                        subnet: edit_subnet.value,
-                        gateway: edit_gateway.value,
-                        dns1: edit_dns1.value,
-                        dns2: edit_dns2.value,
-                        webmgmtpt: edit_isp_webmgmtpt.value
-                    }).then(res => validateResponse(res,"edit_isp"))   
-                }else{
-                    bs5.toast("warning","Please input WAN IP.")
-                }
+            if(edit_wan_ip.value){
+                sole.post("../../controllers/isp/edit_isp.php",{
+                    id: this.getAttribute("i-id"),
+                    name: edit_label_name.value,
+                    isp_name: edit_isp_name.value,
+                    wan_ip: edit_wan_ip.value,
+                    subnet: edit_subnet.value,
+                    gateway: edit_gateway.value,
+                    dns1: edit_dns1.value,
+                    dns2: edit_dns2.value,
+                    webmgmtpt: edit_isp_webmgmtpt.value
+                }).then(res => validateResponse(res,"edit_isp"))   
             }else{
-                bs5.toast("warning","Please select ISP.")
+                bs5.toast("warning","Please input WAN IP.")
             }
         }else{
             bs5.toast("warning","Please provide name.")

@@ -8,8 +8,17 @@
         $router = DB::prepare($router,$data["id"]);
         $router->name = $data["router_name"];
         $router->ip = $data["router_ip"];
+        if($router->active != "-"){
+            if($router->wan1 == $router->active && $router->wan1 != $data["router_wan1"]){
+                $router->active = "-";
+            }
+            if($router->wan2 == $router->active && $router->wan2 != $data["router_wan2"]){
+                $router->active = "-";
+            }    
+        }
+        
+
         $router->subnet = $data["router_subnet"];
-        $router->active = "-";
         $router->wan1 = $data["router_wan1"];
         $router->wan2 = $data["router_wan2"];
         DB::update($router);

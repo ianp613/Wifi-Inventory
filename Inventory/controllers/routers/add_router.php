@@ -11,7 +11,7 @@
         $router->active = "-";
         $router->wan1 = $data["router_wan1"];
         $router->wan2 = $data["router_wan2"];
-        DB::update($router);
+        DB::save($router);
 
         $response = [
             "status" => true,
