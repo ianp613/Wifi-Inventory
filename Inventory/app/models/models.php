@@ -36,6 +36,7 @@
     {
         public $table = "ip_network";
         public $fillable = [
+            "rid",
             "name",
             "from",
             "to",

@@ -17,8 +17,19 @@
                         <input required type="text" name="ip_range_to" id="ip_range_to" class="form-control" placeholder="TO">
                     </div>
                 </div>
-                <label for="ip_subnet" class="mb-2">Subnet Mask</i></label>
+                <label for="ip_subnet" class="mb-2">Subnet Mask</label>
                 <input required type="text" name="ip_subnet" id="ip_subnet" class="form-control mb-2">
+                <label for="ip_gateway_select" class="mb-2">Default Gateway <i class="f-13">(Router)</i></label>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <select name="ip_gateway_select" id="ip_gateway_select" class="form-control">
+                            <option disabled selected value="-">-- Select Router --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input disabled required type="text" name="ip_gateway" id="ip_gateway" class="form-control mb-2">
+                    </div>
+                </div>
             </div>
             <div class="modal-footer" style="display: flex;">
                 <div id="ready_state">
@@ -56,8 +67,19 @@
                         <input required disabled type="text" name="edit_ip_range_to" id="edit_ip_range_to" class="form-control" placeholder="TO">
                     </div>
                 </div>
-                <label for="edit_ip_subnet" class="mb-2">Subnet Mask</i></label>
+                <label for="edit_ip_subnet" class="mb-2">Subnet Mask</label>
                 <input required type="text" name="edit_ip_subnet" id="edit_ip_subnet" class="form-control mb-2">
+                <label for="edit_ip_gateway_select" class="mb-2">Default Gateway <i class="f-13">(Router)</i></label>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <select name="edit_ip_gateway_select" id="edit_ip_gateway_select" class="form-control">
+                            <option value="-">-- Select Router --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input disabled required type="text" name="edit_ip_gateway" id="edit_ip_gateway" class="form-control mb-2">
+                    </div>
+                </div>
             </div>
             <div class="modal-footer" style="display: flex;">
                 <div id="edit_ready_state">

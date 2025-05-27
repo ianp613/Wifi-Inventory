@@ -9,6 +9,7 @@
         DB::prepare($network,$data["id"]);
             $network->name = $data["name"];
             $network->subnet = $data["subnet"];
+            $network->rid = $data["gateway"];
             DB::update($network);
 
             $ip = new IP_Address;

@@ -50,6 +50,8 @@ if(document.getElementById("ipaddress")){
     var ip_range_from = document.getElementById("ip_range_from")
     var ip_range_to = document.getElementById("ip_range_to")
     var ip_subnet = document.getElementById("ip_subnet")
+    var ip_gateway_select = document.getElementById("ip_gateway_select")
+    var ip_gateway = document.getElementById("ip_gateway")
     var add_network_btn = document.getElementById("add_network_btn")
     var ready_state = document.getElementById("ready_state")
     var saving_state = document.getElementById("saving_state")
@@ -57,6 +59,8 @@ if(document.getElementById("ipaddress")){
     var edit_ip_range_from = document.getElementById("edit_ip_range_from")
     var edit_ip_range_to = document.getElementById("edit_ip_range_to")
     var edit_ip_subnet = document.getElementById("edit_ip_subnet")
+    var edit_ip_gateway_select = document.getElementById("edit_ip_gateway_select")
+    var edit_ip_gateway = document.getElementById("edit_ip_gateway")
     var edit_network_btn = document.getElementById("edit_network_btn")
     var edit_ready_state = document.getElementById("edit_ready_state")
     var edit_saving_state = document.getElementById("edit_saving_state")
@@ -85,16 +89,22 @@ if(document.getElementById("ipaddress")){
 
     var unassign_ip_name = document.getElementById("unassign_ip_name")
 
+    // EDIT IP FOCUS
     edit_ip.addEventListener('shown.bs.modal', function () {
-        // edit_entry_description_input.focus()
+        hostname.focus()
     })
 
     // ADD NETWORK FOCUS
     add_network.addEventListener('shown.bs.modal', function () {
         network_name.focus()
+        sole.get("../../controllers/ipaddress/get_routers.php")
+        .then(res => dropRouters_Add(res))
     })
     // EDIT NETWORK FOCUS
     edit_network.addEventListener('shown.bs.modal', function () {
+        sole.post("../../controllers/ipaddress/get_routers_edit.php",{
+            id: edit_network_btn.getAttribute("nid")
+        }).then(res => dropRouters_Edit(res))
         edit_network_name_temp = edit_network_name.value;
         edit_network_name.focus()
     })
@@ -110,11 +120,13 @@ if(document.getElementById("ipaddress")){
         edit_ip_range_from.setAttribute("readonly","true")
         edit_ip_range_to.setAttribute("readonly","true")
         edit_ip_subnet.setAttribute("readonly","true")
+        edit_ip_gateway_select.setAttribute("readonly","true")
 
         sole.post("../../controllers/ipaddress/edit_network.php",{
             id: edit_network_btn.getAttribute("nid"),
             name: edit_network_name.value,
-            subnet: edit_ip_subnet.value
+            subnet: edit_ip_subnet.value,
+            gateway: edit_ip_gateway_select.value.split("|")[0]
         }).then(res => validateResponse(res,"edit_network"))  
     })
 
@@ -126,11 +138,13 @@ if(document.getElementById("ipaddress")){
         ip_range_from.setAttribute("readonly","true")
         ip_range_to.setAttribute("readonly","true")
         ip_subnet.setAttribute("readonly","true")
+        ip_gateway_select.setAttribute("readonly","true")
         sole.post("../../controllers/ipaddress/add_network.php", {
             name: network_name.value,
             from: ip_range_from.value,
             to: ip_range_to.value,
-            subnet: ip_subnet.value
+            subnet: ip_subnet.value,
+            gateway: ip_gateway_select.value.split("|")[0]
         }).then(res => validateResponse(res,"add_network"))
     })
 
@@ -187,6 +201,78 @@ if(document.getElementById("ipaddress")){
             }).then(res => loadIP(res))
         }
     })
+
+
+    // SET GATEWAY
+    ip_gateway_select.addEventListener("change",function(){
+        if(this.value != "-"){
+            ip_gateway.value = this.value.split("|")[1]    
+        }else{
+            ip_gateway.value = ""
+        }
+    })
+
+    // SET GATEWAY
+    edit_ip_gateway_select.addEventListener("change",function(){
+        if(this.value != "-"){
+            edit_ip_gateway.value = this.value.split("|")[1]    
+        }else{
+            edit_ip_gateway.value = ""
+        }
+    })
+
+    function dropRouters_Add(res){
+        ip_gateway_select.innerHTML = ""
+        var op = document.createElement("option")
+        op.setAttribute("disabled","true")
+        op.setAttribute("selected","true")
+        op.value = "-"
+        op.innerText = "-- Select Router --"
+        ip_gateway_select.appendChild(op)
+
+        res.forEach(r => {
+            var op = document.createElement("option")
+            op.value = r["id"] +  "|" + r["ip"]
+            op.innerText = r["name"]
+            ip_gateway_select.appendChild(op)
+        });
+
+        if(res.length){
+            var op = document.createElement("option")
+            op.value = "-"
+            op.innerText = "N/A"
+            ip_gateway_select.appendChild(op)    
+        }
+    }
+
+    function dropRouters_Edit(res){
+
+        edit_ip_gateway_select.innerHTML = ""
+        var op = document.createElement("option")
+        op.setAttribute("disabled","true")
+        op.setAttribute("selected","true")
+        op.value = "-"
+        op.innerText = "-- Select Router --"
+        edit_ip_gateway_select.appendChild(op)
+
+        res.router.forEach(r => {
+            var op = document.createElement("option")
+            op.value = r["id"] +  "|" + r["ip"]
+            if(res.network[0]["rid"] == r["id"]){
+                op.setAttribute("selected","true")
+                edit_ip_gateway.value = r["ip"]
+            }
+            op.innerText = r["name"]
+            edit_ip_gateway_select.appendChild(op)
+        });
+
+        if(res.router.length){
+            var op = document.createElement("option")
+            op.value = "-"
+            op.innerText = "N/A"
+            edit_ip_gateway_select.appendChild(op)    
+        }
+    }
 
     function editNetworkForm(res){
         if(res.status){
@@ -304,6 +390,15 @@ if(document.getElementById("ipaddress")){
             ip_range_from.removeAttribute("readonly")
             ip_range_to.removeAttribute("readonly")
             ip_subnet.removeAttribute("readonly")
+            ip_gateway_select.removeAttribute("readonly")
+            ip_gateway.value = ""
+            ip_gateway_select.innerHTML = ""
+            var op = document.createElement("option")
+            op.setAttribute("disabled","true")
+            op.setAttribute("selected","true")
+            op.value = "-"
+            op.innerText = "-- Select Router --"
+            ip_gateway_select.appendChild(op)
             add_network_modal.hide();
         }
         if(func == "edit_network"){
@@ -313,6 +408,15 @@ if(document.getElementById("ipaddress")){
             edit_ip_range_from.removeAttribute("readonly")
             edit_ip_range_to.removeAttribute("readonly")
             edit_ip_subnet.removeAttribute("readonly")
+            edit_ip_gateway_select.removeAttribute("readonly")
+            edit_ip_gateway.value = ""
+            var op = document.createElement("option")
+            op.setAttribute("disabled","true")
+            op.setAttribute("selected","true")
+            op.value = "-"
+            op.innerText = "-- Select Router --"
+            edit_ip_gateway_select.appendChild(op)
+
         }
         if(func == "delete_network"){
             delete_ready_state.style = ""

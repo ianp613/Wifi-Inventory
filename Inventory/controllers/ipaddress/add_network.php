@@ -27,6 +27,7 @@
                                     $ip_network->from = $data["from"];
                                     $ip_network->to = $data["to"];
                                     $ip_network->subnet = $data["subnet"];
+                                    $ip_network->rid = $data["gateway"];
                                     DB::save($ip_network);
 
                                     $nid = DB::where($ip_network,"name","=",$data["name"])[0]["id"];
