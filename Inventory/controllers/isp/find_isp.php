@@ -6,7 +6,7 @@
         "status" => false,
         "type" => "error",
         "size" => null,
-        "message" => "Entry not found."
+        "message" => "ISP not found."
     ];
 
     if($data["id"]) {

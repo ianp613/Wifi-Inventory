@@ -196,6 +196,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <div class="w-100 text-center text-danger">
+                    <div class="spinner-border text-danger ht-70 wd-70 me-5" role="status"></div>
+                    <span class="fw-bold" style="font-size: 100px;">
+                        WORK IN PROGRESS    
+                    </span>
+                </div>
                 <div class="w-100 text-dark">
                     <div class="ms-5 me-5 mt-2">
                         <div class="w-100 row border border-dark">

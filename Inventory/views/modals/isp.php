@@ -118,3 +118,27 @@
         </div>
     </div>
 </div>
+
+<!-- DELETE ISP MODAL -->
+<div class="modal fade" id="delete_isp" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <div class="w-100">
+                    <span class="fa fa-exclamation-triangle text-danger h2"></span>
+                    <h5 id="delete_isp_title" class="modal-title fw-bolder">Delete ISP</h5>    
+                </div>
+            </div>
+            <div class="modal-header text-center">
+                <div class="w-100">
+                    <div>You're going to delete ISP "<b><span id="delete_isp_name">ISP</span></b>".</div>
+                    <div><span id="delete_isp_message">This ISP will also be removed from the router to which it is assigned, this can't be undone.</span> Do you wish to proceed?</div>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> No</button>
+                <button id="delete_isp_btn" type="button" data-bs-dismiss="" class="btn btn-danger btn-sm"><span class="fa fa-trash-o"></span> Yes</button>
+            </div>
+        </div>
+    </div>
+</div>

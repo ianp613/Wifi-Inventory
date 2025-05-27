@@ -1,0 +1,50 @@
+<?php
+    header('Content-Type: application/json');
+    include("../../includes.php");
+    $data = json_decode(file_get_contents('php://input'), true);
+    $response = [
+        "status" => false,
+        "type" => "error",
+        "size" => null,
+        "message" => "ISP not found."
+    ];
+
+    if($data["id"]) {
+        $router = new Routers;
+
+        $wan1 = DB::where($router,"wan1","=",$data["id"]);
+        $wan2 = DB::where($router,"wan2","=",$data["id"]);
+
+        if(count($wan1)){
+            foreach($wan1 as $w){
+                $temp = DB::prepare($router,$w["id"]);
+                if($temp->active != "-"){
+                    $temp->active == $temp->wan1 ? $temp->active = "-" : null;   
+                }
+                $temp->wan1 = "-";
+                DB::update($temp);
+            }
+        }
+        if(count($wan2)){
+            foreach($wan2 as $w){
+                $temp = DB::prepare($router,$w["id"]);
+                if($temp->active != "-"){
+                    $temp->active == $temp->wan2 ? $temp->active = "-" : null;   
+                }
+                $temp->wan2 = "-";
+                DB::update($temp);
+            }
+        }
+
+        $isp = new ISP;
+        $isp = DB::delete($isp,$data["id"]);
+
+        $response = [
+            "status" => true,
+            "type" => "info",
+            "size" => null,
+            "message" => "ISP has been deleted.",
+        ];
+    }
+    echo json_encode($response);
+?>

@@ -24,6 +24,7 @@ if(document.getElementById("isp")){
 
     const add_isp_modal = new bootstrap.Modal(document.getElementById('add_isp'),unclose)
     const edit_isp_modal = new bootstrap.Modal(document.getElementById('edit_isp'),unclose)
+    const delete_isp_modal = new bootstrap.Modal(document.getElementById('delete_isp'),unclose)
 
     var add_isp = document.getElementById("add_isp")
     var isp_icon = document.getElementById("isp_icon")
@@ -50,6 +51,10 @@ if(document.getElementById("isp")){
 
     var edit_isp_title = document.getElementById("edit_isp_title")
     var edit_isp_btn = document.getElementById("edit_isp_btn")
+
+    var delete_isp_name = document.getElementById("delete_isp_name")
+    var delete_isp_btn = document.getElementById("delete_isp_btn")
+    var delete_isp_message = document.getElementById("delete_isp_message")
 
     loadPage();
     // LOAD PAGE DATA
@@ -101,7 +106,12 @@ if(document.getElementById("isp")){
                 }).then(res => editForm(res))
             }
             if(e.target.classList.contains('delete_isp_row')) {
-                console.log(e.target.getAttribute("i-id"))
+                delete_isp_name.innerText = tr[1].innerText
+                delete_isp_btn.setAttribute("i-id",e.target.getAttribute("i-id"))
+                sole.post("../../controllers/isp/get_router_assigned.php",{
+                    id: e.target.getAttribute("i-id")
+                }).then(res => deleteMessage(res))
+                delete_isp_modal.show()
             }
         })
     }
@@ -194,6 +204,26 @@ if(document.getElementById("isp")){
         }
     })
 
+    delete_isp_btn.addEventListener("click",function(){
+        sole.post("../../controllers/isp/delete_isp.php",{
+            id: this.getAttribute("i-id")
+        }).then(res => validateResponse(res,"delete_isp"))
+    })
+
+    function deleteMessage(res){
+        console.log(res)
+        if(res.status){
+            if(res.wan1.length){
+                delete_isp_message.innerHTML = "This ISP will also be removed from router \"<b>" + res.wan1[0]["name"] + "</b>, this can't be undone.\""
+            }
+            if(res.wan2.length){
+                delete_isp_message.innerHTML = "This ISP will also be removed from router \"<b>" + res.wan2[0]["name"] + "</b>, this can't be undone.\""
+            }
+        }else{
+            delete_isp_message.innerHTML = "This ISP is not assigned to any router."
+        }
+    }
+
     function editForm(res){
         if(res.isp[0]["isp_name"] == "PLDT Inc."){
             edit_isp_icon.setAttribute("src","../../assets/img/pldt.png")
@@ -238,7 +268,6 @@ if(document.getElementById("isp")){
                 sole.get("../../controllers/isp/get_isp.php").then(res => loadISP(res))
             }
             if(func == "delete_isp"){
-                console.log(res)
                 sole.get("../../controllers/isp/get_isp.php").then(res => loadISP(res))
             }
             bs5.toast(res.type,res.message,res.size)
