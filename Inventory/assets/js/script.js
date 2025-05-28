@@ -4,6 +4,16 @@ let unclose = {
 }
 const audio = new Audio("../assets/sound/ph.mp3");
 const click = new Audio("../assets/sound/click.wav");
+var switch_sound = document.getElementById("switch_sound")
+var switch_sound_check = document.getElementById("switch_sound_check")
+
+var sound = null;
+var theme = null;
+
+document.getElementById("settings_modal").addEventListener('shown.bs.modal', function () {
+    sole.get("../../controllers/settings.php").then(res => settings(res))
+})
+
 if(document.getElementById("sidebar")){
     
     const logout_modal = new bootstrap.Modal(document.getElementById('logout_modal'),unclose);
@@ -32,7 +42,7 @@ if(document.getElementById("sidebar")){
     })
 
     document.getElementById("logout").addEventListener("click",function(){
-        audio.play()
+        sound ? audio.play() : null
         logout_modal.show()
         document.getElementById("confirm_logout").addEventListener("click",function(){
             window.location.replace("../index.php");
@@ -187,7 +197,7 @@ EventTarget.prototype.addEventListener = function(type, listener, options) {
     if (type === "click") {
         // Wrap the original listener to also play the sound
         const newListener = function(event) {
-            click.play();
+            sound ? click.play() : null;
             listener.call(this, event);
         };
         originalAddEventListener.call(this, type, newListener, options);
@@ -195,3 +205,20 @@ EventTarget.prototype.addEventListener = function(type, listener, options) {
         originalAddEventListener.call(this, type, listener, options);
     }
 };
+
+
+function settings(res){
+    sound = res["sound"] == "1" ? true : false
+    theme = res["theme"] == "1" ? true : false
+
+    if(sound){
+        switch_sound_check.setAttribute("checked","true")
+    }else{
+        switch_sound_check.getAttribute("checked") ? switch_sound_check.removeAttribute("checked") : null
+    }
+}
+switch_sound.addEventListener("click",function (){
+    sole.post("../../controllers/settings_set.php",{
+        type: "sound"
+    }).then(res => console.log(res))
+})

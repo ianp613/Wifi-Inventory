@@ -82,6 +82,7 @@ if(document.getElementById("routers")){
     var save_active_wan = document.getElementById("save_active_wan")
     var active_wan_id = null
     var bol_unset = false
+    var bol_count = 0
 
     var temp_tr = null;
     var temp_tr_id = null;
@@ -694,7 +695,12 @@ if(document.getElementById("routers")){
         }
         active_wan.appendChild(op)
 
-        bol_unset && name == "WAN 2" ? active_wan.insertAdjacentHTML("beforeend","<option value=\"-\">Unset WAN</option>") : null
+        if(bol_count){
+            bol_unset ? active_wan.insertAdjacentHTML("beforeend","<option value=\"-\">Unset WAN</option>") : null
+            bol_count = 0
+        }else{
+            bol_count++
+        }
 
 
         if(wan[0]["isp_name"] == "PLDT Inc."){

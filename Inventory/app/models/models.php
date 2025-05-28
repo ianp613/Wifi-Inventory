@@ -88,4 +88,12 @@
         ];
     }
 
+    class Settings{
+        public $table = "settings";
+        public $fillable = [
+            "sound",
+            "theme",
+        ];
+    }
+
 ?>

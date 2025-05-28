@@ -9,8 +9,8 @@
             <div class="modal-body">
                 <div class="d-flex justify-content-between mb-2">
                     <h6>Sound</h6>
-                    <label id="switch" class="switch">
-                        <input type="checkbox">
+                    <label id="switch_sound" class="switch">
+                        <input id="switch_sound_check" type="checkbox">
                         <span class="slider round"></span>
                     </label>
                 </div>
