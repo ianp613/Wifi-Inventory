@@ -3,6 +3,12 @@ if(document.getElementById("login")){
     let password = document.getElementById("password")
     let login_btn = document.getElementById("login_btn")
     let login_alert = document.getElementById("login_alert")
+    let login_sound = false
+
+    sole.post("../../controllers/settings.php")
+    .then(res => {
+        res["sound"] == "1" ? login_sound = true : login_sound = false;
+    });
     login_alert.addEventListener("click", e => {
         login_alert.style = "display: none !important;";
         userid.value = ""
@@ -33,7 +39,7 @@ if(document.getElementById("login")){
     function validateLogin(res){
         if(res.status){
             bs5.toast(res.type,res.message + " " + res.user[0]["name"],res.size, true, false)
-            audio.play();
+            login_sound ? audio.play() : null;
             setTimeout(() => {
                 window.location.replace("inventory.php?loc=dashboard");
             }, 3000);

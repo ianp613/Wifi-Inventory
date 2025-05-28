@@ -10,12 +10,10 @@ var switch_sound_check = document.getElementById("switch_sound_check")
 var sound = null;
 var theme = null;
 
-document.getElementById("settings_modal").addEventListener('shown.bs.modal', function () {
-    sole.get("../../controllers/settings.php").then(res => settings(res))
-})
 
 if(document.getElementById("sidebar")){
-    
+    sole.get("../../controllers/settings.php").then(res => settings(res))
+
     const logout_modal = new bootstrap.Modal(document.getElementById('logout_modal'),unclose);
     const settings_modal = new bootstrap.Modal(document.getElementById('settings_modal'),unclose);
     const confirm_export_modal = new bootstrap.Modal(document.getElementById('confirm_export_modal'),unclose);
@@ -163,19 +161,22 @@ if(document.getElementById("sidebar")){
     window.addEventListener('resize', checkScreenSize);
 }
 
-document.getElementsByClassName("ps-field")[0].addEventListener("click",function(e){
-    if(e.target.tagName == "SPAN"){
-        if(e.target.classList.contains("fa-eye-slash")){
-            document.getElementById("password").type = "text"
-            e.target.classList.remove("fa-eye-slash")
-            e.target.classList.add("fa-eye")
-        }else{
-            document.getElementById("password").type = "password"
-            e.target.classList.remove("fa-eye")
-            e.target.classList.add("fa-eye-slash")
+if(document.getElementsByClassName("ps-field")[0]){
+    document.getElementsByClassName("ps-field")[0].addEventListener("click",function(e){
+        if(e.target.tagName == "SPAN"){
+            if(e.target.classList.contains("fa-eye-slash")){
+                document.getElementById("password").type = "text"
+                e.target.classList.remove("fa-eye-slash")
+                e.target.classList.add("fa-eye")
+            }else{
+                document.getElementById("password").type = "password"
+                e.target.classList.remove("fa-eye")
+                e.target.classList.add("fa-eye-slash")
+            }
         }
-    }
-})
+    })    
+}
+
 
 
 // PUBLIC
@@ -207,18 +208,30 @@ EventTarget.prototype.addEventListener = function(type, listener, options) {
 };
 
 
-function settings(res){
-    sound = res["sound"] == "1" ? true : false
-    theme = res["theme"] == "1" ? true : false
+if(document.getElementById("sidebar")){
+    document.getElementById("settings_modal").addEventListener('shown.bs.modal', function () {
+        sole.get("../../controllers/settings.php").then(res => settings(res))
+    })
 
-    if(sound){
-        switch_sound_check.setAttribute("checked","true")
-    }else{
-        switch_sound_check.getAttribute("checked") ? switch_sound_check.removeAttribute("checked") : null
+    function settings(res){
+        sound = res["sound"] == "1" ? true : false
+        theme = res["theme"] == "1" ? true : false
+
+        if(sound){
+            switch_sound_check.setAttribute("checked","true")
+        }else{
+            switch_sound_check.getAttribute("checked") ? switch_sound_check.removeAttribute("checked") : null
+        }
     }
+    let isRunning = false;
+    switch_sound.addEventListener("click",function (e){
+        if (isRunning) return;
+        isRunning = true;
+        sole.post("../../controllers/settings_set.php", {
+            type: "sound"
+        }).then(res => {
+            settings(res);
+            isRunning = false;
+        });
+    })
 }
-switch_sound.addEventListener("click",function (){
-    sole.post("../../controllers/settings_set.php",{
-        type: "sound"
-    }).then(res => console.log(res))
-})

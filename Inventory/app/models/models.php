@@ -5,6 +5,7 @@
         public $table = "user";
         public $fillable = [
             "name",
+            "email",
             "username",
             "password"
         ];
