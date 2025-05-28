@@ -84,6 +84,8 @@
                             <!-- User Name -->
                         </div>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li id="account"><a class="dropdown-item" href="#"><span class="fa fa-user"></span> Account</a></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li id="settings"><a class="dropdown-item" href="#"><span class="fa fa-gears"></span> Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li id="logout"><a class="dropdown-item"><span class="fa fa-sign-out"></span> Log Out</a></li>

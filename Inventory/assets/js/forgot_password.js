@@ -19,8 +19,10 @@ if(document.getElementById("forgot_password")){
     getcode_btn.addEventListener("click",function(){
         if(userid.value){
             userid.setAttribute("readonly","true")
+
             ready_state.setAttribute("hidden","true")
-                sending_state.removeAttribute("hidden")
+            sending_state.removeAttribute("hidden")
+
             sole.post("../../controllers/generate_code.php",{
                 userid: userid.value
             }).then(res => validateResponse(res,"get_code"))
@@ -82,6 +84,10 @@ if(document.getElementById("forgot_password")){
                 user_id = res.user[0]["id"]
             }
         }else{
+            userid.removeAttribute("readonly")
+            sending_state.setAttribute("hidden","true")
+            ready_state.removeAttribute("hidden")
+            
             bs5.toast(res.type,res.message,res.size)
         }
     }
