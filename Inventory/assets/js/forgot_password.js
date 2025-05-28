@@ -10,10 +10,17 @@ if(document.getElementById("forgot_password")){
     var confirm_code = document.getElementById("confirm_code")
     var code_message = document.getElementById("code_message")
 
+    var ready_state = document.getElementById("ready_state")
+    var sending_state = document.getElementById("sending_state")
+    
+
     var user_id = null;
 
     getcode_btn.addEventListener("click",function(){
         if(userid.value){
+            userid.setAttribute("readonly","true")
+            ready_state.setAttribute("hidden","true")
+                sending_state.removeAttribute("hidden")
             sole.post("../../controllers/generate_code.php",{
                 userid: userid.value
             }).then(res => validateResponse(res,"get_code"))
@@ -40,6 +47,9 @@ if(document.getElementById("forgot_password")){
                                 confirm_code.setAttribute("hidden","true")
                                 sent_to.removeAttribute("hidden")
 
+                                sending_state.setAttribute("hidden","true")
+                                ready_state.removeAttribute("hidden")
+
                                 bs5.toast(res.type,res.message,res.size) 
                                 setTimeout(() => {
                                     window.location.replace("login.php");
@@ -64,11 +74,12 @@ if(document.getElementById("forgot_password")){
         if(res.status){
             if(func == "get_code"){
                 userid.value = ""
+                userid.removeAttribute("readonly")
                 sent_to.setAttribute("hidden","true")
                 confirm_code.removeAttribute("hidden")
+                
                 code_message.innerText = res.message
                 user_id = res.user[0]["id"]
-                console.log(res.code)
             }
         }else{
             bs5.toast(res.type,res.message,res.size)

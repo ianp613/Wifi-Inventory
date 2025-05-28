@@ -27,10 +27,16 @@
                     <label for="userid" class="form-label">Input User ID or Email</label>
                     <input type="userid" class="form-control" id="userid">
                   </div>
-                  <button id="getcode_btn" type="submit" class="btn btn-danger w-100"><span class="fa fa-send"></span> Get Code</button>
+                  <div id="ready_state">
+                    <button id="getcode_btn" type="submit" class="btn btn-danger w-100"><span class="fa fa-send"></span> Get Code</button>
+                  </div>
+                  <div id="sending_state" hidden>
+                      <button class="btn btn-danger w-100" type="button">
+                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                          Sending Code ...
+                      </button>    
+                  </div>
                 </div>
-
-
 
 
 
