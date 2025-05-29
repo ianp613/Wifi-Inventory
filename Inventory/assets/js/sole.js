@@ -65,5 +65,11 @@ class Sole{
         }
         window.speechSynthesis.speak(sole.speechsynthesis);  
     }
+    splash(Message, Timer, Type, Theme){
+        initialize_splash_screen(Message, Timer, Type, Theme);
+    }
+    splash_img(Message, Timer, Img, Type, Theme){
+        initialize_splash_screen_img(Message, Timer, Img, Type, Theme);
+    }
 }
 var sole = new Sole;

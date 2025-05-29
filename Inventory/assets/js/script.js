@@ -10,7 +10,6 @@ var switch_sound_check = document.getElementById("switch_sound_check")
 var sound = null;
 var theme = null;
 
-
 if(document.getElementById("sidebar")){
     sole.get("../../controllers/settings.php").then(res => settings(res))
 

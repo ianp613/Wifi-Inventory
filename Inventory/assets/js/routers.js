@@ -1,6 +1,5 @@
 if(document.getElementById("routers")){
     let routerTable = new DataTable('#router_table',{
-        order: [[5, 'asc']],
         rowCallback: function(row) {
             $(row).addClass("trow");
         },
@@ -23,7 +22,6 @@ if(document.getElementById("routers")){
     });
 
     let routerISPTable = new DataTable('#router_isp_table',{
-        order: [[5, 'asc']],
         rowCallback: function(row) {
             $(row).addClass("trow");
         },
@@ -45,9 +43,31 @@ if(document.getElementById("routers")){
         info: false
     });
 
+    let routerDeleteTable = new DataTable('#delete_router_table',{
+        rowCallback: function(row) {
+            $(row).addClass("trow");
+        },
+        columnDefs: [
+            { 
+                className: 'dt-left', 
+                targets: '_all' 
+            },
+        ],
+        autoWidth: false,
+        language: {
+           sLengthMenu: "Show _MENU_entries",
+           search: "Search: ",
+        },
+        searching: false,
+        paging: false,
+        info: false,
+        emptyTable: false
+    });
+
 
     const add_router_modal = new bootstrap.Modal(document.getElementById('add_router'),unclose)
     const edit_router_modal = new bootstrap.Modal(document.getElementById('edit_router'),unclose)
+    const delete_router_modal = new bootstrap.Modal(document.getElementById('delete_router'),unclose)
 
     var add_router_btn = document.getElementById("add_router_btn")
     var router_name = document.getElementById("router_name")
@@ -75,6 +95,10 @@ if(document.getElementById("routers")){
 
     var edit_router_title = document.getElementById("edit_router_title")
     var edit_router_btn = document.getElementById("edit_router_btn")
+
+    var delete_router_btn = document.getElementById("delete_router_btn")
+    var delete_router_name = document.getElementById("delete_router_name")
+    var delete_router_table_container = document.getElementById("delete_router_table_container")
     
     var update_router_btn = document.getElementById("update_router_btn")
 
@@ -151,6 +175,12 @@ if(document.getElementById("routers")){
                 sole.post("../../controllers/routers/find_router.php",{
                     id: e.target.getAttribute("r-id")
                 }).then(res => editForm(res))
+            }
+            if(e.target.classList.contains('delete_router_row')) {
+                delete_router_btn.setAttribute("r-id",e.target.getAttribute("r-id"))
+                sole.post("../../controllers/routers/find_router_delete.php",{
+                    id: e.target.getAttribute("r-id")
+                }).then(res => deleteForm(res))
             }
             // if(e.target.classList.contains('delete_isp_row')) {
             //     console.log(e.target.getAttribute("i-id"))
@@ -286,6 +316,38 @@ if(document.getElementById("routers")){
         sole.get("../../controllers/routers/get_available_isp.php").then(res => selectDrop(res,"edit_router"))
 
         edit_router_modal.show()
+    }
+
+
+
+
+
+
+
+
+    delete_router_btn.addEventListener("click",function(){
+        sole.post("../../controllers/routers/delete_router.php",{
+            id: this.getAttribute("r-id")
+        }).then(res => validateResponse(res,"delete_router"))
+        console.log(this.getAttribute("r-id"))
+    })
+
+    function deleteForm(res){
+        delete_router_modal.show()
+        delete_router_name.innerText = res.router[0]["name"]
+        if(res.network.length){
+            routerDeleteTable.clear().draw();
+            res.network.forEach(e => {
+                routerDeleteTable.row.add([
+                    e["name"],
+                    e["from"],
+                    e["to"],
+                ]).draw(false)   
+            });
+            delete_router_table_container.removeAttribute("hidden")
+        }else{
+            delete_router_table_container.setAttribute("hidden","true")
+        }
     }
 
     function setWanCurrent(res){
@@ -796,6 +858,10 @@ if(document.getElementById("routers")){
                 edit_router_modal.hide()
                 edit_router_wan1.innerHTML = ""
                 edit_router_wan2.innerHTML = ""
+                loadPage()
+            }
+            if(func == "delete_router"){
+                delete_router_modal.hide()
                 loadPage()
             }
             bs5.toast(res.type,res.message,res.size)

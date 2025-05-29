@@ -117,3 +117,48 @@
         </div>
     </div>
 </div>
+
+
+<!-- DELETE ROUTER MODAL -->
+<div class="modal fade" id="delete_router" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <div class="w-100">
+                    <span class="fa fa-exclamation-triangle text-danger h2"></span>
+                    <h5 id="delete_router_title" class="modal-title fw-bolder">Delete Router</h5>    
+                </div>
+            </div>
+            <div class="modal-header text-center">
+                <div class="w-100">
+                    <div>You're going to delete router "<b><span id="delete_router_name">ISP</span></b>".</div>
+                    <div id="delete_router_table_container" class="ps-4 mb-2">
+                        <div>The following is the list of networks connected to this router.</div>
+                        <table id="delete_router_table" class="w-100">
+                            <thead>
+                                <tr class="fw-bold">
+                                    <td>Name</td>
+                                    <td>IP From</td>
+                                    <td>IP To</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>SA</td>
+                                    <td>SA</td>
+                                    <td>SA</td>
+                                </tr>
+                            </tbody>
+                        </table>    
+                    </div>
+                    
+                    <div>This can't be undone. Do you wish to proceed?</div>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> No</button>
+                <button id="delete_router_btn" type="button" data-bs-dismiss="" class="btn btn-danger btn-sm"><span class="fa fa-trash-o"></span> Yes</button>
+            </div>
+        </div>
+    </div>
+</div>

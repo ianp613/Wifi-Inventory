@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="../assets/fontawesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="../assets/css/datatables/datatables.min.css">
         <link rel="stylesheet" href="../assets/css/bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="../assets/css/sole.splash/splash.css">
         <link rel="stylesheet" href="../assets/css/style.css">
     </head>
     <body>
@@ -52,6 +53,11 @@
                     <li class="nav-item mb-2">
                         <a href="?loc=ipaddress" class="nav-link text-light <?php $ipaddress ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-map-marker" style="width: 13px;"></i> <span>IP Address</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link text-light" data-bs-toggle="modal" data-bs-target="#general_search">
+                            <i class="fa fa-search" style="width: 13px;"></i> <span>Search</span>
                         </a>
                     </li>
                 </ul>
@@ -116,10 +122,12 @@
         <?php include("modals/routers.php"); ?>
         <?php include("modals/logout.php"); ?>
         <?php include("modals/settings.php"); ?>
+        <?php include("modals/general_search.php"); ?>
         <script src="../assets/js/jquery/jquery-3.7.1.js"></script>
         <script src="../assets/js/popper/popper.min.js"></script>
         <script src="../assets/js/datatables/datatables.min.js"></script>
         <script src="../assets/js/bootstrap/bootstrap.min.js"></script>
+        <script src="../assets/js/sole.splash/splash.js"></script>
         <script src="../assets/js/sole.js"></script>
         <script src="../assets/js/script.js"></script>
         <script src="../assets/js/dashboard.js"></script>
@@ -127,6 +135,7 @@
         <script src="../assets/js/ipaddress.js"></script>
         <script src="../assets/js/routers.js"></script>
         <script src="../assets/js/isp.js"></script>
+        <script src="../assets/js/general_search.js"></script>
         <script src="../assets/js/modal_alert.js"></script>
     </body>
 </html>

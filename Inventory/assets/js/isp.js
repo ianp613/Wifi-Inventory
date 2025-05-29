@@ -1,6 +1,5 @@
 if(document.getElementById("isp")){
     let ispTable = new DataTable('#isp_table',{
-        order: [[5, 'asc']],
         rowCallback: function(row) {
             $(row).addClass("trow");
         },
@@ -211,7 +210,6 @@ if(document.getElementById("isp")){
     })
 
     function deleteMessage(res){
-        console.log(res)
         if(res.status){
             if(res.wan1.length){
                 delete_isp_message.innerHTML = "This ISP will also be removed from router \"<b>" + res.wan1[0]["name"] + "</b>, this can't be undone.\""

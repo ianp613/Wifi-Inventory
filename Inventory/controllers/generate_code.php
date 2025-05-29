@@ -69,7 +69,7 @@
                         "status" => false,
                         "type" => "error",
                         "size" => null,
-                        "message" => "Something went wrong."
+                        "message" => "Something went wrong. </br> Check internet connection."
                     ]; 
                 }
             }
@@ -78,7 +78,7 @@
         if(count(explode("@",$userid)) == 2){
             $temp = DB::where($user,"email","=",$userid);
             if(count($temp)){
-                $_SESSION["code"] = Data::generate(6,"numeric");
+                $_SESSION["code"] = Data::generate(6,"alphanumeric");
                 try {
                     // SMTP settings
                     $mail->isSMTP();
@@ -118,7 +118,7 @@
                         "status" => false,
                         "type" => "error",
                         "size" => null,
-                        "message" => "Something went wrong."
+                        "message" => "Something went wrong. </br> Check internet connection."
                     ]; 
                 }
             }
