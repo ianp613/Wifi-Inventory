@@ -11,7 +11,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Wifi Team Inventory</title>
-        <link rel="shortcut icon" href="../assets/img/hero.png" type="image/x-icon">
+        <link rel="shortcut icon" href="../assets/img/logo-ico.png" type="image/x-icon">
         <link rel="stylesheet" href="../assets/fontawesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="../assets/css/datatables/datatables.min.css">
         <link rel="stylesheet" href="../assets/css/bootstrap/bootstrap.min.css">
@@ -91,10 +91,10 @@
                             <!-- User Name -->
                         </div>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li id="account"><a class="dropdown-item text-secondary f-13" href="#"><span class="fa fa-user me-2" style="width: 12px;"></span> Account</a></li>
-                            <li id="settings"><a class="dropdown-item text-secondary f-13" href="#"><span class="fa fa-gears me-2" style="width: 12px;"></span> Settings</a></li>
+                            <li id="account"><a class="dropdown-item f-13" href="#"><span class="fa fa-user me-2 text-secondary" style="width: 12px;"></span> Account</a></li>
+                            <li id="settings"><a class="dropdown-item f-13" href="#"><span class="fa fa-gears me-2 text-secondary" style="width: 12px;"></span> Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li id="logout"><a class="dropdown-item text-secondary f-13"><span class="fa fa-sign-out me-2" style="width: 12px;"></span> Log Out</a></li>
+                            <li id="logout"><a class="dropdown-item f-13"><span class="fa fa-sign-out me-2 text-secondary" style="width: 12px;"></span> Log Out</a></li>
                         </ul>
                     </div>
                 </div>

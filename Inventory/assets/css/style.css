@@ -7,7 +7,7 @@ input[readonly] {
 /* Sidebar styling */
 .sidebar {
     width: 200px;
-    background-color: #b61323 !important;
+    background-color: #b61323;
     min-height: 100vh;
     transition: width 0.3s; /* Transition for smooth resizing */
     word-break: break-word;
@@ -25,6 +25,10 @@ input[readonly] {
     transition: width 0.3s;
     width: 40px !important;
     padding: 0px;
+}
+.scroll-y{
+    height: 150px;
+    overflow-y: auto;
 }
 
 .sidebar .nav-link {

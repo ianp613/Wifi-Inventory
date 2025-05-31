@@ -1,4 +1,8 @@
 if(document.getElementById("login")){
+    if(localStorage.getItem("inactivity")){
+        bs5.toast("info","You've been logged out of your account due to inactivity. <br> Please log in again to resume your work.","lg")
+        localStorage.removeItem("inactivity")
+    }
     let userid = document.getElementById("userid")
     let password = document.getElementById("password")
     let login_btn = document.getElementById("login_btn")

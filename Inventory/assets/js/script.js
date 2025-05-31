@@ -11,6 +11,30 @@ var sound = null;
 var theme = null;
 
 if(document.getElementById("sidebar")){
+    let inactivityTime = 60000 * 5; // 5 minutes
+    let timeout;
+
+    function inactive_logout() {
+        localStorage.setItem("inactivity",true)
+        window.location.replace("../index.php");
+    }
+
+    function resetTimer() {
+        clearTimeout(timeout);
+        timeout = setTimeout(inactive_logout, inactivityTime);
+    }
+
+    document.addEventListener('mousemove', resetTimer);
+    document.addEventListener('keypress', resetTimer);
+    document.addEventListener('mousedown', resetTimer);
+    document.addEventListener('touchstart', resetTimer);
+
+    // Start the timer initially
+    resetTimer();
+
+
+
+
     sole.get("../../controllers/settings.php").then(res => settings(res))
 
     const logout_modal = new bootstrap.Modal(document.getElementById('logout_modal'),unclose);
