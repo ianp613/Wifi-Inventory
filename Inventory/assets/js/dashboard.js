@@ -1,5 +1,5 @@
 if(document.getElementById("dashboard")){
-sole.splash()
+
 
     var inuse = document.getElementById("inuse");
     var standby = document.getElementById("standby");

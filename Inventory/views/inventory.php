@@ -20,55 +20,56 @@
     </head>
     <body>
         <div class="d-flex sticky-top">
-            <nav class="bg-danger text-white sidebar p-3" id="sidebar">
+            <nav class="text-white sidebar p-3" id="sidebar">
                 <div class="d-flex justify-content-center align-items-center bg-light p-3 rounded">
                     <img id="sidebar_logo" src="../../assets/img/fposi-logo.png" style="width: 150px;">
                 </div>
-                <hr>
-                <div class="d-flex justify-content-center align-items-center">
-                    <span id="sidebar_inv_icon" class="d-none fa fa-bar-chart-o"></span><h5 class="mb-2 mt-1">Wifi Team Inventory</h5>    
-                </div>
-                <hr>
+                
                 <ul class="nav flex-column">
+                    <li class="nav-item mt-3">
+                        <a href="?loc=dashboard" class="nav-link f-15 text-light">
+                            <i class="fa fa-tachometer red-1 <?php $dashboard ?  printf("text-light rounded") :  null;?>" style="width: 13px;"></i> <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <hr style="margin-top: 6px;">
+                    <div class="d-flex justify-content-start align-items-center">
+                        <h5 class="ms-3 red-1 f-14 fwt-5">MENU</h5>    
+                    </div>
                     <li class="nav-item mb-2">
-                        <a href="?loc=dashboard" class="nav-link text-light <?php $dashboard ?  printf("bg-light text-dark rounded") :  null;?>">
-                            <i class="fa fa-home" style="width: 13px;"></i> <span>Dashboard</span>
+                        <a href="?loc=equipments" class="nav-link f-15 text-light <?php $equipments ?  printf("bg-light text-dark rounded") :  null;?>">
+                            <i class="fa fa-wrench red-1  <?php $equipments ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Equipments</span>
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="?loc=equipments" class="nav-link text-light <?php $equipments ?  printf("bg-light text-dark rounded") :  null;?>">
-                            <i class="fa fa-wrench" style="width: 13px;"></i> <span>Equipments</span>
+                        <a href="?loc=isp" class="nav-link f-15 text-light <?php $isp ?  printf("bg-light text-dark rounded") :  null;?>">
+                            <i class="fa fa-wifi red-1  <?php $isp ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>ISP</span>
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="?loc=isp" class="nav-link text-light <?php $isp ?  printf("bg-light text-dark rounded") :  null;?>">
-                            <i class="fa fa-wifi" style="width: 13px;"></i> <span>ISP</span>
+                        <a href="?loc=routers" class="nav-link f-15 text-light <?php $routers ?  printf("bg-light text-dark rounded") :  null;?>">
+                            <i class="fa fa-gears red-1 <?php $routers ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Routers</span>
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="?loc=routers" class="nav-link text-light <?php $routers ?  printf("bg-light text-dark rounded") :  null;?>">
-                            <i class="fa fa-gears" style="width: 13px;"></i> <span>Routers</span>
+                        <a href="?loc=ipaddress" class="nav-link f-15 text-light <?php $ipaddress ?  printf("bg-light text-dark rounded") :  null;?>">
+                            <i class="fa fa-map-marker red-1 <?php $ipaddress ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>IP Address</span>
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="?loc=ipaddress" class="nav-link text-light <?php $ipaddress ?  printf("bg-light text-dark rounded") :  null;?>">
-                            <i class="fa fa-map-marker" style="width: 13px;"></i> <span>IP Address</span>
+                        <a href="#" class="nav-link f-15 text-light" data-bs-toggle="modal" data-bs-target="#general_search">
+                            <i class="fa fa-search red-1" style="width: 13px;"></i> <span>Search</span>
                         </a>
                     </li>
-                    <li class="nav-item mb-2">
-                        <a href="#" class="nav-link text-light" data-bs-toggle="modal" data-bs-target="#general_search">
-                            <i class="fa fa-search" style="width: 13px;"></i> <span>Search</span>
-                        </a>
-                    </li>
+                    <hr style="margin-top: 2px;">
                 </ul>
             </nav>
             <div class="main-content">
                 <div class="d-flex justify-content-between align-items-center shadow-sm p-3 pb-2 pt-2 ">
-                    <h5 class="mt-1">
+                    <h5 class="mt-1 text-secondary">
                         <?php 
                             if(isset($_GET["loc"])){
                                 if($_GET["loc"] == "dashboard"){
-                                    echo "<span class=\"fa fa-home\"></span> Dashboard";
+                                    echo "<span class=\"fa fa-tachometer\"></span> Dashboard";
                                 }elseif($_GET["loc"] == "equipments"){
                                     echo "<span class=\"fa fa-wrench\"></span> Equipments";
                                 }elseif($_GET["loc"] == "isp"){
@@ -85,16 +86,15 @@
                             }
                         ?>
                     </h5>
-                    <div class="dropdown">
+                    <div class="dropdown text-dark f-14 fwt-5">
                         <div type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <!-- User Name -->
                         </div>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li id="account"><a class="dropdown-item" href="#"><span class="fa fa-user"></span> Account</a></li>
+                            <li id="account"><a class="dropdown-item text-secondary f-13" href="#"><span class="fa fa-user me-2" style="width: 12px;"></span> Account</a></li>
+                            <li id="settings"><a class="dropdown-item text-secondary f-13" href="#"><span class="fa fa-gears me-2" style="width: 12px;"></span> Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li id="settings"><a class="dropdown-item" href="#"><span class="fa fa-gears"></span> Settings</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li id="logout"><a class="dropdown-item"><span class="fa fa-sign-out"></span> Log Out</a></li>
+                            <li id="logout"><a class="dropdown-item text-secondary f-13"><span class="fa fa-sign-out me-2" style="width: 12px;"></span> Log Out</a></li>
                         </ul>
                     </div>
                 </div>

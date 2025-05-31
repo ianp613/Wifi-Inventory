@@ -12,7 +12,7 @@
                         <h1 class="f-30 fa fa-check text-secondary"></h1>
                     </div>
                 </div>
-                <div class="w-100 ht-10 bg-success rounded-bottom"></div>    
+                <div class="w-100 ht-5 bg-secondary rounded-bottom"></div>    
             </div>
         </div>
         <div class="col-md-3 p-2">
@@ -26,7 +26,7 @@
                         <h1 class="f-30 fa fa-tasks text-secondary"></h1>
                     </div>
                 </div>
-                <div class="w-100 ht-10 bg-primary rounded-bottom"></div>    
+                <div class="w-100 ht-5 bg-secondary rounded-bottom"></div>    
             </div>
         </div>
         <div class="col-md-3 p-2">
@@ -40,7 +40,7 @@
                         <h1 class="f-30 fa fa-exclamation-triangle text-secondary"></h1>
                     </div>
                 </div>
-                <div class="w-100 ht-10 bg-danger rounded-bottom"></div>    
+                <div class="w-100 ht-5 bg-secondary rounded-bottom"></div>    
             </div>
         </div>
         <div class="col-md-3 p-2">
@@ -54,7 +54,7 @@
                         <h1 class="f-30 fa fa-clock-o text-secondary"></h1>
                     </div>
                 </div>
-                <div class="w-100 ht-10 bg-warning rounded-bottom"></div>    
+                <div class="w-100 ht-5 bg-secondary rounded-bottom"></div>    
             </div>
         </div>
     </div>

@@ -234,3 +234,41 @@ if(document.getElementById("sidebar")){
         });
     })
 }
+
+
+function splash(message, seconds) {
+  // Create splash element
+  const splashScreen = document.createElement("div");
+  const bs5_spinner = "<div class=\"spinner-border text-danger ht-70 wd-70 me-5\" role=\"status\"></div>"
+  splashScreen.innerHTML = bs5_spinner
+  splashScreen.id = "splash";
+  splashScreen.style.position = "fixed";
+  splashScreen.style.top = "0";
+  splashScreen.style.left = "0";
+  splashScreen.style.width = "100%";
+  splashScreen.style.height = "100%";
+  splashScreen.style.background = "white";
+  splashScreen.style.display = "flex";
+  splashScreen.style.alignItems = "center";
+  splashScreen.style.justifyContent = "center";
+  splashScreen.style.fontSize = "24px";
+  splashScreen.style.opacity = "1";
+  splashScreen.style.transition = "opacity 0.5s ease-out";
+  splashScreen.style.zIndex = "9999";
+
+  if (message) {
+    splashScreen.innerHTML = message;
+  }
+
+  document.body.appendChild(splashScreen);
+
+  // Remove after fade
+  setTimeout(() => {
+    splashScreen.style.opacity = "0";
+    setTimeout(() => {
+      splashScreen.remove();
+    }, 500); // Matches fade transition duration
+  }, seconds);
+}
+
+splash(null, 200)
