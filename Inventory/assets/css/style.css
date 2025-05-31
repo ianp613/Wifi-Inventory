@@ -23,7 +23,8 @@ input[readonly] {
 }
 .sidebar.collapsed img {
     transition: width 0.3s;
-    width: 30px !important;
+    width: 40px !important;
+    padding: 0px;
 }
 
 .sidebar .nav-link {

@@ -21,7 +21,7 @@
     <body>
         <div class="d-flex sticky-top">
             <nav class="text-white sidebar p-3" id="sidebar">
-                <div class="d-flex justify-content-center align-items-center bg-light p-3 rounded">
+                <div class="d-flex justify-content-center align-items-center bg-light p-2 rounded">
                     <img id="sidebar_logo" src="../../assets/img/fposi-logo.png" style="width: 150px;">
                 </div>
                 
