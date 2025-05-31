@@ -54,7 +54,7 @@
                     <label for="confirm_password" class="form-label">Confirm Password</label>
                     <input class="form-control" id="confirm_password" type="password">
                   </div>
-                  <button id="login_btn" type="submit" class="btn btn-danger w-100"><span class="fa fa-sign-in"></span> Login</button>  
+                  <button id="login_btn" type="submit" class="btn btn-danger w-100"><span class="fa fa-send"></span> Submit</button>  
                 </div>  
                 
 

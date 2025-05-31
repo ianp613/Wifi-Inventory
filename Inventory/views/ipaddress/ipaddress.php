@@ -18,7 +18,7 @@
     </div>
     <input hidden type="file" name="" id="ip_import_input"  accept=".xls, .xlsx">
     <table id="network_table" class="table border table-hover">
-        <thead>
+        <thead class="fwt-5">
             <tr>
                 <td class="text-start">ID</td>
                 <td class="text-start">IP</td>

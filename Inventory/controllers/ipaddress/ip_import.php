@@ -60,6 +60,7 @@
 
                     if($ip_count <= 1000){
                         $network = new IP_Network;
+                        $network->rid = "-";
                         $network->name = $network_name;
                         $network->from = $ip_from;
                         $network->to = $ip_to;

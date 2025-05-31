@@ -1,5 +1,5 @@
 <!-- SETTINGS MODAL -->
-<div class="modal fade" id="general_search" tabindex="-1">
+<div class="modal " id="general_search" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header text-center">
@@ -7,7 +7,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="text" class="form-control">
+                <div class="input-group">
+                    <button disabled class="btn">Search: </button>
+                    <input type="text" class="form-control">
+                    <button class="btn btn-secondary"><span class="fa fa-search"></span></button>
+                </div>
+                <div>
+                    
+                </div>
             <div class="modal-footer">
                 <!-- <button id="export_db" class="btn btn-sm btn-success rouded-pill w-100"><span class="fa fa-database"></span> DB Export</button> -->
                 <!-- <button class="btn btn-sm btn-danger rouded-pill">Save</button> -->

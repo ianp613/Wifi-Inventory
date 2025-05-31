@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-8">
             <table id="router_table" class="table border table-hover">
-                <thead>
+                <thead class="fwt-5">
                     <tr class="tr_exclude">
                         <td class="text-start">ID</td>
                         <td class="text-start">Name</td>
@@ -18,10 +18,10 @@
         </div>
         <div class="col-md-4">
             <table id="router_isp_table" class="table border">
-                <thead>
+                <thead class="fwt-5">
                     <tr>
                         <td class="text-start">
-                            <b>WAN Settings</b>    
+                            WAN Settings   
                             <select class="form-control mt-2" name="" id="active_wan">
                                 <option disabled selected value="-">-- Select Active WAN --</option>
                             </select>

@@ -1,6 +1,6 @@
 <div id="isp">
     <table id="isp_table" class="table border table-hover">
-        <thead>
+        <thead class="fwt-5">
             <tr>
                 <td class="text-start">ID</td>
                 <td class="text-start"><span class="fa fa-wifi"></span></td>
