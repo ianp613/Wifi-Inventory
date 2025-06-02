@@ -99,30 +99,7 @@ if(document.getElementById("equipments")){
     var add_entry_remarks_input = document.getElementById('add_entry_remarks_input')
 
     add_entry_btn.addEventListener("click", function () {
-        let invalid = [];
-
-        if (!add_entry_description_input.value) invalid.push('Description');
-        if (!add_entry_model_no_input.value) invalid.push('Model No.');
-        if (!add_entry_barcode_input.value) invalid.push('Barcode');
-        if (!add_entry_specifications_input.value) invalid.push('Specifications');
-        if (!add_entry_status_input.value) invalid.push('Status');
-        if (!add_entry_remarks_input.value) invalid.push('Remarks');
-
-        let message = "";
-
-        for (let i = 0; i < invalid.length; i++) {
-            if(i != invalid.length-1){
-                message += invalid[i] + ", "
-            }else{
-                if(invalid.length != 1){
-                    message += "and " + invalid[i] + " doesn't have a default value. Please put <b class=\"text-warning\"><i>N/A</i></b> if not applicable."
-                }else{
-                    message += invalid[i] + " doesn't have a default value. Please put <b class=\"text-warning\"><i>N/A</i></b> if not applicable."
-                }
-            }
-        }
-
-        if(!message){
+        if(add_entry_description_input.value){
             if(localStorage.getItem("selected_equipment")){
                 sole.post("../../controllers/equipments/add_entry.php", {
                     eid: localStorage.getItem("selected_equipment_id"),
@@ -137,7 +114,7 @@ if(document.getElementById("equipments")){
                 bs5.toast("warning","Please select equipment first.")
             }
         }else{
-            bs5.toast("warning",message)
+            bs5.toast("warning","Please input description.")
         }
     })
 
@@ -269,9 +246,9 @@ if(document.getElementById("equipments")){
             entryTable.row.add([
                 e["id"],
                 e["description"],
-                e["model_no"],
-                e["barcode"],
-                e["status"],
+                e["model_no"] != "-" ? e["model_no"] : "",
+                e["barcode"] != "-" ? e["barcode"] : "",
+                e["status"] != "-" ? e["status"] : "",
                 " <button id=\"edit_entry_"+ e["id"] +"\" e-id=\""+ e["id"] +"\" class=\"edit_entry_row btn btn-sm btn-secondary mb-1\"><i e-id=\""+ e["id"] +"\" class=\"edit_entry_row fa fa-edit\"></i></button>"+
                 " <button id=\"delete_entry_"+ e["id"] +"\" e-id=\""+ e["id"] +"\" class=\"delete_entry_row btn btn-sm btn-danger mb-1\"><i e-id=\""+ e["id"] +"\" class=\"delete_entry_row fa fa-trash-o\"></i></button>"
             ]).draw(false)   
@@ -320,30 +297,8 @@ if(document.getElementById("equipments")){
                     id: e.target.getAttribute("e-id")
                 }).then(res => editForm(res))
                 edit_entry_btn.addEventListener("click", e =>{
-                    let invalid = [];
 
-                    if (!edit_entry_description_input.value) invalid.push('Description');
-                    if (!edit_entry_model_no_input.value) invalid.push('Model No.');
-                    if (!edit_entry_barcode_input.value) invalid.push('Barcode');
-                    if (!edit_entry_specifications_input.value) invalid.push('Specifications');
-                    if (!edit_entry_status_input.value) invalid.push('Status');
-                    if (!edit_entry_remarks_input.value) invalid.push('Remarks');
-
-                    let message = "";
-
-                    for (let i = 0; i < invalid.length; i++) {
-                        if(i != invalid.length-1){
-                            message += invalid[i] + ", "
-                        }else{
-                            if(invalid.length != 1){
-                                message += "and " + invalid[i] + " doesn't have a default value. Please put <b class=\"text-warning\"><i>N/A</i></b> if not applicable."
-                            }else{
-                                message += invalid[i] + " doesn't have a default value. Please put <b class=\"text-warning\"><i>N/A</i></b> if not applicable."
-                            }
-                        }
-                    }
-
-                    if(!message){
+                    if(edit_entry_description_input.value){
                         if(localStorage.getItem("selected_equipment")){
                             var id = null;
                             e.target.tagName == "SPAN" ? id = e.target.parentNode.getAttribute("e-id") : id = e.target.getAttribute("e-id")
@@ -360,7 +315,7 @@ if(document.getElementById("equipments")){
                             bs5.toast("warning","Please select equipment first.")
                         }
                     }else{
-                        bs5.toast("warning",message)
+                        bs5.toast("warning","Please input description.")
                     }
                     
                 })
@@ -378,11 +333,11 @@ if(document.getElementById("equipments")){
     function editForm(res){
         if(res.status){
             edit_entry_description_input.value = res.entry[0].description
-            edit_entry_model_no_input.value = res.entry[0].model_no
-            edit_entry_barcode_input.value = res.entry[0].barcode
-            edit_entry_specifications_input.value = res.entry[0].specifications
-            edit_entry_status_input.value = res.entry[0].status
-            edit_entry_remarks_input.value = res.entry[0].remarks
+            edit_entry_model_no_input.value = res.entry[0].model_no != "-" ? res.entry[0].model_no : ""
+            edit_entry_barcode_input.value = res.entry[0].barcode != "-" ? res.entry[0].barcode : ""
+            edit_entry_specifications_input.value = res.entry[0].specifications != "-" ? res.entry[0].specifications : ""
+            edit_entry_status_input.value = res.entry[0].status != "-" ? res.entry[0].status : "N/A"
+            edit_entry_remarks_input.value = res.entry[0].remarks != "-" ? res.entry[0].remarks : ""
             edit_entry_modal.show()
         }else{
             bs5.toast(res.type,res.message,res.size)

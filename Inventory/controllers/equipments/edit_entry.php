@@ -8,12 +8,13 @@
 
         $entry = DB::prepare($entry,$data["id"]);
         $entry->description = $data["description"];
-        $entry->model_no = strtoupper($data["model_no"]);
-        $entry->barcode = strtoupper($data["barcode"]);
-        $entry->specifications = $data["specifications"];
-        $entry->status = $data["status"];
-        $entry->remarks = $data["remarks"];
+        $entry->model_no = $data["model_no"] ? strtoupper($data["model_no"]) : "-";
+        $entry->barcode = $data["barcode"] ? strtoupper($data["barcode"]) : "-";
+        $entry->specifications = $data["specifications"] ? $data["specifications"] : "-";
+        $entry->status = $data["status"] ? $data["status"] : "-";
+        $entry->remarks = $data["remarks"] ? $data["remarks"] : "-";
         DB::update($entry);
+        
         $response = [
             "status" => true,
             "type" => "success",

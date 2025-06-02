@@ -68,7 +68,6 @@
             <div class="modal-header">
                 <div>
                     <h6 id="add_entry_title" class="modal-title">Add Entry to Selected Equipment</h6>    
-                    <div style="color: #ff0000;"><i>*Note: put <b>N/A</b> if not applicable.</i></div>
                 </div>
                 
             </div>
@@ -119,7 +118,6 @@
             <div class="modal-header">
                 <div>
                     <h6 id="edit_entry_title" class="modal-title">Edit Selected Equipment</h6>    
-                    <div style="color: #ff0000;"><i>*Note: put <b>N/A</b> if not applicable.</i></div>
                 </div>
                 
             </div>
