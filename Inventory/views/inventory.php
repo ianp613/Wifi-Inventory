@@ -1,9 +1,11 @@
 <?php
+    session_start();
     $dashboard = $_GET["loc"] == "dashboard" ? true : false;
     $equipments = $_GET["loc"] == "equipments" ? true : false;
     $isp = $_GET["loc"] == "isp" ? true : false;
     $routers = $_GET["loc"] == "routers" ? true : false;
     $ipaddress = $_GET["loc"] == "ipaddress" ? true : false;
+    $_SESSION["auth"] ? null : header("location: login.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,6 +60,11 @@
                     <li class="nav-item mb-2">
                         <a href="#" class="nav-link f-15 text-light" data-bs-toggle="modal" data-bs-target="#general_search">
                             <i class="fa fa-search red-1" style="width: 13px;"></i> <span>Search</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="http://192.168.15.221:9000/views/ping.php?loc=ping" target="_blank" class="nav-link f-15 text-light">
+                            <i class="fa fa-search red-1" style="width: 13px;"></i> <span>Ping</span>
                         </a>
                     </li>
                     <hr style="margin-top: 2px;">
@@ -137,5 +144,6 @@
         <script src="../assets/js/isp.js"></script>
         <script src="../assets/js/general_search.js"></script>
         <script src="../assets/js/modal_alert.js"></script>
+        
     </body>
 </html>

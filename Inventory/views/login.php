@@ -1,3 +1,7 @@
+<?php
+  session_start();
+  $_SESSION["auth"] ? header("location: inventory.php?loc=dashboard") : null;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

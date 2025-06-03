@@ -1,6 +1,6 @@
 if(document.getElementById("login")){
     if(localStorage.getItem("inactivity")){
-        bs5.toast("info","You've been logged out of your account due to inactivity. <br> Please log in again to resume your work.","lg")
+        bs5.toast("info","<div class=\"w-100 mb-2 text-primary\"><span class=\"fa fa-info\"></span></div>You've been logged out of your account due to inactivity. <br> Please log in again to resume your work.","lg", true, false)
         localStorage.removeItem("inactivity")
     }
     let userid = document.getElementById("userid")

@@ -15,8 +15,12 @@ if(document.getElementById("sidebar")){
     let timeout;
 
     function inactive_logout() {
-        localStorage.setItem("inactivity",true)
-        window.location.replace("../index.php");
+        if(!document.getElementById("dashboard")){
+            localStorage.setItem("inactivity",true)
+            window.location.replace("../index.php");    
+        }else{
+            resetTimer()
+        }
     }
 
     function resetTimer() {
