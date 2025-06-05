@@ -57,7 +57,7 @@
                             <i class="fa fa-map-marker red-1 <?php $ipaddress ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>IP Address</span>
                         </a>
                     </li>
-                    <li class="nav-item mb-2">
+                    <!-- <li class="nav-item mb-2">
                         <a href="#" class="nav-link f-15 text-light" data-bs-toggle="modal" data-bs-target="#general_search">
                             <i class="fa fa-search red-1" style="width: 13px;"></i> <span>Search</span>
                         </a>
@@ -66,7 +66,7 @@
                         <a href="http://192.168.15.221:9000/views/ping.php?loc=ping" target="_blank" class="nav-link f-15 text-light">
                             <i class="fa fa-search red-1" style="width: 13px;"></i> <span>Ping</span>
                         </a>
-                    </li>
+                    </li> -->
                     <hr style="margin-top: 2px;">
                 </ul>
             </nav>

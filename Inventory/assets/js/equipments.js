@@ -48,6 +48,7 @@ if(document.getElementById("equipments")){
     // POST ADD EQUIPMENT
     add_equipment_btn.addEventListener("click", function () {
         sole.post("../../controllers/equipments/add_equipment.php", {
+            uid: localStorage.getItem("user_id"),
             name: add_equipment_input.value
         }).then(res => validateResponse(res,"add_equipment"))
     })
@@ -133,6 +134,8 @@ if(document.getElementById("equipments")){
             edit_equipment_input.setAttribute("eid",e.target.getAttribute("id"))
             delete_equipment_name.innerText = e.target.innerText
             delete_equipment_btn.setAttribute("eid",e.target.getAttribute("id"))
+
+            // console.log(delete_equipment_btn.parentNode)
             edit_equipment_input.focus()
         }
     })

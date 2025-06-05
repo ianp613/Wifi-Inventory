@@ -22,6 +22,7 @@
                     </label>
                 </div>
             </div>
+            
             <div class="modal-footer">
                 <button id="export_db" class="btn btn-sm btn-success rouded-pill w-100"><span class="fa fa-database"></span> DB Export</button>
                 <!-- <button class="btn btn-sm btn-danger rouded-pill">Save</button> -->

@@ -20,7 +20,7 @@
         }else{
             $response = [
                 "status" => false,
-                "type" => "warning",
+                "type" => "info",
                 "size" => null,
                 "message" => "Equipment already exist."
             ];    

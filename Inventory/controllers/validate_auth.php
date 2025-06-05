@@ -13,6 +13,7 @@
         if($_SESSION["auth"]){
             $user = new User;
             $user = DB::find($user, $_SESSION["userid"]);
+            $_SESSION["privileges"] = $user[0]["privileges"];
             $response = [
                 "status" => true,
                 "type" => "success",

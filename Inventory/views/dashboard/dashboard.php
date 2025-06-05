@@ -62,25 +62,16 @@
     <div class="p-3">
         <div class="row">
             <div class="col-md-6">
-                <h6 class="f-14"><span class="fa fa-wifi"></span> Active ISP</h6>
-                <div class="ps-3 scroll-y">
-                    <p class="f-14 mb-1">"Main Building Main Line - Converge" with IP "192.168.15.255" is assigned to "Planning Routers" as "WAN 1"</p>
+                <h6 class="f-14"><span class="fa fa-wifi"></span>ISP</h6>
+                <div id="active_isp" class="ps-3 scroll-y">
+                    <p class="f-14 mb-1">No data available</p>
                 </div>
             </div>
             <div class="col-md-6">
                 <h6 class="f-14"><span class="fa fa-gears"></span> Routers</h6>
-                <div class="ps-3 scroll-y">
-                    <p class="f-14 mb-1">"Planning" with IP "192.168.15.255" is connected to network "Planning Network"</p>
-                    <p class="f-14 mb-1">"Palo Wifi Router" with IP "10.0.0.1" is connected to network "Palo Wifi"</p>
-                    <p class="f-14 mb-1">"Palo Wifi Router" with IP "10.0.0.1" is connected to network "Palo Wifi"</p>
-                    <p class="f-14 mb-1">"Palo Wifi Router" with IP "10.0.0.1" is connected to network "Palo Wifi"</p>
-                    <p class="f-14 mb-1">"Palo Wifi Router" with IP "10.0.0.1" is connected to network "Palo Wifi"</p>
-                    <p class="f-14 mb-1">"Palo Wifi Router" with IP "10.0.0.1" is connected to network "Palo Wifi"</p>
-                    <p class="f-14 mb-1">"Palo Wifi Router" with IP "10.0.0.1" is connected to network "Palo Wifi"</p>
-                    <p class="f-14 mb-1">"Palo Wifi Router" with IP "10.0.0.1" is connected to network "Palo Wifi"</p>
-                    <p class="f-14 mb-1">"Palo Wifi Router" with IP "10.0.0.1" is connected to network "Palo Wifi"</p>
-                    <p class="f-14 mb-1">"Palo Wifi Router" with IP "10.0.0.1" is connected to network "Palo Wifi"</p>
-                    <p class="f-14 mb-1">"Palo Wifi Router" with IP "10.0.0.1" is connected to network "Palo Wifi"</p>
+                    <div id="active_routers" class="ps-3 scroll-y">
+                    <p class="f-14 mb-1">No data available</p>
+                    
                 </div>
             </div>
         </div>

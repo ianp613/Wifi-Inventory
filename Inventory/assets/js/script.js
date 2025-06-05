@@ -51,6 +51,7 @@ if(document.getElementById("sidebar")){
     function validateAuth(res){
         if(res.status){
             localStorage.setItem("user_id",res.user[0]["username"])
+            localStorage.setItem("privileges",res.user[0]["privileges"])
             document.getElementById("userDropdown").innerHTML = "<span class=\"fa fa-user-circle-o\"></span> " + res.user[0]["name"]
         }else{
             window.location.replace("../index.php");

@@ -737,8 +737,7 @@ if(document.getElementById("routers")){
         
     }
 
-    function checkActive(active,wan,name){
-        
+    function checkActive(active,wan,name,res){
         let head = name + ": <b class=\"text-primary\">Standby</b>"
         let data = ""
         let icon = ""
@@ -756,10 +755,15 @@ if(document.getElementById("routers")){
             }
         }
         active_wan.appendChild(op)
-
-        if(bol_count){
+        
+        if(bol_unset && name == "WAN 1"){
+            if(!res.wan2.length){
+                bol_unset ? active_wan.insertAdjacentHTML("beforeend","<option value=\"-\">Unset WAN</option>") : null
+            }
+        }else if(bol_unset && name == "WAN 2"){
             bol_unset ? active_wan.insertAdjacentHTML("beforeend","<option value=\"-\">Unset WAN</option>") : null
             bol_count = 0
+            bol_unset = false
         }else{
             bol_count++
         }
@@ -823,13 +827,13 @@ if(document.getElementById("routers")){
             routerISPTable.clear().draw();
             if(res.wan1.length){
                 routerISPTable.row.add([
-                    checkActive(res.router["active"],res.wan1,"WAN 1")
+                    checkActive(res.router["active"],res.wan1,"WAN 1",res)
                 ]).draw(false)
                 bol = true
             }
             if(res.wan2.length){
                 routerISPTable.row.add([
-                    checkActive(res.router["active"],res.wan2,"WAN 2")
+                    checkActive(res.router["active"],res.wan2,"WAN 2",res)
                 ]).draw(false)
                 bol = true
             }

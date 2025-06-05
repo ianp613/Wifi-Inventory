@@ -5,9 +5,31 @@ if(document.getElementById("dashboard")){
     var standby = document.getElementById("standby");
     var forstatus = document.getElementById("forstatus");
     var pending = document.getElementById("pending");
+    var active_isp = document.getElementById("active_isp");
+    var routers = document.getElementById("active_routers");
 
     sole.get("../../controllers/dashboard/get_entry.php")
     .then(res => load_unit_counts(res))
+
+
+    sole.get("../../controllers/dashboard/current_configurations.php")
+    .then(res => {
+        res.active_isp.length ? active_isp.innerHTML = "" : null
+        res.active_isp.forEach(ai => {
+            var p = document.createElement("p");
+            p.setAttribute("class","f-14 mb-1")
+            p.innerHTML = ai
+            active_isp.appendChild(p)
+        });
+
+        res.routers.length ? routers.innerHTML = "" : null
+        res.routers.forEach(ai => {
+            var p = document.createElement("p");
+            p.setAttribute("class","f-14 mb-1")
+            p.innerHTML = ai
+            routers.appendChild(p)
+        });
+    })
 
     function load_unit_counts(res){
         var wmi_ip = document.getElementById("wmi_ip")

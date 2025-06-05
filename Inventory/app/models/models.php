@@ -6,6 +6,7 @@
         public $fillable = [
             "name",
             "email",
+            "privileges",
             "username",
             "password"
         ];
@@ -15,6 +16,7 @@
     {
         public $table = "equipment";
         public $fillable = [
+            "uid",
             "name"
         ];
     }
@@ -23,6 +25,7 @@
     {
         public $table = "equipment_entry";
         public $fillable = [
+            "uid",
             "eid",
             "description",
             "model_no",
@@ -37,6 +40,7 @@
     {
         public $table = "ip_network";
         public $fillable = [
+            "uid",
             "rid",
             "name",
             "from",
@@ -49,6 +53,7 @@
     {
         public $table = "ip_address";
         public $fillable = [
+            "uid",
             "nid",
             "ip",
             "subnet",
@@ -66,6 +71,7 @@
     class Routers{
         public $table = "routers";
         public $fillable = [
+            "uid",
             "name",
             "ip",
             "subnet",
@@ -78,6 +84,7 @@
     class ISP{
         public $table = "isp";
         public $fillable = [
+            "uid",
             "isp_name",
             "name",
             "wan_ip",

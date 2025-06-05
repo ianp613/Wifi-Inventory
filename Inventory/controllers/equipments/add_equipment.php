@@ -8,6 +8,7 @@
         $bol = DB::validate($equipment,"name",$data["name"]);
 
         if($bol){
+            $equipment->uid = $data["uid"];
             $equipment->name = $data["name"];
             DB::save($equipment);
             $response = [
