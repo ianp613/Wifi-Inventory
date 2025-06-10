@@ -5,6 +5,8 @@
     $isp = $_GET["loc"] == "isp" ? true : false;
     $routers = $_GET["loc"] == "routers" ? true : false;
     $ipaddress = $_GET["loc"] == "ipaddress" ? true : false;
+    $accounts = $_GET["loc"] == "accounts" ? true : false;
+    $groups = $_GET["loc"] == "groups" ? true : false;   
     $_SESSION["auth"] ? null : header("location: login.php");
 ?>
 <!DOCTYPE html>
@@ -67,11 +69,28 @@
                             <i class="fa fa-search red-1" style="width: 13px;"></i> <span>Ping</span>
                         </a>
                     </li> -->
+                    <div hidden id="users_menu">
+                        <hr style="margin-top: 6px;">
+                        <div class="d-flex justify-content-start align-items-center">
+                            <h5 class="ms-3 red-1 f-14 fwt-5">USERS</h5>    
+                        </div>
+                        <li class="nav-item mb-2">
+                            <a href="?loc=accounts" class="nav-link f-15 text-light <?php $accounts ?  printf("bg-light text-dark rounded") :  null;?>">
+                                <i class="fa fa-id-card red-1 <?php $accounts ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Accounts</span>
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="?loc=groups" class="nav-link f-15 text-light <?php $groups ?  printf("bg-light text-dark rounded") :  null;?>">
+                                <i class="fa fa-users red-1 <?php $groups ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Groups</span>
+                            </a>
+                        </li>    
+                    </div>
+                    
                     <hr style="margin-top: 2px;">
                 </ul>
             </nav>
             <div class="main-content">
-                <div class="d-flex justify-content-between align-items-center shadow-sm p-3 pb-2 pt-2 ">
+                <div class="d-flex justify-content-between align-items-center shadow-sm p-3 pb-0 pt-0 ">
                     <h5 class="mt-1 text-secondary">
                         <?php 
                             if(isset($_GET["loc"])){
@@ -85,6 +104,10 @@
                                     echo "<span class=\"fa fa-gears\"></span> Routers";
                                 }elseif($_GET["loc"] == "ipaddress"){
                                     echo "<span class=\"fa fa-map-marker\"></span> IP Address";
+                                }elseif($_GET["loc"] == "accounts"){
+                                    echo "<span class=\"fa fa-id-card\"></span> Accounts";
+                                }elseif($_GET["loc"] == "groups"){
+                                    echo "<span class=\"fa fa-users\"></span> Groups";
                                 }else{
                                     header("location: ../index.php");
                                 }
@@ -117,7 +140,22 @@
                             include("isp/isp.php");
                         }elseif($_GET["loc"] == "routers"){
                             include("routers/routers.php");
+                        }else{
+                            if($_SESSION["privileges"] == "Administrator"){
+                                if($_GET["loc"] == "accounts"){
+                                    echo "accounts";
+                                }elseif($_GET["loc"] == "routers"){
+                                    echo "groups";
+                                }else{
+                                    // header("location: login.php");
+                                }
+                            }elseif($_SESSION["privileges"] == "Head Technician"){
+                                echo "HEAD";
+                            }
                         }
+
+                        
+                        
                     ?>
                 </div>
             </div>

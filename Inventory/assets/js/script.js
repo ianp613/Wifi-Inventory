@@ -52,7 +52,13 @@ if(document.getElementById("sidebar")){
         if(res.status){
             localStorage.setItem("user_id",res.user[0]["username"])
             localStorage.setItem("privileges",res.user[0]["privileges"])
-            document.getElementById("userDropdown").innerHTML = "<span class=\"fa fa-user-circle-o\"></span> " + res.user[0]["name"]
+            document.getElementById("userDropdown").innerHTML = "<div class=\"d-flex gray-2\" style=\"margin-top: 10px;\"><span class=\"fa fa-user-circle-o me-2 mt-2 f-20\"></span> <div>" + res.user[0]["name"] + "<br><p class=\"f-10\" style=\"margin-top: -4px;\"> Account: " + res.user[0]["privileges"] + "</p></div></div>"
+
+            if(res.user[0]["privileges"] == "Administrator"){
+                document.getElementById("users_menu").removeAttribute("hidden")
+            }else{
+                document.getElementById("users_menu").remove()
+            }
         }else{
             window.location.replace("../index.php");
         }

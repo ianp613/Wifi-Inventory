@@ -193,6 +193,9 @@ input:checked + .slider:before {
 .gray-1{
     color: rgb(104, 104, 104);
 }
+.gray-2{
+    color: rgb(80, 80, 80);
+}
 .red-1{
     color: rgb(255, 157, 157);
 }

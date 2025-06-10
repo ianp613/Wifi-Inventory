@@ -135,7 +135,7 @@ if(document.getElementById("equipments")){
             delete_equipment_name.innerText = e.target.innerText
             delete_equipment_btn.setAttribute("eid",e.target.getAttribute("id"))
 
-            // console.log(delete_equipment_btn.parentNode)
+            console.log(delete_equipment_btn.parentNode)
             edit_equipment_input.focus()
         }
     })
