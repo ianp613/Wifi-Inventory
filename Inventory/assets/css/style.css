@@ -4,6 +4,11 @@ input:read-only{
 input[readonly] {
     background-color: #f3f3f3 !important;
   }
+
+.not_found{
+    position: absolute !important;
+    width: 300px;
+}
 /* Sidebar styling */
 .sidebar {
     width: 200px;
@@ -250,6 +255,9 @@ input:checked + .slider:before {
 }
 .f-30{
     font-size: 30px;
+}
+.f-60{
+    font-size: 60px;
 }
 .ht-5 {
     height: 5px;

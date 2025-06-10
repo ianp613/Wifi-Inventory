@@ -1,5 +1,6 @@
 <?php
     session_start();
+    !isset($_GET["loc"]) ? header("location: ../index.php") : null; 
     $dashboard = $_GET["loc"] == "dashboard" ? true : false;
     $equipments = $_GET["loc"] == "equipments" ? true : false;
     $isp = $_GET["loc"] == "isp" ? true : false;
@@ -69,23 +70,20 @@
                             <i class="fa fa-search red-1" style="width: 13px;"></i> <span>Ping</span>
                         </a>
                     </li> -->
-                    <div hidden id="users_menu">
-                        <hr style="margin-top: 6px;">
-                        <div class="d-flex justify-content-start align-items-center">
-                            <h5 class="ms-3 red-1 f-14 fwt-5">USERS</h5>    
-                        </div>
-                        <li class="nav-item mb-2">
-                            <a href="?loc=accounts" class="nav-link f-15 text-light <?php $accounts ?  printf("bg-light text-dark rounded") :  null;?>">
-                                <i class="fa fa-id-card red-1 <?php $accounts ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Accounts</span>
-                            </a>
-                        </li>
-                        <li class="nav-item mb-2">
-                            <a href="?loc=groups" class="nav-link f-15 text-light <?php $groups ?  printf("bg-light text-dark rounded") :  null;?>">
-                                <i class="fa fa-users red-1 <?php $groups ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Groups</span>
-                            </a>
-                        </li>    
+                    <hr hidden class="users_menu" style="margin-top: 6px;">
+                    <div hidden class="users_menu d-flex justify-content-start align-items-center">
+                        <h5 class="ms-3 red-1 f-14 fwt-5">USERS</h5>    
                     </div>
-                    
+                    <li hidden class="users_menu nav-item mb-2">
+                        <a href="?loc=accounts" class="nav-link f-15 text-light <?php $accounts ?  printf("bg-light text-dark rounded") :  null;?>">
+                            <i class="fa fa-id-card red-1 <?php $accounts ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Accounts</span>
+                        </a>
+                    </li>
+                    <li hidden class="users_menu nav-item mb-2">
+                        <a href="?loc=groups" class="nav-link f-15 text-light <?php $groups ?  printf("bg-light text-dark rounded") :  null;?>">
+                            <i class="fa fa-users red-1 <?php $groups ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Groups</span>
+                        </a>
+                    </li>    
                     <hr style="margin-top: 2px;">
                 </ul>
             </nav>
@@ -105,11 +103,11 @@
                                 }elseif($_GET["loc"] == "ipaddress"){
                                     echo "<span class=\"fa fa-map-marker\"></span> IP Address";
                                 }elseif($_GET["loc"] == "accounts"){
-                                    echo "<span class=\"fa fa-id-card\"></span> Accounts";
+                                    $_SESSION["privileges"] == "Administrator" ? printf("<span class=\"fa fa-id-card\"></span> Accounts") : printf("404");
                                 }elseif($_GET["loc"] == "groups"){
-                                    echo "<span class=\"fa fa-users\"></span> Groups";
+                                    $_SESSION["privileges"] == "Administrator" ? printf("<span class=\"fa fa-users\"></span> Groups") : printf("404");
                                 }else{
-                                    header("location: ../index.php");
+                                    echo "404";
                                 }
                             }else{
                                 header("location: ../index.php");
@@ -140,22 +138,21 @@
                             include("isp/isp.php");
                         }elseif($_GET["loc"] == "routers"){
                             include("routers/routers.php");
-                        }else{
+                        }elseif($_GET["loc"] == "accounts"){
                             if($_SESSION["privileges"] == "Administrator"){
-                                if($_GET["loc"] == "accounts"){
-                                    echo "accounts";
-                                }elseif($_GET["loc"] == "routers"){
-                                    echo "groups";
-                                }else{
-                                    // header("location: login.php");
-                                }
-                            }elseif($_SESSION["privileges"] == "Head Technician"){
-                                echo "HEAD";
+                                include("administrator/accounts.php");
+                            }else{
+                                include "404.php";
                             }
-                        }
-
-                        
-                        
+                        }elseif($_GET["loc"] == "groups"){
+                            if($_SESSION["privileges"] == "Administrator"){
+                                include("administrator/groups.php");
+                            }else{
+                                include "404.php";
+                            }
+                        }else{
+                            include "404.php";
+                        }  
                     ?>
                 </div>
             </div>
@@ -167,7 +164,7 @@
         <?php include("modals/routers.php"); ?>
         <?php include("modals/logout.php"); ?>
         <?php include("modals/settings.php"); ?>
-        <?php include("modals/general_search.php"); ?>
+        <?php include("modals/accounts.php"); ?>
         <script src="../assets/js/jquery/jquery-3.7.1.js"></script>
         <script src="../assets/js/popper/popper.min.js"></script>
         <script src="../assets/js/datatables/datatables.min.js"></script>
@@ -180,7 +177,7 @@
         <script src="../assets/js/ipaddress.js"></script>
         <script src="../assets/js/routers.js"></script>
         <script src="../assets/js/isp.js"></script>
-        <script src="../assets/js/general_search.js"></script>
+        <script src="../assets/js/accounts.js"></script>
         <script src="../assets/js/modal_alert.js"></script>
         
     </body>
