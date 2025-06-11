@@ -131,6 +131,7 @@ if(document.getElementById("isp")){
         if(label_name.value){
             if(wan_ip.value){
                 sole.post("../../controllers/isp/add_isp.php",{
+                    uid: localStorage.getItem("user_id"),
                     name: label_name.value,
                     isp_name: isp_name.value,
                     wan_ip: wan_ip.value,

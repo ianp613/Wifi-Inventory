@@ -5,6 +5,7 @@
 
     if($data) {
         $isp = new ISP;
+        $isp->uid = $data["uid"];
         $isp->name = $data["name"] ? $data["name"] : "-";
         $isp->isp_name = $data["isp_name"] ? $data["isp_name"] : "-";
         $isp->wan_ip = $data["wan_ip"] ? $data["wan_ip"] : "-";

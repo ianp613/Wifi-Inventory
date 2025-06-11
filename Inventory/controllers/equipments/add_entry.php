@@ -5,7 +5,7 @@
 
     if($data) {
         $entry = new Equipment_Entry;
-        
+        $entry->uid = $data["uid"];
         $entry->eid = $data["eid"];
         $entry->description = $data["description"];
         $entry->model_no = $data["model_no"] ? strtoupper($data["model_no"]) : "-";

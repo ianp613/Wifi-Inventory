@@ -103,6 +103,7 @@ if(document.getElementById("equipments")){
         if(add_entry_description_input.value){
             if(localStorage.getItem("selected_equipment")){
                 sole.post("../../controllers/equipments/add_entry.php", {
+                    uid: localStorage.getItem("user_id"),
                     eid: localStorage.getItem("selected_equipment_id"),
                     description: add_entry_description_input.value,
                     model_no: add_entry_model_no_input.value,
@@ -134,8 +135,6 @@ if(document.getElementById("equipments")){
             edit_equipment_input.setAttribute("eid",e.target.getAttribute("id"))
             delete_equipment_name.innerText = e.target.innerText
             delete_equipment_btn.setAttribute("eid",e.target.getAttribute("id"))
-
-            console.log(delete_equipment_btn.parentNode)
             edit_equipment_input.focus()
         }
     })
