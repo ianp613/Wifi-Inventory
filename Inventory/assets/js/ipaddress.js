@@ -140,6 +140,7 @@ if(document.getElementById("ipaddress")){
         ip_subnet.setAttribute("readonly","true")
         ip_gateway_select.setAttribute("readonly","true")
         sole.post("../../controllers/ipaddress/add_network.php", {
+            uid: localStorage.getItem("user_id"),
             name: network_name.value,
             from: ip_range_from.value,
             to: ip_range_to.value,

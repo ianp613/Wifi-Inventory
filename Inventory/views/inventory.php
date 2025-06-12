@@ -72,18 +72,18 @@
                     </li> -->
                     <hr hidden class="users_menu" style="margin-top: 6px;">
                     <div hidden class="users_menu d-flex justify-content-start align-items-center">
-                        <h5 class="ms-3 red-1 f-14 fwt-5">USERS</h5>    
+                        <h5 hidden class="users_menu ms-3 red-1 f-14 fwt-5">USERS</h5>    
                     </div>
                     <li hidden class="users_menu nav-item mb-2">
                         <a href="?loc=accounts" class="nav-link f-15 text-light <?php $accounts ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-id-card red-1 <?php $accounts ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Accounts</span>
                         </a>
                     </li>
-                    <li hidden class="users_menu nav-item mb-2">
-                        <a href="?loc=groups" class="nav-link f-15 text-light <?php $groups ?  printf("bg-light text-dark rounded") :  null;?>">
-                            <i class="fa fa-users red-1 <?php $groups ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Groups</span>
+                    <!-- <li hidden class="users_menu nav-item mb-2">
+                        <a href="?loc=groups" class="nav-link f-15 text-light <?php //$groups ?  printf("bg-light text-dark rounded") :  null;?>">
+                            <i class="fa fa-users red-1 <?php //$groups ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Groups</span>
                         </a>
-                    </li>    
+                    </li>     -->
                     <hr style="margin-top: 2px;">
                 </ul>
             </nav>
@@ -105,7 +105,8 @@
                                 }elseif($_GET["loc"] == "accounts"){
                                     $_SESSION["privileges"] == "Administrator" ? printf("<span class=\"fa fa-id-card\"></span> Accounts") : printf("404");
                                 }elseif($_GET["loc"] == "groups"){
-                                    $_SESSION["privileges"] == "Administrator" ? printf("<span class=\"fa fa-users\"></span> Groups") : printf("404");
+                                    echo "404";
+                                    // $_SESSION["privileges"] == "Administrator" ? printf("<span class=\"fa fa-users\"></span> Groups") : printf("404");
                                 }else{
                                     echo "404";
                                 }
@@ -146,7 +147,8 @@
                             }
                         }elseif($_GET["loc"] == "groups"){
                             if($_SESSION["privileges"] == "Administrator"){
-                                include("administrator/groups.php");
+                                include "404.php";
+                                // include("administrator/groups.php");
                             }else{
                                 include "404.php";
                             }

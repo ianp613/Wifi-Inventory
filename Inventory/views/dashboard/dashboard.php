@@ -62,13 +62,13 @@
     <div class="p-3">
         <div class="row">
             <div class="col-md-6">
-                <h6 class="f-14"><span class="fa fa-wifi"></span>ISP</h6>
+                <h6 class="f-14"><span class="fa fa-wifi"></span> Assigned ISP</h6>
                 <div id="active_isp" class="ps-3 scroll-y">
                     <p class="f-14 mb-1">No data available</p>
                 </div>
             </div>
             <div class="col-md-6">
-                <h6 class="f-14"><span class="fa fa-gears"></span> Routers</h6>
+                <h6 class="f-14"><span class="fa fa-gears"></span> Connected Routers</h6>
                     <div id="active_routers" class="ps-3 scroll-y">
                     <p class="f-14 mb-1">No data available</p>
                     

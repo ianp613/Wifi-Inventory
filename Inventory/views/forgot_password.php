@@ -7,13 +7,17 @@
     <link rel="stylesheet" href="../assets/css/style.css">
         <link rel="stylesheet" href="../assets/fontawesome/css/font-awesome.min.css">
     <title>Wifi Team Inventory</title>
-    <link rel="shortcut icon" href="../assets/img/hero.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../assets/img/logo-ico.png" type="image/x-icon">
 </head>
-  <body id="forgot_password">
+  <body class="login" id="forgot_password">
+    <div class="card-cover"></div>
     <div class="container">
       <div class="row justify-content-center align-items-center vh-100">
         <div class="col-md-4">
-          <div class="card">
+          <div class="card mt-3 mb-3">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
             <div class="card-body">
               <div class="row justify-content-center align-items-center">
                 <img src="../assets/img/fposi-logo.png" style="width: 250px;" alt="fposi-logo.png">

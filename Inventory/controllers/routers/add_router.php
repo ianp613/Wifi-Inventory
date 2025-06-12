@@ -5,6 +5,7 @@
 
     if($data) {
         $router = new Routers;
+        $router->uid = $data["uid"];
         $router->name = $data["router_name"];
         $router->ip = $data["router_ip"];
         $router->subnet = $data["router_subnet"];

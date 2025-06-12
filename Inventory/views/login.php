@@ -13,11 +13,15 @@
     <title>Wifi Team Inventory</title>
     <link rel="shortcut icon" href="../assets/img/logo-ico.png" type="image/x-icon">
 </head>
-  <body id="login">
+  <body class="login" id="login">
+    <div class="card-cover"></div>
     <div class="container">
       <div class="row justify-content-center align-items-center vh-100">
         <div class="col-md-4">
           <div class="card">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
             <div class="card-body">
               <div class="row justify-content-center align-items-center">
                 <img src="../assets/img/fposi-logo.png" style="width: 250px;" alt="fposi-logo.png">
@@ -35,7 +39,7 @@
                     <span id="togglePassword" class="fa fa-eye-slash text-secondary"></span>
                 </div>
                 <button id="login_btn" type="submit" class="btn btn-danger w-100"><span class="fa fa-sign-in"></span> Login</button>
-                <div class="w-100 text-center mt-3"><a style="text-decoration: none;" href="forgot_password.php">Forgot password?</a></div>
+                <div class="w-100 text-center mt-3"><a class="text-light" style="text-decoration: none;" href="forgot_password.php">Forgot password?</a></div>
             </div>
           </div>
         </div>

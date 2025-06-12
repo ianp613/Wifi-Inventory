@@ -23,6 +23,7 @@
                                 $ip_network = new IP_Network;
                                 $bol = DB::validate($ip_network,"name",$data["name"]);
                                 if($bol){
+                                    $ip_network->uid = $data["uid"];
                                     $ip_network->name = $data["name"];
                                     $ip_network->from = $data["from"];
                                     $ip_network->to = $data["to"];

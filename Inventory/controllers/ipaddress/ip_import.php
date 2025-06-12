@@ -1,4 +1,5 @@
 <?php
+    session_start();
     header('Content-Type: application/json');
     include("../../includes.php");
 
@@ -60,6 +61,7 @@
 
                     if($ip_count <= 1000){
                         $network = new IP_Network;
+                        $network->uid = $_SESSION["userid"];
                         $network->rid = "-";
                         $network->name = $network_name;
                         $network->from = $ip_from;

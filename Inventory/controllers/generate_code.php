@@ -42,7 +42,6 @@
 
                     // Email details
                     $mail->setFrom('wifiteaminventory@gmail.com', 'Wifi Team Inventory');
-                    $mail->addAddress('ianpaulianchasea@gmail.com');
                     $mail->Subject = 'Account Recovery';
                     $mail->isHTML(true); 
                     $mail->Body = '<div style="width: 100%; color: #332D2D;">'.
@@ -55,15 +54,26 @@
                     '<h4><i>Note: Do not share this code to anyone.</i></h4>'.
                     '</div>'.
                     '</div>';
-                    $mail->send();
+                    if($temp[0]["email"] != "-"){
+                        $mail->addAddress($temp[0]["email"]);
+                        $mail->send();
 
-                    $response = [
-                        "status" => true,
-                        "type" => "info",
-                        "size" => null,
-                        "message" => "We sent your code to: ". $temp[0]["email"],
-                        "user" => $temp,
-                    ]; 
+                        $response = [
+                            "status" => true,
+                            "type" => "info",
+                            "size" => null,
+                            "message" => "We sent your code to: ". $temp[0]["email"],
+                            "user" => $temp,
+                        ];    
+                    }else{
+                        $response = [
+                            "status" => false,
+                            "type" => "info",
+                            "size" => "lg",
+                            "message" => "You did not set up an email for account recovery. <br> Kindly ask your supervisor to reset your account credentials.",
+                            "user" => $temp,
+                        ]; 
+                    } 
                 } catch (Exception $e) {
                     $response = [
                         "status" => false,
@@ -91,7 +101,6 @@
 
                     // Email details
                     $mail->setFrom('wifiteaminventory@gmail.com', 'Wifi Team Inventory');
-                    $mail->addAddress('ianpaulianchasea@gmail.com');
                     $mail->Subject = 'Account Recovery';
                     $mail->isHTML(true); 
                     $mail->Body = '<div style="width: 100%; color: #332D2D;">'.
@@ -104,15 +113,26 @@
                     '<h4><i>Note: Do not share this code to anyone.</i></h4>'.
                     '</div>'.
                     '</div>';
-                    $mail->send();
+                    if($temp[0]["email"] != "-"){
+                        $mail->addAddress($temp[0]["email"]);
+                        $mail->send();
 
-                    $response = [
-                        "status" => true,
-                        "type" => "info",
-                        "size" => null,
-                        "message" => "We sent your code to: ". $temp[0]["email"],
-                        "user" => $temp,
-                    ]; 
+                        $response = [
+                            "status" => true,
+                            "type" => "info",
+                            "size" => null,
+                            "message" => "We sent your code to: ". $temp[0]["email"],
+                            "user" => $temp,
+                        ];    
+                    }else{
+                        $response = [
+                            "status" => false,
+                            "type" => "info",
+                            "size" => "lg",
+                            "message" => "You did not set up an email for account recovery. <br> Kindly ask your supervisor to reset your account credentials.",
+                            "user" => $temp,
+                        ]; 
+                    } 
                 } catch (Exception $e) {
                     $response = [
                         "status" => false,

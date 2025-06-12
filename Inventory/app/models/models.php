@@ -53,7 +53,6 @@
     {
         public $table = "ip_address";
         public $fillable = [
-            "uid",
             "nid",
             "ip",
             "subnet",

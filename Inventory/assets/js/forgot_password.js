@@ -16,6 +16,8 @@ if(document.getElementById("forgot_password")){
 
     var user_id = null;
 
+    userid.focus()
+
     getcode_btn.addEventListener("click",function(){
         if(userid.value){
             userid.setAttribute("readonly","true")
@@ -82,6 +84,7 @@ if(document.getElementById("forgot_password")){
                 
                 code_message.innerText = res.message
                 user_id = res.user[0]["id"]
+                code.focus()
             }
         }else{
             userid.removeAttribute("readonly")
