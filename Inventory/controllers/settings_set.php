@@ -6,17 +6,17 @@
 
     $setting = new Settings;
     if($data["type"] == "sound"){
-        $sound = DB::prepare($setting,1);
+        $sound = DB::prepare($setting,$data["id"]);
         $sound->sound = $sound->sound == 1 ? 0 : 1;
         DB::update($sound);
     }
 
     if($data["type"] == "theme"){
-        $theme = DB::prepare($setting,1);
+        $theme = DB::prepare($setting,$data["id"]);
         $theme->theme = $theme->theme == 1 ? 0 : 1;
         DB::update($theme);
     }
     
 
-    echo json_encode(DB::all($setting)[0]);
+    echo json_encode(DB::where($setting,"uid","=",$_SESSION["userid"])[0]);
 ?>

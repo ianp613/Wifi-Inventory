@@ -4,7 +4,15 @@ input:read-only{
 input[readonly] {
     background-color: #f3f3f3 !important;
 }
+.form-control:focus {
+    box-shadow: none;
+    outline: none;
+}
 
+.form-select:focus {
+    box-shadow: none;
+    outline: none;
+}
 .login{
     background-image: url('../img/ddpo-building.jpg');
     background-size: cover; 

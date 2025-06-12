@@ -98,6 +98,7 @@
     class Settings{
         public $table = "settings";
         public $fillable = [
+            "uid",
             "sound",
             "theme",
         ];

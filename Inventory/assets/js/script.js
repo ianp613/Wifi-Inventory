@@ -7,6 +7,7 @@ const click = new Audio("../assets/sound/click.wav");
 var switch_sound = document.getElementById("switch_sound")
 var switch_sound_check = document.getElementById("switch_sound_check")
 
+var theme_id = null;
 var sound = null;
 var theme = null;
 
@@ -252,6 +253,7 @@ if(document.getElementById("sidebar")){
     })
 
     function settings(res){
+        theme_id = res["id"]
         sound = res["sound"] == "1" ? true : false
         theme = res["theme"] == "1" ? true : false
 
@@ -266,6 +268,7 @@ if(document.getElementById("sidebar")){
         if (isRunning) return;
         isRunning = true;
         sole.post("../../controllers/settings_set.php", {
+            id: theme_id,
             type: "sound"
         }).then(res => {
             settings(res);

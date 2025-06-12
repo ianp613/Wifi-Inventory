@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../assets/css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
         <link rel="stylesheet" href="../assets/fontawesome/css/font-awesome.min.css">
-    <title>Wifi Team Inventory</title>
+    <title>Wifi Team Inventory - Account Recovery</title>
     <link rel="shortcut icon" href="../assets/img/logo-ico.png" type="image/x-icon">
 </head>
   <body class="login" id="forgot_password">

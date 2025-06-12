@@ -16,6 +16,7 @@
             $user = DB::where($user,"username","=",$userid);
             $_SESSION["auth"] = true;
             $_SESSION["userid"] = $user[0]["id"];
+            $_SESSION["name"] = $user[0]["name"];
             $response = [
                 "status" => true,
                 "type" => "success",
