@@ -6,6 +6,7 @@
     $isp = $_GET["loc"] == "isp" ? true : false;
     $routers = $_GET["loc"] == "routers" ? true : false;
     $ipaddress = $_GET["loc"] == "ipaddress" ? true : false;
+    $logs = $_GET["loc"] == "logs" ? true : false;
     $accounts = $_GET["loc"] == "accounts" ? true : false;
     $groups = $_GET["loc"] == "groups" ? true : false;   
     $_SESSION["auth"] ? null : header("location: login.php");
@@ -102,6 +103,8 @@
                                     echo "<span class=\"fa fa-gears\"></span> Routers";
                                 }elseif($_GET["loc"] == "ipaddress"){
                                     echo "<span class=\"fa fa-map-marker\"></span> IP Address";
+                                }elseif($_GET["loc"] == "logs"){
+                                    echo "<span class=\"fa fa-list\"></span> Activity Logs";
                                 }elseif($_GET["loc"] == "accounts"){
                                     $_SESSION["privileges"] == "Administrator" ? printf("<span class=\"fa fa-id-card\"></span> Accounts") : printf("404");
                                 }elseif($_GET["loc"] == "groups"){
@@ -122,6 +125,7 @@
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li id="account"><a class="dropdown-item f-13" href="#"><span class="fa fa-user me-2 text-secondary" style="width: 12px;"></span> Account</a></li>
                             <li id="settings"><a class="dropdown-item f-13" href="#"><span class="fa fa-gears me-2 text-secondary" style="width: 12px;"></span> Settings</a></li>
+                            <li id="activity_log"><a class="dropdown-item f-13" href="#"><span class="fa fa-list me-2 text-secondary" style="width: 12px;"></span> Activity Logs</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li id="logout"><a class="dropdown-item f-13"><span class="fa fa-sign-out me-2 text-secondary" style="width: 12px;"></span> Log Out</a></li>
                         </ul>
@@ -139,6 +143,8 @@
                             include("isp/isp.php");
                         }elseif($_GET["loc"] == "routers"){
                             include("routers/routers.php");
+                        }elseif($_GET["loc"] == "logs"){
+                            include("logs/logs.php");
                         }elseif($_GET["loc"] == "accounts"){
                             if($_SESSION["privileges"] == "Administrator"){
                                 include("administrator/accounts.php");
@@ -180,6 +186,7 @@
         <script src="../assets/js/routers.js"></script>
         <script src="../assets/js/isp.js"></script>
         <script src="../assets/js/accounts.js"></script>
+        <script src="../assets/js/activity_log.js"></script>
         <script src="../assets/js/modal_alert.js"></script>
         
     </body>

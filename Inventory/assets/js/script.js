@@ -51,7 +51,7 @@ if(document.getElementById("sidebar")){
 
     function validateAuth(res){
         if(res.status){
-            localStorage.setItem("user_id",res.user[0]["id"])
+            localStorage.setItem("username",res.user[0]["username"])
             localStorage.setItem("privileges",res.user[0]["privileges"])
             document.getElementById("userDropdown").innerHTML = "<div class=\"d-flex gray-2\" style=\"margin-top: 10px;\"><span class=\"fa fa-user-circle-o me-2 mt-2 f-20\"></span> <div>" + res.user[0]["name"] + "<br><p class=\"f-10\" style=\"margin-top: -4px;\"> Account: " + res.user[0]["privileges"] + "</p></div></div>"
 
@@ -93,10 +93,10 @@ if(document.getElementById("sidebar")){
         confirm_export_modal.show()
     })
 
-    //  // CONFIRM PASSWORD FOCUS
-    // document.getElementById('confirm_export_modal').addEventListener('shown.bs.modal', function () {
-    //     export_password.focus()
-    // })
+     // CONFIRM PASSWORD FOCUS
+    document.getElementById('confirm_export_modal').addEventListener('shown.bs.modal', function () {
+        export_password.focus()
+    })
 
     document.getElementById("cancel_export").addEventListener("click",function(){
         settings_modal.show()
@@ -104,11 +104,21 @@ if(document.getElementById("sidebar")){
         export_password.value = ""
     })
 
+    document.addEventListener("keypress",function(e){
+        if(document.activeElement.classList.contains('export_password') && e.key == "Enter"){
+            authenticate()
+        }
+    })
+
     document.getElementById("confirm_export").addEventListener("click",function(){
-        if(localStorage.getItem("user_id")){
+        authenticate()
+    })
+
+    function authenticate(){
+        if(localStorage.getItem("username")){
             if(export_password.value){
                 sole.post("../controllers/pass_check.php",{
-                    userid: localStorage.getItem("user_id"),
+                    username: localStorage.getItem("username"),
                     password: export_password.value
                 })
                 .then(res => exportAssist(res))
@@ -118,7 +128,7 @@ if(document.getElementById("sidebar")){
         }else{
             bs5.toast("warning","Something went wrong, try again.")
         }
-    })
+    }
 
     function exportAssist(res){
         if(res.status){

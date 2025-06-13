@@ -104,4 +104,11 @@
         ];
     }
 
+    class Logs{
+        public $table = "logs";
+        public $fillable = [
+            "uid",
+            "log",
+        ];
+    }
 ?>

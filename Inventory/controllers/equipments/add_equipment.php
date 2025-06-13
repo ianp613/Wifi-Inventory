@@ -1,6 +1,7 @@
 <?php
     header('Content-Type: application/json');
     include("../../includes.php");
+    session_start();
     $data = json_decode(file_get_contents('php://input'), true);
 
     if($data["name"]) {
@@ -11,6 +12,12 @@
             $equipment->uid = $data["uid"];
             $equipment->name = $data["name"];
             DB::save($equipment);
+            
+            $log = new Logs;
+            $log->uid = $_SESSION["userid"];
+            $log->log = $_SESSION["name"]." added equipment \"".$data["name"]."\".";
+            DB::save($log);
+
             $response = [
                 "status" => true,
                 "type" => "success",

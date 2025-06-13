@@ -6,10 +6,10 @@
     $data = json_decode(file_get_contents('php://input'), true);
 
     if($data) {
-        $userid = $data['userid'];
+        $username = $data['username'];
         $password = $data['password'];
         $user = new User;
-        $auth = DB::auth($user,$userid,$password);
+        $auth = DB::auth($user,$username,$password);
 
         if($auth){
             $response = [

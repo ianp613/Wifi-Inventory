@@ -37,7 +37,7 @@
         <div class="modal-content bg-success">
             <div class="modal-body">
                 <label for="export_password" class="text-light"><i><span class="fa fa-key"></span> Account Password: </i></label>
-                <input type="password" id="export_password" class="text-light form-control mt-2 bg-success">
+                <input type="password" id="export_password" class="export_password text-light form-control mt-2 bg-success">
             </div>
             <div class="modal-footer">
                 <button class="btn btn-sm btn-success rouded-pill" id="cancel_export"><span class="fa fa-close"></span> Cancel</button>
