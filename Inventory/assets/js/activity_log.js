@@ -28,7 +28,7 @@ if(document.getElementById("logs")){
         autoWidth: false,
         language: {
             sLengthMenu: "Show _MENU_entries",
-            search: "Search: "
+            search : localStorage.getItem("privileges") == "Administrator" ? "<button id=\"clear_log_toggle\" data-bs-toggle=\"modal\" data-bs-target=\"#clear_log\" class=\"btn btn-sm btn-danger me-3\"><span class=\"fa fa-trash\"></span> Clear Logs</button> Search: " : "Search: "
         },
         searching: true,
         paging: false,
@@ -39,21 +39,55 @@ if(document.getElementById("logs")){
     var select_log = document.getElementById("select_log")
 
     loadLogs()
-    localStorage.getItem("privileges") ? loadUsers() : null;
+
+    if(localStorage.getItem("privileges") == "Administrator"){
+        loadUsers()
+        var clear_log_btn = document.getElementById("clear_log_btn")
+        var clear_log_name = document.getElementById("clear_log_name")
+        var clear_log_toggle = document.getElementById("clear_log_toggle")
+        select_log.addEventListener("change",function(){
+            loadLogs(select_log.value)
+        })
+        clear_log_toggle.addEventListener("click",function(){
+            if(select_log.value == "All"){
+                clear_log_name.innerHTML = "for all users"
+            }else if(select_log.value == localStorage.getItem("userid")){
+                clear_log_name.innerHTML = "for your account"
+            }else{
+                clear_log_name.innerHTML = "for user <b>\""+select_log.options[select_log.selectedIndex].text+"\"</b>"
+            }
+            clear_log_btn.setAttribute("uid",select_log.value)
+        })
+        const clear_log_modal = new bootstrap.Modal(document.getElementById('clear_log'),unclose);
+        clear_log_btn.addEventListener("click",function(){
+            sole.post("../../controllers/logs/delete_logs.php",{
+                uid: this.getAttribute("uid")
+            }).then(res => {
+                bs5.toast("info","Logs has been cleared.")
+                loadLogs(this.getAttribute("uid"))
+            })
+        })
+    }
     
-    function loadLogs(){
-        sole.get("../../controllers/logs/get_log.php")
-        .then(res => {
+    function loadLogs(logs = "All"){
+        sole.post("../../controllers/logs/get_log.php",{
+            logs: logs
+        }).then(res => {
             logTable.clear().draw();
             res.logs.forEach(e => {
                 logTable.row.add([
                     e["id"],
-                    e["log"],
+                    replaceName(e["uid"],e["log"]),
                     e["created_at"],
                     localStorage.getItem("privileges") == "Administrator" ? "<button id=\"delete_log_"+ e["id"] +"\" r-id=\""+ e["id"] +"\" class=\"delete_log_row btn btn-sm btn-danger ms-1\"><i r-id=\""+ e["id"] +"\" class=\"delete_log_row fa fa-trash\"></i></button>" : ""
                 ]).draw(false)   
             });
         })
+    }
+
+    function replaceName(id,log){
+        id == localStorage.getItem("userid") ? log = log.replace(localStorage.getItem("yourname"), 'You') : null;
+        return log
     }
 
     function loadUsers(){

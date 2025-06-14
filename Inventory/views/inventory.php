@@ -173,6 +173,7 @@
         <?php include("modals/logout.php"); ?>
         <?php include("modals/settings.php"); ?>
         <?php include("modals/accounts.php"); ?>
+        <?php include("modals/logs.php"); ?>
         <script src="../assets/js/jquery/jquery-3.7.1.js"></script>
         <script src="../assets/js/popper/popper.min.js"></script>
         <script src="../assets/js/datatables/datatables.min.js"></script>

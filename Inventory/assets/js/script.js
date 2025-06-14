@@ -52,6 +52,7 @@ if(document.getElementById("sidebar")){
     function validateAuth(res){
         if(res.status){
             localStorage.setItem("userid",res.user[0]["id"])
+            localStorage.setItem("yourname",res.user[0]["name"])
             localStorage.setItem("username",res.user[0]["username"])
             localStorage.setItem("privileges",res.user[0]["privileges"])
             document.getElementById("userDropdown").innerHTML = "<div class=\"d-flex gray-2\" style=\"margin-top: 10px;\"><span class=\"fa fa-user-circle-o me-2 mt-2 f-20\"></span> <div>" + res.user[0]["name"] + "<br><p class=\"f-10\" style=\"margin-top: -4px;\"> Account: " + res.user[0]["privileges"] + "</p></div></div>"
