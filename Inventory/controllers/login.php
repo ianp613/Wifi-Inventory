@@ -17,6 +17,7 @@
             $_SESSION["auth"] = true;
             $_SESSION["userid"] = $user[0]["id"];
             $_SESSION["name"] = $user[0]["name"];
+            $_SESSION["privileges"] = $user[0]["privileges"];
             $response = [
                 "status" => true,
                 "type" => "success",

@@ -1,6 +1,6 @@
 <!-- LOGOUT MODAL -->
 <div class="modal fade" id="logout_modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
             <div class="modal-body text-secondary">
                 <h5 class="w-100 text-start">You are about to leave.</h5>
