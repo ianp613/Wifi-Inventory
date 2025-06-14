@@ -19,7 +19,7 @@
     }
     $response = [
         "status" => true,
-        "message" => $temp
+        "message" => "Logs has been cleared for user width ID ".$data["uid"]
     ];
 
     echo json_encode($response);

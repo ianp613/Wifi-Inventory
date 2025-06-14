@@ -12,12 +12,16 @@
         $auth = DB::auth($user,$userid,$password);
 
         if($auth){
-            
             $user = DB::where($user,"username","=",$userid);
             $_SESSION["auth"] = true;
             $_SESSION["userid"] = $user[0]["id"];
             $_SESSION["name"] = $user[0]["name"];
             $_SESSION["privileges"] = $user[0]["privileges"];
+            
+            $log = new Logs;
+            $log->uid = $user[0]["id"];
+            $log->log = $user[0]["name"]." has logged into the system.";
+            DB::save($log);
             $response = [
                 "status" => true,
                 "type" => "success",

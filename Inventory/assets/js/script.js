@@ -16,7 +16,7 @@ if(document.getElementById("sidebar")){
     let timeout;
 
     function inactive_logout() {
-        if(!document.getElementById("dashboard")){
+        if(document.getElementById("sidebar")){
             localStorage.setItem("inactivity",true)
             window.location.replace("../index.php");    
         }else{
