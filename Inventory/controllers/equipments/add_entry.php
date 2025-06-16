@@ -1,4 +1,5 @@
 <?php
+    session_start();
     header('Content-Type: application/json');
     include("../../includes.php");
     $data = json_decode(file_get_contents('php://input'), true);
@@ -15,6 +16,17 @@
         $entry->remarks = $data["remarks"] ? $data["remarks"] : "-";
 
         DB::save($entry);
+
+        $equipment = new Equipment;
+        $equipment_temp = DB::find($equipment,$data["eid"]);
+
+        $log = new Logs;
+        $log->uid = $_SESSION["userid"];
+        $log->log = $_SESSION["name"]." has add an entry \"".$data["description"]."\" to equipment \"".$equipment_temp[0]["name"]."\".";
+        if($_SESSION["log"] != $log->log){
+            $_SESSION["log"] = $log->log;
+            DB::save($log);
+        }
 
         $response = [
             "status" => true,

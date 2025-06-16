@@ -219,7 +219,7 @@ if(document.getElementById("equipments")){
                 if(edit_equipment_input_temp == localStorage.getItem("selected_equipment")){
                     equipment_dropdown_toggle.innerText = edit_equipment_input.value
                     localStorage.setItem("selected_equipment", edit_equipment_input.value);
-                    localStorage.setItem("selected_equipment_id", edit_equipment_input.getAttribute("id"));
+                    localStorage.setItem("selected_equipment_id", edit_equipment_input.getAttribute("eid"));
                 }
                 edit_equipment_modal.hide();
                 sole.get("../../controllers/equipments/get_equipment.php").then(res => loadEquipment(res))
@@ -272,6 +272,8 @@ if(document.getElementById("equipments")){
                 delete_entry_btn.setAttribute("e-id",e.target.getAttribute("e-id"))
                 delete_entry_btn.addEventListener("click", function(){
                     sole.delete("../../controllers/equipments/delete_entry.php",{
+                        eid: localStorage.getItem("selected_equipment_id"),
+                        description: tr[0].innerText,
                         id: delete_entry_btn.getAttribute("e-id")
                     }).then(res => validateResponse(res,"delete_entry"))
                     delete_entry_modal.hide()
@@ -305,6 +307,7 @@ if(document.getElementById("equipments")){
                             var id = null;
                             e.target.tagName == "SPAN" ? id = e.target.parentNode.getAttribute("e-id") : id = e.target.getAttribute("e-id")
                             sole.post("../../controllers/equipments/edit_entry.php",{
+                                eid: localStorage.getItem("selected_equipment_id"),
                                 id: id,
                                 description: edit_entry_description_input.value,
                                 model_no: edit_entry_model_no_input.value,

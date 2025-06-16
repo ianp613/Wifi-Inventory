@@ -18,7 +18,7 @@ if(document.getElementById("sidebar")){
     function inactive_logout() {
         if(document.getElementById("sidebar")){
             localStorage.setItem("inactivity",true)
-            window.location.replace("../index.php");    
+            window.location.replace("../index.php?inactivity=true");    
         }else{
             resetTimer()
         }
@@ -202,13 +202,13 @@ if(document.getElementById("sidebar")){
     function checkScreenSize() {
         if (window.innerWidth <= 768 && !collapsed) {
             toggleSidebar();
-            if(localStorage.getItem("privileges") == "Administrator"){
+            if(localStorage.getItem("privileges") == "Administrator" && document.getElementById("logs")){
                 document.getElementById("select_log").style.position = ""
                 document.getElementById("select_log_container").classList.add("justify-content-center")
             }
         } else if (window.innerWidth > 768 && collapsed) {
             toggleSidebar();
-            if(localStorage.getItem("privileges") == "Administrator"){
+            if(localStorage.getItem("privileges") == "Administrator" && document.getElementById("logs")){
                 document.getElementById("select_log").style.position = "absolute"
                 document.getElementById("select_log_container").classList.remove("justify-content-center")
             }

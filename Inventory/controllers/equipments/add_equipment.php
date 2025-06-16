@@ -15,8 +15,11 @@
             
             $log = new Logs;
             $log->uid = $_SESSION["userid"];
-            $log->log = $_SESSION["name"]." added equipment \"".$data["name"]."\".";
-            DB::save($log);
+            $log->log = $_SESSION["name"]." has added an equipment \"".$data["name"]."\".";
+            if($_SESSION["log"] != $log->log){
+                $_SESSION["log"] = $log->log;
+                DB::save($log);
+            }
 
             $response = [
                 "status" => true,

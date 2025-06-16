@@ -7,10 +7,11 @@
     $log = new Logs;
 
     if($data["uid"] == "All"){
-        $temp = DB::all($log);
-        foreach ($temp as $t) {
-            DB::delete($log,$t["id"]);
-        }
+        DB::wipe($log);
+        // $temp = DB::all($log);
+        // foreach ($temp as $t) {
+        //     DB::delete($log,$t["id"]);
+        // }
     }else{
         $temp = DB::where($log,"uid","=",$data["uid"]);
         foreach ($temp as $t) {

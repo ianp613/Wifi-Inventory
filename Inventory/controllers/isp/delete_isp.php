@@ -1,4 +1,5 @@
 <?php
+    session_start();
     header('Content-Type: application/json');
     include("../../includes.php");
     $data = json_decode(file_get_contents('php://input'), true);
@@ -37,7 +38,16 @@
         }
 
         $isp = new ISP;
-        $isp = DB::delete($isp,$data["id"]);
+        $isp_temp = DB::find($isp,$data["id"]);
+        DB::delete($isp,$data["id"]);
+
+        $log = new Logs;
+        $log->uid = $_SESSION["userid"];
+        $log->log = $_SESSION["name"]." has deleted an ISP \"".$isp_temp[0]["name"]."\".";
+        if($_SESSION["log"] != $log->log){
+            $_SESSION["log"] = $log->log;
+            DB::save($log);
+        }
 
         $response = [
             "status" => true,
