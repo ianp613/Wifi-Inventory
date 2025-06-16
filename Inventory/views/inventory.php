@@ -6,6 +6,7 @@
     $isp = $_GET["loc"] == "isp" ? true : false;
     $routers = $_GET["loc"] == "routers" ? true : false;
     $ipaddress = $_GET["loc"] == "ipaddress" ? true : false;
+    $cctv = $_GET["loc"] == "cctv" ? true : false;
     $logs = $_GET["loc"] == "logs" ? true : false;
     $accounts = $_GET["loc"] == "accounts" ? true : false;
     $groups = $_GET["loc"] == "groups" ? true : false;   
@@ -61,6 +62,11 @@
                             <i class="fa fa-map-marker red-1 <?php $ipaddress ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>IP Address</span>
                         </a>
                     </li>
+                    <li class="nav-item mb-2">
+                        <a href="?loc=cctv" class="nav-link f-15 text-light <?php $cctv ?  printf("bg-light text-dark rounded") :  null;?>">
+                            <i class="fa fa-video-camera red-1 <?php $cctv ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>CCTV</span>
+                        </a>
+                    </li>
                     <!-- <li class="nav-item mb-2">
                         <a href="#" class="nav-link f-15 text-light" data-bs-toggle="modal" data-bs-target="#general_search">
                             <i class="fa fa-search red-1" style="width: 13px;"></i> <span>Search</span>
@@ -105,6 +111,8 @@
                                     echo "<span class=\"fa fa-map-marker\"></span> IP Address";
                                 }elseif($_GET["loc"] == "logs"){
                                     echo "<span class=\"fa fa-list\"></span> Activity Logs";
+                                }elseif($_GET["loc"] == "cctv"){
+                                    echo "<span class=\"fa fa-video-camera\"></span> CCTV";
                                 }elseif($_GET["loc"] == "accounts"){
                                     $_SESSION["privileges"] == "Administrator" ? printf("<span class=\"fa fa-id-card\"></span> Accounts") : printf("404");
                                 }elseif($_GET["loc"] == "groups"){
@@ -139,6 +147,8 @@
                             include("equipments/equipments.php");
                         }elseif($_GET["loc"] == "ipaddress"){
                             include("ipaddress/ipaddress.php");
+                        }elseif($_GET["loc"] == "cctv"){
+                            include("cctv/cctv.php");
                         }elseif($_GET["loc"] == "isp"){
                             include("isp/isp.php");
                         }elseif($_GET["loc"] == "routers"){
@@ -168,6 +178,7 @@
         <h6 class="copyright f-10 text-secondary"><i>Copyright 2025 @ Wifi Team</i></h6>
         <?php include("modals/equipments.php"); ?>
         <?php include("modals/ipaddress.php"); ?>
+        <?php include("modals/cctv.php"); ?>
         <?php include("modals/isp.php"); ?>
         <?php include("modals/routers.php"); ?>
         <?php include("modals/logout.php"); ?>
@@ -184,6 +195,7 @@
         <script src="../assets/js/dashboard.js"></script>
         <script src="../assets/js/equipments.js"></script>
         <script src="../assets/js/ipaddress.js"></script>
+        <script src="../assets/js/cctv.js"></script>
         <script src="../assets/js/routers.js"></script>
         <script src="../assets/js/isp.js"></script>
         <script src="../assets/js/accounts.js"></script>

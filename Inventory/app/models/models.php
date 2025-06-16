@@ -111,4 +111,14 @@
             "log",
         ];
     }
+
+    class CCTV_Location{
+        public $table = "cctv_location";
+        public $fillable = [
+            "uid",
+            "map_location",
+            "floorplan",
+            "remarks",
+        ];
+    }
 ?>

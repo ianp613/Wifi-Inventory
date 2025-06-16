@@ -463,3 +463,9 @@ input:checked + .slider:before {
 .wd-100 {
     width: 100px;
 }
+
+.cctv_canvas{
+    box-shadow: 0 0 5px rgba(141, 141, 141, 0.8);
+    border-radius: 5px;
+    padding: 10px;
+}
