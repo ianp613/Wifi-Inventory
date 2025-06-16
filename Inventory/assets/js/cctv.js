@@ -15,7 +15,7 @@ if(document.getElementById("cctv")){
         formData.append("map_remarks",map_remarks.value)
         sole.file("../../controllers/cctv/add_site.php",formData)
         .then(res => {
-            console.log(res)
+            bs5.toast(res.type,res.message,res.size)
             map_location.value = ""
             floorplan.value = ""
             map_remarks.value = ""

@@ -23,7 +23,7 @@
                 "size" => null,
                 "message" => "Map has been added."
             ];
-            
+
         } else {
             $response = [
                 "status" => false,
@@ -38,6 +38,6 @@
             "status" => false,
             "type" => "error",
             "size" => null,
-            "message" => "Import error."
+            "message" => "Add map error."
         ];     
     }
