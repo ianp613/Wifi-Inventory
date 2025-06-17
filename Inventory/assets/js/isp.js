@@ -131,7 +131,7 @@ if(document.getElementById("isp")){
         if(label_name.value){
             if(wan_ip.value){
                 sole.post("../../controllers/isp/add_isp.php",{
-                    uid: localStorage.getItem("user_id"),
+                    uid: localStorage.getItem("userid"),
                     name: label_name.value,
                     isp_name: isp_name.value,
                     wan_ip: wan_ip.value,
@@ -154,6 +154,7 @@ if(document.getElementById("isp")){
         if(edit_label_name.value){
             if(edit_wan_ip.value){
                 sole.post("../../controllers/isp/edit_isp.php",{
+                    uid: localStorage.getItem("userid"),
                     id: this.getAttribute("i-id"),
                     name: edit_label_name.value,
                     isp_name: edit_isp_name.value,
@@ -163,7 +164,7 @@ if(document.getElementById("isp")){
                     dns1: edit_dns1.value,
                     dns2: edit_dns2.value,
                     webmgmtpt: edit_isp_webmgmtpt.value
-                }).then(res => validateResponse(res,"edit_isp"))   
+                }).then(res => console.log(res,"edit_isp"))   
             }else{
                 bs5.toast("warning","Please input WAN IP.")
             }

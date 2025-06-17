@@ -9,7 +9,7 @@ if(document.getElementById("cctv")){
         floorplan.files.length > 0 ? null : bs5.toast("warning","Please select floor plan.")
 
         const formData = new FormData();
-        formData.append("uid",localStorage.getItem("user_id"))
+        formData.append("uid",localStorage.getItem("userid"))
         formData.append("file",floorplan.files[0])
         formData.append("map_location",map_location.value)
         formData.append("map_remarks",map_remarks.value)

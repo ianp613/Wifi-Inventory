@@ -277,7 +277,7 @@ if(document.getElementById("routers")){
 
     function postRouter(){
         sole.post("../../controllers/routers/add_router.php",{
-            uid: localStorage.getItem("user_id"),
+            uid: localStorage.getItem("userid"),
             router_name: router_name.value,
             router_ip: router_ip.value,
             router_subnet: router_subnet.value,

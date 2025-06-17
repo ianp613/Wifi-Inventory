@@ -1,10 +1,12 @@
 <?php
+    session_start();
     header('Content-Type: application/json');
     include("../../includes.php");
     $data = json_decode(file_get_contents('php://input'), true);
 
     $isp = new ISP;
     $isp = DB::prepare($isp,$data["id"]);
+    $isp_name_temp = $isp->name;
     $isp->name = $data["name"] ? $data["name"] : "-";
     $isp->isp_name = $data["isp_name"] ? $data["isp_name"] : "-";
     $isp->wan_ip = $data["wan_ip"] ? $data["wan_ip"] : "-";
@@ -14,6 +16,24 @@
     $isp->dns2 = $data["dns2"] ? $data["dns2"] : "-";
     $isp->webmgmtpt = $data["webmgmtpt"] ? $data["webmgmtpt"] : "-";
     DB::update($isp);
+
+    if($isp_name_temp != $data["name"]){
+        $isp = new ISP;
+        $log->uid = $_SESSION["userid"];
+        $log->log = $_SESSION["name"]." has updated an ISP name from \"".$isp_name_temp."\" to \"".$data["name"].".\"";
+        if($_SESSION["log"] != $log->log){
+            $_SESSION["log"] = $log->log;
+            DB::save($log);
+        }    
+    }
+
+    $isp = new ISP;
+    $log->uid = $_SESSION["userid"];
+    $log->log = $_SESSION["name"]." has updated an information of ISP \"".$data["name"]."\".";
+    if($_SESSION["log"] != $log->log){
+        $_SESSION["log"] = $log->log;
+        DB::save($log);
+    }
 
     $response = [
         "status" => true,

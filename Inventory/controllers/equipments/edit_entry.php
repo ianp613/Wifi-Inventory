@@ -19,14 +19,6 @@
         $entry->remarks = $data["remarks"] ? $data["remarks"] : "-";
         DB::update($entry);
 
-        $log = new Logs;
-        $log->uid = $_SESSION["userid"];
-        $log->log = $_SESSION["name"]." has updated an information of entry \"".$data["description"]."\" from equipment \"".$equipment_temp[0]["name"]."\".";
-        if($_SESSION["log"] != $log->log){
-            $_SESSION["log"] = $log->log;
-            DB::save($log);
-        }
-
         if($entry_description_temp != $data["description"]){
             $log = new Logs;
             $log->uid = $_SESSION["userid"];
@@ -36,7 +28,15 @@
                 DB::save($log);
             }    
         }
-        
+
+        $log = new Logs;
+        $log->uid = $_SESSION["userid"];
+        $log->log = $_SESSION["name"]." has updated an information of entry \"".$data["description"]."\" from equipment \"".$equipment_temp[0]["name"]."\".";
+        if($_SESSION["log"] != $log->log){
+            $_SESSION["log"] = $log->log;
+            DB::save($log);
+        }
+
         $response = [
             "status" => true,
             "type" => "success",

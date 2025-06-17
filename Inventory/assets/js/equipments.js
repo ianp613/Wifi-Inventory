@@ -48,7 +48,7 @@ if(document.getElementById("equipments")){
     // POST ADD EQUIPMENT
     add_equipment_btn.addEventListener("click", function () {
         sole.post("../../controllers/equipments/add_equipment.php", {
-            uid: localStorage.getItem("user_id"),
+            uid: localStorage.getItem("userid"),
             name: add_equipment_input.value
         }).then(res => validateResponse(res,"add_equipment"))
     })
@@ -103,7 +103,7 @@ if(document.getElementById("equipments")){
         if(add_entry_description_input.value){
             if(localStorage.getItem("selected_equipment")){
                 sole.post("../../controllers/equipments/add_entry.php", {
-                    uid: localStorage.getItem("user_id"),
+                    uid: localStorage.getItem("userid"),
                     eid: localStorage.getItem("selected_equipment_id"),
                     description: add_entry_description_input.value,
                     model_no: add_entry_model_no_input.value,
