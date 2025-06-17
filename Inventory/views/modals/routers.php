@@ -30,7 +30,7 @@
                 <select name="router_wan1" id="router_wan1" class="form-control">
                     <option value="0" disabled selected>-- Select WAN 1 --</option>
                 </select>
-                <div id="wan1_info" class="ht-150 p-2">
+                <div id="wan1_info" class="ht-160 p-2" style="overflow-y: auto; overflow-x: hidden;">
                     <!-- ISP INFO -->
                 </div>
 
@@ -43,7 +43,7 @@
                 <select name="router_wan2" id="router_wan2" class="form-control">
                     <option value="0" disabled selected>-- Select WAN 2 --</option>
                 </select>
-                <div id="wan2_info" class="ht-150 p-2">
+                <div id="wan2_info" class="ht-160 p-2" style="overflow-y: auto; overflow-x: hidden;">
                     <!-- ISP INFO -->
                 </div>
 
@@ -90,7 +90,7 @@
                 <select name="edit_router_wan1" id="edit_router_wan1" class="form-control">
                     <option value="0" disabled selected>-- Select WAN 1 --</option>
                 </select>
-                <div id="edit_wan1_info" class="ht-150 p-2">
+                <div id="edit_wan1_info" class="ht-160 p-2" style="overflow-y: auto; overflow-x: hidden;">
                     <!-- ISP INFO -->
                 </div>
 
@@ -103,7 +103,7 @@
                 <select name="edit_router_wan2" id="edit_router_wan2" class="form-control">
                     <option value="0" disabled selected>-- Select WAN 2 --</option>
                 </select>
-                <div id="edit_wan2_info" class="ht-150 p-2">
+                <div id="edit_wan2_info" class="ht-160 p-2" style="overflow-y: auto; overflow-x: hidden;">
                     <!-- ISP INFO -->
                 </div>
 

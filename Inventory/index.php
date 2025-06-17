@@ -23,6 +23,10 @@
     $_SESSION["privileges"] = null;
     $_SESSION["code"] = null;
     $_SESSION["log"] = null;
+    $_SESSION["log1"] = null;
+    $_SESSION["log2"] = null;
+    $_SESSION["log3"] = null;
+    $_SESSION["log4"] = null;
     $_SESSION["mail_username"] = 'paulian.dumdum@gmail.com';
     $_SESSION["mail_password"] = 'ytrr qwdo kqox vdre';
 

@@ -164,7 +164,7 @@ if(document.getElementById("isp")){
                     dns1: edit_dns1.value,
                     dns2: edit_dns2.value,
                     webmgmtpt: edit_isp_webmgmtpt.value
-                }).then(res => console.log(res,"edit_isp"))   
+                }).then(res => validateResponse(res,"edit_isp"))   
             }else{
                 bs5.toast("warning","Please input WAN IP.")
             }

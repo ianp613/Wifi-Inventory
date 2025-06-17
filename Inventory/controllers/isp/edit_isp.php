@@ -17,22 +17,22 @@
     $isp->webmgmtpt = $data["webmgmtpt"] ? $data["webmgmtpt"] : "-";
     DB::update($isp);
 
-    if($isp_name_temp != $data["name"]){
-        $isp = new ISP;
-        $log->uid = $_SESSION["userid"];
-        $log->log = $_SESSION["name"]." has updated an ISP name from \"".$isp_name_temp."\" to \"".$data["name"].".\"";
-        if($_SESSION["log"] != $log->log){
-            $_SESSION["log"] = $log->log;
-            DB::save($log);
-        }    
-    }
-
-    $isp = new ISP;
+    $log = new Logs;
     $log->uid = $_SESSION["userid"];
     $log->log = $_SESSION["name"]." has updated an information of ISP \"".$data["name"]."\".";
-    if($_SESSION["log"] != $log->log){
-        $_SESSION["log"] = $log->log;
+    if($_SESSION["log1"] != $log->log){
+        $_SESSION["log1"] = $log->log;
         DB::save($log);
+    }
+
+    if($isp_name_temp != $data["name"]){
+        $log = new Logs;
+        $log->uid = $_SESSION["userid"];
+        $log->log = $_SESSION["name"]." has updated an ISP name from \"".$isp_name_temp."\" to \"".$data["name"].".\"";
+        if($_SESSION["log2"] != $log->log){
+            $_SESSION["log2"] = $log->log;
+            DB::save($log);
+        }    
     }
 
     $response = [

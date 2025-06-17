@@ -1,4 +1,5 @@
 <?php
+    session_start();
     header('Content-Type: application/json');
     include("../../includes.php");
     $data = json_decode(file_get_contents('php://input'), true);
@@ -21,7 +22,16 @@
         }
 
         $router = new Routers;
+        $router_temp = DB::find($router,$data["id"]);
         DB::delete($router,$data["id"]);
+
+        $log = new Logs;
+        $log->uid = $_SESSION["userid"];
+        $log->log = $_SESSION["name"]." has deleted a router \"".$router_temp[0]["name"]."\".";
+        if($_SESSION["log"] != $log->log){
+            $_SESSION["log"] = $log->log;
+            DB::save($log);
+        }
 
         $response = [
             "status" => true,
