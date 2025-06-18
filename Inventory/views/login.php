@@ -1,6 +1,7 @@
 <?php
   session_start();
   !array_key_exists("auth",$_SESSION) ? $_SESSION["auth"] = null : null;
+  !array_key_exists("userid",$_SESSION) ? header("location: ../index.php") : null; 
   $_SESSION["auth"] ? header("location: inventory.php?loc=dashboard") : null;
 ?>
 <!DOCTYPE html>

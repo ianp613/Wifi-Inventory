@@ -1,6 +1,7 @@
 <?php
     include("includes.php");
     session_start();
+    !array_key_exists("userid",$_SESSION) ?  $_SESSION["userid"] = null : null; 
     if($_SESSION["userid"]){
         if(array_key_exists("inactivity",$_GET)){
             if($_GET["inactivity"] == "true"){
@@ -18,7 +19,6 @@
     }
         
     $_SESSION["auth"] = false;
-    $_SESSION["userid"] ? null : $_SESSION["userid"] = null;
     $_SESSION["name"] = null;
     $_SESSION["privileges"] = null;
     $_SESSION["code"] = null;
