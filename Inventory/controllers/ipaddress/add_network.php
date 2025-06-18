@@ -1,4 +1,5 @@
 <?php
+    session_start();
     header('Content-Type: application/json');
     include("../../includes.php");
     $data = json_decode(file_get_contents('php://input'), true);
@@ -48,6 +49,28 @@
                                         $ip_address->username = "-";
                                         $ip_address->password = "-";
                                         DB::save($ip_address);
+
+                                        $log = new Logs;
+                                        $log->uid = $_SESSION["userid"];
+                                        $log->log = $_SESSION["name"]." has added a network \"".$data["name"]."\".";
+                                        if($_SESSION["log1"] != $log->log){
+                                            $_SESSION["log1"] = $log->log;
+                                            DB::save($log);
+                                        }
+
+                                        if($data["gateway"] != "-"){
+                                            $router = new Routers;
+                                            $router_temp = DB::find($router,$data["gateway"]);
+
+                                            $log = new Logs;
+                                            $log->uid = $_SESSION["userid"];
+                                            $log->log = $_SESSION["name"]." has connected network \"".$data["name"]."\" to router \"".$router_temp[0]["name"]."\".";
+                                            if($_SESSION["log2"] != $log->log){
+                                                $_SESSION["log2"] = $log->log;
+                                                DB::save($log);
+                                            }    
+                                        }
+                                        
                                     }
                                     
                                     $response = [
@@ -55,6 +78,7 @@
                                         "type" => "success",
                                         "size" => null,
                                         "message" => "Network has been saved.",
+                                        "route" => $router_temp
                                     ]; 
                                 }else{
                                     $response = [

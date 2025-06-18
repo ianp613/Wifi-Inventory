@@ -1,4 +1,5 @@
 <?php
+    session_start();
     header('Content-Type: application/json');
     include("../../includes.php");
     $data = json_decode(file_get_contents('php://input'), true);
@@ -11,6 +12,7 @@
         }
 
         $network = new IP_Network;
+        $network_temp = DB::find($network,$data["id"]);
         DB::delete($network,$data["id"]);
 
         $response = [
@@ -19,6 +21,14 @@
             "size" => null,
             "message" => "Network has been deleted."
         ];
+
+        $log = new Logs;
+        $log->uid = $_SESSION["userid"];
+        $log->log = $_SESSION["name"]." has deleted a network \"".$network_temp[0]["name"]."\".";
+        if($_SESSION["log"] != $log->log){
+            $_SESSION["log"] = $log->log;
+            DB::save($log);
+        }
     }else{
         $response = [
             "status" => false,

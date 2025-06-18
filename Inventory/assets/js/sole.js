@@ -73,3 +73,10 @@ class Sole{
     }
 }
 var sole = new Sole;
+
+if(document.getElementsByClassName("copyright-1").length){
+    document.getElementsByClassName("copyright-1")[0].innerHTML = "<i>Copyright 2025 @ Wifi Team | Ian</i>"
+}
+if(document.getElementsByClassName("copyright").length){
+    document.getElementsByClassName("copyright")[0].innerHTML = "<i>Copyright 2025 @ Wifi Team | Ian</i>"
+}

@@ -176,7 +176,7 @@
                 </div>
             </div>
         </div>
-        <h6 class="copyright f-10 text-secondary"><i>Copyright 2025 @ Wifi Team</i></h6>
+        <h6 class="copyright f-10 text-secondary"></h6>
         <?php include("modals/equipments.php"); ?>
         <?php include("modals/ipaddress.php"); ?>
         <?php include("modals/cctv.php"); ?>

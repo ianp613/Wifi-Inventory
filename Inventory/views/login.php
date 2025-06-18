@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-    <h6 class="copyright-1 f-10 text-secondary"><i>Copyright 2025 @ Wifi Team</i></h6>
+    <h6 class="copyright-1 f-10 text-secondary"></h6>
   </body>
   
   <script src="../assets/js/bootstrap/bootstrap.min.js"></script>
