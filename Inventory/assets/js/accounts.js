@@ -42,8 +42,8 @@ if(document.getElementById("accounts")){
     var edit_account_title = document.getElementById("edit_account_title")
 
     add_account_btn.addEventListener("click",function(){
-        !add_name.value ? bs5.toast("warning","Please input name.") : null
         !add_username.value ? bs5.toast("warning","Please input user ID.") : null
+        !add_name.value ? bs5.toast("warning","Please input name.") : null
 
         sole.post("../../controllers/administrator/create_account.php",{
             name: add_name.value,
