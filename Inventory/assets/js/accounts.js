@@ -26,6 +26,7 @@ if(document.getElementById("accounts")){
     const edit_account_modal = new bootstrap.Modal(document.getElementById('edit_account'),unclose);
     const delete_account_modal = new bootstrap.Modal(document.getElementById('delete_account'),unclose);
 
+    var add_account = document.getElementById("add_account")
     var add_account_btn = document.getElementById("add_account_btn")
     var add_name = document.getElementById("add_name")
     var add_email = document.getElementById("add_email")
@@ -33,6 +34,7 @@ if(document.getElementById("accounts")){
     var add_password = document.getElementById("add_password")
     var add_privilege = document.getElementById("add_privilege")
 
+    var edit_account = document.getElementById("edit_account")
     var edit_account_btn = document.getElementById("edit_account_btn")
     var edit_account_name = document.getElementById("edit_account_name")
     var edit_email = document.getElementById("edit_email")
@@ -43,6 +45,10 @@ if(document.getElementById("accounts")){
 
     var delete_account_btn = document.getElementById("delete_account_btn")
     var delete_account_name = document.getElementById("delete_account_name")
+
+    add_account.addEventListener('shown.bs.modal', function () {
+        add_name.focus()
+    })
 
     add_account_btn.addEventListener("click",function(){
         var message = "";
@@ -68,6 +74,10 @@ if(document.getElementById("accounts")){
         }else{
             bs5.toast("warning",message)    
         }
+    })
+
+    edit_account.addEventListener('shown.bs.modal', function () {
+        edit_account_name.focus()
     })
 
     edit_account_btn.addEventListener("click",function(){
