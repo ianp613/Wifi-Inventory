@@ -21,6 +21,7 @@
                 "status" => true,
                 "type" => "success",
                 "size" => null,
+                "cctvs" => DB::all($cctv_location),
                 "message" => "Map has been added."
             ];
 
@@ -29,6 +30,7 @@
                 "status" => false,
                 "type" => "error",
                 "size" => null,
+                "cctvs" => DB::all($cctv_location),
                 "message" => "Something went wrong, please try again."
             ];
         }

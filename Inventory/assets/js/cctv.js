@@ -1,8 +1,14 @@
 if(document.getElementById("cctv")){
+    const add_cctv_map_modal = new bootstrap.Modal(document.getElementById('add_cctv_map'),unclose);
+
     var add_site_btn = document.getElementById("add_site_btn")
     var map_location = document.getElementById("map_location")
     var floorplan = document.getElementById("floorplan")
     var map_remarks = document.getElementById("map_remarks")
+
+    var manage_camera = document.getElementById("manage_camera")
+
+    sole.get("../../controllers/cctv/get_site.php").then(res => loadSite(res))
 
     add_site_btn.addEventListener("click",function(){
         !map_location.value ? bs5.toast("warning","Please input map location.") : null
@@ -19,8 +25,56 @@ if(document.getElementById("cctv")){
             map_location.value = ""
             floorplan.value = ""
             map_remarks.value = ""
+            loadSite(res)
         })
     })
+
+    function loadSite(res){
+        cctv_dropdown.innerHTML = ""
+        res.cctvs.forEach(cctv => {
+            cctv_dropdown.innerHTML += "<li><a href=\"#\" class=\"dropdown-item\" id=\""+ cctv["id"] +"\" >"+ cctv["map_location"] +"</a></li>"
+        });
+    }
+
+    // SELECT SITE
+    cctv_dropdown.addEventListener("click", e=>{
+        if(e.target.classList.contains("dropdown-item")){
+            cctv_dropdown_toggle.innerText = e.target.innerText
+            // localStorage.setItem("selected_cctv", e.target.innerText);
+            // localStorage.setItem("selected_cctv_id", e.target.getAttribute("id"));
+            sole.post("../../controllers/cctv/get_site_info.php", {
+                id: e.target.getAttribute("id")
+            }).then(res => {
+                document.getElementById("cctvCanvas").removeAttribute("hidden")
+                loadCCTVMap(res)
+            })
+        }
+    })
+
+    manage_camera.addEventListener("click",function(){
+        if(cctv_dropdown_toggle.innerText == "-- Select Map --"){
+            bs5.toast("warning","Please select map first.")
+        }
+    })
+
+    function loadCCTVMap(res){
+        const canvas = document.getElementById("cctvCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const background = new Image();
+        background.src = res.cctv[0]["floorplan"]; // Replace with your actual image path
+
+        background.onload = function () {
+            const targetWidth = 1050; // or canvas container width
+            const aspectRatio = background.height / background.width;
+            const targetHeight = targetWidth * aspectRatio;
+
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+
+            ctx.drawImage(background, 0, 0, targetWidth, targetHeight);
+        };
+    }
 }
 
 
