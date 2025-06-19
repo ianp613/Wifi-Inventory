@@ -86,6 +86,13 @@
                             $ip->remarks = $sheet->getCell('J'.$count)->getValue();
                             DB::save($ip);
                             $count++;
+                        }
+                        $log = new Logs;
+                        $log->uid = $_SESSION["userid"];
+                        $log->log = $_SESSION["name"]." has imported data of network \"".$network_name."\".";
+                        if($_SESSION["log"] != $log->log){
+                            $_SESSION["log"] = $log->log;
+                            DB::save($log);
                         }  
                         $response = [
                             "status" => true,
@@ -127,6 +134,7 @@
                 "message" => "Something went wrong, please try again."
             ];
         }
+
         echo json_encode($response);
     } catch (\Throwable $th) {
         $response = [

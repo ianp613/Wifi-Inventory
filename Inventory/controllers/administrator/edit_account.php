@@ -6,21 +6,52 @@
     if($data) {
         $user = new User;
 
-        $user = DB::prepare($user,$data["id"]);
-        $user->name = $data["name"];
-        $user->email = $data["email"] ? $data["email"] : "-";
-        $user->username = $data["username"];
-        $user->password = $data["password"] ? $data["password"] : "12345";
-        $user->privileges = $data["privilege"];
-        DB::update($user);
+        $user1 = DB::where($user,"username","=",$data["username"]);
+        $user2 = DB::prepare($user,$data["id"]);
+
+        if(count($user1)){
+            if($user1[0]["id"] == $user->id){
+                $user2->name = $data["name"];
+                $user2->email = $data["email"] ? $data["email"] : "-";
+                $user2->username = $data["username"];
+                $user2->password = $data["password"] ? $data["password"] : "12345";
+                $user2->privileges = $data["privilege"];
+                DB::update($user2);
+                $response = [
+                    "status" => true,
+                    "type" => "success",
+                    "size" => null,
+                    "message" => "User account has been updated.",
+                    "entry" => DB::all($user)
+                ];      
+            }else{
+                $response = [
+                    "status" => false,
+                    "type" => "warning",
+                    "size" => null,
+                    "message" => "User ID already exist.",
+                    "entry" => DB::all($user)
+                ];
+            }
+        }else{
+            $user2->name = $data["name"];
+            $user2->email = $data["email"] ? $data["email"] : "-";
+            $user2->username = $data["username"];
+            $user2->password = $data["password"] ? $data["password"] : "12345";
+            $user2->privileges = $data["privilege"];
+            DB::update($user2);
+                $response = [
+                "status" => true,
+                "type" => "success",
+                "size" => null,
+                "message" => "User account has been updated.",
+                "entry" => DB::all($user)
+            ];  
+        }
+
         
-        $response = [
-            "status" => true,
-            "type" => "success",
-            "size" => null,
-            "message" => "User account has been updated.",
-            "entry" => DB::all($user)
-        ];
+        
+        
     }else{
         $response = [
             "status" => false,

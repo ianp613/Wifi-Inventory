@@ -1,4 +1,10 @@
 if(document.getElementById("login")){
+    localStorage.removeItem("email");
+    localStorage.removeItem("userid");
+    localStorage.removeItem("yourname");
+    localStorage.removeItem("username");
+    localStorage.removeItem("privileges");
+
     if(localStorage.getItem("inactivity")){
         bs5.toast("info","<div class=\"w-100 mb-2 text-primary\"><span class=\"fa fa-info\"></span></div>You've been logged out of your account due to inactivity. <br> Please log in again to resume your work.","lg", true, false)
         localStorage.removeItem("inactivity")

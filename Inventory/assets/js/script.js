@@ -52,9 +52,13 @@ if(document.getElementById("sidebar")){
     function validateAuth(res){
         if(res.status){
             localStorage.setItem("userid",res.user[0]["id"])
+            localStorage.setItem("email",res.user[0]["email"])
             localStorage.setItem("yourname",res.user[0]["name"])
             localStorage.setItem("username",res.user[0]["username"])
             localStorage.setItem("privileges",res.user[0]["privileges"])
+            if(document.getElementById("dashboard")){
+                !localStorage.getItem("email") ? alert("Your account doesn’t have an email address associated with it. Please add one to enhance your account’s security.") : null
+            }
             document.getElementById("userDropdown").innerHTML = "<div class=\"d-flex gray-2\" style=\"margin-top: 10px;\"><span class=\"fa fa-user-circle-o me-2 mt-2 f-20\"></span> <div>" + res.user[0]["name"] + "<br><p class=\"f-10\" style=\"margin-top: -4px;\"> Account: " + (res.user[0]["privileges"] == "Assistant Technician" ? "Technician" : res.user[0]["privileges"]) + "</p></div></div>"
 
             if(res.user[0]["privileges"] == "Administrator"){
@@ -218,7 +222,30 @@ if(document.getElementById("sidebar")){
     // Call checkScreenSize on load and resize
     window.addEventListener('load', checkScreenSize);
     window.addEventListener('resize', checkScreenSize);
+
+    const account_edit_modal = new bootstrap.Modal(document.getElementById('account_edit'),unclose);
+    var account = document.getElementById("account");
+    var account_email = document.getElementById("account_email");
+    var account_new_password = document.getElementById("account_new_password");
+    var account_confirm_password = document.getElementById("account_confirm_password");
+    var account_submit_btn = document.getElementById("account_submit_btn");
+
+    account.addEventListener("click",function(){
+        account_email.value = localStorage.getItem("email") != "-" ? localStorage.getItem("email") : "";
+        account_edit_modal.show()
+    })
+    account_submit_btn.addEventListener("click",function(){
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(account_email.value){
+            var bol = regex.test(account_email.value)
+            if(!bol){
+                alert("Please input a valid email.")
+            }
+        }
+        account_new_password.value ? account_confirm_password.value ? account_new_password.value != account_confirm_password.value ? alert("Password did not match.") : null : alert("Please confirm new password.") : null ;
+    })
 }
+
 
 if(document.getElementsByClassName("ps-field")[0]){
     document.getElementsByClassName("ps-field")[0].addEventListener("click",function(e){
@@ -332,5 +359,4 @@ function splash(message, seconds) {
     }, 500); // Matches fade transition duration
   }, seconds);
 }
-
 splash(null, 200)

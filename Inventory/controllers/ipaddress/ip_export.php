@@ -1,4 +1,5 @@
 <?php
+    session_start();
     header('Content-Type: application/json');
     include("../../includes.php");
     $data = json_decode(file_get_contents('php://input'), true);
@@ -73,6 +74,14 @@
         $outputFile = '../../assets/temp/'.$uid.'.xlsx'; // Change this to your desired output file name
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save($outputFile);
+
+        $log = new Logs;
+        $log->uid = $_SESSION["userid"];
+        $log->log = $_SESSION["name"]." has exported data of network \"".$network['name']."\".";
+        if($_SESSION["log"] != $log->log){
+            $_SESSION["log"] = $log->log;
+            DB::save($log);
+        }
     }
     echo json_encode([$outputFile, $network['name']."_".date('m-d-Y_Hi').'.xlsx']);
 ?>

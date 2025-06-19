@@ -74,3 +74,55 @@
     </div>
 </div>
 
+<!-- DELETE ACCOUNT MODAL -->
+<div class="modal fade" id="delete_account" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <div class="w-100">
+                    <span class="fa fa-exclamation-triangle text-danger h2"></span>
+                    <h5 id="delete_entry_title" class="modal-title fw-bolder">Delete Account</h5>    
+                </div>
+            </div>
+            <div class="modal-header text-center">
+                <div class="w-100">
+                    <div>You're going to delete the account of <b>"<span id="delete_account_name">Name</span>"</b>.</div>
+                    <div>This can't be undone. Do you wish to proceed?</div>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> No</button>
+                <button id="delete_account_btn" e-id="" type="button" data-bs-dismiss="" class="btn btn-danger btn-sm"><span class="fa fa-trash-o"></span> Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- EDIT ACCOUNT -->
+<div class="modal fade" id="account_edit" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h6 class="modal-title" id="edit_account_title"><span class="fa fa-user"></span> Account Information</h6>
+            </div>
+            <div class="modal-body">
+                <label for="account_email" class="mb-2 mt-2">Email <i class="f-13">(recommended)</i></label>
+                <input required type="text" name="" id="account_email" class="form-control">
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label for="account_new_password" class="mb-2">New Password</label>
+                        <input required type="password" name="" id="account_new_password" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="account_confirm_password" class="mb-2">Confirm New Password</label>
+                        <input required type="password" name="" id="account_confirm_password" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
+                <button id="account_submit_btn" class="btn btn-sm btn-primary"><span class="fa fa-save"></span> Save</button>
+            </div>
+        </div>
+    </div>
+</div>

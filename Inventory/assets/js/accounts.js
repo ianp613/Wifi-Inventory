@@ -24,7 +24,7 @@ if(document.getElementById("accounts")){
     sole.get("../../controllers/administrator/get_accounts.php").then(res => loadAccounts(res))
 
     const edit_account_modal = new bootstrap.Modal(document.getElementById('edit_account'),unclose);
-
+    const delete_account_modal = new bootstrap.Modal(document.getElementById('delete_account'),unclose);
 
     var add_account_btn = document.getElementById("add_account_btn")
     var add_name = document.getElementById("add_name")
@@ -41,33 +41,68 @@ if(document.getElementById("accounts")){
     var edit_privilege = document.getElementById("edit_privilege")
     var edit_account_title = document.getElementById("edit_account_title")
 
-    add_account_btn.addEventListener("click",function(){
-        !add_username.value ? bs5.toast("warning","Please input user ID.") : null
-        !add_name.value ? bs5.toast("warning","Please input name.") : null
+    var delete_account_btn = document.getElementById("delete_account_btn")
+    var delete_account_name = document.getElementById("delete_account_name")
 
-        sole.post("../../controllers/administrator/create_account.php",{
-            name: add_name.value,
-            email: add_email.value,
-            username: add_username.value,
-            password: add_password.value,
-            privilege: add_privilege.value
-        })
-        .then(res => validateResponse(res,"create_account"))
+    add_account_btn.addEventListener("click",function(){
+        var message = "";
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        !add_username.value ? message = "Please input user ID." : null
+        !add_name.value ? message = "Please input name." : null
+
+        if(add_email.value){
+            var bol = regex.test(add_email.value)
+            if(!bol){
+                message = "Please input a valid email."
+            }
+        }
+        if(!message){
+            sole.post("../../controllers/administrator/create_account.php",{
+                name: add_name.value,
+                email: add_email.value,
+                username: add_username.value,
+                password: add_password.value,
+                privilege: add_privilege.value
+            })
+            .then(res => validateResponse(res,"create_account"))    
+        }else{
+            bs5.toast("warning",message)    
+        }
     })
 
     edit_account_btn.addEventListener("click",function(){
-        !edit_account_name.value ? bs5.toast("warning","Please input name.") : null
-        !edit_username.value ? bs5.toast("warning","Please input user ID.") : null
+        var message = "";
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        !edit_account_name.value ? message = "Please input name." : null
+        !edit_username.value ? message = "Please input user ID." : null
         !edit_password.value ? alert("Password field is empty, it will be set to default password \"12345\".") : null
+
+        if(edit_email.value){
+            var bol = regex.test(edit_email.value)
+            if(!bol){
+                message = "Please input a valid email."
+            }
+        }
         
-        sole.post("../../controllers/administrator/edit_account.php",{
-            id: this.getAttribute("u-id"),
-            name: edit_account_name.value,
-            email: edit_email.value,
-            username: edit_username.value,
-            password: edit_password.value,
-            privilege: edit_privilege.value
-        }).then(res => validateResponse(res,"edit_account"))
+        if(!message){
+            sole.post("../../controllers/administrator/edit_account.php",{
+                id: this.getAttribute("u-id"),
+                name: edit_account_name.value,
+                email: edit_email.value,
+                username: edit_username.value,
+                password: edit_password.value,
+                privilege: edit_privilege.value
+            }).then(res => validateResponse(res,"edit_account"))    
+        }else{
+            bs5.toast("warning",message);
+        }
+        
+    })
+
+    delete_account_btn.addEventListener("click",function(){
+        sole.post("../../controllers/administrator/delete_account.php",{
+            id: this.getAttribute("u-id")
+        }).then(res => validateResponse(res,"delete_account"))
     })
 
     function loadAccounts(res){
@@ -83,7 +118,6 @@ if(document.getElementById("accounts")){
                 "<button id=\"delete_account_"+ e["id"] +"\" u-id=\""+ e["id"] +"\" class=\"delete_account_row btn btn-sm btn-danger ms-1\"><i u-id=\""+ e["id"] +"\" class=\"delete_account_row fa fa-trash\"></i></button>" : ""
             ]).draw(false)   
         });
-
         document.querySelector('#accounts_table').addEventListener("click", e=>{
             let tr = "";
             if(e.target.tagName == "I"){
@@ -107,12 +141,9 @@ if(document.getElementById("accounts")){
                 })
             }
             if(e.target.classList.contains('delete_account_row')) {
-                delete_isp_name.innerText = tr[1].innerText
-                delete_isp_btn.setAttribute("i-id",e.target.getAttribute("i-id"))
-                sole.post("../../controllers/isp/get_router_assigned.php",{
-                    id: e.target.getAttribute("i-id")
-                }).then(res => deleteMessage(res))
-                delete_isp_modal.show()
+                delete_account_name.innerText = tr[0].innerText
+                delete_account_btn.setAttribute("u-id",e.target.getAttribute("u-id"))
+                delete_account_modal.show()
             }
         })
     }
@@ -127,6 +158,10 @@ if(document.getElementById("accounts")){
             }
             if(func == "edit_account"){
                 edit_account_modal.hide()
+                sole.get("../../controllers/administrator/get_accounts.php").then(res => loadAccounts(res))
+            }
+            if(func == "delete_account"){
+                delete_account_modal.hide()
                 sole.get("../../controllers/administrator/get_accounts.php").then(res => loadAccounts(res))
             }
             bs5.toast(res.type,res.message,res.size)

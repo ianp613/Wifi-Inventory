@@ -109,7 +109,7 @@
             </div>
             <div class="modal-header text-center">
                 <div class="w-100">
-                    <div>You're going to delete network "<b><span id="delete_network_name">NETWORK</span></b>".</div>
+                    <div>You're going to delete network <b>"<span id="delete_network_name">NETWORK</span>"</b>.</div>
                     <div>All of the recorded IP address will also be deleted, this can't be undone. Do you wish to proceed?</div>    
                 </div>
             </div>

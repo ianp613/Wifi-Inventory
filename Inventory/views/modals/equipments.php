@@ -173,7 +173,7 @@
             </div>
             <div class="modal-header text-center">
                 <div class="w-100">
-                    <div>You're going to delete "<b><span id="delete_entry_name">AiOS Mac 10Gbits Monitoring FS</span></b>" entry.</div>
+                    <div>You're going to delete <b>"<span id="delete_entry_name">Equipment</span>"</b> entry.</div>
                     <div>This can't be undone. Do you wish to proceed?</div>    
                 </div>
             </div>

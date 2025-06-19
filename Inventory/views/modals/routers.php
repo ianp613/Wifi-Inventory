@@ -131,7 +131,7 @@
             </div>
             <div class="modal-header text-center">
                 <div class="w-100">
-                    <div>You're going to delete router "<b><span id="delete_router_name">ISP</span></b>".</div>
+                    <div>You're going to delete router <b>"<span id="delete_router_name">ISP</span>"</b>.</div>
                     <div id="delete_router_table_container" class="ps-4 mb-2">
                         <div>The following is the list of networks connected to this router.</div>
                         <table id="delete_router_table" class="w-100">

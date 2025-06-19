@@ -1,6 +1,4 @@
 if(document.getElementById("dashboard")){
-
-
     var inuse = document.getElementById("inuse");
     var standby = document.getElementById("standby");
     var forstatus = document.getElementById("forstatus");
