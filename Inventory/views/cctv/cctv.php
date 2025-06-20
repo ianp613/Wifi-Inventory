@@ -8,7 +8,7 @@
                 <!-- DROP DOWN SITE -->
                 </ul>
             </div>
-            <button id="manage_camera" class="btn btn-sm btn-danger" style="margin-bottom: -5px; margin-left: 10px;"><span class="fa fa-edit"></span> Manage Camera</button>
+            <button id="manage_camera_btn" class="btn btn-sm btn-danger" style="margin-bottom: -5px; margin-left: 10px;"><span class="fa fa-edit"></span> Manage Camera</button>
         </div>
     </div>
     <div class="w-100 d-flex justify-content-center mt-3">

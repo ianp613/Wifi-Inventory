@@ -1,12 +1,46 @@
 if(document.getElementById("cctv")){
+    let cameraTable = new DataTable('#camera_table',{
+        rowCallback: function(row) {
+            $(row).addClass("trow");
+        },
+        columnDefs: [
+            {
+                target: 0,
+                visible: false,
+                searchable: false
+            },
+            { 
+                className: 'dt-left', 
+                targets: '_all' 
+            }
+        ],
+        autoWidth: false,
+        language: {
+           sLengthMenu: "Show _MENU_entries",
+           search: "<button id=\"add_camera_btn\" class=\"btn btn-sm btn-danger me-3\"><span class=\"fa fa-plus\"></span> Add Camera</button> Search: "
+        }
+    });
+    const canvas = document.getElementById("cctvCanvas");
+    const ctx = canvas.getContext("2d");
     const add_cctv_map_modal = new bootstrap.Modal(document.getElementById('add_cctv_map'),unclose);
+    const manage_camera_modal = new bootstrap.Modal(document.getElementById('manage_camera'),unclose);
 
+    manage_camera_modal.show()
     var add_site_btn = document.getElementById("add_site_btn")
     var map_location = document.getElementById("map_location")
     var floorplan = document.getElementById("floorplan")
     var map_remarks = document.getElementById("map_remarks")
+    var manage_camera_title = document.getElementById("manage_camera_title")
 
-    var manage_camera = document.getElementById("manage_camera")
+    var manage_camera_btn = document.getElementById("manage_camera_btn")
+
+    var add_camera_btn = document.getElementById("add_camera_btn")
+    var camera_form_control = document.getElementById("camera_form_control")
+    var cancel_camera_form_btn = document.getElementById("cancel_camera_form_btn")
+    var save_camera_form_btn = document.getElementById("save_camera_form_btn")
+    var update_camera_form_btn = document.getElementById("update_camera_form_btn")
+    var camera_menu = document.getElementById("camera_menu")
+    var camera_form = document.getElementById("camera_form")
 
     sole.get("../../controllers/cctv/get_site.php").then(res => loadSite(res))
 
@@ -21,6 +55,7 @@ if(document.getElementById("cctv")){
         formData.append("map_remarks",map_remarks.value)
         sole.file("../../controllers/cctv/add_site.php",formData)
         .then(res => {
+            add_cctv_map_modal.hide()
             bs5.toast(res.type,res.message,res.size)
             map_location.value = ""
             floorplan.value = ""
@@ -32,6 +67,7 @@ if(document.getElementById("cctv")){
     function loadSite(res){
         cctv_dropdown.innerHTML = ""
         res.cctvs.forEach(cctv => {
+            manage_camera_title.innerHTML = "<span class=\"fa fa-video-camera\"></span> " + cctv["map_location"]
             cctv_dropdown.innerHTML += "<li><a href=\"#\" class=\"dropdown-item\" id=\""+ cctv["id"] +"\" >"+ cctv["map_location"] +"</a></li>"
         });
     }
@@ -51,16 +87,15 @@ if(document.getElementById("cctv")){
         }
     })
 
-    manage_camera.addEventListener("click",function(){
+    manage_camera_btn.addEventListener("click",function(){
         if(cctv_dropdown_toggle.innerText == "-- Select Map --"){
             bs5.toast("warning","Please select map first.")
+        }else{
+            manage_camera_modal.show()
         }
     })
 
     function loadCCTVMap(res){
-        const canvas = document.getElementById("cctvCanvas");
-        const ctx = canvas.getContext("2d");
-
         const background = new Image();
         background.src = res.cctv[0]["floorplan"]; // Replace with your actual image path
 
@@ -74,6 +109,57 @@ if(document.getElementById("cctv")){
 
             ctx.drawImage(background, 0, 0, targetWidth, targetHeight);
         };
+    }
+
+    canvas.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+
+        const rect = canvas.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+
+        // Store clicked position for modal to use later
+        canvas.dataset.clickX = clickX;
+        canvas.dataset.clickY = clickY;
+
+        console.log(canvas.dataset)
+
+        // // Open your camera selection modal here
+        // openCameraModal(); // your function to show the modal
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    add_camera_btn.addEventListener("click",function(){
+        camera_menu.setAttribute("hidden","")
+        camera_form.removeAttribute("hidden")
+        camera_form_control.removeAttribute("hidden")
+        
+        update_camera_form_btn.setAttribute("hidden","")
+        save_camera_form_btn.removeAttribute("hidden")
+    })
+
+    cancel_camera_form_btn.addEventListener("click",function(){
+        camera_menu.removeAttribute("hidden")
+        camera_form.setAttribute("hidden","")
+        camera_form_control.setAttribute("hidden","")
+        clearForm();
+    })
+
+    function clearForm(){
+
     }
 }
 
@@ -95,21 +181,4 @@ if(document.getElementById("cctv")){
 //     ctx.drawImage(background, 0, 0, targetWidth, targetHeight);
 // };
 
-// canvas.addEventListener("contextmenu", function (e) {
-//     e.preventDefault();
 
-//     // Get mouse position relative to the canvas
-//     const rect = canvas.getBoundingClientRect();
-//     const x = e.clientX - rect.left;
-//     const y = e.clientY - rect.top;
-
-//     // Prompt the user
-//     if (confirm("Do you want to add a circle here?")) {
-//         // Draw the circle
-//         ctx.beginPath();
-//         ctx.arc(x, y, 20, 0, Math.PI * 2); // (x, y, radius, startAngle, endAngle)
-//         ctx.fillStyle = "rgba(0, 0, 255, 0.6)";
-//         ctx.fill();
-//         ctx.closePath();
-//     }
-// });

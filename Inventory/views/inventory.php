@@ -180,6 +180,7 @@
         <?php include("modals/equipments.php"); ?>
         <?php include("modals/ipaddress.php"); ?>
         <?php include("modals/cctv.php"); ?>
+        <?php include("modals/manage_camera.php"); ?>
         <?php include("modals/isp.php"); ?>
         <?php include("modals/routers.php"); ?>
         <?php include("modals/logout.php"); ?>
