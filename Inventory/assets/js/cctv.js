@@ -41,6 +41,26 @@ if(document.getElementById("cctv")){
     var update_camera_form_btn = document.getElementById("update_camera_form_btn")
     var camera_menu = document.getElementById("camera_menu")
     var camera_form = document.getElementById("camera_form")
+    var camera_subtype_form = document.getElementById("camera_subtype_form")
+
+    var camera_size = document.getElementById("camera_size")
+
+
+    var camera_id = document.getElementById("camera_id")
+    var camera_type = document.getElementById("camera_type")
+    var camera_subtype = document.getElementById("camera_subtype")
+    var camera_ip_address = document.getElementById("camera_ip_address")
+    var camera_port_no = document.getElementById("camera_port_no")
+    var camera_username = document.getElementById("camera_username")
+    var camera_password = document.getElementById("camera_password")
+    var camera_angle = document.getElementById("camera_angle")
+    var camera_location = document.getElementById("camera_location")
+    var camera_brand = document.getElementById("camera_brand")
+    var camera_model_no = document.getElementById("camera_model_no")
+    var camera_barcode = document.getElementById("camera_barcode")
+    var camera_status = document.getElementById("camera_status")
+    var camera_remarks = document.getElementById("camera_remarks")
+
 
     sole.get("../../controllers/cctv/get_site.php").then(res => loadSite(res))
 
@@ -67,15 +87,17 @@ if(document.getElementById("cctv")){
     function loadSite(res){
         cctv_dropdown.innerHTML = ""
         res.cctvs.forEach(cctv => {
-            manage_camera_title.innerHTML = "<span class=\"fa fa-video-camera\"></span> " + cctv["map_location"]
-            cctv_dropdown.innerHTML += "<li><a href=\"#\" class=\"dropdown-item\" id=\""+ cctv["id"] +"\" >"+ cctv["map_location"] +"</a></li>"
+            cctv_dropdown.innerHTML += "<li><a href=\"#\" class=\"dropdown-item\" id=\""+ cctv["id"] +"\" size=\""+ cctv["camera_size"] +"\">"+ cctv["map_location"] +"</a></li>"
         });
     }
 
     // SELECT SITE
     cctv_dropdown.addEventListener("click", e=>{
         if(e.target.classList.contains("dropdown-item")){
+            manage_camera_title.innerHTML = "<span class=\"fa fa-video-camera\"></span> " + e.target.innerText
+            manage_camera_title.setAttribute("s-id",e.target.getAttribute("id"))
             cctv_dropdown_toggle.innerText = e.target.innerText
+            camera_size.value = e.target.getAttribute("size")
             // localStorage.setItem("selected_cctv", e.target.innerText);
             // localStorage.setItem("selected_cctv_id", e.target.getAttribute("id"));
             sole.post("../../controllers/cctv/get_site_info.php", {
@@ -146,7 +168,7 @@ if(document.getElementById("cctv")){
         camera_menu.setAttribute("hidden","")
         camera_form.removeAttribute("hidden")
         camera_form_control.removeAttribute("hidden")
-        
+
         update_camera_form_btn.setAttribute("hidden","")
         save_camera_form_btn.removeAttribute("hidden")
     })
@@ -159,8 +181,33 @@ if(document.getElementById("cctv")){
     })
 
     function clearForm(){
-
+        camera_id.value = ""
+        camera_type.value = "-"
+        camera_subtype.value = "-"
+        camera_angle.value = 0
+        camera_location.value = ""
+        camera_brand.value = ""
+        camera_model_no.value = ""
+        camera_barcode.value = ""
+        camera_status.value = "UP"
+        camera_remarks.value = ""
+        camera_subtype_form.setAttribute("hidden","")
     }
+
+    camera_angle.addEventListener("input",function(){
+        if(!this.value){
+            this.value = 0
+        }else{
+            this.value = parseInt(this.value)
+        }
+    })
+    camera_subtype.addEventListener("change",function(){
+        if(this.value != "Coaxial Camera"){
+            camera_subtype_form.removeAttribute("hidden")
+        }else{
+            camera_subtype_form.setAttribute("hidden","")
+        }
+    })
 }
 
 

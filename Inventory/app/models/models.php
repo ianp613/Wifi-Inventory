@@ -119,6 +119,30 @@
             "map_location",
             "floorplan",
             "remarks",
+            "camera_size",
+        ];
+    }
+
+    class CCTV_Camera{
+        public $table = "cctv_camera";
+        public $fillable = [
+            "lid",
+            "camera_id",
+            "camera_type",
+            "camera_subtype",
+            "camera_ip_address",
+            "camera_port_no",
+            "camera_username",
+            "camera_password",
+            "camera_angle",
+            "camera_location",
+            "camera_brand",
+            "camera_model_no",
+            "camera_barcode",
+            "camera_status",
+            "camera_remarks",
+            "cx",
+            "cy"
         ];
     }
 ?>

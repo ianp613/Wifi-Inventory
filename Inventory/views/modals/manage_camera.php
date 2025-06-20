@@ -28,7 +28,7 @@
                 <div class="modal-footer">
                     <div class="btn-group btn-sm m-0">
                         <button class="btn btn-sm text-end" style="width: 120px;">Set Camera Size: </button>
-                        <select name="" id="" class="form-control pt-0 pb-0" style="width: 40px; height: 31px !important;">
+                        <select name="" id="camera_size" class="form-control pt-0 pb-0" style="width: 40px; height: 31px !important;">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -52,7 +52,7 @@
                         <div class="col-md-4">
                             <label for="camera_type" class="mb-1">Type</label>
                             <select name="" id="camera_type" class="form-control">
-                                <option value="-" selected>-- Select Type --</option>
+                                <option disabled value="-" selected>-- Select Type --</option>
                                 <option value="Bullet Type Camera">Bullet Type Camera</option>
                                 <option value="Dome Camera">Dome Camera</option>
                                 <option value="Wireless Camera">Wireless Camera</option>
@@ -68,7 +68,7 @@
                         <div class="col-md-4">
                             <label for="camera_subtype" class="mb-1">Subtype</label>
                             <select name="" id="camera_subtype" class="form-control">
-                                <option value="-">-- Select Subtype --</option>
+                                <option disabled selected value="-">-- Select Subtype --</option>
                                 <option value="IP Camera">IP Camera</option>
                                 <option value="Coaxial Camera">Coaxial Camera</option>
                                 <option value="Wi-Fi Camera">Wi-Fi Camera</option>
@@ -76,7 +76,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row mb-2">
+                    <div hidden id="camera_subtype_form" class="row mb-2">
                         <div class="col-md-4">
                             <label for="camera_ip_address" class="mb-1">IP Address</label>
                             <input type="text" name="" id="camera_ip_address" class="form-control">
