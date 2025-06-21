@@ -469,3 +469,13 @@ input:checked + .slider:before {
     border-radius: 5px;
     padding: 10px;
 }
+
+@keyframes blinkMe {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.blink {
+    animation: blinkMe 1s linear infinite;
+}
