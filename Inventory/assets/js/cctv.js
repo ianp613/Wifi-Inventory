@@ -1,4 +1,6 @@
 if(document.getElementById("cctv")){
+    localStorage.setItem("cameraTitle",null)
+    localStorage.setItem("log_delete","")
     let cameraTable = new DataTable('#camera_table',{
         rowCallback: function(row) {
             $(row).addClass("trow");
@@ -30,13 +32,17 @@ if(document.getElementById("cctv")){
                 className: 'dt-left', 
                 targets: '_all' 
             },
+            { 
+                className: 'dt-center', 
+                target: 4
+            },
         ],
         autoWidth: false,
         language: {
            sLengthMenu: "Show _MENU_entries",
            search: "Search: ",
         },
-        searching: false,
+        searching: true,
         paging: false,
         info: false,
         emptyTable: false
@@ -48,7 +54,7 @@ if(document.getElementById("cctv")){
     const manage_camera_modal = new bootstrap.Modal(document.getElementById('manage_camera'),unclose);
     const camera_list_modal = new bootstrap.Modal(document.getElementById('camera_list'),unclose);
 
-    // manage_camera_modal.show()
+    var save_map_btn = document.getElementById("save_map_btn")
     var add_site_btn = document.getElementById("add_site_btn")
     var map_location = document.getElementById("map_location")
     var floorplan = document.getElementById("floorplan")
@@ -67,7 +73,7 @@ if(document.getElementById("cctv")){
     var camera_subtype_form = document.getElementById("camera_subtype_form")
 
     var camera_size = document.getElementById("camera_size")
-
+    var save_size_btn = document.getElementById("save_size_btn")
 
     var camera_id = document.getElementById("camera_id")
     var camera_type = document.getElementById("camera_type")
@@ -121,6 +127,7 @@ if(document.getElementById("cctv")){
     // SELECT SITE
     cctv_dropdown.addEventListener("click", e=>{
         if(e.target.classList.contains("dropdown-item")){
+            localStorage.setItem("cameraTitle",e.target.innerText)
             manage_camera_title.innerHTML = "<span class=\"fa fa-video-camera\"></span> " + e.target.innerText
             camera_list_title.innerHTML = "<span class=\"fa fa-video-camera\"></span> <b>Unassigned Camera:</b> " + e.target.innerText
             manage_camera_title.setAttribute("s-id",e.target.getAttribute("id"))
@@ -128,15 +135,8 @@ if(document.getElementById("cctv")){
             camera_size.value = e.target.getAttribute("size")
             // localStorage.setItem("selected_cctv", e.target.innerText);
             // localStorage.setItem("selected_cctv_id", e.target.getAttribute("id"));
-            sole.post("../../controllers/cctv/get_site_info.php", {
-                id: e.target.getAttribute("id")
-            }).then(res => {
-                document.getElementById("cctvCanvas").removeAttribute("hidden")
-                loadCCTVList(res)
-                setTimeout(() => {
-                    loadCCTVMap(res)
-                }, 100);
-            })
+            save_map_btn.removeAttribute("hidden")
+            loadMAP_CAMERA()
         }
     })
 
@@ -161,21 +161,97 @@ if(document.getElementById("cctv")){
                     e["camera_type"] != "-" ? e["camera_type"] : "",
                     e["camera_subtype"] != "-" ? e["camera_subtype"] : "",
                     "<button id=\"edit_isp_"+ e["id"] +"\" i-id=\""+ e["id"] +"\" class=\"edit_isp_row btn btn-sm btn-secondary\"><i i-id=\""+ e["id"] +"\" class=\"edit_isp_row fa fa-edit\"></i></button>" +
-                    "<button id=\"delete_isp_"+ e["id"] +"\" i-id=\""+ e["id"] +"\" class=\"delete_isp_row btn btn-sm btn-danger ms-1\"><i i-id=\""+ e["id"] +"\" class=\"delete_isp_row fa fa-trash\"></i></button>" 
+                    "<button id=\"delete_camera_"+ e["id"] +"\" c-id=\""+ e["id"] +"\" class=\"delete_camera_row btn btn-sm btn-danger ms-1\"><i c-id=\""+ e["id"] +"\" class=\"delete_camera_row fa fa-trash\"></i></button>" 
                 ]).draw(false)   
             });
+            document.querySelector('#camera_table').addEventListener("click", e=>{
+                let tr = "";
+                if(e.target.tagName == "I"){
+                    tr = e.target.parentNode.parentNode.parentNode.children
+                }
+                if(e.target.tagName == "BUTTON"){
+                    tr = e.target.parentNode.parentNode.children    
+                }
+                if(e.target.classList.contains('delete_camera_row')){
+                    if(localStorage.getItem("log_delete") != tr[0].innerText){
+                        localStorage.setItem("log_delete",tr[0].innerText)
+                        if(confirm("You're going to delete "+tr[0].innerText+". This can't be undone, do you wish to proceed?")){
+                            sole.post("../../controllers/cctv/delete_camera.php",{
+                                id: e.target.getAttribute("c-id")
+                            }).then(res => {
+                                if(res.status){
+                                    alert(res.message)
+                                    loadMAP_CAMERA()
+                                }
+                            })
+                        }
+                    }
+                    
+                }
+            })
+
+
+
+
+
+
+
+
+
+
             cameraListTable.clear().draw();
             res.camera.forEach(e => {
-                if(e.cx == "-" && e.cy == "-"){
+                // if(e.cx == "-" && e.cy == "-"){
                     cameraListTable.row.add([
-                    "<img id=\""+e["id"]+"\" style=\"transform: rotate("+e["camera_angle"]+"deg);\" src=\"../../assets/img/camera/camera.png\" alt=\"camera_preview\" width=\"25px;\" height=\"25px\">",
-                    e["camera_id"],
-                    e["camera_id"],
-                    e["camera_type"] != "-" ? e["camera_type"] : "",
-                    e["camera_subtype"] != "-" ? e["camera_subtype"] : "",
-                ]).draw(false)  
-                }
+                        "<img id=\""+e["id"]+"\" style=\"transform: rotate("+e["camera_angle"]+"deg);\" src=\"../../assets/img/camera/camera.png\" alt=\"camera_preview\" width=\"25px;\" height=\"25px\">",
+                        e["camera_id"],
+                        e["camera_type"] != "-" ? e["camera_type"] : "",
+                        e["camera_subtype"] != "-" ? e["camera_subtype"] : "",
+                        e.cx == "-" && e.cy == "-" ? "<button id=\"select_camera_"+ e["id"] +"\" c-id=\""+ e["id"] +"\" class=\"select_camera_row btn btn-sm btn-primary mr-3 \"><i c-id=\""+ e["id"] +"\" class=\"select_camera_row fa fa-check\"></i></button>" : "<button id=\"remove_camera_"+ e["id"] +"\" c-id=\""+ e["id"] +"\" class=\"remove_camera_row btn btn-sm btn-danger mr-3 \"><i c-id=\""+ e["id"] +"\" class=\"remove_camera_row fa fa-ban\"></i></button>",
+                    ]).draw(false)  
+                // }
             });
+
+            document.querySelector('#camera_list').addEventListener("click", e=>{
+                if(e.target.classList.contains('remove_camera_row')){
+                    sole.post("../../controllers/cctv/assign_camera.php",{
+                        id: e.target.getAttribute("c-id"),
+                        type: "unassign"
+                    }).then(res => {
+                        if(res.status){
+                            alert(res.message)
+                            loadMAP_CAMERA()
+                            camera_list_modal.hide()
+                        }
+                    })
+                }
+                if(e.target.classList.contains('select_camera_row')) {
+                    sole.post("../../controllers/cctv/assign_camera.php",{
+                        id: e.target.getAttribute("c-id"),
+                        cx: canvas.dataset.clickX,
+                        cy: canvas.dataset.clickY,
+                        type: "assign"
+                    }).then(res => {
+                        if(res.status){
+                            alert(res.message)
+                            loadMAP_CAMERA()
+                            camera_list_modal.hide()    
+                        }
+                    })
+                }
+            })
+        })
+    }
+
+    function loadMAP_CAMERA(){
+        sole.post("../../controllers/cctv/get_site_info.php", {
+            id: manage_camera_title.getAttribute("s-id"),
+        }).then(res => {
+            document.getElementById("cctvCanvas").removeAttribute("hidden")
+            loadCCTVList(res)
+            setTimeout(() => {
+                loadCCTVMap(res)
+            }, 100);
         })
     }
 
@@ -196,13 +272,30 @@ if(document.getElementById("cctv")){
             ctx.drawImage(background, 0, 0, targetWidth, targetHeight);
 
             // After background is drawn, place the camera icons
+            var tHeight = 14;
+            if(res.cctv[0]["camera_size"] == "25"){
+                tHeight = 14;
+            }
+            if(res.cctv[0]["camera_size"] == "30"){
+                tHeight = 16;
+            }
+            if(res.cctv[0]["camera_size"] == "40"){
+                tHeight = 18;
+            }
+            if(res.cctv[0]["camera_size"] == "50"){
+                tHeight = 19;
+            }
+            if(res.cctv[0]["camera_size"] == "60"){
+                tHeight = 20;
+            }
+            
             cameraList.camera.forEach(cam => {
                 if (cam.cx != "-" && cam.cy != "-") {
                     const camImage = new Image();
                     camImage.src = "../../assets/img/camera/camera.png";
 
                     camImage.onload = function () {
-                        const size = 20;
+                        const size = res.cctv[0]["camera_size"];
                         const centerX = parseFloat(cam.cx);
                         const centerY = parseFloat(cam.cy);
                         const angle = (parseFloat(cam.camera_angle) || 0) * Math.PI / 180;
@@ -214,10 +307,26 @@ if(document.getElementById("cctv")){
                         ctx.restore();
 
                         const label = cam.camera_id;
-                        ctx.font = "bold 12px Arial";
-                        ctx.fillStyle = cam.camera_status == "UP" ? "green" : "red";
+                        ctx.font = "bold "+tHeight+"px Arial";
                         ctx.textAlign = "center";
-                        ctx.fillText(label, centerX, centerY + size / 2 + 15); // 12px below the icon
+                        ctx.textBaseline = "top"; // Keeps text and background aligned
+
+                        // Measure text size
+                        const textWidth = ctx.measureText(label).width;
+                        const textHeight = tHeight + 2; // Approx height for 14px font
+                        const padding = 4;
+                        const bgX = centerX - textWidth / 2 - padding;
+                        const bgY = centerY + size / 2 + 5;
+                        const bgWidth = textWidth + padding * 2;
+                        const bgHeight = textHeight + padding * 1;
+
+                        // Draw background
+                        ctx.fillStyle = cam.camera_status == "UP" ? "rgb(0, 128, 0)" : "rgb(255, 0, 0)"; // Light translucent background
+                        ctx.fillRect(bgX, bgY, bgWidth, bgHeight);
+
+                        // Draw label text
+                        ctx.fillStyle = "white";
+                        ctx.fillText(label, centerX, bgY + padding);
                     };
                 }
             });
@@ -235,13 +344,31 @@ if(document.getElementById("cctv")){
         canvas.dataset.clickX = clickX;
         canvas.dataset.clickY = clickY;
 
-        console.log(canvas.dataset)
-
         if(cameraList){
             camera_list_modal.show()
         }
     });
 
+    save_map_btn.addEventListener("click",function(){
+        const dataUrl = canvas.toDataURL("image/png"); // You can use "image/jpeg" if preferred
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = localStorage.getItem("cameraTitle")+".png";
+        link.click();
+    })
+
+    save_size_btn.addEventListener("click",function(){
+        sole.post("../../controllers/cctv/set_camera_size.php",{
+            id: manage_camera_title.getAttribute("s-id"),
+            camera_size: camera_size.value
+        }).then(res => {
+            if(res.status){
+                alert(res.message)
+                sole.get("../../controllers/cctv/get_site.php").then(res => loadSite(res))
+                loadMAP_CAMERA()   
+            }
+        })
+    })
 
 
 
@@ -265,7 +392,6 @@ if(document.getElementById("cctv")){
                 camera_remarks : camera_remarks.value
             }).then(res => {
                 validateResponse(res,"add_camera")
-                console.log(res)
             })
         }else{
             alert("Please provide camera alias or input DVR or NVR port no.")
@@ -275,11 +401,12 @@ if(document.getElementById("cctv")){
     function validateResponse(res,func){
         if(res.status){
             if(func == "add_camera"){
+                loadMAP_CAMERA()
                 clearForm()
             }
-            bs5.toast(res.type,res.message,res.size)
+            alert(res.message)
         }else{
-            bs5.toast(res.type,res.message,res.size)
+            alert(res.message)
         }
     }
 
@@ -303,13 +430,13 @@ if(document.getElementById("cctv")){
     })
 
     cancel_camera_form_btn.addEventListener("click",function(){
-        camera_menu.removeAttribute("hidden")
-        camera_form.setAttribute("hidden","")
-        camera_form_control.setAttribute("hidden","")
         clearForm();
     })
 
     function clearForm(){
+        camera_menu.removeAttribute("hidden")
+        camera_form.setAttribute("hidden","")
+        camera_form_control.setAttribute("hidden","")
         camera_id.value = ""
         camera_type.value = "-"
         camera_subtype.value = "-"

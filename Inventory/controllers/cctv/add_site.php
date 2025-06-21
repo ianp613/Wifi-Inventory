@@ -15,7 +15,7 @@
             $cctv_location->map_location = $_POST["map_location"];
             $cctv_location->floorplan = $filePath;
             $cctv_location->remarks = $_POST["map_remarks"] ? $_POST["map_remarks"] : "-";
-            $cctv_location->camera_size = "1";
+            $cctv_location->camera_size = "25";
             DB::save($cctv_location);
 
             $response = [

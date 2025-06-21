@@ -22,6 +22,8 @@
     $_SESSION["name"] = null;
     $_SESSION["privileges"] = null;
     $_SESSION["code"] = null;
+    $_SESSION["assign_camera_id"] = null;
+    $_SESSION["assign_type"] = null;
     $_SESSION["log"] = null;
     $_SESSION["log1"] = null;
     $_SESSION["log2"] = null;

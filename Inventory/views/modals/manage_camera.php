@@ -29,14 +29,14 @@
                     <div class="btn-group btn-sm m-0">
                         <button class="btn btn-sm text-end" style="width: 120px;">Set Camera Size: </button>
                         <select name="" id="camera_size" class="form-control pt-0 pb-0" style="width: 40px; height: 31px !important;">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
+                            <option value="25">1</option>
+                            <option value="30">2</option>
+                            <option value="40">3</option>
+                            <option value="50">4</option>
+                            <option value="60">5</option>
                         </select>    
                     </div>
-                    <button id="" class="m-0 btn btn-sm btn-primary"><span class="fa fa-save"></span> Save</button>
+                    <button id="save_size_btn" class="m-0 btn btn-sm btn-primary"><span class="fa fa-save"></span> Save</button>
                 </div>
             </div>
             
@@ -130,8 +130,8 @@
                         <div class="col-md-2">
                             <label for="camera_status" class="mb-2">Status</label>
                             <select name="" id="camera_status" class="form-control">
-                                <option value="UP">UP</option>
                                 <option value="DOWN">DOWN</option>
+                                <option value="UP">UP</option>
                             </select>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
 
 <!-- CAMERA LIST -->
 <div class="modal fade" id="camera_list" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title" id="camera_list_title">Camera List: Pantry Annex</div>
@@ -162,10 +162,11 @@
                 <table  id="camera_list_table" class="table border table-hover">
                     <thead>
                         <tr>
-                            <td class="text-start" style="width: 80px;">Preview</td>
+                            <td class="text-start">Preview</td>
                             <td class="text-start">Alias</td>
                             <td class="text-start">Type</td>
                             <td class="text-start">Subtype</td>
+                            <td class="text-center" style="width: 80px;">Action</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -174,7 +175,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <div class="w-100 f-13 text-danger"><i>*Note: Click a camera from the unassigned list to add it to the map.</i></div>
+                <div class="w-100 f-13 text-danger"><i>*Note: select a camera from the unassigned list to add it to the map.</i></div>
             </div>
         </div>
     </div>

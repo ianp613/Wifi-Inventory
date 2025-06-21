@@ -1,6 +1,10 @@
 <div id="cctv">
     <div class="w-100 d-flex justify-content-between">
-        <button data-bs-toggle="modal" data-bs-target="#add_cctv_map" class="btn btn-sm btn-danger"><span class="fa fa-plus"></span> Add Map</button>
+        <div>
+            <button data-bs-toggle="modal" data-bs-target="#add_cctv_map" class="btn btn-sm btn-danger"><span class="fa fa-plus"></span> Add Map</button>
+            <button hidden id="save_map_btn" class="btn btn-sm btn-secondary"><span class="fa fa-download"></span> Save Map</button>    
+        </div>
+        
         <div class="col-md-6 d-flex justify-content-end align-items-end">
             <div class="dropdown">
                 <div id="cctv_dropdown_toggle" tabindex="0" title="Right-Click cctv to Edit" class="dropdown-toggle d-inline-block" type="button" data-bs-toggle="dropdown" aria-expanded="false">-- Select Map --</div>
