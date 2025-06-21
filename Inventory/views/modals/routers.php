@@ -121,7 +121,7 @@
 
 <!-- DELETE ROUTER MODAL -->
 <div class="modal fade" id="delete_router" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered ">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header text-center">
                 <div class="w-100">

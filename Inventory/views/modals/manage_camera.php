@@ -14,7 +14,7 @@
                         <thead>
                             <tr>
                                 <td class="text-start">ID</td>
-                                <td class="text-start">Camera ID</td>
+                                <td class="text-start">Alias / DVR or NVR Port No.</td>
                                 <td class="text-start">Type</td>
                                 <td class="text-start">Subtype</td>
                                 <td style="width: 100px; !important">Action</td>
@@ -99,6 +99,12 @@
                             <label for="camera_angle" class="mb-2">Camera Angle <i class="f-13">(°degree)</i></label>
                             <input type="number" value="0" min="0" max="360" name="" id="camera_angle" class="form-control">
                         </div>
+                        <div class="col md 4">
+                            <label class="mb-2">Camera Angle Preview</label>
+                            <div>
+                                <img id="camera_preview" style="transform: rotate(0deg);" src="../../assets/img/camera/camera.png" alt="camera_preview" width="40px;" height="40px">
+                            </div>
+                        </div>
                     </div>
                     <hr>
                     <h6>Additional Information</h6>
@@ -139,6 +145,36 @@
                     <button id="save_camera_form_btn" class="btn btn-sm btn-primary"><span class="fa fa-save"></span> Save</button>
                     <button id="update_camera_form_btn" class="btn btn-sm btn-success"><span class="fa fa-save"></span> Update</button>
                 </div>    
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CAMERA LIST -->
+<div class="modal fade" id="camera_list" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="camera_list_title">Camera List: Pantry Annex</div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table  id="camera_list_table" class="table border table-hover">
+                    <thead>
+                        <tr>
+                            <td class="text-start" style="width: 80px;">Preview</td>
+                            <td class="text-start">Alias</td>
+                            <td class="text-start">Type</td>
+                            <td class="text-start">Subtype</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Entry Here -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <div class="w-100 f-13 text-danger"><i>*Note: Click a camera from the unassigned list to add it to the map.</i></div>
             </div>
         </div>
     </div>
