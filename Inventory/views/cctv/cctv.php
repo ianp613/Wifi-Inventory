@@ -13,7 +13,7 @@
                 </ul>
             </div>
             <button id="manage_camera_btn" class="btn btn-sm btn-danger" style="margin-bottom: -5px; margin-left: 10px;"><span class="fa fa-edit"></span> Manage Camera</button>
-            <button class="btn btn-sm btn-warning ms-1 fw-bold" style="margin-bottom: -5px;"><span class="blink text-success">How to?</span></button>
+            <button data-bs-toggle="modal" data-bs-target="#how_to" class="btn btn-sm btn-warning ms-1 fw-bold" style="margin-bottom: -5px;"><span class="blink text-success">How to?</span></button>
         </div>
     </div>
     <div class="w-100 d-flex justify-content-center mt-3">

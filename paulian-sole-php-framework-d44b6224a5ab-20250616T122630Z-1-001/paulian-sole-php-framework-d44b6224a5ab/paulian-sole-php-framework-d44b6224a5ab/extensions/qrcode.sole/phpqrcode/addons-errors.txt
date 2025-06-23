@@ -1,0 +1,1 @@
+2021-05-08 01:47:13: imagepng(addons/): Failed to open stream: No such file or directory

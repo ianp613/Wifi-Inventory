@@ -137,6 +137,7 @@ if(document.getElementById("cctv")){
             // localStorage.setItem("selected_cctv_id", e.target.getAttribute("id"));
             save_map_btn.removeAttribute("hidden")
             loadMAP_CAMERA()
+            saveCanvas()
         }
     })
 
@@ -182,6 +183,7 @@ if(document.getElementById("cctv")){
                                 if(res.status){
                                     alert(res.message)
                                     loadMAP_CAMERA()
+                                    saveCanvas()
                                 }
                             })
                         }
@@ -244,6 +246,7 @@ if(document.getElementById("cctv")){
                         if(res.status){
                             alert(res.message)
                             loadMAP_CAMERA()
+                            saveCanvas()
                             camera_list_modal.hide()
                         }
                     })
@@ -258,6 +261,7 @@ if(document.getElementById("cctv")){
                         if(res.status){
                             alert(res.message)
                             loadMAP_CAMERA()
+                            saveCanvas()
                             camera_list_modal.hide()    
                         }
                     })
@@ -389,6 +393,7 @@ if(document.getElementById("cctv")){
                 alert(res.message)
                 sole.get("../../controllers/cctv/get_site.php").then(res => loadSite(res))
                 loadMAP_CAMERA()   
+                saveCanvas()
             }
         })
     })
@@ -451,10 +456,12 @@ if(document.getElementById("cctv")){
         if(res.status){
             if(func == "update_camera"){
                 loadMAP_CAMERA()
+                saveCanvas()
                 clearForm()
             }
             if(func == "add_camera"){
                 loadMAP_CAMERA()
+                saveCanvas()
                 clearForm()
             }
             alert(res.message)
@@ -531,6 +538,18 @@ if(document.getElementById("cctv")){
             camera_subtype_form.setAttribute("hidden","")
         }
     })
+
+    function saveCanvas(){
+        setTimeout(() => {
+            const imageData = canvas.toDataURL('image/png');
+            sole.post("../../controllers/cctv/save_canvas.php",{
+                image: imageData,
+                map_name: manage_camera_title.innerText
+            }).then(res => console.log(res))
+        }, 1000);
+        
+    }
+    // document.getElementById("sample_img").src = "../../assets/img/maps_output/" + encodeURIComponent("Sample.png")
 }
 
 
@@ -550,5 +569,24 @@ if(document.getElementById("cctv")){
 
 //     ctx.drawImage(background, 0, 0, targetWidth, targetHeight);
 // };
+
+
+
+
+
+
+// USE THIS TO DISPLAY UPLOADED IMAGE, BECAUSE IT CANT BE DISPLAYED WHEN USING SRC ONLY
+
+    // const sampleImage = new Image();
+    // sampleImage.src = "../../assets/img/maps_output/Sample.png";
+
+    // const div = document.getElementById("myDiv");
+    // div.style.backgroundImage = `url('${sampleImage.src}')`;
+    // div.style.backgroundSize = "cover";      // optional for full coverage
+    // div.style.backgroundPosition = "center";
+
+    // sampleImage.onload = () => {
+    // div.style.backgroundImage = `url('${sampleImage.src}')`;
+    // };
 
 
