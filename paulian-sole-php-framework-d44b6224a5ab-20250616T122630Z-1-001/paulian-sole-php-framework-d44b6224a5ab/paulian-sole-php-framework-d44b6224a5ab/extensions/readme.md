@@ -1,1 +1,0 @@
-Note: Library extensions from Sole PHP Framework version 5.1 and below will not work in this framework's version.
