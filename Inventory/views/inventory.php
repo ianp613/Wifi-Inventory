@@ -63,7 +63,7 @@
                             <i class="fa fa-map-marker red-1 <?php $ipaddress ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>IP Address</span>
                         </a>
                     </li>
-                    <li hidden class="nav-item mb-2">
+                    <li class="nav-item mb-2">
                         <a href="?loc=cctv" class="nav-link f-15 text-light <?php $cctv ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-video-camera red-1 <?php $cctv ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>CCTV</span>
                         </a>

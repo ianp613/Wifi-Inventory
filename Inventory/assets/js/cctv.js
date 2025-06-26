@@ -51,6 +51,7 @@ if(document.getElementById("cctv")){
     const canvas = document.getElementById("cctvCanvas");
     const ctx = canvas.getContext("2d");
     const add_cctv_map_modal = new bootstrap.Modal(document.getElementById('add_cctv_map'),unclose);
+    const edit_cctv_map_modal = new bootstrap.Modal(document.getElementById('edit_cctv_map'),unclose);
     const manage_camera_modal = new bootstrap.Modal(document.getElementById('manage_camera'),unclose);
     const camera_list_modal = new bootstrap.Modal(document.getElementById('camera_list'),unclose);
 
@@ -60,6 +61,11 @@ if(document.getElementById("cctv")){
     var floorplan = document.getElementById("floorplan")
     var map_remarks = document.getElementById("map_remarks")
     var manage_camera_title = document.getElementById("manage_camera_title")
+
+    var edit_site_btn = document.getElementById("edit_site_btn")
+    var edit_map_location = document.getElementById("edit_map_location")
+    var edit_floorplan = document.getElementById("edit_floorplan")
+    var edit_map_remarks = document.getElementById("edit_map_remarks")
 
     var manage_camera_btn = document.getElementById("manage_camera_btn")
 
@@ -138,6 +144,19 @@ if(document.getElementById("cctv")){
             save_map_btn.removeAttribute("hidden")
             loadMAP_CAMERA()
             saveCanvas()
+        }
+    })
+
+    cctv_dropdown.addEventListener("contextmenu",function(e){
+        if(e.target.classList.contains("dropdown-item")){
+            sole.post("../../controllers/cctv/find_site.php",{
+                id: e.target.getAttribute("id")
+            }).then(res => {
+                edit_map_location.value = res.site[0].map_location
+                edit_map_remarks.value = res.site[0].remarks != "-" ? res.site[0].remarks : null
+                edit_cctv_map_modal.show()
+                edit_site_btn.setAttribute("lid",e.target.getAttribute("id"))
+            })
         }
     })
 
@@ -244,7 +263,7 @@ if(document.getElementById("cctv")){
                         type: "unassign"
                     }).then(res => {
                         if(res.status){
-                            alert(res.message)
+                            // alert(res.message)
                             loadMAP_CAMERA()
                             saveCanvas()
                             camera_list_modal.hide()
@@ -259,7 +278,7 @@ if(document.getElementById("cctv")){
                         type: "assign"
                     }).then(res => {
                         if(res.status){
-                            alert(res.message)
+                            // alert(res.message)
                             loadMAP_CAMERA()
                             saveCanvas()
                             camera_list_modal.hide()    

@@ -45,6 +45,30 @@
     </div>
 </div>
 
+<!-- EDIT CCTV SITE -->
+<div class="modal fade" id="edit_cctv_map" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">Edit CCTV Site</h6>
+            </div>
+            <div class="modal-body">
+                <label for="edit_map_location" class="mb-2">Location</label>
+                <input required type="text" name="edit_map_location" id="edit_map_location" class="form-control">
+                <label for="edit_floorplan" class="mb-2 mt-2">Select Floor Plan</label>
+                <input required accept="image/*" type="file" name="edit_floorplan" id="edit_floorplan" class="form-control" >
+                <p class="f-13"><i>Note: Changing the floorplan will remove all cameras currently placed on the map.</i></p>
+                <label for="edit_map_remarks" class="mb-2 mt-2">Remarks</label>
+                <textarea maxlength="1000" rows="5" name="" id="edit_map_remarks" class="form-control" placeholder="Aa"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
+                <button id="edit_site_btn" type="button" class="btn btn-success btn-sm"><span class="fa fa-save"></span> Update</button>    
+            </div>     
+        </div>
+    </div>
+</div>
+
 <!-- MANAGE CAMERA -->
 <div class="modal fade" id="manage_camera" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
