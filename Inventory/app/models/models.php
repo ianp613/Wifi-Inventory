@@ -126,6 +126,7 @@
     class CCTV_Camera{
         public $table = "cctv_camera";
         public $fillable = [
+            "uid",
             "lid",
             "camera_id",
             "camera_type",

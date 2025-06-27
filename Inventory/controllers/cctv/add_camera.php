@@ -6,6 +6,7 @@
 
     if($data["camera_id"]) {
         $camera = new CCTV_Camera;
+        $camera->uid = $data["uid"];
         $camera->lid = $data["camera_lid"];
         $camera->camera_id = $data["camera_id"];
         $camera->camera_type = $data["camera_type"] ? $data["camera_type"] : "-";

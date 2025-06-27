@@ -135,6 +135,7 @@
         public static function index(){
             Migrate::attrib_table("cctv_camera");
             Migrate::attrib_string(255);
+            Migrate::string("uid");
             Migrate::string("lid");
             Migrate::string("camera_id");
             Migrate::string("camera_type");

@@ -10,7 +10,7 @@
         $user2 = DB::prepare($user,$data["id"]);
 
         if(count($user1)){
-            if($user1[0]["id"] == $user->id){
+            if($user1[0]["id"] == $user2->id){
                 $user2->name = $data["name"];
                 $user2->email = $data["email"] ? $data["email"] : "-";
                 $user2->username = $data["username"];

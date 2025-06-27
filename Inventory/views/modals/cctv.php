@@ -57,7 +57,7 @@
                 <input required type="text" name="edit_map_location" id="edit_map_location" class="form-control">
                 <label for="edit_floorplan" class="mb-2 mt-2">Select Floor Plan</label>
                 <input required accept="image/*" type="file" name="edit_floorplan" id="edit_floorplan" class="form-control" >
-                <p class="f-13"><i>Note: Changing the floorplan will remove all cameras currently placed on the map.</i></p>
+                <p class="f-13 text-danger"><i>Note: Changing the floorplan may cause some cameras to disappear from the map due to differences in position alignment or map size.</i></p>
                 <label for="edit_map_remarks" class="mb-2 mt-2">Remarks</label>
                 <textarea maxlength="1000" rows="5" name="" id="edit_map_remarks" class="form-control" placeholder="Aa"></textarea>
             </div>

@@ -123,6 +123,35 @@ if(document.getElementById("cctv")){
         })
     })
 
+    edit_site_btn.addEventListener("click",function(){
+        !edit_map_location.value ? bs5.toast("warning","Please input map location.") : null
+        // edit_floorplan.files.length > 0 ? null : bs5.toast("warning","Please select floor plan.")
+
+        const formData = new FormData();
+        formData.append("id",this.getAttribute("lid"))
+        formData.append("file",edit_floorplan.files[0])
+        formData.append("map_location",edit_map_location.value)
+        formData.append("map_remarks",edit_map_remarks.value)
+        sole.file("../../controllers/cctv/edit_site.php",formData)
+        .then(res => {
+            edit_cctv_map_modal.hide()
+            bs5.toast(res.type,res.message,res.size)
+            if(cctv_dropdown_toggle.getAttribute("lid") == this.getAttribute("lid")){
+                cctv_dropdown_toggle.innerText = edit_map_location.value 
+                manage_camera_title.innerHTML = "<span class=\"fa fa-video-camera\"></span> " + edit_map_location.value 
+                camera_list_title.innerHTML = "<span class=\"fa fa-video-camera\"></span> <b>Camera List:</b> " + edit_map_location.value 
+            }
+            edit_map_location.value = ""
+            edit_floorplan.value = ""
+            edit_map_remarks.value = ""
+            loadSite(res)
+            if(cctv_dropdown_toggle.innerText != "-- Select Map --"){
+                loadMAP_CAMERA()
+                saveCanvas()    
+            }
+        })
+    })
+
     function loadSite(res){
         cctv_dropdown.innerHTML = ""
         res.cctvs.forEach(cctv => {
@@ -135,9 +164,10 @@ if(document.getElementById("cctv")){
         if(e.target.classList.contains("dropdown-item")){
             localStorage.setItem("cameraTitle",e.target.innerText)
             manage_camera_title.innerHTML = "<span class=\"fa fa-video-camera\"></span> " + e.target.innerText
-            camera_list_title.innerHTML = "<span class=\"fa fa-video-camera\"></span> <b>Unassigned Camera:</b> " + e.target.innerText
+            camera_list_title.innerHTML = "<span class=\"fa fa-video-camera\"></span> <b>Camera List:</b> " + e.target.innerText
             manage_camera_title.setAttribute("s-id",e.target.getAttribute("id"))
             cctv_dropdown_toggle.innerText = e.target.innerText
+            cctv_dropdown_toggle.setAttribute("lid",e.target.getAttribute("id"))
             camera_size.value = e.target.getAttribute("size")
             // localStorage.setItem("selected_cctv", e.target.innerText);
             // localStorage.setItem("selected_cctv_id", e.target.getAttribute("id"));
@@ -422,6 +452,7 @@ if(document.getElementById("cctv")){
     save_camera_form_btn.addEventListener("click",function(){
         if(camera_id.value){
             sole.post("../../controllers/cctv/add_camera.php",{
+                uid: localStorage.getItem("userid"),
                 camera_lid : manage_camera_title.getAttribute("s-id"),
                 camera_id : camera_id.value,
                 camera_type : camera_type.value,
