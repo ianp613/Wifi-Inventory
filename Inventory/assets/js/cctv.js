@@ -522,14 +522,6 @@ if(document.getElementById("cctv")){
 
 
 
-
-
-
-
-
-
-
-
     add_camera_btn.addEventListener("click",function(){
         camera_menu.setAttribute("hidden","")
         camera_form.removeAttribute("hidden")
@@ -594,7 +586,7 @@ if(document.getElementById("cctv")){
             const imageData = canvas.toDataURL('image/png');
             sole.post("../../controllers/cctv/save_canvas.php",{
                 image: imageData,
-                map_name: manage_camera_title.innerText
+                map_name: cctv_dropdown_toggle.innerText
             }).then(res => console.log(res))
         }, 1000);
         

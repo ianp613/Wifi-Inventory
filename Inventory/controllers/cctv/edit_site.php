@@ -35,6 +35,10 @@
                     }
                 }
 
+                if(file_exists("../../assets/img/maps_output/".$location2->map_location.".png")){
+                    unlink("../../assets/img/maps_output/".$location2->map_location.".png");
+                }
+
                 if($file_uploaded){
                     $location2->map_location = $_POST["map_location"];
                     $location2->floorplan = $filePath;
@@ -85,13 +89,15 @@
                     if(file_exists($location2->floorplan)){
                         unlink($location2->floorplan);
                     }
-                    if(file_exists("../../assets/img/maps_output/".$location2->map_location.".png")){
-                        unlink("../../assets/img/maps_output/".$location2->map_location.".png");
-                    }
+                    
                     $file_uploaded = true;
                 }else{
                     $file_uploaded = false;
                 }
+            }
+
+            if(file_exists("../../assets/img/maps_output/".$location2->map_location.".png")){
+                unlink("../../assets/img/maps_output/".$location2->map_location.".png");
             }
             
             if($file_uploaded){
