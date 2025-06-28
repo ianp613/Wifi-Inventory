@@ -7,7 +7,7 @@ from telegramAPI import TelegramBot
 class DATABASE:
     def __init__(self):
         try:
-            self.conn = mysql.connector.connect(host="127.0.0.1", user="root", database="wifi_inventory")
+            self.conn = mysql.connector.connect(host="localhost", user="root", database="wifi_inventory")
             self.cursor = self.conn.cursor()
             self.botStatus()
             self.description= ""

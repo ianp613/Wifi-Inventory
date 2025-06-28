@@ -1,9 +1,12 @@
+import mysql.connector
 
+conn = mysql.connector.connect(host="localhost", user="root", database="wifi_inventory")
+cursor = conn.cursor()
 
-img_path= {}
+description= "Joseph PC"
 
-img_path["annex"]= "12/12/12.png"
-img_path["annex2"]= "13/13/13.png"
+query = f"SELECT ip FROM ip_address WHERE hostname LIKE '%{description}%';"
+cursor.execute(query)
+result = cursor.fetchall()
 
-for key, value in img_path.items():
-    print(key, value)
+print(result)

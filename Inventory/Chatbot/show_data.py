@@ -507,11 +507,10 @@ if __name__ == "__main__":
                     query= vars(message)
                     query= query["text"]
                     response, images_path= showData.finalOutput(query)
-                    # print(f"Response: {response}\nImages Path: {images_path}")
+                    print(f"Response: {response}\nImages Path: {images_path}")
                     if len(images_path) != 0:
                         for img_path, description in images_path.items():
-                            img_path= img_path.replace("../../","")
-                            img_path= img_path.replace("maps","maps_output")
+                            img_path= img_path[3:].replace("maps","maps_output")
                             with open(img_path, "rb") as photo:
                                 bot.send_photo(message.chat.id, photo, caption=description)
                     else:

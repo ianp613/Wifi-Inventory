@@ -585,6 +585,7 @@ if(document.getElementById("cctv")){
         setTimeout(() => {
             const imageData = canvas.toDataURL('image/png');
             sole.post("../../controllers/cctv/save_canvas.php",{
+                id: cctv_dropdown_toggle.getAttribute("lid"),
                 image: imageData,
                 map_name: cctv_dropdown_toggle.innerText
             }).then(res => console.log(res))
