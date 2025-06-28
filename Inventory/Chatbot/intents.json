@@ -1,0 +1,19 @@
+[
+    {
+      "tags":"greetings",
+      "patterns": ["hello", "hey","hi","good morning ","good afternoon","good eve","afternoon","morning","evening","hi there","whats up?","what's up?","yhow","yo","yow"], 
+      "response": "Hello! How can I help you?"
+    },
+    {   
+      "tags":"farewell",
+      "patterns": ["bye", "goodbye"], 
+      "response": "Goodbye! Have a great day!"
+    },
+
+    {
+      "tags":"identity",
+      "patterns": ["who is joseph"], 
+      "response": "Joseph is a wifi technician and is currently a senior technician of wifi team."
+      
+  }
+]

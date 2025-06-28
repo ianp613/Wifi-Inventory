@@ -235,6 +235,7 @@ if(document.getElementById("sidebar")){
         account_edit_modal.show()
     })
     account_submit_btn.addEventListener("click",function(){
+        var bol = false;
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(account_email.value){
             var bol = regex.test(account_email.value)
@@ -242,7 +243,30 @@ if(document.getElementById("sidebar")){
                 alert("Please input a valid email.")
             }
         }
-        account_new_password.value ? account_confirm_password.value ? account_new_password.value != account_confirm_password.value ? alert("Password did not match.") : null : alert("Please confirm new password.") : null ;
+        bol = account_new_password.value
+            ? account_confirm_password.value
+                ? account_new_password.value !== account_confirm_password.value
+                ? (alert("Password did not match."), false)
+                : true
+                : (alert("Please confirm new password."), false)
+            : (alert("Please enter a new password."), false);
+
+        if(bol){
+            sole.post("../../controllers/update_account.php",{
+                id: localStorage.getItem("userid"),
+                email: account_email.value,
+                password: account_new_password.value
+            }).then(res => {
+                bs5.toast(res.type,res.message,res.size)
+                if(res.status){
+                    localStorage.setItem("email",account_email.value)
+                    account_email.value = ""
+                    account_new_password.value = ""
+                    account_confirm_password.value = ""
+                }
+                console.log(res)
+            })
+        }
     })
 }
 

@@ -1,0 +1,3 @@
+-install python-3.13.3-amd64.exe
+-run install_package.py
+-run WIFITEAM-BOT.bat
