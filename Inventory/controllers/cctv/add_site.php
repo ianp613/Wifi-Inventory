@@ -20,6 +20,14 @@
                 $cctv_location->camera_size = "25";
                 DB::save($cctv_location);
 
+                $log = new Logs;
+                $log->uid = $_SESSION["userid"];
+                $log->log = $_SESSION["name"]." has added a map \"".$_POST["map_location"]."\".";
+                if($_SESSION["log"] != $log->log){
+                    $_SESSION["log"] = $log->log;
+                    DB::save($log);
+                }
+
                 $response = [
                     "status" => true,
                     "type" => "success",

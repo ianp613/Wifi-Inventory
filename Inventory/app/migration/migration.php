@@ -77,6 +77,7 @@
             Migrate::string("hostname");
             Migrate::string("site");
             Migrate::string("server");
+            Migrate::string("state");
             Migrate::string("status");
             Migrate::string("remarks");
             Migrate::string("webmgmtpt");

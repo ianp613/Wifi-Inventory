@@ -172,6 +172,11 @@
                         </div>
                     </div>
                 </div>
+                <label for="state" class="mb-2 mt-2">Status</label>
+                <select name="state" id="state" class="form-control">
+                    <option value="DOWN">DOWN</option>
+                    <option value="UP">UP</option>
+                </select>
                 <label for="remarks" class="mb-2 mt-2">Remarks</label>
                 <textarea maxlength="1000" rows="5" name="" id="remarks" class="form-control" placeholder="Aa"></textarea>
             </div>

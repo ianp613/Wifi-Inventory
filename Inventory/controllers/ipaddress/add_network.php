@@ -43,6 +43,7 @@
                                         $ip_address->hostname = "-";
                                         $ip_address->site = "-";
                                         $ip_address->server = "-";
+                                        $ip_address->state = "DOWN";
                                         $ip_address->status = "UNASSIGNED";
                                         $ip_address->remarks = "-";
                                         $ip_address->webmgmtpt = "-";

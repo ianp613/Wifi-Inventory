@@ -59,6 +59,7 @@
             "hostname",
             "site",
             "server",
+            "state",
             "status",
             "remarks",
             "webmgmtpt",

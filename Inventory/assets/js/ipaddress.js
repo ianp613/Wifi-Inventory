@@ -77,6 +77,7 @@ if(document.getElementById("ipaddress")){
     var server = document.getElementById("server")
     var webmgmtpt = document.getElementById("webmgmtpt")
     var username = document.getElementById("username")
+    var state = document.getElementById("state")
     var password = document.getElementById("password")
     var remarks = document.getElementById("remarks")
     
@@ -168,6 +169,7 @@ if(document.getElementById("ipaddress")){
             webmgmtpt: webmgmtpt.value,
             username: username.value,
             password: password.value,
+            state: state.value,
             remarks: remarks.value
         }).then(res => validateResponse(res,"edit_ip"))
     })
@@ -327,7 +329,7 @@ if(document.getElementById("ipaddress")){
                 e["site"] != "-" ? e["site"] : "",
                 e["server"] != "-" ? e["server"] : "",
                 e["status"] != "UNASSIGNED" ? "A - USED" : "B - AVAILABLE",
-                e["status"] == "UNASSIGNED" ? "<div class=\"red-circle mx-auto\"></div>" : "<div class=\"green-circle mx-auto\"></div>",
+                e["state"] == "DOWN" ? "<div class=\"red-circle mx-auto\"></div>" : "<div class=\"green-circle mx-auto\"></div>",
                 e["webmgmtpt"] != "-" ? e["webmgmtpt"] : "",
                 e["username"] != "-" || e["password"] != "-" ? "<div class=\"f-10\"><b>Username: </b>" + usernameSupport(e["username"]) + " <br> " + "<b>Password: </b>" + passwordSupport(e["password"]) + "</div>": "",
                 " <button id=\"edit_ip_"+ e["id"] +"\" i-id=\""+ e["id"] +"\" class=\"edit_ip_row btn btn-sm btn-secondary\"><i i-id=\""+ e["id"] +"\" class=\"edit_ip_row fa fa-edit\"></i></button>"
@@ -377,6 +379,7 @@ if(document.getElementById("ipaddress")){
         res.ip[0].server != "-" ? server.value = res.ip[0].server : server.value = ""
         res.ip[0].webmgmtpt != "-" ? webmgmtpt.value = res.ip[0].webmgmtpt : webmgmtpt.value = ""
         res.ip[0].username != "-" ? username.value = res.ip[0].username : username.value = ""
+        state.value = res.ip[0].state
         res.ip[0].password != "-" ? password.value = res.ip[0].password : password.value = ""
         res.ip[0].remarks != "-" ? remarks.value = res.ip[0].remarks : remarks.value = ""
         edit_ip_modal.show()

@@ -11,6 +11,7 @@
     $ip->webmgmtpt = $data["webmgmtpt"] ? $data["webmgmtpt"] : "-";
     $ip->username = $data["username"] ? $data["username"] : "-";
     $ip->password = $data["password"] ? $data["password"] : "-";
+    $ip->state = $data["state"];
     $ip->remarks = $data["remarks"] ? $data["remarks"] : "-";
     $ip->status = "ASSIGNED";
     DB::update($ip);
