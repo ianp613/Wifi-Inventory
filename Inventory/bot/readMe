@@ -1,7 +1,7 @@
 setup
     cd bot folder
+    python3.13 -m venv venv_name
     venv\Scripts\activate.bat
     pip install python-telegram-bot
     pip install requests
-    pip install "vanna[mysql,chromadb,ollama]"
     python main.py

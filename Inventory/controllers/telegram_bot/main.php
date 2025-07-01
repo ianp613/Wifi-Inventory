@@ -1,12 +1,10 @@
 <?php
 include("../../includes.php");
-include("interpreter.php");
+include("SQLGenerator.php");
 if (isset($_POST['message'])) {
     $message = $_POST['message'];
-
-    $message = Interprepter::solve($message);
     
-    echo json_encode($message);
+    echo json_encode(SQLGenerator::generate($message));
 } else {
     echo "No message received, something is wrong with bot module [python]";
 }
