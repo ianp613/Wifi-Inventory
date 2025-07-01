@@ -1,7 +1,7 @@
 <div id="equipments">
     <div class="d-flex mb-3">
         <div class="col-md-6">
-            <button data-bs-toggle="modal" data-bs-target="#add_entry" class="btn btn-sm btn-danger" style="margin-bottom: -5px;"><span class="fa fa-plus"></span> Add Entry</button>
+            <button id="add_entry_modal_btn" class="btn btn-sm btn-danger" style="margin-bottom: -5px;"><span class="fa fa-plus"></span> Add Entry</button>
         </div>
         <div class="col-md-6 d-flex justify-content-end align-items-end">
             <div class="dropdown">

@@ -6,7 +6,11 @@
                 <h6 class="modal-title">Add Equipment</h6>
             </div>
             <div class="modal-body">
-                <label for="add_equipment_input" class="mb-2">Equipment Name</label>
+                <label for="add_equipment_select" class="mb-2">Equipment Name</label>
+                <select name="" id="add_equipment_select" class="form-control">
+                    <option selected disabled value="">-- Select Equipment --</option>
+                </select>
+                <label for="add_equipment_input" class="mt-2 mb-2">Others</label>
                 <input required type="text" name="name" id="add_equipment_input" class="form-control">
             </div>
             <div class="modal-footer">

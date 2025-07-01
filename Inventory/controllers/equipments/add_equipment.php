@@ -39,8 +39,8 @@
         $response = [
             "status" => false,
             "type" => "warning",
-            "size" => null,
-            "message" => "Please provide equipment name."
+            "size" => "lg",
+            "message" => "Please select or provide equipment name."
         ];
     }
     echo json_encode($response);

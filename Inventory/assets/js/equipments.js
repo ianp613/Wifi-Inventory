@@ -38,18 +38,29 @@ if(document.getElementById("equipments")){
 
     // FOCUS ADD EQUIPMENT INPUT
     var add_equipment = document.getElementById('add_equipment')
+    var add_equipment_select = document.getElementById('add_equipment_select')
     var add_equipment_input = document.getElementById('add_equipment_input')
     var add_equipment_btn = document.getElementById('add_equipment_btn')
 
+    sole.get("../../controllers/get_list.php")
+    .then(res => {
+        res.equipment.forEach(e => {
+            var op = document.createElement("option")
+            op.value = e
+            op.innerText = e
+            add_equipment_select.appendChild(op)
+        });
+    })
+
     add_equipment.addEventListener('shown.bs.modal', function () {
-        add_equipment_input.focus()
+        add_equipment_select.focus()
     })
 
     // POST ADD EQUIPMENT
     add_equipment_btn.addEventListener("click", function () {
         sole.post("../../controllers/equipments/add_equipment.php", {
             uid: localStorage.getItem("userid"),
-            name: add_equipment_input.value
+            name: add_equipment_input.value ? add_equipment_input.value : add_equipment_select.value
         }).then(res => validateResponse(res,"add_equipment"))
     })
 
@@ -76,6 +87,15 @@ if(document.getElementById("equipments")){
     var add_entry = document.getElementById('add_entry')
     var add_entry_description_input = document.getElementById('add_entry_description_input')
     var add_entry_btn = document.getElementById('add_entry_btn')
+    var add_entry_modal_btn = document.getElementById('add_entry_modal_btn')
+
+    add_entry_modal_btn.addEventListener("click",function(){
+        if(localStorage.getItem("selected_equipment") != null){
+            add_entry_modal.show()
+        }else{
+            bs5.toast("warning","Please select equipment first.")
+        }
+    })
 
     add_entry.addEventListener('shown.bs.modal', function () {
         add_entry_title.innerText = "Add Entry to " + localStorage.getItem("selected_equipment")
@@ -212,6 +232,7 @@ if(document.getElementById("equipments")){
             }
             if(func == "add_equipment"){
                 add_equipment_input.value = ""
+                add_equipment_select.value = ""
                 sole.get("../../controllers/equipments/get_equipment.php").then(res => loadEquipment(res))
                 add_equipment_modal.hide();
             }
