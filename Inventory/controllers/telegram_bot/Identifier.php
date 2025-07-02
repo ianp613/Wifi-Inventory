@@ -14,16 +14,16 @@ class Identifier {
         ];
         $input = strtolower(trim($input));
 
-        // $input_temp = $input;
-        // $in = explode("in",$input);
-        // count($in) == 2 ? $input = $in[1] : null;
+        $input_temp = $input;
+        $in = explode("in",$input);
+        count($in) == 2 ? $input = $in[1] : null;
 
         foreach ($models as $field => $model) {
             $words = preg_split('/\s+/', strtolower($input));
 
             foreach ($words as $word) {
                 // Skip words shorter than 3 characters
-                if (strlen($word) < 3) continue;
+                if (strlen($word) < 2) continue;
 
                 // Match if the word is a substring of the model key
                 if (stripos($field, $word) !== false) {
