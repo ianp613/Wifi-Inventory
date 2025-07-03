@@ -22,6 +22,7 @@
         public $ignore = [
             "uid"
         ];
+        public $main = "name";
     }
 
     class Equipment_Entry
@@ -47,6 +48,7 @@
             "on",
             "ion"
         ];
+        public $main = "description";
     }
 
     class IP_Network
@@ -65,8 +67,10 @@
             "rid",
             "ne",
             "net",
-            "et"
+            "et",
+            "me"
         ];
+        public $main = "name";
     }
 
     class IP_Address
@@ -99,6 +103,7 @@
             "ame",
             "te",
         ];
+        public $main = "hostname";
     }
 
     class Routers{
@@ -116,8 +121,10 @@
             "uid",
             "wan",
             "wa",
-            "an"
+            "an",
+            "me"
         ];
+        public $main = "name";
     }
 
     class ISP{
@@ -148,6 +155,7 @@
             "is",
             "sp"
         ];
+        public $main = "name";
     }
 
     class Settings{
@@ -188,8 +196,10 @@
             "ma",
             "map",
             "ma",
-            "ap"
+            "ap",
+            "me"
         ];
+        public $main = "map_location";
     }
 
     class CCTV_Camera{
@@ -232,5 +242,6 @@
             "yp",
             "ar"
         ];
+        public $main = "camera_id";
     }
 ?>

@@ -13,7 +13,7 @@ class Identifier {
             "log" => new Logs(),
         ];
 
-        $ignore = ["en", "ent"];  // Add any more short tokens here
+        $ignore = ["en", "ent","me"];  // Add any more short tokens here
 
         $input_temp = strtolower(trim($input));
         $in = explode("in", $input);
@@ -58,7 +58,7 @@ class Identifier {
 
         $input = strtolower(trim($input));
         $words = preg_split('/\s+/', $input);
-        $ignored = ["me", "give", "all", "in", "on", "at", "to", "the", "show", "list", "data", "using", "with", "for","map"];
+        $ignored = ["is","me", "give", "all", "in", "on", "at", "to", "the", "show", "list", "data", "using", "with", "for","map"];
         $results = [];
         foreach ($words as $word) {
             if (strlen($word) < 2 || in_array($word, $ignored)) continue;
@@ -75,7 +75,6 @@ class Identifier {
 
         // get columns to be used
         $words = preg_split('/\s+/', strtolower($input));
-
         foreach ($words as $word) {
             if (strlen($word) < 2) continue;
             if (in_array($word, $ignore)) continue;
@@ -89,35 +88,37 @@ class Identifier {
                     break;
                 }
             }
-
             // Keep word only if it's not matched to any column
             if (!$isColumnMatch) {
                 $filteredWords[] = $word;
             }
         }
-
-        // 🧹 Final cleaned input
         $cleanedInput = implode(' ', $filteredWords);
+        $column = array_unique($column); // Removes duplicates
 
+        // Get row in database where value is in $results
+        $data = DB::all($model);
+        $row = [];
+        foreach ($data as $d) {
+            in_array(strtolower($d[$model->main]),array_map('strtolower',$results)) ? $row[] = $d : null;
+        }
 
-        // Check if there are two possible column in the input
-        $and = preg_match('/\band\b/i', $input) ? true : false;
+        if(count($column)){
+            return true;
+            // $final = [];
+            // for
+        }else{
+            return false;
+        }
 
-        // $column = [];
-
-        // foreach ($model->fillable as $field) {
-        //     // Check if input contains any part of the field name
-        //     if (preg_match('/' . preg_quote(substr($field, 0, 4), '/') . '/i', $input)) {
-        //         $column[] = $field;
-        //     }
-        // }
-        return [$column,$cleanedInput,$results];
+        // return ["table to be used","columns or fillable to be used","matching value in database using the query","row of from database which match the value of model->main"]
+        return [$table,$column,$results,$row];
 
 
         
 
 
-        return "⚠️ Unable to generate SQL from input.";
+        // return "⚠️ Unable to generate SQL from input.";
     }
 }
 ?>
