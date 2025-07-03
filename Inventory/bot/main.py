@@ -33,12 +33,13 @@ async def reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
             bot_reply = sole.index(user_message)
 
             for part in split_message(bot_reply):
-                await update.message.reply_text(part)
+                await update.message.reply_text(part, parse_mode="HTML")
+                # await update.message.reply_text(part)
 
         except Exception as e:
             logging.error("Error in reply(): %s", str(e), exc_info=True)
             try:
-                await update.message.reply_text("⚠️ Something went wrong while processing your request.")
+                await update.message.reply_text("⚠️ Something went wrong while processing your request. [python]")
             except:
                 pass  # Prevent bot from crashing if reply fails
 
@@ -49,7 +50,7 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE):
     # Attempt to notify the user if possible
     if isinstance(update, Update) and update.message:
         try:
-            await update.message.reply_text("⚠️ Bot encountered an error. Please try again later.")
+            await update.message.reply_text("⚠️ Bot encountered an error. Please try again later. [python]")
         except:
             pass
 

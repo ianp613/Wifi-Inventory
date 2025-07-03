@@ -104,6 +104,11 @@ class Identifier {
         }
 
         if(count($column)){
+            $reply = "";
+            for ($i = 0; $i < count($row); $i++) { 
+                $reply .= "<b>".$row[$i][$model->main]."</b>";
+            }
+            return $reply;
             return true;
             // $final = [];
             // for

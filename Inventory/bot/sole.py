@@ -7,4 +7,4 @@ def index(user_message: str) -> str:
         response = requests.post(url, data=payload)
         return response.text
     except Exception as e:
-        return f"Error contacting Wifi Team Inventory Server: {e}"
+        return f"Error contacting Wifi Team Inventory Server: {e} [python]"
