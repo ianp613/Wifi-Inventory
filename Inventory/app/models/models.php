@@ -19,6 +19,9 @@
             "uid",
             "name"
         ];
+        public $ignore = [
+            "uid"
+        ];
     }
 
     class Equipment_Entry
@@ -34,6 +37,16 @@
             "status",
             "remarks"
         ];
+        public $ignore = [
+            "uid",
+            "eid",
+            "at",
+            "tio",
+            "ti",
+            "io",
+            "on",
+            "ion"
+        ];
     }
 
     class IP_Network
@@ -46,6 +59,13 @@
             "from",
             "to",
             "subnet"
+        ];
+        public $ignore = [
+            "uid",
+            "rid",
+            "ne",
+            "net",
+            "et"
         ];
     }
 
@@ -66,6 +86,19 @@
             "username",
             "password"
         ];
+        public $ignore = [
+            "nid",
+            "er",
+            "se",
+            "ser",
+            "name",
+            "na",
+            "am",
+            "me",
+            "nam",
+            "ame",
+            "te",
+        ];
     }
 
     class Routers{
@@ -78,6 +111,12 @@
             "wan1",
             "wan2",
             "active"
+        ];
+        public $ignore = [
+            "uid",
+            "wan",
+            "wa",
+            "an"
         ];
     }
 
@@ -94,6 +133,21 @@
             "dns2",
             "webmgmtpt"
         ];
+        public $ignore = [
+            "uid",
+            "name",
+            "na",
+            "am",
+            "me",
+            "nam",
+            "ame",
+            "dns",
+            "dn",
+            "ns",
+            "isp",
+            "is",
+            "sp"
+        ];
     }
 
     class Settings{
@@ -103,6 +157,9 @@
             "sound",
             "theme",
         ];
+        public $ignore = [
+            "uid"
+        ];
     }
 
     class Logs{
@@ -110,6 +167,9 @@
         public $fillable = [
             "uid",
             "log",
+        ];
+        public $ignore = [
+            "uid"
         ];
     }
 
@@ -121,6 +181,14 @@
             "floorplan",
             "remarks",
             "camera_size",
+        ];
+        public $ignore = [
+            "uid",
+            "lo",
+            "ma",
+            "map",
+            "ma",
+            "ap"
         ];
     }
 
@@ -145,6 +213,24 @@
             "camera_remarks",
             "cx",
             "cy"
+        ];
+        public $ignore = [
+            "uid",
+            "lid",
+            "camera",
+            "ca",
+            "am",
+            "me",
+            "er",
+            "ra",
+            "cam",
+            "ame",
+            "mer",
+            "era",
+            "pe",
+            "ty",
+            "yp",
+            "ar"
         ];
     }
 ?>
