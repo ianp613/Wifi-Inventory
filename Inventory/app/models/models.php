@@ -20,6 +20,7 @@
             "name"
         ];
         public $ignore = [
+            "id",
             "uid"
         ];
         public $main = "name";
@@ -63,6 +64,7 @@
             "subnet"
         ];
         public $ignore = [
+            "id",
             "uid",
             "rid",
             "ne",
@@ -91,6 +93,7 @@
             "password"
         ];
         public $ignore = [
+            "id",
             "nid",
             "er",
             "se",
@@ -118,6 +121,7 @@
             "active"
         ];
         public $ignore = [
+            "id",
             "uid",
             "wan",
             "wa",
@@ -141,6 +145,7 @@
             "webmgmtpt"
         ];
         public $ignore = [
+            "id",
             "uid",
             "name",
             "na",
@@ -166,6 +171,7 @@
             "theme",
         ];
         public $ignore = [
+            "id",
             "uid"
         ];
     }
@@ -174,11 +180,13 @@
         public $table = "logs";
         public $fillable = [
             "uid",
-            "log",
+            "log"
         ];
         public $ignore = [
+            "id",
             "uid"
         ];
+        public $main = "log";
     }
 
     class CCTV_Location{
@@ -191,6 +199,7 @@
             "camera_size",
         ];
         public $ignore = [
+            "id",
             "uid",
             "lo",
             "ma",
@@ -225,6 +234,7 @@
             "cy"
         ];
         public $ignore = [
+            "id",
             "uid",
             "lid",
             "camera",

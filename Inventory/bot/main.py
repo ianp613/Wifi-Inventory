@@ -34,6 +34,8 @@ async def reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             for part in split_message(bot_reply):
                 part = part.replace("\\", "")
+                part = part.replace("br|", "\n")
+                part = part.strip('"')
                 await update.message.reply_text(part, parse_mode="HTML")
                 # await update.message.reply_text(part)
 
