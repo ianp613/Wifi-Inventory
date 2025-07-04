@@ -2,8 +2,9 @@
 class Identifier {
     public static function main($input) {
         $input = str_replace(",","",$input);
+        $input = str_replace(":","",$input);
         $models = [
-            "ip" => new IP_Address(),
+            "ipaddress" => new IP_Address(),
             "equipment" => new Equipment(),
             "entry" => new Equipment_Entry(),
             "network" => new IP_Network(),
@@ -117,7 +118,7 @@ class Identifier {
         }
         $row = $temp_row;
 
-        in_array("ip",$column) ? $column = array_diff($column,["ip"]): null;
+        // in_array("ip",$column) ? $column = array_diff($column,["ip"]): null;
         if(count($column)){
             count($row) ? $reply = "" : $reply = "No matching data found. 0";
             for ($i = 0; $i < count($row); $i++) {
@@ -213,6 +214,7 @@ class Identifier {
             }
 
             return $reply;
+            // return Identifier::breaker($reply);
         }
 
         // return ["table to be used","columns or fillable to be used","matching value in database using the query","row of from database which match the value of model->main"]
@@ -223,6 +225,24 @@ class Identifier {
 
 
         // return "⚠️ Unable to generate SQL from input.";
+    }
+
+    public static function breaker($reply){
+        $response = [];
+        $temp = explode("br|",$reply);
+        $temp_text = "";
+        foreach ($temp as $t) {
+            if(strlen($temp_text) > 3500 && strlen($temp_text) < 3600){
+                $response[] = $temp_text;
+                $temp_text = "";
+            }else{
+                $temp_text .= $t . "br|";
+            }
+        }
+        if($temp_text != ""){
+            $response[] = $temp_text;
+        }
+        return strlen($response[0]);
     }
 }
 ?>

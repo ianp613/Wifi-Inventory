@@ -1,3 +1,4 @@
+import re
 import logging
 
 # Disable INFO logs from httpx and telegram
@@ -13,7 +14,7 @@ import sole  # Your custom business logic module
 # Bot config
 BOT_TOKEN = "7585903473:AAGAuKu6c4kOnNvDB0URwdBt_9gK66uD4HU"
 GROUP_CHAT_ID = -1002850193001
-MAX_LENGTH = 4096  # Telegram's message size limit
+MAX_LENGTH = 3000  # Telegram's message size limit
 
 # 🧩 Log setup
 logging.basicConfig(
