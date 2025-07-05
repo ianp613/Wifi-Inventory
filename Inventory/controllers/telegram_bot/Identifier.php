@@ -147,6 +147,7 @@
             $row = $temp_row;
 
             // in_array("ip",$column) ? $column = array_diff($column,["ip"]): null;
+            // return ["string",count($column),""];
             if(count($column)){
                 count($row) ? $reply = "" : $reply = "No matching data found.1";
                 // for ($i = 0; $i < count($row); $i++) {

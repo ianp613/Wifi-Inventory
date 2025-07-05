@@ -41,6 +41,7 @@ async def reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
                 if isinstance(parsed, list):
                     # It's an array from PHP
+                    print("It's an array from PHP")
                     if parsed[0] == "string":
                         for part in split_message(parsed[1]):
                             part = part.replace("[", "   ")
@@ -89,6 +90,7 @@ async def reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     parsed = parsed.replace("\\", "")
                     parsed = parsed.replace("br|", "\n")
                     parsed = parsed.strip('"')
+                    print("It's a JSON string or object, not an array")
                     await update.message.reply_text(str(parsed), parse_mode="HTML")
 
             except json.JSONDecodeError:
