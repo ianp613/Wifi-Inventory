@@ -1,5 +1,7 @@
-import re
 import logging
+import json
+import os
+import time
 
 # Disable INFO logs from httpx and telegram
 logging.getLogger("httpx").setLevel(logging.CRITICAL)
@@ -33,13 +35,68 @@ async def reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
             user_message = update.message.text
             bot_reply = sole.index(user_message)
 
-            for part in split_message(bot_reply):
-                part = part.replace("[", "   ")
-                part = part.replace("---", "🍂")
-                part = part.replace("\\", "")
-                part = part.replace("br|", "\n")
-                part = part.strip('"')
-                await update.message.reply_text(part, parse_mode="HTML")
+            try:
+                # Try to parse as JSON
+                parsed = json.loads(bot_reply)
+
+                if isinstance(parsed, list):
+                    # It's an array from PHP
+                    if parsed[0] == "string":
+                        for part in split_message(parsed[1]):
+                            part = part.replace("[", "   ")
+                            part = part.replace("---", "🍂")
+                            part = part.replace("\\", "")
+                            part = part.replace("br|", "\n")
+                            part = part.strip('"')
+                            await update.message.reply_text(part, parse_mode="HTML")
+                            # await update.message.reply_text(part)
+                    
+                    if parsed[0] == "file":
+                        parsed[1] = parsed[1].replace("[", "   ")
+                        parsed[1] = parsed[1].replace("---", "🍂")
+                        parsed[1] = parsed[1].replace("\\", "")
+                        parsed[1] = parsed[1].replace("br|", "\n")
+                        parsed[1] = parsed[1].strip('"')
+
+                        # if os.path.exists(parsed[2]):
+                        #     with open(parsed[2], "rb") as photo:
+                        #         await update.message.reply_photo(photo=photo, caption=parsed[1], parse_mode="HTML")
+                        # else:
+                        #     await update.message.reply_text(parsed[1]+"⚠️ Map layout is not yet generated, you can log into the system and manualy add camera to generate map layout.", parse_mode="HTML")
+
+                        # Wait until the file exists and is ready (up to 10 seconds)
+                        timeout = 10  # seconds
+                        elapsed = 0
+                        while not os.path.exists(parsed[2]):
+                            time.sleep(1)
+                            elapsed += 1
+                            if elapsed >= timeout:
+                                break
+
+                        # Proceed only if the file is now available
+                        if os.path.exists(parsed[2]):
+                            with open(parsed[2], "rb") as photo:
+                                await update.message.reply_photo(photo=photo, caption=parsed[1], parse_mode="HTML")
+                        else:
+                            await update.message.reply_text(
+                                parsed[1] + "⚠️ The map layout is currently unavailable. Please log into the system and manually add a camera to initiate its generation.",
+                                parse_mode="HTML"
+                            )
+                else:
+                    # It's a JSON string or object, not an array
+                    await update.message.reply_text(str(parsed), parse_mode="HTML")
+
+            except json.JSONDecodeError:
+                # Not JSON — treat as plain string
+                await update.message.reply_text(bot_reply, parse_mode="HTML")
+
+            # for part in split_message(bot_reply):
+            #     part = part.replace("[", "   ")
+            #     part = part.replace("---", "🍂")
+            #     part = part.replace("\\", "")
+            #     part = part.replace("br|", "\n")
+            #     part = part.strip('"')
+            #     await update.message.reply_text(part, parse_mode="HTML")
                 # await update.message.reply_text(part)
 
         except Exception as e:

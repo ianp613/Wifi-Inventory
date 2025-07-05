@@ -37,7 +37,9 @@
         }
 
         public static function generateFromModel($model, $input) {
-            $findID = stripos($input,"id") !== false;
+            $reply_type = "string";
+            $reply_file = "";
+            $findID = preg_match('/\bid\b/i', $input) === 1;
             $table = $model->table;
             $fillable = $model->fillable;
             $ignore = $model->ignore;
@@ -61,11 +63,10 @@
             // Get all matching data from database that are in the $input
             $input = strtolower(trim($input));
             $words = preg_split('/\s+/', $input);
-            $ignored = ["table","column","someone","some","something","everyone","everything","every","log","can","provide","their","you","please","find","of","is","me","and","equal","value", "give","also", "all", "in", "on","=","than","less","greater","at", "to", "the", "show", "list", "data","who","have","has","been", "using", "with", "for","map","that"];
+            $ignored = ["table","column","from","someone","some","which","something","everyone","everything","every","log","can","provide","their","you","please","find","of","is","me","and","equal","value", "give","also", "all", "in", "on","=","than","less","greater","at", "to", "the", "show", "list", "data","who","have","has","been", "using", "with", "for","map","that"];
             $results = [];
             foreach ($words as $word) {
                 if (strlen($word) < 2 || in_array($word, $ignored)) continue;
-
                 foreach ($values as $value) {
                     if (stripos($value, $word) !== false) {
                         $results[] = $value;
@@ -96,7 +97,7 @@
                 $isColumnMatch = false;
 
                 foreach ($fillable as $fill) {
-                    if (stripos($fill, $word) !== false) {
+                    if (strlen($word) > 1 && stripos($fill, $word) !== false) {
                         $column[] = $fill;
                         $isColumnMatch = true;
                         break;
@@ -107,10 +108,22 @@
                     $filteredWords[] = $word;
                 }
             }
+
+            
             $cleanedInput = implode(' ', $filteredWords);
             $cleanedInput = str_replace($model->table,"",$cleanedInput);
+            foreach ($ignored as $i) {
+                $cleanedInput = str_replace($i,"",$cleanedInput);
+            }
             $column = array_unique($column); // Removes duplicates
+            // $cleanedInput = str_replace(" ","",$cleanedInput);
 
+            // remove all character from the remaining string in &input except numeric and use only the first occurence or numeric value
+            if($findID){
+                preg_match_all('/\d+/', $cleanedInput, $matches);
+                $numbers = $matches[0];
+                $cleanedInput = $numbers[0];
+            }
 
             // Get row in database where value is in $results
             $data = DB::all($model);
@@ -121,7 +134,6 @@
                 }
                 in_array(strtolower($d[$model->main]),array_map('strtolower',$results)) ? $row[] = $d : null;
             }
-
 
             // Removes duplicates for multidimensional array
             $id = [];
@@ -161,7 +173,7 @@
                         $reply .= "br|";
                     }
                 }
-                return Identifier::label_replace($reply,$model);
+                return [$reply_type,Identifier::label_replace($reply,$model),$reply_file];
                 // return Identifier::breaker($reply);
             }else{
                 count($row) ? $reply = "" : $reply = "No matching data found.3";
@@ -226,12 +238,20 @@
                     foreach ($data as $d) {
                         $reply .= "<b>--- ".$d[$model->main]."</b>br|";
                         $reply .= "[<b>ID: </b><i>".$d["id"]."</i>br|";
-                        $reply .= "[<b>".$model->main.": </b><i>".$d[$model->main]."</i>br|";
+                        foreach ($model->fillable as $fill) {
+                            $fill != "floorplan" ? $reply .= "[<b>".$fill.": </b><i>".$d[$fill]."</i>br|" : null;
+                            if($fill == "floorplan"){
+                                $reply_type = "file";
+                                $reply_file = $d[$fill];
+                                $reply_file = str_replace("maps","maps_output",$reply_file);
+                                $reply_file = str_replace("../../","../",$reply_file);
+                            }
+                        }
                         $reply .= "br|";
                     }
                 }
 
-                return Identifier::label_replace($reply,$model);
+                return [$reply_type,Identifier::label_replace($reply,$model),$reply_file];
                 // return Identifier::breaker($reply);
             }
 
