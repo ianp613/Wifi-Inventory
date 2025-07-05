@@ -34,6 +34,8 @@ async def reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
             bot_reply = sole.index(user_message)
 
             for part in split_message(bot_reply):
+                part = part.replace("[", "   ")
+                part = part.replace("---", "🍂")
                 part = part.replace("\\", "")
                 part = part.replace("br|", "\n")
                 part = part.strip('"')

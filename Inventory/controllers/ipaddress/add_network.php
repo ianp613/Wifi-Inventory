@@ -78,8 +78,7 @@
                                         "status" => true,
                                         "type" => "success",
                                         "size" => null,
-                                        "message" => "Network has been saved.",
-                                        "route" => $router_temp
+                                        "message" => "Network has been saved."
                                     ]; 
                                 }else{
                                     $response = [

@@ -19,6 +19,10 @@
             "uid",
             "name"
         ];
+        public $label = [
+            "uid:" => "UID:",
+            "name:" => "Name:"
+        ];
         public $ignore = [
             "id",
             "uid"
@@ -38,6 +42,16 @@
             "specifications",
             "status",
             "remarks"
+        ];
+        public $label = [
+            "uid:" => "UID:",
+            "eid:" => "EID:",
+            "description:" => "Description:",
+            "model_no:" => "Model No.:",
+            "barcode:" => "Barcode:",
+            "specifications:" => "Specifications:",
+            "status:" => "Status:",
+            "remarks:" => "Remarks:"
         ];
         public $ignore = [
             "uid",
@@ -62,6 +76,14 @@
             "from",
             "to",
             "subnet"
+        ];
+        public $label = [
+            "uid:" => "UID:",
+            "rid:" => "RID:",
+            "name:" => "Name:",
+            "from:" => "IP from:",
+            "to:" => "IP to:",
+            "subnet:" => "Subnet:"
         ];
         public $ignore = [
             "id",
@@ -92,6 +114,20 @@
             "username",
             "password"
         ];
+        public $label = [
+            "nid:" => "NID:",
+            "ip:" => "IP:",
+            "subnet:" => "Subnet:",
+            "hostname:" => "Hostname:",
+            "site:" => "Site:",
+            "server:" => "Server:",
+            "state:" => "State:",
+            "status:" => "Status:",
+            "remarks:" => "Remarks:",
+            "webmgmtpt:" => "Web Mgmt Port:",
+            "username:" => "Username:",
+            "password:" => "Password:"
+        ];
         public $ignore = [
             "id",
             "nid",
@@ -120,6 +156,15 @@
             "wan2",
             "active"
         ];
+        public $label = [
+            "uid:" => "UID:",
+            "name:" => "Name:",
+            "ip:" => "IP:",
+            "subnet:" => "Subnet:",
+            "wan1:" => "WAN 1:",
+            "wan2:" => "WAN 2:",
+            "active:" => "Active WAN:",
+        ];
         public $ignore = [
             "id",
             "uid",
@@ -143,6 +188,17 @@
             "dns1",
             "dns2",
             "webmgmtpt"
+        ];
+        public $label = [
+            "uid:" => "UID:",
+            "isp_name:" => "ISP Name:",
+            "name:" => "Name:",
+            "wan_ip:" => "WAN IP:",
+            "subnet:" => "Subnet:",
+            "gateway:" => "Gateway:",
+            "dns1:" => "DNS 1:",
+            "dns2:" => "DNS 2:",
+            "webmgmtpt:" => "Web Mgmt Port:",
         ];
         public $ignore = [
             "id",
@@ -198,6 +254,13 @@
             "remarks",
             "camera_size",
         ];
+        public $label = [
+            "uid:" => "UID:",
+            "map_location:" => "Location:",
+            "floorplan:" => "Floorplan:",
+            "remarks:" => "Remarks:",
+            "camera_size:" => "Camera Size(px):",
+        ];
         public $ignore = [
             "id",
             "uid",
@@ -232,6 +295,26 @@
             "camera_remarks",
             "cx",
             "cy"
+        ];
+        public $label = [
+            "uid:" => "UID:",
+            "lid:" => "LID:",
+            "camera_id:" => "Name:",
+            "camera_type:" => "Type:",
+            "camera_subtype:" => "Subtype:",
+            "camera_ip_address:" => "IP:",
+            "camera_port_no:" => "Port No:",
+            "camera_username:" => "Username:",
+            "camera_password:" => "Password:",
+            "camera_angle:" => "Angle(°deg):",
+            "camera_location:" => "Location:",
+            "camera_brand:" => "Brand:",
+            "camera_model_no:" => "Model No.:",
+            "camera_barcode:" => "Barcode:",
+            "camera_status:" => "Status:",
+            "camera_remarks:" => "Remarks:",
+            "cx:" => "CX:",
+            "cy:" => "CY:",
         ];
         public $ignore = [
             "id",

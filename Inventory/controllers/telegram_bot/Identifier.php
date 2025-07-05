@@ -1,248 +1,267 @@
 <?php
-class Identifier {
-    public static function main($input) {
-        $input = str_replace(",","",$input);
-        $input = str_replace(":","",$input);
-        $models = [
-            "ipaddress" => new IP_Address(),
-            "equipment" => new Equipment(),
-            "entry" => new Equipment_Entry(),
-            "network" => new IP_Network(),
-            "router" => new Routers(),
-            "isp" => new ISP(),
-            "map" => new CCTV_Location(),
-            "cctv" => new CCTV_Camera()
-        ];
+    class Identifier {
+        public static function main($input) {
+            $input = str_replace(",","",$input);
+            $input = str_replace(":","",$input);
+            $models = [
+                "ipaddress" => new IP_Address(),
+                "equipment" => new Equipment(),
+                "entry" => new Equipment_Entry(),
+                "network" => new IP_Network(),
+                "router" => new Routers(),
+                "isp" => new ISP(),
+                "map" => new CCTV_Location(),
+                "cctv" => new CCTV_Camera()
+            ];
 
-        $ignore = ["en", "ent","me"];  // Add any more short tokens here
+            $ignore = ["en", "ent","me"];  // Add any more short tokens here
 
-        // $input_temp = strtolower(trim($input));
-        // $in = explode("in", $input);
-        // $input = count($in) == 2 ? $in[1] : $input;
+            // $input_temp = strtolower(trim($input));
+            // $in = explode("in", $input);
+            // $input = count($in) == 2 ? $in[1] : $input;
 
-        foreach ($models as $field => $model) {
-            $words = preg_split('/\s+/', strtolower($input));
+            foreach ($models as $field => $model) {
+                $words = preg_split('/\s+/', strtolower($input));
 
+                foreach ($words as $word) {
+                    if (strlen($word) < 2) continue;
+                    if (in_array($word, $ignore)) continue;  // Skip ignored words
+
+                    if (stripos($field, $word) !== false) {
+                        $input = str_replace($word,"",$input);
+                        return Identifier::generateFromModel($model, $input);
+                    }
+                }
+            }
+            return "No matching data found.";
+        }
+
+        public static function generateFromModel($model, $input) {
+            $findID = stripos($input,"id") !== false;
+            $table = $model->table;
+            $fillable = $model->fillable;
+            $ignore = $model->ignore;
+            $column = [];
+            $filteredWords = [];
+
+            // Extract all the data in the database
+            $data = DB::all($model);
+            $values = [];
+            foreach ($data as $record) {
+                foreach ($record as $key => $value) {
+                    // Skip nulls or unnecessary fields if needed
+                    if (!is_null($value) && $value != "-" && !in_array($key, ['created_at', 'updated_at'])) {
+                        $values[] = strtolower(trim($value)); // Normalize for matching
+                    }
+                }
+            }
+            // return $values;
+
+
+            // Get all matching data from database that are in the $input
+            $input = strtolower(trim($input));
+            $words = preg_split('/\s+/', $input);
+            $ignored = ["table","column","someone","some","something","everyone","everything","every","log","can","provide","their","you","please","find","of","is","me","and","equal","value", "give","also", "all", "in", "on","=","than","less","greater","at", "to", "the", "show", "list", "data","who","have","has","been", "using", "with", "for","map","that"];
+            $results = [];
             foreach ($words as $word) {
-                if (strlen($word) < 2) continue;
-                if (in_array($word, $ignore)) continue;  // Skip ignored words
+                if (strlen($word) < 2 || in_array($word, $ignored)) continue;
 
-                if (stripos($field, $word) !== false) {
-                    return Identifier::generateFromModel($model, $input);
+                foreach ($values as $value) {
+                    if (stripos($value, $word) !== false) {
+                        $results[] = $value;
+                    }
                 }
             }
-        }
-        return "No matching data found.";
-    }
-
-    public static function generateFromModel($model, $input) {
-        $table = $model->table;
-        $fillable = $model->fillable;
-        $ignore = $model->ignore;
-        $column = [];
-        $filteredWords = [];
+            $results = array_unique($results); // Removes duplicates
 
 
-        // Extract all the data in the database
-        $data = DB::all($model);
-        $values = [];
-        foreach ($data as $record) {
-            foreach ($record as $key => $value) {
-                // Skip nulls or unnecessary fields if needed
-                if (!is_null($value) && $value != "-" && !in_array($key, ['created_at', 'updated_at'])) {
-                    $values[] = strtolower(trim($value)); // Normalize for matching
+
+            if(!$findID){
+                $input = strtolower(trim($input));
+                $wor = preg_split('/\s+/', $input);
+                // Filter out ignored words and store the cleaned input back into $input
+                $filwor = array_filter($wor, function ($wo) use ($ignored) {
+                    return strlen($wo) >= 2 && !in_array($wo, $ignored);
+                });
+                $input = implode(' ', $filwor);    
+            }
+            
+
+            // get columns to be used
+            $words = preg_split('/\s+/', strtolower($input));
+            foreach ($words as $word) {
+                if ((!ctype_digit($word) && strlen($word) < 2) || (!$findID && ctype_digit($word))) continue;
+                if (in_array($word, $ignore)) continue;
+
+                $isColumnMatch = false;
+
+                foreach ($fillable as $fill) {
+                    if (stripos($fill, $word) !== false) {
+                        $column[] = $fill;
+                        $isColumnMatch = true;
+                        break;
+                    }
+                }
+                // Keep word only if it's not matched to any column
+                if (!$isColumnMatch) {
+                    $filteredWords[] = $word;
                 }
             }
-        }
-        // return $values;
+            $cleanedInput = implode(' ', $filteredWords);
+            $cleanedInput = str_replace($model->table,"",$cleanedInput);
+            $column = array_unique($column); // Removes duplicates
 
 
-        // Get all matching data from database that are in the $input
-        $input = strtolower(trim($input));
-        $words = preg_split('/\s+/', $input);
-        $ignored = ["table","column","someone","some","something","everyone","everything","every","log","can","provide","their","you","please","find","of","is","me","and","equal","value", "give","also", "all", "in", "on","=","than","less","greater","at", "to", "the", "show", "list", "data","who","have","has","been", "using", "with", "for","map","that"];
-        $results = [];
-        foreach ($words as $word) {
-            if (strlen($word) < 2 || in_array($word, $ignored)) continue;
-
-            foreach ($values as $value) {
-                if (stripos($value, $word) !== false) {
-                    $results[] = $value;
-                }
-            }
-        }
-        $results = array_unique($results); // Removes duplicates
-
-        // get columns to be used
-        $words = preg_split('/\s+/', strtolower($input));
-        foreach ($words as $word) {
-            if (strlen($word) < 2) continue;
-            if (in_array($word, $ignore)) continue;
-
-            $isColumnMatch = false;
-
-            foreach ($fillable as $fill) {
-                if (stripos($fill, $word) !== false) {
-                    $column[] = $fill;
-                    $isColumnMatch = true;
-                    break;
-                }
-            }
-            // Keep word only if it's not matched to any column
-            if (!$isColumnMatch) {
-                $filteredWords[] = $word;
-            }
-        }
-        $cleanedInput = implode(' ', $filteredWords);
-        $column = array_unique($column); // Removes duplicates
-
-        // Get row in database where value is in $results
-        $data = DB::all($model);
-        $row = [];
-        foreach ($data as $d) {
-            foreach ($column as $c) {
-                in_array(strtolower($d[$c]),array_map('strtolower',$results)) ? $row[] = $d : null;
-            }
-            in_array(strtolower($d[$model->main]),array_map('strtolower',$results)) ? $row[] = $d : null;
-        }
-
-
-        // Removes duplicates for multidimensional array
-        $id = [];
-        $temp_row = [];
-        foreach ($row as $r) {
-            if(!in_array($r["id"],$id)){
-                array_push($id,$r["id"]);
-                array_push($temp_row,$r);
-            }
-        }
-        $row = $temp_row;
-
-        // in_array("ip",$column) ? $column = array_diff($column,["ip"]): null;
-        if(count($column)){
-            count($row) ? $reply = "" : $reply = "No matching data found. 0";
-            for ($i = 0; $i < count($row); $i++) {
-                if($model->table == "logs"){ // Add name of user if model is log
-                    // $user = new User;
-                    // if(count(DB::find($user,$row[$i]["uid"]))){
-                    //     $reply .= "<b>".DB::find($user,$row[$i]["uid"])[0]["name"]."</b>br|";
-                    // }else{
-                    //     $reply .= "<b>Deleted Account</b>br|";
-                    // }
-                }else{
-                    $reply .= "<b>--- ".$row[$i][$model->main]." ---</b>br|";
-                }
+            // Get row in database where value is in $results
+            $data = DB::all($model);
+            $row = [];
+            foreach ($data as $d) {
                 foreach ($column as $c) {
-                    for ($j = 0; $j < count($row); $j++) {
-                        if($row[$j][$model->main] == $row[$i][$model->main]){
-                            $reply .= "<b>".$c.": </b><i>".($row[$j][$c] != "-" ? $row[$j][$c] : "")."</i>br|";
+                    in_array(strtolower($d[$c]),array_map('strtolower',$results)) ? $row[] = $d : null;
+                }
+                in_array(strtolower($d[$model->main]),array_map('strtolower',$results)) ? $row[] = $d : null;
+            }
+
+
+            // Removes duplicates for multidimensional array
+            $id = [];
+            $temp_row = [];
+            foreach ($row as $r) {
+                if(!in_array($r["id"],$id)){
+                    array_push($id,$r["id"]);
+                    array_push($temp_row,$r);
+                }
+            }
+            $row = $temp_row;
+
+            // in_array("ip",$column) ? $column = array_diff($column,["ip"]): null;
+            if(count($column)){
+                count($row) ? $reply = "" : $reply = "No matching data found.1";
+                // for ($i = 0; $i < count($row); $i++) {
+                //     $reply .= "<b>--- ".$row[$i][$model->main]."</b>br|";
+                //     foreach ($column as $c) {
+                //         for ($j = 0; $j < count($row); $j++) {
+                //             if($row[$j][$model->main] == $row[$i][$model->main]){
+                //                 $reply .= "<b>".$c.": </b><i>".($row[$j][$c] != "-" ? $row[$j][$c] : "")."</i>br|";
+                //             }
+                //         }
+                //     }
+                //     $reply .= "br|";
+                // }
+                if(!count($row) && count($column)){
+                    $data = DB::all($model);
+                    count($data) ? $reply = "" : $reply = "No matching data found.2";
+                    foreach ($data as $d) {
+                        $reply .= "<b>--- ".$d[$model->main]."</b>br|";
+                        $reply .= "[<b>ID: </b><i>".$d["id"]."</i>br|";
+
+                        foreach ($column as $c) {
+                            $reply .= "[<b>".$c.": </b><i>".$d[$c]."</i>br|";
                         }
+                        $reply .= "br|";
                     }
                 }
-                $reply .= "br|";
-            }
-            if(!count($row) && count($column)){
-                $data = DB::all($model);
-                count($data) ? $reply = "" : $reply = "No matching data found. 00";
-                foreach ($data as $d) {
-                    $reply .= "<b>--- ".$d[$model->main]." ---</b>br|";
-                    foreach ($column as $c) {
-                        $reply .= "<b>".$c.": </b><i>".$d[$c]."</i>br|";
-                    }
-                    $reply .= "br|";
-                }
-            }
-            return $reply;
-        }else{
-            count($row) ? $reply = "" : $reply = "No matching data found. 1";
-            for ($i = 0; $i < count($row); $i++) {
-                if($model->table == "logs"){ // Add name of user if model is log
-                    // $user = new User;
-                    // if(count(DB::find($user,$row[$i]["uid"]))){
-                    //     $reply .= "<b>".DB::find($user,$row[$i]["uid"])[0]["name"]."</b>br|";
-                    // }else{
-                    //     $reply .= "<b>Deleted Account</b>br|";
-                    // }
-                }else{
-                    $reply .= "<b>--- ".$row[$i][$model->main]." ---</b>br|";
-                }
-                count($column) ? $reply .= "br|" : null;
-            }
-            if(!count($row) && count($results)){
-                $data = DB::all($model);
-                $row = [];
-                $fillable = [];
-
-                foreach ($data as $d) {
-                    foreach ($model->fillable as $fill) {
-                        if(in_array(strtolower($d[$fill]),array_map('strtolower',$results))){
-                            array_push($row,$d);
-                            !in_array($fill,$fillable) ? array_push($fillable,$fill) : null;
-                        }
-                    }
-                }
-
-                // Removes duplicates for multidimensional array
-                $id = [];
-                $temp_row = [];
-                foreach ($row as $r) {
-                    if(!in_array($r["id"],$id)){
-                        array_push($id,$r["id"]);
-                        array_push($temp_row,$r);
-                    }
-                }
-                $row = $temp_row;
-                count($row) ? $reply = "" : $reply = "No matching data found. 11";
-                foreach ($row as $r) {
-                    $reply .= "<b>--- ".$r[$model->main]." ---</b>br|";
-                    foreach ($fillable as $f) {
-                        $reply .= "<b>".$f.": </b><i>".$d[$f]."</i>br|";
-                    }
-                    $reply .= "br|";
-                }
-            }
-
-            if(!count($row) && !count($results)){
-                $data = DB::all($model);
-                count($data) ? $reply = "" : $reply = "No matching data found. 00";
-                foreach ($data as $d) {
-                    $reply .= "<b>--- ".$d[$model->main]." ---</b>br|";
-                    $reply .= "<b>ID: </b><i>".$d["id"]."</i>br|";
-                    $reply .= "<b>".$model->main.": </b><i>".$d[$model->main]."</i>br|";
-                    $reply .= "br|";
-                }
-            }
-
-            return $reply;
-            // return Identifier::breaker($reply);
-        }
-
-        // return ["table to be used","columns or fillable to be used","matching value in database using the query","row of from database which match the value of model->main"]
-        return [$table,$column,$results,$row];
-
-
-        
-
-
-        // return "⚠️ Unable to generate SQL from input.";
-    }
-
-    public static function breaker($reply){
-        $response = [];
-        $temp = explode("br|",$reply);
-        $temp_text = "";
-        foreach ($temp as $t) {
-            if(strlen($temp_text) > 3500 && strlen($temp_text) < 3600){
-                $response[] = $temp_text;
-                $temp_text = "";
+                return Identifier::label_replace($reply,$model);
+                // return Identifier::breaker($reply);
             }else{
-                $temp_text .= $t . "br|";
+                count($row) ? $reply = "" : $reply = "No matching data found.3";
+                if(!$findID && $cleanedInput){
+                    for ($i = 0; $i < count($row); $i++) {
+                        $reply .= "<b>--- ".$row[$i][$model->main]."</b>br|";
+                        $reply .= "[<b>ID: </b><i>".$row[$i]["id"]."</i>br|";
+                        $reply .= "[<b>".$model->main.": </b><i>".$row[$i][$model->main]."</i>br|";
+                        count($column) ? $reply .= "br|" : null;
+                    }
+                }
+                
+                if(!count($row) && count($results) && !$findID){
+                    $data = DB::all($model);
+                    $row = [];
+                    $fillable = [];
+
+                    foreach ($data as $d) {
+                        foreach ($model->fillable as $fill) {
+                            if(in_array(strtolower($d[$fill]),array_map('strtolower',$results))){
+                                array_push($row,$d);
+                                !in_array($fill,$fillable) ? array_push($fillable,$fill) : null;
+                            }
+                        }
+                    }
+
+                    // Removes duplicates for multidimensional array
+                    $id = [];
+                    $temp_row = [];
+                    foreach ($row as $r) {
+                        if(!in_array($r["id"],$id)){
+                            array_push($id,$r["id"]);
+                            array_push($temp_row,$r);
+                        }
+                    }
+                    $row = $temp_row;
+                    count($row) ? $reply = "" : $reply = "No matching data found.4";
+                    foreach ($row as $r) {
+                        $reply .= "<b>--- ".$r[$model->main]."</b>br|";
+                        $reply .= "[<b>ID: </b><i>".$r["id"]."</i>br|";
+                        foreach ($fillable as $f) {
+                            $reply .= "[<b>".$f.": </b><i>".$d[$f]."</i>br|";
+                        }
+                        $reply .= "br|";
+                    }
+                }
+
+                if(!count($row) && !count($results) && !$findID & !$cleanedInput){
+                    $data = DB::all($model);
+                    count($data) ? $reply = "" : $reply = "No matching data found.5";
+                    foreach ($data as $d) {
+                        $reply .= "<b>--- ".$d[$model->main]."</b>br|";
+                        $reply .= "[<b>ID: </b><i>".$d["id"]."</i>br|";
+                        $reply .= "[<b>".$model->main.": </b><i>".$d[$model->main]."</i>br|";
+                        $reply .= "br|";
+                    }
+                }
+
+                if($findID && $cleanedInput){
+                    $data = DB::find($model,$cleanedInput);
+                    count($data) ? $reply = "" : $reply = "No matching data found.6";
+                    foreach ($data as $d) {
+                        $reply .= "<b>--- ".$d[$model->main]."</b>br|";
+                        $reply .= "[<b>ID: </b><i>".$d["id"]."</i>br|";
+                        $reply .= "[<b>".$model->main.": </b><i>".$d[$model->main]."</i>br|";
+                        $reply .= "br|";
+                    }
+                }
+
+                return Identifier::label_replace($reply,$model);
+                // return Identifier::breaker($reply);
             }
+
+            // return ["table to be used","columns or fillable to be used","matching value in database using the query","row of from database which match the value of model->main"]
+            return [$table,$column,$results,$row];
         }
-        if($temp_text != ""){
-            $response[] = $temp_text;
+
+        public static function label_replace($reply,$model){
+            foreach ($model->label as $fillable => $label) {
+                $reply = str_replace($fillable,$label,$reply);
+            }
+            return $reply;
         }
-        return strlen($response[0]);
+
+        public static function breaker($reply){
+            $response = [];
+            $temp = explode("br|",$reply);
+            $temp_text = "";
+            foreach ($temp as $t) {
+                if(strlen($temp_text) > 3500 && strlen($temp_text) < 3600){
+                    $response[] = $temp_text;
+                    $temp_text = "";
+                }else{
+                    $temp_text .= $t . "br|";
+                }
+            }
+            if($temp_text != ""){
+                $response[] = $temp_text;
+            }
+            return strlen($response[0]);
+        }
     }
-}
 ?>
