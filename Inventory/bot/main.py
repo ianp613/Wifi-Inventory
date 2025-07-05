@@ -84,6 +84,11 @@ async def reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
                             )
                 else:
                     # It's a JSON string or object, not an array
+                    parsed = parsed.replace("[", "   ")
+                    parsed = parsed.replace("---", "🍂")
+                    parsed = parsed.replace("\\", "")
+                    parsed = parsed.replace("br|", "\n")
+                    parsed = parsed.strip('"')
                     await update.message.reply_text(str(parsed), parse_mode="HTML")
 
             except json.JSONDecodeError:
