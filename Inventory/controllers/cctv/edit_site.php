@@ -35,8 +35,8 @@
                     }
                 }
 
-                if(file_exists("../../assets/img/maps_output/".$location2->map_location.".png")){
-                    unlink("../../assets/img/maps_output/".$location2->map_location.".png");
+                if(file_exists(str_replace("maps","maps_output",$location2->floorplan))){
+                    unlink(str_replace("maps","maps_output",$location2->floorplan));
                 }
 
                 if($file_uploaded){
@@ -96,8 +96,8 @@
                 }
             }
 
-            if(file_exists("../../assets/img/maps_output/".$location2->map_location.".png")){
-                unlink("../../assets/img/maps_output/".$location2->map_location.".png");
+            if(file_exists(str_replace("maps","maps_output",$location2->floorplan))){
+                unlink(str_replace("maps","maps_output",$location2->floorplan));
             }
             
             if($file_uploaded){

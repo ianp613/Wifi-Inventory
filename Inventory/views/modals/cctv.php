@@ -51,6 +51,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title">Edit CCTV Site</h6>
+                <button id="delete_cctv_map_btn" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></button>
             </div>
             <div class="modal-body">
                 <label for="edit_map_location" class="mb-2">Location</label>
@@ -247,6 +248,31 @@
             </div>
             <div class="modal-footer">
                 <div class="w-100 f-13 text-danger"><i>*Note: select a camera from the unassigned list to add it to the map.</i></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- DELETE CCTV MODAL -->
+<div class="modal fade" id="delete_cctv_map" tabindex="-1">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <div class="w-100">
+                    <span class="fa fa-exclamation-triangle text-danger h2"></span>
+                    <h5 id="delete_cctv_map_title" class="modal-title fw-bolder">Delete Map</h5>    
+                </div>
+            </div>
+            <div class="modal-body text-center">
+                <div class="w-100">
+                    <div>You're going to delete cctv map "<b><span id="delete_cctv_map_name">MAP</span></b>".</div>
+                    <div>All of the camera will also be deleted, this can't be undone. Do you wish to proceed?</div>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#edit_cctv_map"><span class="fa fa-remove"></span> No</button>
+                <button id="delete_cctv_map_btn_proceed" type="button" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span> Yes</button>
             </div>
         </div>
     </div>

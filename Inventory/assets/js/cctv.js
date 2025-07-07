@@ -52,6 +52,7 @@ if(document.getElementById("cctv")){
     const ctx = canvas.getContext("2d");
     const add_cctv_map_modal = new bootstrap.Modal(document.getElementById('add_cctv_map'),unclose);
     const edit_cctv_map_modal = new bootstrap.Modal(document.getElementById('edit_cctv_map'),unclose);
+    const delete_cctv_map_modal = new bootstrap.Modal(document.getElementById('delete_cctv_map'),unclose); 
     const manage_camera_modal = new bootstrap.Modal(document.getElementById('manage_camera'),unclose);
     const camera_list_modal = new bootstrap.Modal(document.getElementById('camera_list'),unclose);
 
@@ -66,6 +67,11 @@ if(document.getElementById("cctv")){
     var edit_map_location = document.getElementById("edit_map_location")
     var edit_floorplan = document.getElementById("edit_floorplan")
     var edit_map_remarks = document.getElementById("edit_map_remarks")
+
+    var delete_cctv_map_btn = document.getElementById("delete_cctv_map_btn");
+    var delete_cctv_map_little = document.getElementById("delete_cctv_map_little");
+    var delete_cctv_map_name = document.getElementById("delete_cctv_map_name");
+    var delete_cctv_map_btn_proceed = document.getElementById("delete_cctv_map_btn_proceed");
 
     var manage_camera_btn = document.getElementById("manage_camera_btn")
 
@@ -133,6 +139,7 @@ if(document.getElementById("cctv")){
         formData.append("map_location",edit_map_location.value)
         formData.append("map_remarks",edit_map_remarks.value)
         sole.file("../../controllers/cctv/edit_site.php",formData)
+
         .then(res => {
             edit_cctv_map_modal.hide()
             bs5.toast(res.type,res.message,res.size)
@@ -149,6 +156,19 @@ if(document.getElementById("cctv")){
                 loadMAP_CAMERA()
                 saveCanvas()    
             }
+        })
+    })
+
+    delete_cctv_map_btn.addEventListener("click",function(){
+        edit_cctv_map_modal.hide();
+        delete_cctv_map_modal.show();
+    })
+
+    delete_cctv_map_btn_proceed.addEventListener("click",function(){
+        sole.post("../../controllers/cctv/delete_site.php",{
+            id: this.getAttribute("lid")
+        }).then(res => {
+            console.log(res)
         })
     })
 
@@ -185,6 +205,8 @@ if(document.getElementById("cctv")){
                 edit_map_location.value = res.site[0].map_location
                 edit_map_remarks.value = res.site[0].remarks != "-" ? res.site[0].remarks : null
                 edit_cctv_map_modal.show()
+                delete_cctv_map_name.innerText = e.target.innerText;
+                delete_cctv_map_btn_proceed.setAttribute("lid",e.target.getAttribute("id"))
                 edit_site_btn.setAttribute("lid",e.target.getAttribute("id"))
             })
         }

@@ -40,6 +40,7 @@
             $reply_type = "string";
             $reply_file = "";
             $findID = preg_match('/\bid\b/i', $input) === 1;
+            $input = str_replace("id","",$input);
             $table = $model->table;
             $fillable = $model->fillable;
             $ignore = $model->ignore;
@@ -148,6 +149,7 @@
 
             // in_array("ip",$column) ? $column = array_diff($column,["ip"]): null;
             // return ["string",count($column),""];
+            // return implode(" ",$column);
             if(count($column)){
                 count($row) ? $reply = "" : $reply = "No matching data found.1";
                 // for ($i = 0; $i < count($row); $i++) {
