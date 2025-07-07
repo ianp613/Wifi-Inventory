@@ -106,27 +106,33 @@ if(document.getElementById("cctv")){
     var cameraList = null;
     var camera_list_title = document.getElementById("camera_list_title")
 
-
     sole.get("../../controllers/cctv/get_site.php").then(res => loadSite(res))
 
     add_site_btn.addEventListener("click",function(){
-        !map_location.value ? bs5.toast("warning","Please input map location.") : null
-        floorplan.files.length > 0 ? null : bs5.toast("warning","Please select floor plan.")
+        if(map_location.value){
+            if(floorplan.files.length > 0){
+                const formData = new FormData();
+                formData.append("uid",localStorage.getItem("userid"))
+                formData.append("file",floorplan.files[0])
+                formData.append("map_location",map_location.value)
+                formData.append("map_remarks",map_remarks.value)
+                sole.file("../../controllers/cctv/add_site.php",formData)
+                .then(res => {
+                    add_cctv_map_modal.hide()
+                    bs5.toast(res.type,res.message,res.size)
+                    map_location.value = ""
+                    floorplan.value = ""
+                    map_remarks.value = ""
+                    loadSite(res)
+                })    
+            }else{
+                bs5.toast("warning","Please select floor plan.")
+            }
+        }else{
+            bs5.toast("warning","Please input map location.")
+        }
 
-        const formData = new FormData();
-        formData.append("uid",localStorage.getItem("userid"))
-        formData.append("file",floorplan.files[0])
-        formData.append("map_location",map_location.value)
-        formData.append("map_remarks",map_remarks.value)
-        sole.file("../../controllers/cctv/add_site.php",formData)
-        .then(res => {
-            add_cctv_map_modal.hide()
-            bs5.toast(res.type,res.message,res.size)
-            map_location.value = ""
-            floorplan.value = ""
-            map_remarks.value = ""
-            loadSite(res)
-        })
+        
     })
 
     edit_site_btn.addEventListener("click",function(){
@@ -168,11 +174,19 @@ if(document.getElementById("cctv")){
         sole.post("../../controllers/cctv/delete_site.php",{
             id: this.getAttribute("lid")
         }).then(res => {
-            console.log(res)
+            bs5.toast(res.type,res.message,res.size)
+            if(cctv_dropdown_toggle.getAttribute("lid") == this.getAttribute("lid")){
+                cctv_dropdown_toggle.innerText = "-- Select Map --"
+            }
+            ctx.clearRect(0, 0, 0, 0);
+            canvas.setAttribute("hidden","true")
+            save_map_btn.setAttribute("hidden","true")
+            loadSite(res)
         })
     })
 
     function loadSite(res){
+        console.log(res)
         cctv_dropdown.innerHTML = ""
         res.cctvs.forEach(cctv => {
             cctv_dropdown.innerHTML += "<li><a href=\"#\" class=\"dropdown-item\" id=\""+ cctv["id"] +"\" size=\""+ cctv["camera_size"] +"\">"+ cctv["map_location"] +"</a></li>"
