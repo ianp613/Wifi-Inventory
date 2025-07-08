@@ -8,7 +8,11 @@ input[readonly] {
     box-shadow: none;
     outline: none;
 }
-
+.form-control-nooutline{
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
 .form-select:focus {
     box-shadow: none;
     outline: none;

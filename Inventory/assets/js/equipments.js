@@ -30,6 +30,7 @@ if(document.getElementById("equipments")){
     const delete_entry_modal = new bootstrap.Modal(document.getElementById('delete_entry'),unclose);
     const edit_entry_modal = new bootstrap.Modal(document.getElementById('edit_entry'),unclose);
     const for_status_modal = new bootstrap.Modal(document.getElementById('for_status'),unclose);
+    const barcode_camera_modal = new bootstrap.Modal(document.getElementById('barcode_camera'),unclose);
     var add_entry_title = document.getElementById('add_entry_title');
     var delete_equipment_btn = document.getElementById('delete_equipment_btn')
     var delete_equipment_name = document.getElementById('delete_equipment_name')
@@ -41,6 +42,9 @@ if(document.getElementById("equipments")){
     var add_equipment_select = document.getElementById('add_equipment_select')
     var add_equipment_input = document.getElementById('add_equipment_input')
     var add_equipment_btn = document.getElementById('add_equipment_btn')
+
+    var barcode_scanner_btn = document.getElementById("barcode_scanner_btn");
+    var cancel_barcode_scanner_btn = document.getElementById("cancel_barcode_scanner_btn");
 
     sole.get("../../controllers/get_list.php")
     .then(res => {
@@ -204,6 +208,7 @@ if(document.getElementById("equipments")){
                 edit_entry_modal.hide();
                 edit_entry_description_input.value = ""
                 edit_entry_model_no_input.value = ""
+                add_entry_barcode_input.value = ""
                 edit_entry_barcode_input.value = ""
                 edit_entry_specifications_input.value = ""
                 edit_entry_status_input.value = ""
@@ -395,4 +400,49 @@ if(document.getElementById("equipments")){
             equipment_dropdown.innerHTML += "<li><a href=\"#\" class=\"dropdown-item\" id=\""+ equipment["id"] +"\" >"+ equipment["name"] +"</a></li>"
         });
     }
+    barcode_scanner_btn.addEventListener("click",function(){
+        barcode_camera_modal.show()
+        startBarcodeScanner()
+    })
+    cancel_barcode_scanner_btn.addEventListener("click",function(){
+        barcode_camera_modal.hide();
+        stopScanner();
+    })
+
+    function startBarcodeScanner() {
+            Quagga.init({
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: document.querySelector('#scanner'),
+                    constraints: {
+                        facingMode: "environment" // Use rear camera
+                    }
+                },
+                decoder: {
+                    readers: ["code_128_reader", "ean_reader", "ean_8_reader"]
+                }
+            }, function(err) {
+                if (err) {
+                    console.error("Quagga init error:", err);
+                    return;
+                }
+                Quagga.start();
+            });
+
+            Quagga.onDetected(onDetectedHandler);
+        }
+        function stopScanner() {
+            Quagga.stop();
+            Quagga.offDetected(onDetectedHandler);
+        }
+
+        function onDetectedHandler(result) {
+            const code = result.codeResult.code;
+            console.log(code)
+            add_entry_barcode_input.value = code
+            edit_entry_barcode_input.value = code
+            stopScanner(); // Stop after successful scan
+            barcode_camera_modal.hide();
+        }
 }

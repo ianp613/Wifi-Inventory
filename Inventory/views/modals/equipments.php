@@ -85,7 +85,12 @@
                     </div>
                     <div class="col-md-6">
                         <label for="add_entry_barcode_input" class="mb-2">Barcode (FPOSI)</label>
-                        <input required style="text-transform: uppercase" type="text" name="" id="add_entry_barcode_input" class="form-control">
+
+                        <div class="btn-group form-control m-0 p-0 form-control-nooutline">
+                            <input required style="text-transform: uppercase" type="text" name="" id="add_entry_barcode_input" class="form-control">
+                            <button class="btn btn-dark" id="barcode_scanner_btn"><span class="fa fa-camera"></span></button>
+                        </div>
+                        
                     </div>
                 </div>
                 <div class="row mt-2">
@@ -257,6 +262,25 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm"><span class="fa fa-download"></span> Download</button>
                 <button id="edit_equipment_btn" type="button" class="btn btn-primary btn-sm"><span class="fa fa-print"></span> Print</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="barcode_camera"  tabindex="-1">
+    <div class="modal-dialog modal-fullscreen modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">BARCODE SCANNER</div>
+            </div>
+            <div class="modal-body">
+                <div class="w-100 bg-primary">
+                    <div id="scanner" style="position: absolute; left: 50%; transform: translateX(-50%);"></div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-dark form-control" id="cancel_barcode_scanner_btn"> <span class="fa fa-remove"></span> Cancel</button>
             </div>
         </div>
     </div>

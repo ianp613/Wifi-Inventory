@@ -14,7 +14,7 @@
                 "cctv" => new CCTV_Camera()
             ];
 
-            $ignore = ["en", "ent","me"];  // Add any more short tokens here
+            $ignore = ["en", "ent","nt","me"];  // Add any more short tokens here
 
             // $input_temp = strtolower(trim($input));
             // $in = explode("in", $input);
@@ -58,13 +58,11 @@
                     }
                 }
             }
-            // return $values;
-
 
             // Get all matching data from database that are in the $input
             $input = strtolower(trim($input));
             $words = preg_split('/\s+/', $input);
-            $ignored = ["table","column","from","someone","some","which","something","everyone","everything","every","log","can","provide","their","you","please","find","of","is","me","and","equal","value", "give","also", "all", "in", "on","=","than","less","greater","at", "to", "the", "show", "list", "data","who","have","has","been", "using", "with", "for","map","that"];
+            $ignored = ["table","or","column","from","someone","some","which","something","everyone","everything","every","log","can","provide","their","you","please","find","of","is","me","and","equal","value", "give","also", "all", "in", "on","=","than","less","greater","at", "to", "the", "show", "list", "data","who","have","has","been", "using", "with", "for","map","that"];
             $results = [];
             foreach ($words as $word) {
                 if (strlen($word) < 2 || in_array($word, $ignored)) continue;
@@ -75,7 +73,6 @@
                 }
             }
             $results = array_unique($results); // Removes duplicates
-
 
 
             if(!$findID){
@@ -122,8 +119,11 @@
             // remove all character from the remaining string in &input except numeric and use only the first occurence or numeric value
             if($findID){
                 preg_match_all('/\d+/', $cleanedInput, $matches);
-                $numbers = $matches[0];
-                $cleanedInput = $numbers[0];
+                if(count($matches[0])){
+                    $numbers = $matches[0];
+                    $cleanedInput = $numbers[0];    
+                }
+                
             }
 
             // Get row in database where value is in $results
@@ -136,6 +136,7 @@
                 in_array(strtolower($d[$model->main]),array_map('strtolower',$results)) ? $row[] = $d : null;
             }
 
+
             // Removes duplicates for multidimensional array
             $id = [];
             $temp_row = [];
@@ -147,22 +148,13 @@
             }
             $row = $temp_row;
 
+
             // in_array("ip",$column) ? $column = array_diff($column,["ip"]): null;
             // return ["string",count($column),""];
-            // return implode(" ",$column);
+            // return ["string",$findID];
+
             if(count($column)){
                 count($row) ? $reply = "" : $reply = "No matching data found.1";
-                // for ($i = 0; $i < count($row); $i++) {
-                //     $reply .= "<b>--- ".$row[$i][$model->main]."</b>br|";
-                //     foreach ($column as $c) {
-                //         for ($j = 0; $j < count($row); $j++) {
-                //             if($row[$j][$model->main] == $row[$i][$model->main]){
-                //                 $reply .= "<b>".$c.": </b><i>".($row[$j][$c] != "-" ? $row[$j][$c] : "")."</i>br|";
-                //             }
-                //         }
-                //     }
-                //     $reply .= "br|";
-                // }
                 if(!count($row) && count($column)){
                     $data = DB::all($model);
                     count($data) ? $reply = "" : $reply = "No matching data found.2";
@@ -176,6 +168,19 @@
                         $reply .= "br|";
                     }
                 }
+                if(count($row) && count($column)){
+                    for ($i = 0; $i < count($row); $i++) {
+                        $reply .= "<b>--- ".$row[$i][$model->main]."</b>br|";
+                        foreach ($column as $c) {
+                            for ($j = 0; $j < count($row); $j++) {
+                                if($row[$j][$model->main] == $row[$i][$model->main]){
+                                    $reply .= "<b>".$c.": </b><i>".($row[$j][$c] != "-" ? $row[$j][$c] : "")."</i>br|";
+                                }
+                            }
+                        }
+                        $reply .= "br|";
+                    }
+                }
                 return [$reply_type,Identifier::label_replace($reply,$model),$reply_file];
                 // return Identifier::breaker($reply);
             }else{
@@ -185,6 +190,8 @@
                         $reply .= "<b>--- ".$row[$i][$model->main]."</b>br|";
                         $reply .= "[<b>ID: </b><i>".$row[$i]["id"]."</i>br|";
                         $reply .= "[<b>".$model->main.": </b><i>".$row[$i][$model->main]."</i>br|";
+                        $model->table == "ip_address" ? $reply .= "[<b>IP: </b><i>".$row[$i]["ip"]."</i>br|" : null;
+
                         count($column) ? $reply .= "br|" : null;
                     }
                 }
