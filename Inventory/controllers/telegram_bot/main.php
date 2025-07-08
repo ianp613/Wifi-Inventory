@@ -52,7 +52,7 @@ if (isset($_POST['message'])) {
         $batchPath = realpath(__DIR__ . '/../../_ngrok/get_tunnels.bat');
         shell_exec("start \"\" \"$batchPath\"");
         sleep(1);
-        $tunnels = file_get_contents("../../_ngrok/tunnels.json");
+        $tunnels = file_get_contents("tunnels.json");
         $data = json_decode($tunnels, true);
         echo json_encode($data['tunnels'][0]['public_url']);
     }
