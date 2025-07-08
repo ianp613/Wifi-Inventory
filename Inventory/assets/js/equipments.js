@@ -44,6 +44,7 @@ if(document.getElementById("equipments")){
     var add_equipment_btn = document.getElementById('add_equipment_btn')
 
     var barcode_scanner_btn = document.getElementById("barcode_scanner_btn");
+    var barcode_scanner_btn_edit = document.getElementById("barcode_scanner_btn_edit");
     var cancel_barcode_scanner_btn = document.getElementById("cancel_barcode_scanner_btn");
 
     sole.get("../../controllers/get_list.php")
@@ -401,6 +402,10 @@ if(document.getElementById("equipments")){
         });
     }
     barcode_scanner_btn.addEventListener("click",function(){
+        barcode_camera_modal.show()
+        startBarcodeScanner()
+    })
+    barcode_scanner_btn_edit.addEventListener("click",function(){
         barcode_camera_modal.show()
         startBarcodeScanner()
     })

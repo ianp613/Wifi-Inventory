@@ -16,5 +16,17 @@ echo.
 echo System will be running in http://%host%:%port%
 pause
 
+:: Save host and port to bot\config.json
+(
+    echo {
+    echo     "host": "%host%",
+    echo     "port": "%port%"
+    echo }
+) > "%~dp0bot\config.json"
+
+:: run telegram bot pyton
+start "" cmd /c "cd /d %~dp0bot && serve.bat"
+start "" cmd /c "cd /d %~dp0_ngrok && serve.bat"
+
 start msedge http://%host%:%port%
 php -S %host%:%port%

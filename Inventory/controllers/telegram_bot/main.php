@@ -17,6 +17,8 @@ if (isset($_POST['message'])) {
     if (!file_exists($telebot) || filesize($telebot) === 0) {
         file_put_contents($telebot, "false");
     }
+
+
     if(strtolower($message_temp[0]) == "notes" || strtolower($message_temp[0]) == "note"){
         echo json_encode(file_get_contents($file));
     }elseif(strtolower($message_temp[0]) == "notes update" || strtolower($message_temp[0]) == "notes edit" || strtolower($message) == "note update" || strtolower($message) == "note edit"){
@@ -46,6 +48,13 @@ if (isset($_POST['message'])) {
         }else{
             echo json_encode("--- There is nothing to undo.");
         }
+    }elseif(strtolower($message_temp[0]) == "ngrok tunnel"){
+        $batchPath = realpath(__DIR__ . '/../../_ngrok/get_tunnels.bat');
+        shell_exec("start \"\" \"$batchPath\"");
+        sleep(1);
+        $tunnels = file_get_contents("../../_ngrok/tunnels.json");
+        $data = json_decode($tunnels, true);
+        echo json_encode($data['tunnels'][0]['public_url']);
     }
     else{
         echo json_encode(Identifier::main($message), JSON_UNESCAPED_UNICODE);

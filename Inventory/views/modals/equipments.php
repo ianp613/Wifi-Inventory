@@ -140,7 +140,12 @@
                     </div>
                     <div class="col-md-6">
                         <label for="edit_entry_barcode_input" class="mb-2">Barcode (FPOSI)</label>
-                        <input required style="text-transform: uppercase" type="text" name="" id="edit_entry_barcode_input" class="form-control">
+
+                        <div class="btn-group form-control m-0 p-0 form-control-nooutline">
+                            <input required style="text-transform: uppercase" type="text" name="" id="edit_entry_barcode_input" class="form-control">
+                            <button class="btn btn-dark" id="barcode_scanner_btn_edit"><span class="fa fa-camera"></span></button>
+                        </div>
+                        
                     </div>
                 </div>
                 <div class="row mt-2">
