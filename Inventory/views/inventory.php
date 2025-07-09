@@ -112,6 +112,8 @@
                                     echo "<span class=\"fa fa-map-marker\"></span> IP Address";
                                 }elseif($_GET["loc"] == "logs"){
                                     echo "<span class=\"fa fa-list\"></span> Activity Logs";
+                                }elseif($_GET["loc"] == "artisanry"){
+                                    echo "<span class=\"fa fa-wrench\"></span> Artisanry";
                                 }elseif($_GET["loc"] == "cctv"){
                                     echo "<span class=\"fa fa-video-camera\"></span> CCTV";
                                 }elseif($_GET["loc"] == "accounts"){
@@ -135,6 +137,7 @@
                             <li id="account"><a class="dropdown-item f-13" href="#"><span class="fa fa-user me-2 text-secondary" style="width: 12px;"></span> Account</a></li>
                             <li id="settings"><a class="dropdown-item f-13" href="#"><span class="fa fa-gears me-2 text-secondary" style="width: 12px;"></span> Settings</a></li>
                             <li id="activity_log"><a class="dropdown-item f-13" href="#"><span class="fa fa-list me-2 text-secondary" style="width: 12px;"></span> Activity Logs</a></li>
+                            <li id="artisanry"><a class="dropdown-item f-13" href="#"><span class="fa fa-wrench me-2 text-secondary" style="width: 12px;"></span> Artisanry</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li id="logout"><a class="dropdown-item f-13"><span class="fa fa-sign-out me-2 text-secondary" style="width: 12px;"></span> Log Out</a></li>
                         </ul>
@@ -156,6 +159,8 @@
                             include("routers/routers.php");
                         }elseif($_GET["loc"] == "logs"){
                             include("logs/logs.php");
+                        }elseif($_GET["loc"] == "artisanry"){
+                            include("artisanry/artisanry.php");
                         }elseif($_GET["loc"] == "accounts"){
                             if($_SESSION["privileges"] == "Administrator"){
                                 include("administrator/accounts.php");
@@ -186,6 +191,7 @@
         <?php include("modals/settings.php"); ?>
         <?php include("modals/accounts.php"); ?>
         <?php include("modals/logs.php"); ?>
+        <?php include("modals/artisanry.php"); ?>
         <script src="../assets/js/jquery/jquery-3.7.1.js"></script>
         <script src="../assets/js/popper/popper.min.js"></script>
         <script src="../assets/js/datatables/datatables.min.js"></script>
@@ -202,7 +208,7 @@
         <script src="../assets/js/isp.js"></script>
         <script src="../assets/js/accounts.js"></script>
         <script src="../assets/js/activity_log.js"></script>
+        <script src="../assets/js/artisanry.js"></script>
         <script src="../assets/js/modal_alert.js"></script>
-        
     </body>
 </html>

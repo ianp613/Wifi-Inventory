@@ -17,7 +17,8 @@ if(document.getElementById("equipments")){
         autoWidth: false,
         language: {
            sLengthMenu: "Show _MENU_entries",
-           search: "<button id=\"for_status_btn\" data-bs-toggle=\"modal\" data-bs-target=\"#for_status\" style=\"margin-right: 20px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span id=\"for_status_count\" class=\"position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger\"></span><span class=\" fa fa-file-pdf-o\"></span> For Status</button>   Search: "
+        //    search: "Search: "
+           search: "<button hidden id=\"for_status_btn\" data-bs-toggle=\"modal\" data-bs-target=\"#for_status\" style=\"margin-right: 20px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span id=\"for_status_count\" class=\"position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger\"></span><span class=\" fa fa-file-pdf-o\"></span> For Status</button>   Search: "
         }
     });
 

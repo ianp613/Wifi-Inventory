@@ -483,3 +483,12 @@ input:checked + .slider:before {
 .blink {
     animation: blinkMe 1s linear infinite;
 }
+
+.artisanry-menu{
+    cursor: pointer;
+    padding: 10px;
+    transition: transform 0.3s ease;
+}
+.artisanry-menu:hover{
+    transform: scale(1.1);
+}
