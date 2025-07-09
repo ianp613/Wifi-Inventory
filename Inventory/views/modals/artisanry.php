@@ -33,6 +33,8 @@
                     <label for="qr_key" class="mb-2 mt-2">Wifi Key</label>
                     <input required type="text" name="qr_key" id="qr_key" class="form-control">
                 </div>
+                <label for="qr_custom_logo" class="mb-2 mt-2">Custom Logo</label>
+                <input required accept="image/*" type="file" name="qr_custom_logo" id="qr_ssid" class="form-control">
             </div>
             <div class="modal-footer">
                 <button class="w-100 btn btn-success"><span class="fa fa-qrcode"></span> Generate</button>
