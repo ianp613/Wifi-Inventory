@@ -9,14 +9,14 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label for="qr_type">QR Type</label>
-                        <select name="qr_type" id="" class="form-control mt-2">
+                        <select name="qr_type" id="qr_type" class="form-control mt-2 mb-2">
                             <option value="text">Text QR Code</option>
                             <option value="wifi">Wifi QR Code</option>
                         </select>    
                     </div>
                     <div class="col-md-6">
                         <label for="qr_logo_overlay">Logo Overlay</label>
-                        <select name="qr_logo_overlay" id="" class="form-control mt-2">
+                        <select name="qr_logo_overlay" id="qr_logo_overlay" class="form-control mt-2">
                             <option value="none">None</option>
                             <option value="default">Default Logo</option>
                             <option value="custom">Custom Logo</option>
@@ -24,20 +24,22 @@
                     </div>
                 </div>
                 <div id="qr_type_text">
-                    <label for="qr_text" class="mb-2 mt-2">Text <i class="f-13">(Max Length: 300 Characters)</i></label>
-                    <textarea maxlength="300" rows="5" name="" id="qr_text" class="form-control" placeholder="Aa"></textarea>
+                    <label for="qr_text" class="mb-2">Text <i class="f-13">(Max Length: 300 Characters)</i></label>
+                    <textarea maxlength="300" rows="5" name="qr_text" id="qr_text" class="form-control" placeholder="Aa"></textarea>
                 </div>
-                <div id="qr_type_wifi">
+                <div hidden id="qr_type_wifi">
                     <label for="qr_ssid" class="mb-2 mt-2">Wifi SSID</label>
                     <input required type="text" name="qr_ssid" id="qr_ssid" class="form-control">
                     <label for="qr_key" class="mb-2 mt-2">Wifi Key</label>
                     <input required type="text" name="qr_key" id="qr_key" class="form-control">
                 </div>
-                <label for="qr_custom_logo" class="mb-2 mt-2">Custom Logo</label>
-                <input required accept="image/*" type="file" name="qr_custom_logo" id="qr_ssid" class="form-control">
+                <div hidden id="qr_custom_logo_display">
+                    <label for="qr_custom_logo" class="mb-2 mt-2">Custom Logo</label>
+                    <input required accept="image/*" type="file" name="qr_custom_logo" id="qr_custom_logo" class="form-control">    
+                </div>
             </div>
             <div class="modal-footer">
-                <button class="w-100 btn btn-success"><span class="fa fa-qrcode"></span> Generate</button>
+                <button id="qr_generate_btn" class="w-100 btn btn-success"><span class="fa fa-qrcode"></span> Generate</button>
             </div>
         </div>
     </div>
