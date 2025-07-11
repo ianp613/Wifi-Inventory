@@ -7,6 +7,11 @@ namespace Composer\Autoload;
 class ComposerStaticInitdf457f6088e865ee4c2005a5b0dcf4a9
 {
     public static $prefixLengthsPsr4 = array (
+        'c' => 
+        array (
+            'chillerlan\\Settings\\' => 20,
+            'chillerlan\\QRCode\\' => 18,
+        ),
         'Z' => 
         array (
             'ZipStream\\' => 10,
@@ -31,6 +36,14 @@ class ComposerStaticInitdf457f6088e865ee4c2005a5b0dcf4a9
     );
 
     public static $prefixDirsPsr4 = array (
+        'chillerlan\\Settings\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/chillerlan/php-settings-container/src',
+        ),
+        'chillerlan\\QRCode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/chillerlan/php-qrcode/src',
+        ),
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',

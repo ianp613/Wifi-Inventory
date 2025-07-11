@@ -1,1 +1,0 @@
-2021-05-08 02:01:43: imagepng(addons/filessample/HI.png): Failed to open stream: No such file or directory2021-05-08 02:02:21: imagepng(addons/filessample/HI.png): Failed to open stream: No such file or directory
