@@ -8,9 +8,66 @@ if(document.getElementById("artisan")){
     const qr_generator_modal = new bootstrap.Modal(document.getElementById('qr_generator_modal'),unclose);
     qr_generator_modal.show()
 
+    var qr_type = document.getElementById("qr_type");
+    var qr_generate_btn = document.getElementById("qr_generate_btn")
+    var qr_text_container = document.getElementById("qr_text_container")
+    var qr_wifi_container = document.getElementById("qr_wifi_container")
+
+    var qr_text = document.getElementById("qr_text")
+    var qr_color = document.getElementById("qr_color")
+    
+    var qr_encryption = document.getElementById("qr_encryption")
+    var qr_password_container = document.getElementById("qr_password_container")
+    var qr_password = document.getElementById("qr_password")
+
+    var qr_preview = document.getElementById("qr_preview")
+
+    var containers = [
+        qr_text_container,
+        qr_wifi_container
+    ]
+
+    qr_type.addEventListener("change",function(){
+        containers[parseInt(this.value)].removeAttribute("hidden")
+        for (let index = 0; index < containers.length; index++) {
+            if(index != this.value){
+                containers[index].setAttribute("hidden","true")
+            }
+        }
+    })
+
+    qr_encryption.addEventListener("change",function(){
+        if(this.value != "none"){
+            qr_password_container.removeAttribute("hidden")
+        }else{
+            qr_password.value = ""
+            qr_password_container.setAttribute("hidden","true")
+        }
+    })
+
+    qr_generate_btn.addEventListener("click",function(){
+        const formData = new FormData();
+        formData.append("qr_type", qr_type.value); 
+        formData.append("qr_color", qr_color.value); 
+
+        if(qr_type.value = "0"){
+           formData.append("qr_text", qr_text.value); 
+        }
+
+        sole.file("../../controllers/artisanry/qr_generate.php",formData)
+        .then(res => {
+            console.log(res)
+            qr_preview.classList.remove("image-wrapper")
+            qr_preview.innerHTML = '<img src="'+res.image+'">'
+        })
+    })
+
+    
+
+
     // var qr_generator = document.getElementById("qr_generator");
 
-    // var qr_type = document.getElementById("qr_type");
+    // 
     // var qr_type_text = document.getElementById("qr_type_text");
     // var qr_text = document.getElementById("qr_text");
     // var qr_type_wifi = document.getElementById("qr_type_wifi");

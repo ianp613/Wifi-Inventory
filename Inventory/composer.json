@@ -4,6 +4,6 @@
         "ext-fileinfo": "*",
         "phpoffice/phpspreadsheet": "^4.2",
         "phpmailer/phpmailer": "^6.10",
-        "chillerlan/php-qrcode": "^5.0"
+        "amirezaeb/heroqr": "^1.1"
     }
 }

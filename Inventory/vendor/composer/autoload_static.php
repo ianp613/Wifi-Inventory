@@ -7,11 +7,6 @@ namespace Composer\Autoload;
 class ComposerStaticInitdf457f6088e865ee4c2005a5b0dcf4a9
 {
     public static $prefixLengthsPsr4 = array (
-        'c' => 
-        array (
-            'chillerlan\\Settings\\' => 20,
-            'chillerlan\\QRCode\\' => 18,
-        ),
         'Z' => 
         array (
             'ZipStream\\' => 10,
@@ -28,22 +23,30 @@ class ComposerStaticInitdf457f6088e865ee4c2005a5b0dcf4a9
         array (
             'Matrix\\' => 7,
         ),
+        'H' => 
+        array (
+            'HeroQR\\' => 7,
+        ),
+        'E' => 
+        array (
+            'Endroid\\QrCode\\' => 15,
+        ),
+        'D' => 
+        array (
+            'DASPRiD\\Enum\\' => 13,
+        ),
         'C' => 
         array (
             'Composer\\Pcre\\' => 14,
             'Complex\\' => 8,
         ),
+        'B' => 
+        array (
+            'BaconQrCode\\' => 12,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'chillerlan\\Settings\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/chillerlan/php-settings-container/src',
-        ),
-        'chillerlan\\QRCode\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/chillerlan/php-qrcode/src',
-        ),
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
@@ -73,6 +76,18 @@ class ComposerStaticInitdf457f6088e865ee4c2005a5b0dcf4a9
         array (
             0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
         ),
+        'HeroQR\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/amirezaeb/heroqr/src',
+        ),
+        'Endroid\\QrCode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/endroid/qr-code/src',
+        ),
+        'DASPRiD\\Enum\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dasprid/enum/src',
+        ),
         'Composer\\Pcre\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/pcre/src',
@@ -80,6 +95,10 @@ class ComposerStaticInitdf457f6088e865ee4c2005a5b0dcf4a9
         'Complex\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
+        ),
+        'BaconQrCode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/bacon/bacon-qr-code/src',
         ),
     );
 
