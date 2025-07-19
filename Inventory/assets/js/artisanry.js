@@ -5,6 +5,7 @@ artisanry.addEventListener("click",function(){
 })
 
 if(document.getElementById("artisan")){
+    // QR GENERATOR SECTION
     const qr_generator_modal = new bootstrap.Modal(document.getElementById('qr_generator_modal'),unclose);
     qr_generator_modal.show()
 
@@ -45,22 +46,35 @@ if(document.getElementById("artisan")){
         }
     })
 
-    qr_generate_btn.addEventListener("click",function(){
-        const formData = new FormData();
-        formData.append("qr_type", qr_type.value); 
-        formData.append("qr_color", qr_color.value); 
 
-        if(qr_type.value = "0"){
-           formData.append("qr_text", qr_text.value); 
+    // COLORS
+    var transparentBackgroundSwitch = document.getElementById("transparentBackgroundSwitch")
+    var transparentBackgroundSwitchValue = document.getElementById("transparentBackgroundSwitchValue")
+
+    transparentBackgroundSwitch.addEventListener("click",function(){
+        if(!transparentBackgroundSwitchValue.getAttribute("checked")){
+            transparentBackgroundSwitchValue.setAttribute("checked","true")
+        }else{
+            transparentBackgroundSwitchValue.removeAttribute("checked") : null
         }
-
-        sole.file("../../controllers/artisanry/qr_generate.php",formData)
-        .then(res => {
-            console.log(res)
-            qr_preview.classList.remove("image-wrapper")
-            qr_preview.innerHTML = '<img src="'+res.image+'">'
-        })
     })
+
+    // qr_generate_btn.addEventListener("click",function(){
+    //     const formData = new FormData();
+    //     formData.append("qr_type", qr_type.value); 
+    //     formData.append("qr_color", qr_color.value); 
+
+    //     if(qr_type.value = "0"){
+    //        formData.append("qr_text", qr_text.value); 
+    //     }
+
+    //     sole.file("../../controllers/artisanry/qr_generate.php",formData)
+    //     .then(res => {
+    //         console.log(res)
+    //         qr_preview.classList.remove("image-wrapper")
+    //         qr_preview.innerHTML = '<img src="'+res.image+'">'
+    //     })
+    // })
 
     
 

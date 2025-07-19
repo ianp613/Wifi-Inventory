@@ -24,6 +24,7 @@
         <link rel="stylesheet" href="../assets/css/datatables/datatables.min.css">
         <link rel="stylesheet" href="../assets/css/bootstrap/bootstrap.min.css">
         <link rel="stylesheet" href="../assets/css/sole.splash/splash.css">
+        <link rel="stylesheet" href="../assets/css/colorpicker.css">
         <link rel="stylesheet" href="../assets/css/style.css">
     </head>
     <body>
@@ -209,6 +210,7 @@
         <script src="../assets/js/accounts.js"></script>
         <script src="../assets/js/activity_log.js"></script>
         <script src="../assets/js/artisanry.js"></script>
+        <script src="../assets/js/colorpicker.js"></script>
         <script src="../assets/js/modal_alert.js"></script>
     </body>
 </html>

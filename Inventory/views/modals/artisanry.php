@@ -49,9 +49,32 @@
                                             <span class="fa fa-paint-brush me-2"></span> <b>Colors</b>
                                         </button>
                                     </h2>
-                                    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label for="bgColor" class="mb-2">Background Color</label>
+                                                    <input class="colorpicker colorpicker-light" id="bgColor" type="text">
+                                                    <div class="d-flex mt-2 mb-1">
+                                                        <label id="transparentBackgroundSwitch" class="switch">
+                                                            <input id="transparentBackgroundSwitchValue" type="checkbox">
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                        <h6 class="f-15 ms-2">Transparent Background</h6>
+                                                    </div>
+                                                    <div class="d-flex">
+                                                        <label id="imgBackgroundSwitch" class="switch">
+                                                            <input id="imgBackgroundSwitchValue" type="checkbox">
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                        <h6 class="f-15 ms-2">Image Background</h6>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="fgColor" class="mb-1">Foreground Color</label>
+                                                    <input class="colorpicker colorpicker-dark" id="fgColor" type="text">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

@@ -28,5 +28,5 @@ pause
 start "" cmd /c "cd /d %~dp0bot && serve.bat"
 start "" cmd /c "cd /d %~dp0_ngrok && serve.bat"
 
-start msedge http://%host%:%port%
+:: start msedge http://%host%:%port%
 php -S %host%:%port%
