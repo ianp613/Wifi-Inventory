@@ -48,14 +48,42 @@ if(document.getElementById("artisan")){
 
 
     // COLORS
-    var transparentBackgroundSwitch = document.getElementById("transparentBackgroundSwitch")
-    var transparentBackgroundSwitchValue = document.getElementById("transparentBackgroundSwitchValue")
+    var bgColor = document.getElementById("bgColor")
+    var bgTransparent = document.getElementById("bgTransparent")
+    var bgImg = document.getElementById("bgImg")
+    var bgImgFile = document.getElementById("bgImgFile")
 
-    transparentBackgroundSwitch.addEventListener("click",function(){
-        if(!transparentBackgroundSwitchValue.getAttribute("checked")){
-            transparentBackgroundSwitchValue.setAttribute("checked","true")
+    bgTransparent.addEventListener("change",function(){
+        
+        if(this.checked){
+            bgImg.checked = false
+            bgColor.classList.add("bgTransparent")
+            bgImgFile.value = ""
+            bgImgFile.setAttribute("hidden","true")
+            bgColor.setAttribute("disabled","true")
+            bgColor.value = "rgba(0, 0, 0, 0)"
+            bgColor.style.color = "#000000"
         }else{
-            transparentBackgroundSwitchValue.removeAttribute("checked") : null
+            bgColor.value = "#ffffff"
+            bgColor.style.color = "#000000"
+            bgColor.style.backgroundColor = "#ffffff"
+            bgColor.classList.remove("bgTransparent")
+            bgColor.removeAttribute("disabled")
+        }
+    })
+
+    bgImg.addEventListener("change",function(){
+        if(this.checked){
+            bgTransparent.checked = false
+            bgImgFile.removeAttribute("hidden")
+            bgColor.value = "#ffffff"
+            bgColor.style.color = "#000000"
+            bgColor.style.backgroundColor = "#ffffff"
+            bgColor.classList.remove("bgTransparent")
+            bgColor.removeAttribute("disabled")
+        }else{
+            bgImgFile.value = ""
+            bgImgFile.setAttribute("hidden","true")
         }
     })
 

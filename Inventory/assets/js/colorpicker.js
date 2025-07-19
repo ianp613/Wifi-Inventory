@@ -29,20 +29,28 @@ if(document.getElementsByClassName("colorpicker").length){
         cp.value = cpscolor
         colorpicker[i].insertAdjacentElement("beforebegin",cp)
 
-        var cps = document.getElementById("cps" + [i])
         colorpicker[i].addEventListener("click",function(){
-            cps.click()
+            document.getElementById("cps" + [i]).click()
         })
 
         // AUTO ADJUST COLOR OF FONT AND BACKGROUND
+        var cps = document.getElementById("cps" + [i])
         cps.addEventListener("input",function(){
-            colorpicker[i].value = this.value
-            colorpicker[i].style.backgroundColor = this.value
-            colorpicker[i].style.color = getContrastYIQ(this.value)
+            if(!colorpicker[i].getAttribute("disabled")){
+                colorpicker[i].value = this.value
+                colorpicker[i].style.backgroundColor = this.value
+                colorpicker[i].style.color = getContrastYIQ(this.value)
+            }
+        })
+
+        cps.addEventListener("click",function(event){
+            if(colorpicker[i].getAttribute("disabled")){
+                event.preventDefault();
+            }
         })
         
         // SET INNITIAL COLOR
-        colorpicker[i].style.backgroundColor = cpscolor
+        // colorpicker[i].style.backgroundColor = cpscolor
         colorpicker[i].style.color = getContrastYIQ(cpscolor)
 
         function getContrastYIQ(hexcolor) {

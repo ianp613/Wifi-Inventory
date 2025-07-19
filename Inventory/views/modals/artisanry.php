@@ -56,22 +56,17 @@
                                                     <label for="bgColor" class="mb-2">Background Color</label>
                                                     <input class="colorpicker colorpicker-light" id="bgColor" type="text">
                                                     <div class="d-flex mt-2 mb-1">
-                                                        <label id="transparentBackgroundSwitch" class="switch">
-                                                            <input id="transparentBackgroundSwitchValue" type="checkbox">
-                                                            <span class="slider round"></span>
-                                                        </label>
-                                                        <h6 class="f-15 ms-2">Transparent Background</h6>
+                                                        <input type="checkbox" name="" id="bgTransparent">
+                                                        <label for="bgTransparent" class="f-15 ms-2 text-secondary">Transparent Background</label>
                                                     </div>
                                                     <div class="d-flex">
-                                                        <label id="imgBackgroundSwitch" class="switch">
-                                                            <input id="imgBackgroundSwitchValue" type="checkbox">
-                                                            <span class="slider round"></span>
-                                                        </label>
-                                                        <h6 class="f-15 ms-2">Image Background</h6>
+                                                        <input type="checkbox" name="" id="bgImg">
+                                                        <label for="bgImg" class="f-15 ms-2 text-secondary">Image Background</label>
                                                     </div>
+                                                    <input hidden type="file" accept="image/*" name="" id="bgImgFile" class="form-control mt-2">
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label for="fgColor" class="mb-1">Foreground Color</label>
+                                                    <label for="fgColor" class="mb-2">Foreground Color</label>
                                                     <input class="colorpicker colorpicker-dark" id="fgColor" type="text">
                                                 </div>
                                             </div>
