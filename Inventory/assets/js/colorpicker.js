@@ -50,7 +50,7 @@ if(document.getElementsByClassName("colorpicker").length){
         })
         
         // SET INNITIAL COLOR
-        // colorpicker[i].style.backgroundColor = cpscolor
+        colorpicker[i].style.backgroundColor = cpscolor
         colorpicker[i].style.color = getContrastYIQ(cpscolor)
 
         function getContrastYIQ(hexcolor) {

@@ -531,3 +531,8 @@ input:checked + .slider:before {
     background-image: url("../../assets/img/artisanry/transparent.jpg");
     background-size: cover;
 }
+
+#qr_preview{
+    width: 100%;
+    overflow-x: hidden;
+}

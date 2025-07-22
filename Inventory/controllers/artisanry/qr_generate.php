@@ -6,23 +6,30 @@
 
     $qr = (new QRCodeGenerator())
     ->setData($_POST["qr_text"])
-    ->setColor('#490a0a')
-    ->setBackgroundColor('#ffffff')
+    ->setColor($_POST["fgColor"])
+    ->setBackgroundColor($_POST["bgColor"]."00")
     ->setSize(800)
+    ->setMargin(30)
     ->generate('png', [
         'Shape'  => 'S2', // Circle
         'Marker' => 'M2', // Circular finder pattern
-        'Cursor' => 'C2', // Circular alignment
+        'Cursor' => 'C2', // CENTER DOT
     ]);
-$qr->saveTo('custom-qr.png');
+
+    // SAVE AS FILE
+    // $qr_file = "../../assets/img/qr/". uniqid() . ".png";
+    // $qr->saveTo($qr_file);
+
+    // GET IMAGE DATA AS BINARY AND ENCODE IT TO BASE64
+    $qr_data = $qr->getDataUri();
 
     $response = [
         "status" => true,
         "type" => "info",
         "size" => null,
         "message" => "QR Created successfully",
-        // "image" => $svg,
-        "color" => $_POST["qr_color"]
+        "qr_data" => $qr_data,
+        // "qr_file" => $qr_file
     ];
 
     echo json_encode($response);

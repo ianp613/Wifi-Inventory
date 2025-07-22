@@ -8,6 +8,9 @@ if(document.getElementById("artisan")){
     // QR GENERATOR SECTION
     const qr_generator_modal = new bootstrap.Modal(document.getElementById('qr_generator_modal'),unclose);
     qr_generator_modal.show()
+    const qrcanvas = document.getElementById("qrPreviewCanvas");
+    const qrctx = qrcanvas.getContext("2d");
+    loadDefault()
 
     var qr_type = document.getElementById("qr_type");
     var qr_generate_btn = document.getElementById("qr_generate_btn")
@@ -15,6 +18,8 @@ if(document.getElementById("artisan")){
     var qr_wifi_container = document.getElementById("qr_wifi_container")
 
     var qr_text = document.getElementById("qr_text")
+    var qr_text_counter = document.getElementById("qr_text_counter")
+    var qr_text_temp = qr_text.value;
     var qr_color = document.getElementById("qr_color")
     
     var qr_encryption = document.getElementById("qr_encryption")
@@ -49,12 +54,12 @@ if(document.getElementById("artisan")){
 
     // COLORS
     var bgColor = document.getElementById("bgColor")
+    var fgColor = document.getElementById("fgColor")
     var bgTransparent = document.getElementById("bgTransparent")
     var bgImg = document.getElementById("bgImg")
     var bgImgFile = document.getElementById("bgImgFile")
 
     bgTransparent.addEventListener("change",function(){
-        
         if(this.checked){
             bgImg.checked = false
             bgColor.classList.add("bgTransparent")
@@ -87,22 +92,79 @@ if(document.getElementById("artisan")){
         }
     })
 
-    // qr_generate_btn.addEventListener("click",function(){
-    //     const formData = new FormData();
-    //     formData.append("qr_type", qr_type.value); 
-    //     formData.append("qr_color", qr_color.value); 
 
-    //     if(qr_type.value = "0"){
-    //        formData.append("qr_text", qr_text.value); 
-    //     }
+    qr_text.addEventListener("input",function(){
+        if(this.value.length <= 1000){
+            qr_text_counter.innerText = this.value.length + "/" + "1000"
+            qr_text_temp = this.value
+        }else{
+            this.value = qr_text_temp
+            alert("You've reach the maximum number of characters.")
+        }
+    })
 
-    //     sole.file("../../controllers/artisanry/qr_generate.php",formData)
-    //     .then(res => {
-    //         console.log(res)
-    //         qr_preview.classList.remove("image-wrapper")
-    //         qr_preview.innerHTML = '<img src="'+res.image+'">'
-    //     })
-    // })
+    function loadDefault(){
+        const background = new Image();
+        background.src = "../../assets/img/artisanry/qr-hello.png";
+        qrctx.clearRect(0, 0, qrcanvas.width, qrcanvas.height);
+
+        background.onload = function () {
+            const targetSize = 250;
+            qrcanvas.width = targetSize;
+            qrcanvas.height = targetSize;
+
+            // Draw the background
+            qrctx.drawImage(background, 0, 0, targetSize, targetSize);
+        }
+    }
+
+    function loadGeneratedQR(res){
+        if(res.status){
+            qr_preview.classList.remove("image-wrapper")
+            const background = new Image();
+            background.src = res.qr_data;
+            qrctx.clearRect(0, 0, qrcanvas.width, qrcanvas.height);
+            background.onload = function () {
+                const targetSize = 250;
+                qrcanvas.width = targetSize;
+                qrcanvas.height = targetSize;
+
+                // Draw the background
+                qrctx.drawImage(background, 0, 0, targetSize, targetSize);
+            }    
+        }
+    }
+
+    qr_generate_btn.addEventListener("click",function(){
+        const formData = new FormData();
+        formData.append("qr_type", qr_type.value);
+        formData.append("bgColor", bgColor.value)
+        formData.append("fgColor", fgColor.value)
+        var submit = false;
+        // formData.append("qr_color", qr_color.value); 
+
+        if(qr_type.value = "0"){
+           if(qr_text.value){
+                formData.append("qr_text", qr_text.value);
+                submit = true     
+           }
+        }else{
+            alert("Please select QR Code Type.")
+        }
+
+        if(submit){
+            sole.file("../../controllers/artisanry/qr_generate.php",formData)
+            .then(res => {
+                console.log(res)
+                loadGeneratedQR(res)
+                // qr_preview.classList.remove("image-wrapper")
+                // qr_preview.innerHTML = '<img src="'+res.image+'">'
+            })    
+        }else{
+            alert("Please input data.")
+        }
+        
+    })
 
     
 

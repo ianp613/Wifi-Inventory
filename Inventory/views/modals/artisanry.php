@@ -18,6 +18,7 @@
                             </select>
                             <div id="qr_text_container" class="mt-3">
                                 <textarea maxlength="300" rows="5" name="qr_text" id="qr_text" class="form-control text-secondary fw-bolder" placeholder="Enter your text"></textarea>
+                                <p id="qr_text_counter" class="w-100 text-end text-secondary">0/1000</p>
                             </div>
                             <div hidden id="qr_wifi_container" class="mt-3">
                                 <label for="qr_ssid" class="mb-2">Network Name</label>
@@ -127,9 +128,9 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class=" rounded-3 p-1">
-                            <div id="qr_preview" class="w-100 text-center image-wrapper">
-                                <img class="wd-180" src="../../assets/img/artisanry/qr-hello.png" alt="">
+                        <div class="rounded-3 p-1">
+                            <div id="qr_preview" class="w-100 text-center image-wrapper pb-3">
+                                <canvas class="shadow" id="qrPreviewCanvas"></canvas>
                             </div>
                         </div>
                         <button class="mt-4 ht-55 btn btn-primary w-100 d-flex justify-content-center fw-bolder"><span class="fa fa-download mt-2 f-20 me-2"></span><div>DOWNLOAD <br> <p class="f-13" style="margin-top: -4px; font-weight: 400;">PNG</p></div></button>
