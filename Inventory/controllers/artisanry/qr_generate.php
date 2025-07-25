@@ -7,7 +7,7 @@
     $qr = (new QRCodeGenerator())
     ->setData($_POST["qr_text"])
     ->setColor($_POST["fgColor"])
-    ->setBackgroundColor($_POST["bgColor"]."00")
+    ->setBackgroundColor($_POST["bgTransparent"] == "true" ? "#ffffff00" : $_POST["bgColor"])
     ->setSize(800)
     ->setMargin(30)
     ->generate('png', [
@@ -17,8 +17,8 @@
     ]);
 
     // SAVE AS FILE
-    // $qr_file = "../../assets/img/qr/". uniqid() . ".png";
-    // $qr->saveTo($qr_file);
+    $qr_file = "../../assets/img/qr/". uniqid() . ".png";
+    $qr->saveTo($qr_file);
 
     // GET IMAGE DATA AS BINARY AND ENCODE IT TO BASE64
     $qr_data = $qr->getDataUri();

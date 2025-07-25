@@ -137,9 +137,10 @@ if(document.getElementById("artisan")){
 
     qr_generate_btn.addEventListener("click",function(){
         const formData = new FormData();
-        formData.append("qr_type", qr_type.value);
+        formData.append("qr_type", qr_type.value)
         formData.append("bgColor", bgColor.value)
         formData.append("fgColor", fgColor.value)
+        formData.append("bgTransparent", bgTransparent.checked ? "true" : "false")
         var submit = false;
         // formData.append("qr_color", qr_color.value); 
 
