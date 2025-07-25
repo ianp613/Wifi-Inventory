@@ -17,8 +17,8 @@
                                 <option disabled value="3">&#xf0c1 URL</option>
                             </select>
                             <div id="qr_text_container" class="mt-3">
-                                <textarea maxlength="300" rows="5" name="qr_text" id="qr_text" class="form-control text-secondary fw-bolder" placeholder="Enter your text"></textarea>
-                                <p id="qr_text_counter" class="w-100 text-end text-secondary">0/1000</p>
+                                <textarea maxlength="200" rows="5" name="qr_text" id="qr_text" class="form-control text-secondary fw-bolder" placeholder="Enter your text"></textarea>
+                                <p id="qr_text_counter" class="w-100 text-end text-secondary">0/200</p>
                             </div>
                             <div hidden id="qr_wifi_container" class="mt-3">
                                 <label for="qr_ssid" class="mb-2">Network Name</label>
@@ -43,14 +43,14 @@
                                 </div>
                             </div>
 
-                            <div class="accordion mt-3" id="accordionExample">
+                            <div class="accordion mt-3" id="accordionQR">
                                 <div class="accordion-item">
                                     <h2 class="accordion-header">
                                         <button class="accordion-button collapsed text-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                             <span class="fa fa-paint-brush me-2"></span> <b>Colors</b>
                                         </button>
                                     </h2>
-                                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionQR">
                                         <div class="accordion-body">
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -80,9 +80,19 @@
                                             <span class="fa fa-qrcode me-2"></span> <b>Design</b>
                                         </button>
                                     </h2>
-                                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                    <div id="collapseTwo" class="accordion-collapse collapse show" data-bs-parent="#accordionQR">
                                         <div class="accordion-body">
-                                            <strong>This is the second item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                            <h6>Pattern</h6>
+                                            <div id="pattern" class="design-selector">
+                                                <img value="S1" src="../../assets/img/artisanry/qr-pattern/S1.png" alt="">
+                                                <img value="S2" src="../../assets/img/artisanry/qr-pattern/S2.png" alt="">
+                                                <img value="S3" src="../../assets/img/artisanry/qr-pattern/S3.png" alt="">
+                                                <img value="S4" src="../../assets/img/artisanry/qr-pattern/S4.png" alt="">
+                                                <img value="S5" src="../../assets/img/artisanry/qr-pattern/S5.png" alt="">
+                                                <img value="S6" src="../../assets/img/artisanry/qr-pattern/S6.png" alt="">
+                                                <img value="S7" src="../../assets/img/artisanry/qr-pattern/S7.png" alt="">
+                                                <img value="S8" src="../../assets/img/artisanry/qr-pattern/S8.png" alt="">    
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -92,7 +102,7 @@
                                             <span class="fa fa-certificate me-2"></span> <b>Logo</b>
                                         </button>
                                     </h2>
-                                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionQR">
                                         <div class="accordion-body">
                                             <strong>This is the third item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
                                         </div>
@@ -104,7 +114,7 @@
                                             <span class="fa fa-th-list me-2"></span> <b>Frame</b>
                                         </button>
                                     </h2>
-                                    <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                    <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionQR">
                                         <div class="accordion-body">
                                             <strong>This is the third item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
                                         </div>
@@ -116,7 +126,7 @@
                                             <span class="fa fa-toggle-on me-2"></span> <b>Options</b>
                                         </button>
                                     </h2>
-                                    <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                    <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionQR">
                                         <div class="accordion-body">
                                             <strong>This is the third item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
                                         </div>
@@ -128,10 +138,11 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="rounded-3 p-1">
+                        <div class="rounded-3 p-1 text-center">
                             <div id="qr_preview" class="w-100 text-center image-wrapper pb-3">
                                 <canvas class="shadow" id="qrPreviewCanvas"></canvas>
                             </div>
+                            <img hidden id="qr_loading" src="../../assets/img/artisanry/qr-loading.svg" alt="sadsad" srcset="">
                         </div>
                         <button class="mt-4 ht-55 btn btn-primary w-100 d-flex justify-content-center fw-bolder"><span class="fa fa-download mt-2 f-20 me-2"></span><div>DOWNLOAD <br> <p class="f-13" style="margin-top: -4px; font-weight: 400;">PNG</p></div></button>
                     </div>

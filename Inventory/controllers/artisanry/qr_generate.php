@@ -11,14 +11,16 @@
     ->setSize(800)
     ->setMargin(30)
     ->generate('png', [
-        'Shape'  => 'S2', // Circle
-        'Marker' => 'M2', // Circular finder pattern
-        'Cursor' => 'C2', // CENTER DOT
+        'Size'      => 1024,
+        'BlockSize' => 10,         // Crisp modules
+        'Shape'  => 'S2', // PATTERN = [S1 => SQUARE, S2 => CIRCLE, S3 => STAR, S4 => DIAMOND, S5 => HEART]
+        'Marker' => 'M6', // MARKER BORDER = 
+        'Cursor' => 'C3', // MARKER CENTER = 
     ]);
 
     // SAVE AS FILE
-    $qr_file = "../../assets/img/qr/". uniqid() . ".png";
-    $qr->saveTo($qr_file);
+    // $qr_file = "../../assets/img/qr/". uniqid() . ".png";
+    // $qr->saveTo($qr_file);
 
     // GET IMAGE DATA AS BINARY AND ENCODE IT TO BASE64
     $qr_data = $qr->getDataUri();

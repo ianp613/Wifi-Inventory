@@ -27,6 +27,7 @@ if(document.getElementById("artisan")){
     var qr_password = document.getElementById("qr_password")
 
     var qr_preview = document.getElementById("qr_preview")
+    var qr_loading = document.getElementById("qr_loading")
 
     var containers = [
         qr_text_container,
@@ -94,8 +95,8 @@ if(document.getElementById("artisan")){
 
 
     qr_text.addEventListener("input",function(){
-        if(this.value.length <= 1000){
-            qr_text_counter.innerText = this.value.length + "/" + "1000"
+        if(this.value.length <= 200){
+            qr_text_counter.innerText = this.value.length + "/" + "200"
             qr_text_temp = this.value
         }else{
             this.value = qr_text_temp
@@ -120,6 +121,8 @@ if(document.getElementById("artisan")){
 
     function loadGeneratedQR(res){
         if(res.status){
+            qr_preview.removeAttribute("hidden","true")
+            qr_loading.setAttribute("hidden","true")
             qr_preview.classList.remove("image-wrapper")
             const background = new Image();
             background.src = res.qr_data;
@@ -154,6 +157,13 @@ if(document.getElementById("artisan")){
         }
 
         if(submit){
+            qr_preview.setAttribute("hidden","true")
+            qr_loading.removeAttribute("hidden","true")
+            if(bgColor.value != "rgba(0, 0, 0, 0)" && bgColor.value != "#ffffff"){
+                qr_loading.style.backgroundColor = bgColor.value
+            }else{
+                qr_loading.style.backgroundColor = "#000000"
+            }
             sole.file("../../controllers/artisanry/qr_generate.php",formData)
             .then(res => {
                 console.log(res)
@@ -224,4 +234,43 @@ if(document.getElementById("artisan")){
     // })
     // sole.get("../../controllers/artisanry/artisanry.php")
     // .then(res => console.log(res))
+    initialize_designSelector()
+    function initialize_designSelector(){
+        var selector = document.getElementsByClassName("design-selector")
+        for (let i = 0; i < selector.length; i++) {
+            var childrenTemp = selector[i].children
+            selector[i].children[0].classList.add("design-selected")
+            for (let j = 0; j < childrenTemp .length; j++) {
+                childrenTemp[j].addEventListener("click",function(){
+                    for (let k = 0; k < this.parentNode.children.length; k++) {
+                        this.parentNode.children[k].classList.remove("design-selected")
+                    }
+                    this.classList.add("design-selected")
+                })
+            }
+        }
+    }
+    setTimeout(() => {
+        var pattern = get_designSelector("pattern")
+        console.log(pattern)
+    }, 5000);
+    
+    function get_designSelector(id){
+        var selector = document.getElementById(id)
+        var val = false;
+        if(selector){
+            if(selector.classList.contains("design-selector")){
+                for (let i = 0; i < selector.children.length; i++) {
+                    if(selector.children[i].classList.contains("design-selected")){
+                        val = selector.children[i].getAttribute("value")
+                    }
+                }
+            }else{
+                alert("Error getting value from \"" + id + "\", not a design selector.")
+            }    
+        }else{
+            alert("Error getting value from \"" + id + "\", not a design selector.")
+        }
+        return val
+    }
 }

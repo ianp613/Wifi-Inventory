@@ -536,3 +536,26 @@ input:checked + .slider:before {
     width: 100%;
     overflow-x: hidden;
 }
+#qr_loading{
+    width: 250px;
+    background-color: #000000;
+    border-radius: 30px;
+    opacity: 0.5;
+}
+.design-selector{
+    display: block;
+}
+.design-selector img{
+    width: 50px;
+    margin-right: 2px;
+    margin-bottom: 2px;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.design-selector img:hover{
+    transform: scale(1.1);
+}
+.design-selected{
+    border: solid 2px green;
+}

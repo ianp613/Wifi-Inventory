@@ -101,4 +101,33 @@ class ShapeDrawers
             $centerY,
         ], $foregroundColor);
     }
+
+    /**
+     * Draws a small heart shape on the image
+     */
+    public static function drawHeart(
+        \GdImage $baseImage,
+        int      $rowIndex,
+        int      $columnIndex,
+        int      $baseBlockSize,
+        int      $foregroundColor
+    ): void {
+        $points = [];
+
+        // Fewer points for a compact shape
+        $n = 50;
+        $centerX = $columnIndex * $baseBlockSize + $baseBlockSize / 2;
+        $centerY = $rowIndex * $baseBlockSize + $baseBlockSize / 2;
+        $scale   = $baseBlockSize / 32; // Smaller scale than before
+
+        for ($i = 0; $i < $n; $i++) {
+            $t = M_PI * 2 * $i / $n;
+            $x = 16 * pow(sin($t), 3);
+            $y = 13 * cos($t) - 5 * cos(2 * $t) - 2 * cos(3 * $t) - cos(4 * $t);
+            $points[] = intval($centerX + $x * $scale);
+            $points[] = intval($centerY - $y * $scale);
+        }
+
+        imagefilledpolygon($baseImage, $points, $foregroundColor);
+    }
 }
