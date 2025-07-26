@@ -56,7 +56,7 @@
                                                 <div class="col-md-6">
                                                     <label for="bgColor" class="mb-2">Background Color</label>
                                                     <input class="colorpicker colorpicker-light" id="bgColor" type="text">
-                                                    <div class="d-flex mt-2 mb-1">
+                                                    <!-- <div class="d-flex mt-2 mb-1">
                                                         <input type="checkbox" name="" id="bgTransparent">
                                                         <label for="bgTransparent" class="f-15 ms-2 text-secondary">Transparent Background</label>
                                                     </div>
@@ -64,7 +64,7 @@
                                                         <input type="checkbox" name="" id="bgImg">
                                                         <label for="bgImg" class="f-15 ms-2 text-secondary">Image Background</label>
                                                     </div>
-                                                    <input hidden type="file" accept="image/*" name="" id="bgImgFile" class="form-control mt-2">
+                                                    <input hidden type="file" accept="image/*" name="" id="bgImgFile" class="form-control mt-2"> -->
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label for="fgColor" class="mb-2">Foreground Color</label>
@@ -80,7 +80,7 @@
                                             <span class="fa fa-qrcode me-2"></span> <b>Design</b>
                                         </button>
                                     </h2>
-                                    <div id="collapseTwo" class="accordion-collapse collapse show" data-bs-parent="#accordionQR">
+                                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionQR">
                                         <div class="accordion-body">
                                             <h6>Pattern</h6>
                                             <div id="pattern" class="design-selector">
@@ -121,9 +121,27 @@
                                             <span class="fa fa-certificate me-2"></span> <b>Logo</b>
                                         </button>
                                     </h2>
-                                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionQR">
+                                    <div id="collapseThree" class="accordion-collapse collapse show" data-bs-parent="#accordionQR">
                                         <div class="accordion-body">
-                                            <strong>This is the third item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                            <div id="qrLogo" class="design-selector">
+                                                <h6 value="none" class="pb-2 pt-2"><span class="fa fa-remove"></span></h6>
+                                                <h6 value="custom" class="pb-2 pt-2"><span class="fa fa-upload"></span></h6>
+                                                <img value="../../assets/img/fposi.png" class="p-1" src="../../assets/img/fposi.png" alt="">  
+                                                <img value="../../assets/img/ddc.png" class="p-1" src="../../assets/img/ddc.png" alt="">  
+                                                <img value="../../assets/img/artisanry/qr-logo/link-circle.png" class="p-2" src="../../assets/img/artisanry/qr-logo/link-circle.png" alt="">  
+                                                <img value="../../assets/img/artisanry/qr-logo/link-square.png" class="p-2" src="../../assets/img/artisanry/qr-logo/link-square.png" alt="">
+                                                <img value="../../assets/img/artisanry/qr-logo/email-circle.png" class="p-2" src="../../assets/img/artisanry/qr-logo/email-circle.png" alt="">  
+                                                <img value="../../assets/img/artisanry/qr-logo/email-square.png" class="p-2" src="../../assets/img/artisanry/qr-logo/email-square.png" alt="">
+                                                <img value="../../assets/img/artisanry/qr-logo/location-circle.png" class="p-2" src="../../assets/img/artisanry/qr-logo/location-circle.png" alt="">  
+                                                <img value="../../assets/img/artisanry/qr-logo/location-square.png" class="p-2" src="../../assets/img/artisanry/qr-logo/location-square.png" alt="">  
+                                                <img value="../../assets/img/artisanry/qr-logo/phone-circle.png" class="p-2" src="../../assets/img/artisanry/qr-logo/phone-circle.png" alt="">
+                                                <img value="../../assets/img/artisanry/qr-logo/wifi-circle.png" class="p-2" src="../../assets/img/artisanry/qr-logo/wifi-circle.png" alt="">  
+                                                <img value="../../assets/img/artisanry/qr-logo/wifi-square.png" class="p-2" src="../../assets/img/artisanry/qr-logo/wifi-square.png" alt="">
+                                            </div>
+                                            <div hidden id="qrLogoContainer">
+                                                <h6 class="mt-2">Upload your logo or select a watermark</h6>
+                                                <input accept="image/*" class="form-control" type="file" name="" id="qrLogoFile">    
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

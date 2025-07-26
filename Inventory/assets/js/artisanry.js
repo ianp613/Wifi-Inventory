@@ -21,6 +21,10 @@ if(document.getElementById("artisan")){
     var qr_text_counter = document.getElementById("qr_text_counter")
     var qr_text_temp = qr_text.value;
     var qr_color = document.getElementById("qr_color")
+
+    var qrLogo = document.getElementById("qrLogo")
+    var qrLogoContainer = document.getElementById("qrLogoContainer")   
+    var qrLogoFile = document.getElementById("qrLogoFile")  
     
     var qr_encryption = document.getElementById("qr_encryption")
     var qr_password_container = document.getElementById("qr_password_container")
@@ -60,38 +64,38 @@ if(document.getElementById("artisan")){
     var bgImg = document.getElementById("bgImg")
     var bgImgFile = document.getElementById("bgImgFile")
 
-    bgTransparent.addEventListener("change",function(){
-        if(this.checked){
-            bgImg.checked = false
-            bgColor.classList.add("bgTransparent")
-            bgImgFile.value = ""
-            bgImgFile.setAttribute("hidden","true")
-            bgColor.setAttribute("disabled","true")
-            bgColor.value = "rgba(0, 0, 0, 0)"
-            bgColor.style.color = "#000000"
-        }else{
-            bgColor.value = "#ffffff"
-            bgColor.style.color = "#000000"
-            bgColor.style.backgroundColor = "#ffffff"
-            bgColor.classList.remove("bgTransparent")
-            bgColor.removeAttribute("disabled")
-        }
-    })
+    // bgTransparent.addEventListener("change",function(){
+    //     if(this.checked){
+    //         bgImg.checked = false
+    //         bgColor.classList.add("bgTransparent")
+    //         bgImgFile.value = ""
+    //         bgImgFile.setAttribute("hidden","true")
+    //         bgColor.setAttribute("disabled","true")
+    //         bgColor.value = "rgba(0, 0, 0, 0)"
+    //         bgColor.style.color = "#000000"
+    //     }else{
+    //         bgColor.value = "#ffffff"
+    //         bgColor.style.color = "#000000"
+    //         bgColor.style.backgroundColor = "#ffffff"
+    //         bgColor.classList.remove("bgTransparent")
+    //         bgColor.removeAttribute("disabled")
+    //     }
+    // })
 
-    bgImg.addEventListener("change",function(){
-        if(this.checked){
-            bgTransparent.checked = false
-            bgImgFile.removeAttribute("hidden")
-            bgColor.value = "#ffffff"
-            bgColor.style.color = "#000000"
-            bgColor.style.backgroundColor = "#ffffff"
-            bgColor.classList.remove("bgTransparent")
-            bgColor.removeAttribute("disabled")
-        }else{
-            bgImgFile.value = ""
-            bgImgFile.setAttribute("hidden","true")
-        }
-    })
+    // bgImg.addEventListener("change",function(){
+    //     if(this.checked){
+    //         bgTransparent.checked = false
+    //         bgImgFile.removeAttribute("hidden")
+    //         bgColor.value = "#ffffff"
+    //         bgColor.style.color = "#000000"
+    //         bgColor.style.backgroundColor = "#ffffff"
+    //         bgColor.classList.remove("bgTransparent")
+    //         bgColor.removeAttribute("disabled")
+    //     }else{
+    //         bgImgFile.value = ""
+    //         bgImgFile.setAttribute("hidden","true")
+    //     }
+    // })
 
 
     qr_text.addEventListener("input",function(){
@@ -101,6 +105,16 @@ if(document.getElementById("artisan")){
         }else{
             this.value = qr_text_temp
             alert("You've reach the maximum number of characters.")
+        }
+    })
+
+    qrLogo.addEventListener("click",function(){
+        var type = get_designSelector("qrLogo");
+        if(type == "custom"){
+            qrLogoContainer.removeAttribute("hidden")
+        }else{
+            qrLogoFile.value = ""
+            qrLogoContainer.setAttribute("hidden","true")
         }
     })
 
@@ -146,17 +160,31 @@ if(document.getElementById("artisan")){
         formData.append("pattern", get_designSelector("pattern"))
         formData.append("marker", get_designSelector("marker"))
         formData.append("cursor", get_designSelector("cursor"))
-        formData.append("bgTransparent", bgTransparent.checked ? "true" : "false")
+        formData.append("logo", get_designSelector("qrLogo"))
+
+        if(get_designSelector("qrLogo") == "custom"){
+            console.log("ok na")
+        }
+        // formData.append("bgTransparent", bgTransparent.checked ? "true" : "false")
         var submit = false;
-        // formData.append("qr_color", qr_color.value); 
+
+        // if(bgImg.checked){
+        //     if(bgImgFile.files.length > 0){
+        //         submit = true;
+        //         formData.append("bgImage", bgImgFile.files[0])
+        //     }else{
+        //         alert("Please select a background image.")
+        //         submit = false;
+        //     }
+        // }
 
         if(qr_type.value = "0"){
            if(qr_text.value){
                 formData.append("qr_text", qr_text.value);
                 submit = true     
+           }else{
+                submit = false
            }
-        }else{
-            alert("Please select QR Code Type.")
         }
 
         if(submit){
@@ -253,10 +281,6 @@ if(document.getElementById("artisan")){
             }
         }
     }
-    setTimeout(() => {
-        var pattern = get_designSelector("pattern")
-        console.log(pattern)
-    }, 5000);
     
     function get_designSelector(id){
         var selector = document.getElementById(id)

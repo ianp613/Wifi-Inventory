@@ -545,15 +545,17 @@ input:checked + .slider:before {
 .design-selector{
     display: block;
 }
-.design-selector img{
+.design-selector *{
+    display: inline-block;
     width: 50px;
+    text-align: center;
     margin-right: 2px;
     margin-bottom: 2px;
     transition: transform 0.3s ease;
     cursor: pointer;
     border-radius: 5px;
 }
-.design-selector img:hover{
+.design-selector *:hover{
     transform: scale(1.1);
 }
 .design-selected{
