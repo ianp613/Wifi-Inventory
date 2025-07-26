@@ -7,17 +7,23 @@
     ->setData($_POST["qr_text"])
     ->setColor($_POST["fgColor"])
     ->setBackgroundColor($_POST["bgColor"])
-    ->setLogo('../../assets/img/camera/camera.png', 200)
     // ->setBackgroundColor($_POST["bgTransparent"] == "true" ? "#ffffff00" : $_POST["bgColor"])
     ->setSize(800)
-    ->setMargin(30)
-    ->generate('png', [
+    ->setMargin(30);
+
+    if ($_POST["logo"] != "none") {
+        $qr->setLogo(Support::getLogo($_POST,$_FILES), $_POST["logo_size"] + 100);
+    }
+
+    $qr->generate('png', [
         'Size'      => 1024,
         'BlockSize' => 10,         // Crisp modules
         'Shape'  => $_POST["pattern"],
         'Marker' => $_POST["marker"],
         'Cursor' => $_POST["cursor"],
     ]);
+
+
 
     // SAVE AS FILE
     // $qr_file = "../../assets/img/qr/". uniqid() . ".png";

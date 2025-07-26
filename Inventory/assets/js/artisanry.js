@@ -24,8 +24,11 @@ if(document.getElementById("artisan")){
 
     var qrLogo = document.getElementById("qrLogo")
     var qrLogoContainer = document.getElementById("qrLogoContainer")   
-    var qrLogoFile = document.getElementById("qrLogoFile")  
-    
+    var qrLogoFile = document.getElementById("qrLogoFile")
+    var logoSize = document.getElementById("logoSize")
+    var logoSizeContainer = document.getElementById("logoSizeContainer")
+    var logoSizeLabel = document.getElementById("logoSizeLabel")
+
     var qr_encryption = document.getElementById("qr_encryption")
     var qr_password_container = document.getElementById("qr_password_container")
     var qr_password = document.getElementById("qr_password")
@@ -110,12 +113,22 @@ if(document.getElementById("artisan")){
 
     qrLogo.addEventListener("click",function(){
         var type = get_designSelector("qrLogo");
+        if(type == "none"){
+            logoSizeContainer.setAttribute("hidden","true")
+        }else{
+            logoSizeContainer.removeAttribute("hidden")
+        }
         if(type == "custom"){
             qrLogoContainer.removeAttribute("hidden")
+            qrLogoFile.click()
         }else{
             qrLogoFile.value = ""
             qrLogoContainer.setAttribute("hidden","true")
         }
+    })
+
+    logoSize.addEventListener("input",function(){
+        logoSizeLabel.innerText = "Logo Size: " + this.value + "%"
     })
 
     function loadDefault(){
@@ -161,12 +174,18 @@ if(document.getElementById("artisan")){
         formData.append("marker", get_designSelector("marker"))
         formData.append("cursor", get_designSelector("cursor"))
         formData.append("logo", get_designSelector("qrLogo"))
+        formData.append("logo_size", logoSize.value)
+        var submit = true;
 
         if(get_designSelector("qrLogo") == "custom"){
-            console.log("ok na")
+            if(qrLogoFile.files.length > 0){
+                formData.append("logo_file", qrLogoFile.files[0])
+            }else{
+                alert("Please select a logo.")
+                submit = false
+            }
         }
         // formData.append("bgTransparent", bgTransparent.checked ? "true" : "false")
-        var submit = false;
 
         // if(bgImg.checked){
         //     if(bgImgFile.files.length > 0){
@@ -180,9 +199,9 @@ if(document.getElementById("artisan")){
 
         if(qr_type.value = "0"){
            if(qr_text.value){
-                formData.append("qr_text", qr_text.value);
-                submit = true     
+                formData.append("qr_text", qr_text.value); 
            }else{
+                alert("Please input data.")
                 submit = false
            }
         }
@@ -202,8 +221,6 @@ if(document.getElementById("artisan")){
                 // qr_preview.classList.remove("image-wrapper")
                 // qr_preview.innerHTML = '<img src="'+res.image+'">'
             })    
-        }else{
-            alert("Please input data.")
         }
         
     })

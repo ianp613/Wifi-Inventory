@@ -126,8 +126,8 @@
                                             <div id="qrLogo" class="design-selector">
                                                 <h6 value="none" class="pb-2 pt-2"><span class="fa fa-remove"></span></h6>
                                                 <h6 value="custom" class="pb-2 pt-2"><span class="fa fa-upload"></span></h6>
-                                                <img value="../../assets/img/fposi.png" class="p-1" src="../../assets/img/fposi.png" alt="">  
-                                                <img value="../../assets/img/ddc.png" class="p-1" src="../../assets/img/ddc.png" alt="">  
+                                                <img value="../../assets/img/artisanry/qr-logo/fposi.png" class="p-1" src="../../assets/img/artisanry/qr-logo/fposi.png" alt="">  
+                                                <img value="../../assets/img/artisanry/qr-logo/ddc.png" class="p-1" src="../../assets/img/artisanry/qr-logo/ddc.png" alt="">  
                                                 <img value="../../assets/img/artisanry/qr-logo/link-circle.png" class="p-2" src="../../assets/img/artisanry/qr-logo/link-circle.png" alt="">  
                                                 <img value="../../assets/img/artisanry/qr-logo/link-square.png" class="p-2" src="../../assets/img/artisanry/qr-logo/link-square.png" alt="">
                                                 <img value="../../assets/img/artisanry/qr-logo/email-circle.png" class="p-2" src="../../assets/img/artisanry/qr-logo/email-circle.png" alt="">  
@@ -137,6 +137,10 @@
                                                 <img value="../../assets/img/artisanry/qr-logo/phone-circle.png" class="p-2" src="../../assets/img/artisanry/qr-logo/phone-circle.png" alt="">
                                                 <img value="../../assets/img/artisanry/qr-logo/wifi-circle.png" class="p-2" src="../../assets/img/artisanry/qr-logo/wifi-circle.png" alt="">  
                                                 <img value="../../assets/img/artisanry/qr-logo/wifi-square.png" class="p-2" src="../../assets/img/artisanry/qr-logo/wifi-square.png" alt="">
+                                            </div>
+                                            <div hidden id="logoSizeContainer">
+                                                <input type="range" class="form-range mt-2" value="100" min="30" max="100" id="logoSize">       
+                                                <label id="logoSizeLabel" for="logoSize" class="form-label">Logo Size: 100%</label>    
                                             </div>
                                             <div hidden id="qrLogoContainer">
                                                 <h6 class="mt-2">Upload your logo or select a watermark</h6>
