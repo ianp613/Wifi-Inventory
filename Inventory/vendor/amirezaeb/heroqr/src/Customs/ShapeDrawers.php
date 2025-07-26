@@ -5,7 +5,7 @@ namespace HeroQR\Customs;
 /**
  * Class ShapeDrawers
  *
- * This class provides static methods to draw various shapes (star, square, circle, diamond)
+ * This class provides static methods to draw various shapes (star, square, circle, diamond, heart, askew square, plus, small circle, twinkilng star)
  * on a GD image resource. Each method is designed to handle specific shape-drawing logic
  * based on the provided parameters such as position, size, and color.
  *
@@ -103,7 +103,7 @@ class ShapeDrawers
     }
 
     /**
-     * Draws a small heart shape on the image
+     * Draws a heart shape on the image
      */
     public static function drawHeart(
         \GdImage $baseImage,
@@ -130,4 +130,143 @@ class ShapeDrawers
 
         imagefilledpolygon($baseImage, $points, $foregroundColor);
     }
+
+    /**
+     * Draws a random askew square (quadrilateral) on the image
+     */
+    public static function drawAskewSquare(
+        \GdImage $baseImage,
+        int      $rowIndex,
+        int      $columnIndex,
+        int      $baseBlockSize,
+        int      $foregroundColor
+    ): void {
+        // Random rotation angle between -10 and +10 degrees
+        $angleDegrees = rand(-10, 10);
+        $angle = deg2rad($angleDegrees);
+
+        // Slightly smaller square (e.g. 85% of block size)
+        $scale = 0.85;
+        $halfSize = ($baseBlockSize * $scale) / 2;
+
+        // Center of the square
+        $centerX = $columnIndex * $baseBlockSize + $baseBlockSize / 2;
+        $centerY = $rowIndex * $baseBlockSize + $baseBlockSize / 2;
+
+        // Define corners before rotation
+        $corners = [
+            [-$halfSize, -$halfSize], // Top-left
+            [$halfSize, -$halfSize],  // Top-right
+            [$halfSize, $halfSize],   // Bottom-right
+            [-$halfSize, $halfSize],  // Bottom-left
+        ];
+
+        $rotatedPoints = [];
+
+        foreach ($corners as [$x, $y]) {
+            // Apply rotation
+            $rotatedX = $x * cos($angle) - $y * sin($angle);
+            $rotatedY = $x * sin($angle) + $y * cos($angle);
+
+            // Translate to center
+            $rotatedPoints[] = intval($centerX + $rotatedX);
+            $rotatedPoints[] = intval($centerY + $rotatedY);
+        }
+
+        imagefilledpolygon($baseImage, $rotatedPoints, 4, $foregroundColor);
+    }
+
+    /**
+     * Draws a plus pattern centered in the block
+     */
+    public static function drawPlus(
+        \GdImage $baseImage,
+        int      $rowIndex,
+        int      $columnIndex,
+        int      $baseBlockSize,
+        int      $foregroundColor
+    ): void
+    {
+        $centerX = $columnIndex * $baseBlockSize + $baseBlockSize / 2;
+        $centerY = $rowIndex * $baseBlockSize + $baseBlockSize / 2;
+
+        $armThickness = intval($baseBlockSize * 0.3); // Bolder arms
+        $armLength = intval($baseBlockSize * 0.8);     // Longer arms
+
+        // Horizontal arm
+        imagefilledrectangle(
+            $baseImage,
+            intval($centerX - $armLength / 2),
+            intval($centerY - $armThickness / 2),
+            intval($centerX + $armLength / 2),
+            intval($centerY + $armThickness / 2),
+            $foregroundColor
+        );
+
+        // Vertical arm
+        imagefilledrectangle(
+            $baseImage,
+            intval($centerX - $armThickness / 2),
+            intval($centerY - $armLength / 2),
+            intval($centerX + $armThickness / 2),
+            intval($centerY + $armLength / 2),
+            $foregroundColor
+        );
+    }
+
+    /**
+     * Draws a slightly smaller circle shape on the image
+     */
+    public static function drawSmallCircle(
+        \GdImage $baseImage,
+        int      $rowIndex,
+        int      $columnIndex,
+        int      $baseBlockSize,
+        int      $foregroundColor
+    ): void
+    {
+        $diameter = intval($baseBlockSize * 0.5);
+
+        imagefilledellipse(
+            $baseImage,
+            intval($columnIndex * $baseBlockSize + $baseBlockSize / 2),
+            intval($rowIndex * $baseBlockSize + $baseBlockSize / 2),
+            $diameter,
+            $diameter,
+            $foregroundColor
+        );
+    }
+
+    /**
+     * Draws a twinkling star with straight-pointing arms
+     */
+    public static function drawTwinklingStar(
+        \GdImage $baseImage,
+        int      $rowIndex,
+        int      $columnIndex,
+        int      $baseBlockSize,
+        int      $foregroundColor
+    ): void
+    {
+        $centerX = $columnIndex * $baseBlockSize + $baseBlockSize / 2;
+        $centerY = $rowIndex * $baseBlockSize + $baseBlockSize / 2;
+        $radius = $baseBlockSize * 0.4;
+
+        $points = [];
+
+        // Create 8-point star with straight-facing arms
+        for ($i = 0; $i < 8; $i++) {
+            // Use multiples of 45° starting from 0°
+            $angle = deg2rad($i * 45);
+            $length = ($i % 2 === 0) ? $radius : $radius * 0.5;
+
+            $x = intval($centerX + cos($angle) * $length);
+            $y = intval($centerY + sin($angle) * $length);
+            $points[] = $x;
+            $points[] = $y;
+        }
+
+        imagefilledpolygon($baseImage, $points, count($points) / 2, $foregroundColor);
+    }
+    
 }

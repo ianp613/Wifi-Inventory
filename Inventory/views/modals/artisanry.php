@@ -92,6 +92,25 @@
                                                 <img value="S6" src="../../assets/img/artisanry/qr-pattern/S6.png" alt="">
                                                 <img value="S7" src="../../assets/img/artisanry/qr-pattern/S7.png" alt="">
                                                 <img value="S8" src="../../assets/img/artisanry/qr-pattern/S8.png" alt="">    
+                                                <img value="S9" src="../../assets/img/artisanry/qr-pattern/S9.png" alt="">    
+                                            </div>
+                                            <h6 class="mt-2">Marker Border</h6>
+                                            <div id="marker" class="design-selector">
+                                                <img class="p-2" value="M1" src="../../assets/img/artisanry/qr-marker/M1.png" alt="">
+                                                <img class="p-2" value="M2" src="../../assets/img/artisanry/qr-marker/M2.png" alt="">
+                                                <img class="p-2" value="M3" src="../../assets/img/artisanry/qr-marker/M3.png" alt="">
+                                                <img class="p-2" value="M4" src="../../assets/img/artisanry/qr-marker/M4.png" alt="">
+                                                <img class="p-2" value="M5" src="../../assets/img/artisanry/qr-marker/M5.png" alt="">
+                                                <img class="p-2" value="M6" src="../../assets/img/artisanry/qr-marker/M6.png" alt="">
+                                            </div>
+                                            <h6 class="mt-2">Marker Cursor</h6>
+                                            <div id="cursor" class="design-selector">
+                                                <img class="p-3" value="C1" src="../../assets/img/artisanry/qr-cursor/C1.png" alt="">
+                                                <img class="p-3" value="C2" src="../../assets/img/artisanry/qr-cursor/C2.png" alt="">
+                                                <img class="p-3" value="C3" src="../../assets/img/artisanry/qr-cursor/C3.png" alt="">
+                                                <img class="p-3" value="C4" src="../../assets/img/artisanry/qr-cursor/C4.png" alt="">
+                                                <img class="p-3" value="C5" src="../../assets/img/artisanry/qr-cursor/C5.png" alt="">
+                                                <img class="p-3" value="C6" src="../../assets/img/artisanry/qr-cursor/C6.png" alt="">
                                             </div>
                                         </div>
                                     </div>

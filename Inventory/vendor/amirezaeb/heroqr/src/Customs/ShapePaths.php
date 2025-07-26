@@ -17,7 +17,11 @@ class ShapePaths extends AbstractCustomPaths
     public const S3 = 'drawStar';
     public const S4 = 'drawDiamond';
     public const S5 = 'drawHeart';
-
+    public const S6 = 'drawAskewSquare';
+    public const S7 = 'drawPlus';    
+    public const S8 = 'drawSmallCircle';
+    public const S9 = 'drawTwinklingStar';
+    
     /**
      * Retrieves all marker paths as an associative array
      */

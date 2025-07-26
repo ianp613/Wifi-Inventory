@@ -143,6 +143,9 @@ if(document.getElementById("artisan")){
         formData.append("qr_type", qr_type.value)
         formData.append("bgColor", bgColor.value)
         formData.append("fgColor", fgColor.value)
+        formData.append("pattern", get_designSelector("pattern"))
+        formData.append("marker", get_designSelector("marker"))
+        formData.append("cursor", get_designSelector("cursor"))
         formData.append("bgTransparent", bgTransparent.checked ? "true" : "false")
         var submit = false;
         // formData.append("qr_color", qr_color.value); 
