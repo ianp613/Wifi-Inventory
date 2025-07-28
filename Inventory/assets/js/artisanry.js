@@ -7,7 +7,6 @@ artisanry.addEventListener("click",function(){
 if(document.getElementById("artisan")){
     // QR GENERATOR SECTION
     const qr_generator_modal = new bootstrap.Modal(document.getElementById('qr_generator_modal'),unclose);
-    qr_generator_modal.show()
     const qrcanvas = document.getElementById("qrPreviewCanvas");
     const qrctx = qrcanvas.getContext("2d");
     loadDefault()
@@ -29,12 +28,26 @@ if(document.getElementById("artisan")){
     var logoSizeContainer = document.getElementById("logoSizeContainer")
     var logoSizeLabel = document.getElementById("logoSizeLabel")
 
+    var qrSize = document.getElementById("qrSize")
+    var qrPrecision = document.getElementById("qrPrecision")
+
     var qr_encryption = document.getElementById("qr_encryption")
     var qr_password_container = document.getElementById("qr_password_container")
     var qr_password = document.getElementById("qr_password")
 
     var qr_preview = document.getElementById("qr_preview")
     var qr_loading = document.getElementById("qr_loading")
+
+    var qr_filename  = document.getElementById("qr_filename")
+
+    var downloadqr_btn = document.getElementById("downloadqr_btn")
+
+    // COLORS
+    var bgColor = document.getElementById("bgColor")
+    var fgColor = document.getElementById("fgColor")
+    var bgTransparent = document.getElementById("bgTransparent")
+    var bgImg = document.getElementById("bgImg")
+    var bgImgFile = document.getElementById("bgImgFile")
 
     var containers = [
         qr_text_container,
@@ -59,13 +72,12 @@ if(document.getElementById("artisan")){
         }
     })
 
+    downloadqr_btn.addEventListener("click",function(){
+        generate_QR("download")
+    })
 
-    // COLORS
-    var bgColor = document.getElementById("bgColor")
-    var fgColor = document.getElementById("fgColor")
-    var bgTransparent = document.getElementById("bgTransparent")
-    var bgImg = document.getElementById("bgImg")
-    var bgImgFile = document.getElementById("bgImgFile")
+
+    
 
     // bgTransparent.addEventListener("change",function(){
     //     if(this.checked){
@@ -99,7 +111,6 @@ if(document.getElementById("artisan")){
     //         bgImgFile.setAttribute("hidden","true")
     //     }
     // })
-
 
     qr_text.addEventListener("input",function(){
         if(this.value.length <= 200){
@@ -166,7 +177,12 @@ if(document.getElementById("artisan")){
     }
 
     qr_generate_btn.addEventListener("click",function(){
+        generate_QR("preview")
+    })
+
+    function generate_QR(action){
         const formData = new FormData();
+        formData.append("action",action)
         formData.append("qr_type", qr_type.value)
         formData.append("bgColor", bgColor.value)
         formData.append("fgColor", fgColor.value)
@@ -175,6 +191,8 @@ if(document.getElementById("artisan")){
         formData.append("cursor", get_designSelector("cursor"))
         formData.append("logo", get_designSelector("qrLogo"))
         formData.append("logo_size", logoSize.value)
+        formData.append("qrSize", qrSize.value)
+        formData.append("qrPrecision", qrPrecision.value)
         var submit = true;
 
         if(get_designSelector("qrLogo") == "custom"){
@@ -218,12 +236,12 @@ if(document.getElementById("artisan")){
             .then(res => {
                 console.log(res)
                 loadGeneratedQR(res)
-                // qr_preview.classList.remove("image-wrapper")
-                // qr_preview.innerHTML = '<img src="'+res.image+'">'
+                if(action == "download"){
+                    downloadQR(res.qr_file,qr_filename.value)
+                }
             })    
         }
-        
-    })
+    }
 
     
 
@@ -252,9 +270,9 @@ if(document.getElementById("artisan")){
     //     this.value == "custom" ? qr_custom_logo_display.removeAttribute("hidden") : qr_custom_logo_display.setAttribute("hidden","true")
     // })
 
-    // qr_generator.addEventListener("click",function(){
-    //     qr_generator_modal.show()
-    // })
+    qr_generator.addEventListener("click",function(){
+        qr_generator_modal.show()
+    })
 
     // qr_generate_btn.addEventListener("click",function(){
     //     var submit = true
@@ -316,5 +334,37 @@ if(document.getElementById("artisan")){
             alert("Error getting value from \"" + id + "\", not a design selector.")
         }
         return val
+    }
+
+    function downloadQR(url, filename) {
+        if(!filename){
+            filename = url.split('/').pop()
+        }else{
+            if(filename.split('.').pop().toLowerCase() == "png"){
+                const dotIndex = filename.lastIndexOf(".");
+                filename = filename.slice(0, dotIndex) + filename.slice(dotIndex).toLowerCase();
+            }else{
+                filename += ".png"
+            }
+            
+        }
+
+        fetch(url)
+        .then(response => response.blob()) // Convert response to a Blob
+        .then(blob => {
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = filename; // Set the filename
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        })
+        .catch(error => alert("error", "Download Failed: " + error));
+
+        setTimeout(() => {
+            sole.post("../../controllers/artisanry/qr_delete.php",{
+                qr_file : url
+            }).then(res => console.log(res));
+        }, 5000);
     }
 }

@@ -7,8 +7,9 @@
     ->setData($_POST["qr_text"])
     ->setColor($_POST["fgColor"])
     ->setBackgroundColor($_POST["bgColor"])
+    ->setErrorCorrectionLevel($_POST["qrPrecision"])
     // ->setBackgroundColor($_POST["bgTransparent"] == "true" ? "#ffffff00" : $_POST["bgColor"])
-    ->setSize(800)
+    ->setSize($_POST["qrSize"])
     ->setMargin(30);
 
     if ($_POST["logo"] != "none") {
@@ -25,21 +26,35 @@
 
 
 
-    // SAVE AS FILE
-    // $qr_file = "../../assets/img/qr/". uniqid() . ".png";
-    // $qr->saveTo($qr_file);
+    
+    
 
     // GET IMAGE DATA AS BINARY AND ENCODE IT TO BASE64
     $qr_data = $qr->getDataUri();
 
-    $response = [
-        "status" => true,
-        "type" => "info",
-        "size" => null,
-        "message" => "QR Created successfully",
-        "qr_data" => $qr_data,
-        // "qr_file" => $qr_file
-    ];
+    // SAVE AS FILE
+    if($_POST["action"] == "download"){
+        $qr_file = "../../assets/img/qr/". uniqid();
+        $qr->saveTo($qr_file);
+        
+        $response = [
+            "status" => true,
+            "type" => "info",
+            "size" => null,
+            "message" => "QR Created successfully",
+            "qr_data" => $qr_data,
+            "qr_file" => $qr_file.".png"
+        ];
+    }else{
+        $response = [
+            "status" => true,
+            "type" => "info",
+            "size" => null,
+            "message" => "QR Created successfully",
+            "qr_data" => $qr_data,
+        ];
+    }
+
 
     echo json_encode($response);
 

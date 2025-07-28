@@ -1,4 +1,4 @@
-<div id="qr_generator_modal" class="modal" tabindex="-1">
+<div id="qr_generator_modal" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -121,7 +121,7 @@
                                             <span class="fa fa-certificate me-2"></span> <b>Logo</b>
                                         </button>
                                     </h2>
-                                    <div id="collapseThree" class="accordion-collapse collapse show" data-bs-parent="#accordionQR">
+                                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionQR">
                                         <div class="accordion-body">
                                             <div id="qrLogo" class="design-selector">
                                                 <h6 value="none" class="pb-2 pt-2"><span class="fa fa-remove"></span></h6>
@@ -157,7 +157,7 @@
                                     </h2>
                                     <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionQR">
                                         <div class="accordion-body">
-                                            <strong>This is the third item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                            <code>WORK IN PROGRESS</code>
                                         </div>
                                     </div>
                                 </div>
@@ -169,13 +169,36 @@
                                     </h2>
                                     <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionQR">
                                         <div class="accordion-body">
-                                            <strong>This is the third item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label for="qrSize">Size</label>
+                                                    <select name="qrSize" id="qrSize" class="form-control mt-2">
+                                                        <option value="200">200</option>
+                                                        <option value="300">300</option>
+                                                        <option value="400">400</option>
+                                                        <option value="500">500</option>
+                                                        <option value="600">600</option>
+                                                        <option value="700">700</option>
+                                                        <option selected value="800">800</option>
+                                                        <option value="900">900</option>
+                                                        <option value="1000">1000</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="qrPrecision">Precision</label>
+                                                    <select class="form-control mt-2" name="qrPrecision" id="qrPrecision">
+                                                        <option value="Low">Low</option>
+                                                        <option value="Medium">Medium</option>
+                                                        <option value="Quartile">Quartile</option>
+                                                        <option selected value="High">High</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                
                             </div>
-                            <button id="qr_generate_btn" class="btn btn-success alert-success rounded-pill fw-bolder mt-4 mb-2"><span class="fa fa-refresh"></span> GENERATE QR CODE</button>
+                            <button id="qr_generate_btn" class="btn btn-success alert-success rounded-pill fw-bolder mt-4 mb-2"><span class="fa fa-refresh"></span> GENERATE QR PREVIEW</button>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -185,7 +208,9 @@
                             </div>
                             <img hidden id="qr_loading" src="../../assets/img/artisanry/qr-loading.svg" alt="sadsad" srcset="">
                         </div>
-                        <button class="mt-4 ht-55 btn btn-primary w-100 d-flex justify-content-center fw-bolder"><span class="fa fa-download mt-2 f-20 me-2"></span><div>DOWNLOAD <br> <p class="f-13" style="margin-top: -4px; font-weight: 400;">PNG</p></div></button>
+                        <label for="qr_filename">QR Filename <i class="f-13">(Optional)</i></label>
+                        <input type="text" id="qr_filename" class="form-control mt-2">
+                        <button id="downloadqr_btn" class="mt-4 ht-55 btn btn-primary w-100 d-flex justify-content-center fw-bolder"><span class="fa fa-download mt-2 f-20 me-2"></span><div>DOWNLOAD <br> <p class="f-13" style="margin-top: -4px; font-weight: 400;">PNG</p></div></button>
                     </div>
                 </div>
             </div>
