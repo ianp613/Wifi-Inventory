@@ -10,9 +10,9 @@
                     <div class="col-md-8">
                         <div class="border rounded-3 p-3">
                             <label for="qr_type" class="mb-2 fwt-5">Select QR Code Type</label>
-                            <select name="qr_type" id="qr_type" class="form-control wd-150 text-secondary"  style="font-family: 'FontAwesome', sans-serif;">
+                            <select disabled name="qr_type" id="qr_type" class="form-control wd-150 text-secondary"  style="font-family: 'FontAwesome', sans-serif;">
                                 <option value="0">&#xf15c Text</option>
-                                <option value="1">&#xf1eb Wifi</option>
+                                <option disabled value="1">&#xf1eb Wifi</option>
                                 <option disabled value="2">&#xf0e0 Email</option>
                                 <option disabled value="3">&#xf0c1 URL</option>
                             </select>

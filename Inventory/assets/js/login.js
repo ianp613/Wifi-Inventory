@@ -28,7 +28,10 @@ if(document.getElementById("login")){
     userid.focus()
 
     document.addEventListener("keypress", e=>{
-        if(e.key == "Enter"){
+        if(e.key == "Enter" && document.activeElement === userid){
+            login()
+        }
+        if(e.key == "Enter" && document.activeElement === password){
             login()
         }
     })
@@ -63,4 +66,50 @@ if(document.getElementById("login")){
             }, 2000);
         }
     }
+    const chatbot_body = document.getElementById("chatbot_body")
+    const chatbot_input = document.getElementById("chatbot_input")
+    const chatbot_send = document.getElementById("chatbot_send")
+    scrollToBottom()
+
+    chatbot_input.addEventListener('focus', scrollToBottom);
+    chatbot_input.addEventListener('click', scrollToBottom);
+
+    chatbot_send.addEventListener("click",function(){
+        var chat_message_left = document.createElement("div")
+        chat_message_left.setAttribute("class","chatbot-message-right")
+        var chat_head = document.createElement("p")
+        chat_head.innerText = "You"
+        var chat_message = document.createElement("div")
+        chat_message_left.appendChild(chat_head)
+        chat_message_left.appendChild(chat_message)
+        chatbot_body.appendChild(chat_message_left)
+        chat_message.innerText = chatbot_input.value
+        chatbot_input.value = ""
+        scrollToBottom()
+    })
+
+
+    function scrollToBottom() {
+        chatbot_body.scrollTo({
+            top: chatbot_body.scrollHeight,
+            behavior: 'smooth'
+        });
+    }
+    const text = "Lorem Ipsum is simply <br><br><br><br> survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with ";
+    const speed = 10;
+    let i = 0;
+    let output = "";
+
+    typeWriter();
+
+    function typeWriter() {
+        if (i < text.length) {
+            output += text.charAt(i);
+            document.getElementById("chat_message").innerHTML = output;
+            i++;
+            setTimeout(typeWriter, speed);
+        }
+    }
+
+
 }

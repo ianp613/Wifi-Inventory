@@ -48,6 +48,69 @@
       </div>
     </div>
     <h6 class="copyright-1 f-10 text-secondary"></h6>
+    <div class="chatbot">
+      <div class="modal-header m-0 p-2">
+        <h6><span class="fa fa-comments"></span> CHAT WITH US</h6>
+        <div class="bot-ico">
+          <img src="../../assets/img/chatbot/bot-transparent.gif" alt="">  
+        </div>
+        
+      </div>
+      <div id="chatbot_body" class="chatbot-body modal-body">
+
+
+
+        <div class="chatbot-message-left">
+          <p>Inventory Bot</p>
+          <div id="chat_message">
+            
+          </div>
+        </div>
+        <br>
+        <div class="chatbot-message-right">
+          <p>Inventory Bot</p>
+          <div>
+          Message 2
+
+          </div>
+        </div>
+        <br>
+        <div class="chatbot-message-left">
+          <p>Inventory Bot</p>
+          Message 3 
+        </div>
+        <br>
+        <div class="chatbot-message-left">
+          <p>Inventory Bot</p>
+          Message 3 
+        </div>
+        <br>
+        <div class="chatbot-message-right">
+          <p>Inventory Bot</p>
+          Message 4
+        </div>
+        <div class="chatbot-message-right">
+          <p>Inventory Bot</p>
+          Message 4
+        </div>
+        
+
+
+
+
+      </div>
+      <div class="modal-footer p-0">
+        <div class="d-flex ms-3 mt-1">
+          <textarea name="" id="chatbot_input" rows="1" class="form-control margin"></textarea>
+          <div id="chatbot_send" class="btn btn-sm btn-dark wd-100 pt-2"><span class="fa fa-send"></span> Send</div>  
+        </div>
+        
+      </div>
+      <div class="chatbot-doorknob">
+        <!-- <div class="chatbot-show btn btn-sm btn-danger pe-3"><span class="fa fa-arrow-circle-left"></span></div> -->
+        <div class="chatbot-hide btn btn-sm btn-danger pe-3"><span class="fa fa-arrow-circle-right"></span></div>
+      </div>
+    </div>
   </body>
   
   <script src="../assets/js/bootstrap/bootstrap.min.js"></script>
