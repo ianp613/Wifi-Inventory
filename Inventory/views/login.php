@@ -48,10 +48,10 @@
       </div>
     </div>
     <h6 class="copyright-1 f-10 text-secondary"></h6>
-    <div class="chatbot">
+    <div id="chatbot" class="chatbot chatbot-hide">
       <div class="modal-header m-0 p-2">
         <h6><span class="fa fa-comments"></span> CHAT WITH US</h6>
-        <div class="bot-ico">
+        <div id="bot_ico" class="bot-ico bot-ico-hidden">
           <img src="../../assets/img/chatbot/bot-transparent.gif" alt="">  
         </div>
         
@@ -67,8 +67,8 @@
         
       </div>
       <div class="chatbot-doorknob">
-        <!-- <div class="chatbot-show btn btn-sm btn-danger pe-3"><span class="fa fa-arrow-circle-left"></span></div> -->
-        <div class="chatbot-hide btn btn-sm btn-danger pe-3"><span class="fa fa-arrow-circle-right"></span></div>
+        <div id="chatbot_show" class="chatbot-show btn btn-sm btn-danger pe-3"><span class="fa fa-comments"></span></div>
+        <div hidden id="chatbot_hide" class="chatbot-hide btn btn-sm btn-danger pe-3"><span class="fa fa-arrow-circle-right"></span></div>
       </div>
     </div>
   </body>

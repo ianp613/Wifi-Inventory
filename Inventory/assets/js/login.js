@@ -34,6 +34,24 @@ if(document.getElementById("login")){
         if(e.key == "Enter" && document.activeElement === password){
             login()
         }
+        if(e.key == "Enter" && document.activeElement === chatbot_input){
+            if (!e.shiftKey) {
+                if(!chatbot_input.value){
+                    return false
+                }
+                if(!send){
+                    return false
+                }
+                chatbotSend()
+            }
+        }
+        if (e.shiftKey && (e.key === 'c' || e.key === 'C')) {
+            i = 7000
+            setTimeout(() => {
+                chatbot_input.value = ""
+                i = 0
+            }, 10);
+        }
     })
 
     login_btn.addEventListener("click", e => {
@@ -66,18 +84,61 @@ if(document.getElementById("login")){
             }, 2000);
         }
     }
+
+    
+
+    const chatbot = document.getElementById("chatbot")
+    const bot_ico = document.getElementById("bot_ico")
     const chatbot_body = document.getElementById("chatbot_body")
     const chatbot_input = document.getElementById("chatbot_input")
     const chatbot_send = document.getElementById("chatbot_send")
-    const speed = 5;
+    const chatbot_hide = document.getElementById("chatbot_hide")
+    const chatbot_show = document.getElementById("chatbot_show")
+    var greet = true;
+    var send = false;
+    
+    var speed = 30;
     var reply = []
     var reply_output = ""
+
     scrollToBottom()
+
+    chatbot_hide.addEventListener("click",function(){
+        chatbot_show.removeAttribute("hidden")
+        this.setAttribute("hidden","true")
+        chatbot.classList.add("chatbot-hide")
+        bot_ico.classList.add("bot-ico-hidden")
+    })
+
+    chatbot_show.addEventListener("click",function(){
+        chatbot_hide.removeAttribute("hidden")
+        this.setAttribute("hidden","true")
+        chatbot.classList.remove("chatbot-hide")
+        bot_ico.classList.remove("bot-ico-hidden")
+
+        if(greet){
+            reply = ["Good day, I am your BOT assistant. <br> To start please provide your User ID.","greetings"]
+            createMessageBoxBOT(reply)
+            botReply()
+            chatbot_input.focus()
+            greet = false
+        }
+    })
 
     chatbot_input.addEventListener('focus', scrollToBottom);
     chatbot_input.addEventListener('click', scrollToBottom);
 
     chatbot_send.addEventListener("click",function(){
+        if(!chatbot_input.value){
+            return false
+        }
+        if(!send){
+            return false
+        }
+        chatbotSend()
+    })
+
+    function chatbotSend(){
         var br = document.createElement("br")
         var wrapper = document.createElement("div")
         var chat_message_right = document.createElement("div")
@@ -98,27 +159,34 @@ if(document.getElementById("login")){
             if(res){
                 reply = res
                 if(res[0]){
-                    var br = document.createElement("br")
-                    var wrapper = document.createElement("div")
-                    var chat_message_left = document.createElement("div")
-                    chat_message_left.setAttribute("class","chatbot-message-left")
-                    var chat_head = document.createElement("p")
-                    chat_head.innerText = "Inventory Bot"
-                    var chat_message = document.createElement("div")
-                    chat_message.setAttribute("id",res[1])
-                    chat_message_left.appendChild(chat_head)
-                    chat_message_left.appendChild(chat_message)
-                    wrapper.appendChild(chat_message_left)
-                    chatbot_body.appendChild(wrapper)
-                    chatbot_body.appendChild(br)
+                    speed = 5
+                    createMessageBoxBOT(res)
                     botReply()
                 }
             }
         })
-        chatbot_input.value = ""
-
         scrollToBottom()
-    })
+        setTimeout(() => {
+            chatbot_input.value = ""
+            
+        }, 1);
+    }
+
+    function createMessageBoxBOT(res){
+        var br = document.createElement("br")
+        var wrapper = document.createElement("div")
+        var chat_message_left = document.createElement("div")
+        chat_message_left.setAttribute("class","chatbot-message-left")
+        var chat_head = document.createElement("p")
+        chat_head.innerText = "Inventory Bot"
+        var chat_message = document.createElement("div")
+        chat_message.setAttribute("id",res[1])
+        chat_message_left.appendChild(chat_head)
+        chat_message_left.appendChild(chat_message)
+        wrapper.appendChild(chat_message_left)
+        chatbot_body.appendChild(wrapper)
+        chatbot_body.appendChild(br)
+    }
 
 
     function scrollToBottom() {
@@ -134,6 +202,7 @@ if(document.getElementById("login")){
     // typeWriter();
     
     function botReply(){
+        // console.log(res)
         var text = ""
         if (typeof reply[0] === 'string'){
             text = reply[0]
@@ -141,11 +210,13 @@ if(document.getElementById("login")){
             text = reply[0][1]
         }
         if (i < text.length) {
+            send = false
             reply_output += text.charAt(i);
             document.getElementById(reply[1]).innerHTML = reply_output;
             i++;
             setTimeout(botReply, speed);
         }else{
+            send = true
             reply_output = ""
             i = 0
         }

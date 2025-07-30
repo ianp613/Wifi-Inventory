@@ -154,10 +154,10 @@
             // return ["string",$findID];
 
             if(count($column)){
-                count($row) ? $reply = "" : $reply = "No matching data found.1";
+                count($row) ? $reply = "" : $reply = "No matching data found";
                 if(!count($row) && count($column)){
                     $data = DB::all($model);
-                    count($data) ? $reply = "" : $reply = "No matching data found.2";
+                    count($data) ? $reply = "" : $reply = "No matching data found";
                     foreach ($data as $d) {
                         $reply .= "<b class=\"text-danger\">  ".$d[$model->main]."</b> <br>";
                         $reply .= "<b>ID: </b> <i>".$d["id"]." </i> <br>";
@@ -184,7 +184,7 @@
                 return [$reply_type,Identifier::label_replace($reply,$model),$reply_file];
                 // return Identifier::breaker($reply);
             }else{
-                count($row) ? $reply = "" : $reply = "No matching data found.3";
+                count($row) ? $reply = "" : $reply = "No matching data found";
                 if(!$findID && $cleanedInput){
                     for ($i = 0; $i < count($row); $i++) {
                         $reply .= "<b class=\"text-danger\">  ".$row[$i][$model->main]."</b> <br>";
@@ -220,7 +220,7 @@
                         }
                     }
                     $row = $temp_row;
-                    count($row) ? $reply = "" : $reply = "No matching data found.4";
+                    count($row) ? $reply = "" : $reply = "No matching data found";
                     foreach ($row as $r) {
                         $reply .= "<b class=\"text-danger\">  ".$r[$model->main]."</b> <br>";
                         $reply .= "<b>ID: </b> <i>".$r["id"]." </i> <br>";
@@ -233,7 +233,7 @@
 
                 if(!count($row) && !count($results) && !$findID & !$cleanedInput){
                     $data = DB::all($model);
-                    count($data) ? $reply = "" : $reply = "No matching data found.5";
+                    count($data) ? $reply = "" : $reply = "No matching data found";
                     foreach ($data as $d) {
                         $reply .= "<b class=\"text-danger\">  ".$d[$model->main]."</b> <br>";
                         $reply .= "<b>ID: </b> <i>".$d["id"]." </i> <br>";
@@ -244,7 +244,7 @@
 
                 if($findID && $cleanedInput){
                     $data = DB::find($model,$cleanedInput);
-                    count($data) ? $reply = "" : $reply = "No matching data found.6";
+                    count($data) ? $reply = "" : $reply = "No matching data found";
                     foreach ($data as $d) {
                         $reply .= "<b class=\"text-danger\">  ".$d[$model->main]."</b> <br>";
                         $reply .= "<b>ID: </b> <i>".$d["id"]." </i> <br>";
