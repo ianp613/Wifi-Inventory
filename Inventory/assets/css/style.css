@@ -602,6 +602,7 @@ input:checked + .slider:before {
     overflow: auto;
     display: flex;
     flex-direction: column;
+    padding-top: 30px;
 }
 .chatbot-body::-webkit-scrollbar{
     width: 0px;
@@ -617,11 +618,11 @@ input:checked + .slider:before {
     color: rgb(20, 20, 20);
     padding: 5px;
     font-size: 13px;
-    margin-bottom: 10px;
 
     border-radius: 5px;
     padding-left: 10px;
     padding-right: 10px;
+    margin-top: 5px;
 }
 .chatbot-message-right:hover{
     background-color: rgba(250, 250, 250, 0.7);
@@ -641,7 +642,6 @@ input:checked + .slider:before {
 
 
 .chatbot-message-left{
-    /* margin-top: 15px; */
     float: inline-start;
     width: fit-content;
     text-align: left;
@@ -649,7 +649,6 @@ input:checked + .slider:before {
     color: white;
     padding: 5px;
     font-size: 13px;
-    margin-bottom: 10px;
     
     border-radius: 5px;
     padding-left: 10px;

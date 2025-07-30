@@ -57,47 +57,7 @@
         
       </div>
       <div id="chatbot_body" class="chatbot-body modal-body">
-
-
-
-        <div class="chatbot-message-left">
-          <p>Inventory Bot</p>
-          <div id="chat_message">
-            
-          </div>
-        </div>
-        <br>
-        <div class="chatbot-message-right">
-          <p>Inventory Bot</p>
-          <div>
-          Message 2
-
-          </div>
-        </div>
-        <br>
-        <div class="chatbot-message-left">
-          <p>Inventory Bot</p>
-          Message 3 
-        </div>
-        <br>
-        <div class="chatbot-message-left">
-          <p>Inventory Bot</p>
-          Message 3 
-        </div>
-        <br>
-        <div class="chatbot-message-right">
-          <p>Inventory Bot</p>
-          Message 4
-        </div>
-        <div class="chatbot-message-right">
-          <p>Inventory Bot</p>
-          Message 4
-        </div>
-        
-
-
-
-
+        <!-- CONVERSATION HERE -->
       </div>
       <div class="modal-footer p-0">
         <div class="d-flex ms-3 mt-1">
