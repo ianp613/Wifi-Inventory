@@ -94,6 +94,7 @@ if(document.getElementById("login")){
     const chatbot_send = document.getElementById("chatbot_send")
     const chatbot_hide = document.getElementById("chatbot_hide")
     const chatbot_show = document.getElementById("chatbot_show")
+    var user = ""
     var greet = true;
     var send = false;
     
@@ -135,7 +136,15 @@ if(document.getElementById("login")){
         if(!send){
             return false
         }
-        chatbotSend()
+        if(user != ""){
+            chatbotSend()
+        }else{
+            sole.post("../../controllers/chatbot/get_user.php",{
+                userid : chatbot_input.value
+            }).then(res => {
+                console.log(res)
+            })
+        }
     })
 
     function chatbotSend(){
