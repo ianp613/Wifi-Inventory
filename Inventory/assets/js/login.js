@@ -27,7 +27,13 @@ if(document.getElementById("login")){
     })
     userid.focus()
 
-    document.addEventListener("keypress", e=>{
+    document.addEventListener("keydown", e=>{
+        if(e.key == "ArrowUp"){
+            if(tempText){
+                chatbot_input.value = tempText
+                tempText = ""
+            }
+        }
         if(e.key == "Enter" && document.activeElement === userid){
             login()
         }
@@ -45,7 +51,7 @@ if(document.getElementById("login")){
                 chatbotSend()
             }
         }
-        if (e.shiftKey && (e.key === 'c' || e.key === 'C')) {
+        if (e.ctrlKey && (e.key === 'c' || e.key === 'C')) {
             i = 7000
             setTimeout(() => {
                 chatbot_input.value = ""
@@ -101,6 +107,8 @@ if(document.getElementById("login")){
     var speed = 30;
     var reply = []
     var reply_output = ""
+    var file_inserted = true
+    var tempText = ""
 
     scrollToBottom()
 
@@ -136,18 +144,24 @@ if(document.getElementById("login")){
         if(!send){
             return false
         }
-        if(user != ""){
-            chatbotSend()
-        }else{
-            sole.post("../../controllers/chatbot/get_user.php",{
-                userid : chatbot_input.value
-            }).then(res => {
-                console.log(res)
-            })
-        }
+        chatbotSend()
     })
 
     function chatbotSend(){
+        tempText = chatbot_input.value
+        if(chatbot_input.value.toLowerCase() == "clear"){
+            chatbot_body.innerHTML = ""
+            user = ""
+            reply = ["Good day, I am your BOT assistant. <br> To start please provide your User ID.","cleared"]
+            speed = 40
+            createMessageBoxBOT(reply)
+            botReply()
+            chatbot_input.focus()
+            setTimeout(() => {
+                chatbot_input.value = ""    
+            }, 1);
+            return true
+        }
         var br = document.createElement("br")
         var wrapper = document.createElement("div")
         var chat_message_right = document.createElement("div")
@@ -162,22 +176,43 @@ if(document.getElementById("login")){
         chatbot_body.appendChild(br)
         chat_message.innerText = chatbot_input.value
 
-        sole.post("../../controllers/chatbot/main.php",{
-            message : chatbot_input.value
-        }).then(res => {
-            if(res){
-                reply = res
-                if(res[0]){
-                    speed = 5
-                    createMessageBoxBOT(res)
+        if(user != ""){
+            sole.post("../../controllers/chatbot/main.php",{
+                message : chatbot_input.value
+            }).then(res => {
+                if(res){
+                    reply = res
+                    if(res[0]){
+                        if (typeof reply[0] !== 'string'){
+                            file_inserted = false
+                        }
+                        speed = 5
+                        createMessageBoxBOT(res)
+                        botReply()
+                    }
+                }
+            })    
+        }else{
+            sole.post("../../controllers/chatbot/get_user.php",{
+                userid : chatbot_input.value
+            }).then(res => {
+                if(res.length){
+                    user = res[0]["name"]
+                    reply = ["Hello " + res[0]["name"] + " how may I help you?",Math.floor(Math.random() * (10000 - 1 + 1)) + 1]
+                    createMessageBoxBOT(reply)
+                    botReply()
+                }else{
+                    reply = ["Please provide a valid User ID",Math.floor(Math.random() * (10000 - 1 + 1)) + 1]
+                    createMessageBoxBOT(reply)
                     botReply()
                 }
-            }
-        })
+            })
+        }
+
+        
         scrollToBottom()
         setTimeout(() => {
             chatbot_input.value = ""
-            
         }, 1);
     }
 
@@ -189,6 +224,7 @@ if(document.getElementById("login")){
         var chat_head = document.createElement("p")
         chat_head.innerText = "Inventory Bot"
         var chat_message = document.createElement("div")
+        var tempText = ""
         chat_message.setAttribute("id",res[1])
         chat_message_left.appendChild(chat_head)
         chat_message_left.appendChild(chat_message)
@@ -210,21 +246,42 @@ if(document.getElementById("login")){
 
     // typeWriter();
     
+    
     function botReply(){
-        // console.log(res)
+        var file = false
         var text = ""
         if (typeof reply[0] === 'string'){
             text = reply[0]
         }else{
+            file = reply[0][0] == "file" ? true : false
             text = reply[0][1]
+        }
+        if (text.endsWith('<br>')) {
+            text = text.slice(0, -4);
         }
         if (i < text.length) {
             send = false
             reply_output += text.charAt(i);
+
             document.getElementById(reply[1]).innerHTML = reply_output;
             i++;
             setTimeout(botReply, speed);
         }else{
+            if(file && !file_inserted){
+                var img = document.createElement("img")
+                img.setAttribute("class","chatbot_file")
+                img.src = reply[0][2]
+
+                const link = document.createElement('a');
+                link.href = reply[0][2];
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.appendChild(img)
+
+                document.getElementById(reply[1]).insertAdjacentElement("afterend",link)
+                file = false
+                file_inserted = true
+            }
             send = true
             reply_output = ""
             i = 0

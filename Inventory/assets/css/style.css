@@ -581,6 +581,13 @@ input:checked + .slider:before {
     margin-right: -300px !important;
 }
 
+.chatbot_file{
+    width: 100%;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
 .bot-ico{
     width: 80px;
     height: 70px;
