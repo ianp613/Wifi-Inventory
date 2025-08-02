@@ -7,6 +7,7 @@
     $isp = $_GET["loc"] == "isp" ? true : false;
     $routers = $_GET["loc"] == "routers" ? true : false;
     $ipaddress = $_GET["loc"] == "ipaddress" ? true : false;
+    $mac = $_GET["loc"] == "mac" ? true : false;
     $cctv = $_GET["loc"] == "cctv" ? true : false;
     $logs = $_GET["loc"] == "logs" ? true : false;
     $accounts = $_GET["loc"] == "accounts" ? true : false;
@@ -65,6 +66,11 @@
                         </a>
                     </li>
                     <li class="nav-item mb-2">
+                        <a href="?loc=mac" class="nav-link f-15 text-light <?php $mac ?  printf("bg-light text-dark rounded") :  null;?>">
+                            <i class="fa fa-map-marker red-1 <?php $mac ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>MAC Address</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
                         <a href="?loc=cctv" class="nav-link f-15 text-light <?php $cctv ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-video-camera red-1 <?php $cctv ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>CCTV</span>
                         </a>
@@ -111,6 +117,8 @@
                                     echo "<span class=\"fa fa-gears\"></span> Routers";
                                 }elseif($_GET["loc"] == "ipaddress"){
                                     echo "<span class=\"fa fa-map-marker\"></span> IP Address";
+                                }elseif($_GET["loc"] == "mac"){
+                                    echo "<span class=\"fa fa-map-marker\"></span> MAC Address";
                                 }elseif($_GET["loc"] == "logs"){
                                     echo "<span class=\"fa fa-list\"></span> Activity Logs";
                                 }elseif($_GET["loc"] == "artisanry"){
@@ -152,6 +160,8 @@
                             include("equipments/equipments.php");
                         }elseif($_GET["loc"] == "ipaddress"){
                             include("ipaddress/ipaddress.php");
+                        }elseif($_GET["loc"] == "mac"){
+                            include("mac/mac.php");
                         }elseif($_GET["loc"] == "cctv"){
                             include("cctv/cctv.php");
                         }elseif($_GET["loc"] == "isp"){
@@ -188,6 +198,7 @@
         <?php include("modals/cctv.php"); ?>
         <?php include("modals/isp.php"); ?>
         <?php include("modals/routers.php"); ?>
+        <?php include("modals/mac.php"); ?>
         <?php include("modals/logout.php"); ?>
         <?php include("modals/settings.php"); ?>
         <?php include("modals/accounts.php"); ?>
@@ -204,6 +215,7 @@
         <script src="../assets/js/dashboard.js"></script>
         <script src="../assets/js/equipments.js"></script>
         <script src="../assets/js/ipaddress.js"></script>
+        <script src="../assets/js/mac.js"></script>
         <script src="../assets/js/cctv.js"></script>
         <script src="../assets/js/routers.js"></script>
         <script src="../assets/js/isp.js"></script>

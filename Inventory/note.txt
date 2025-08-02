@@ -1,1 +1,9 @@
 Add login attemp and Account Lock Function
+
+purpose
+project
+user
+
+Count add per month
+Resupply if reach 0 or minimum for need restock
+

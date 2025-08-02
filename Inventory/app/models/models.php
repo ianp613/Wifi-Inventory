@@ -337,4 +337,51 @@
         ];
         public $main = "camera_id";
     }
+
+    class MAC_Address{
+        public $table = "mac_address";
+        public $fillable = [
+            "uid",
+            "wid",
+            "mac",
+            "name",
+            "device",
+            "project",
+            "location"
+        ];
+        public $label = [
+            "uid" => "UID:",
+            "wid" => "WID:",
+            "name" => "Name:",
+            "mac" => "MAC:",
+            "device" => "Device:",
+            "project" => "Project:",
+            "location" => "Location:"
+        ];
+        public $ignore = [
+            "id",
+            "uid",
+            "wid"
+        ];
+        public $main = "name";
+    }
+
+    class Wifi{
+        public $table = "wifi";
+        public $fillable = [
+            "uid",
+            "name",
+            "password"
+        ];
+        public $label = [
+            "uid" => "UID:",
+            "name" => "Name:",
+            "password" => "Password:"
+        ];
+        public $ignore = [
+            "id",
+            "uid"
+        ];
+        public $main = "name";
+    }
 ?>

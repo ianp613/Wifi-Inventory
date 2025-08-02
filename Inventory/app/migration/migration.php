@@ -10,7 +10,9 @@
         "cctvLocationMigration",
         "cctvCamera",
         "SettingsMigration",
-        "LogMigration"
+        "LogMigration",
+        "mac_addressMigration",
+        "wifiMigration",
     ];
     class UserMigration
     {
@@ -174,6 +176,32 @@
             Migrate::attrib_string(255);
             Migrate::string("uid");
             Migrate::string("log");
+        }
+    }
+
+    class mac_addressMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("mac_address");
+            Migrate::attrib_string(255);
+            Migrate::string("uid");
+            Migrate::string("wid");
+            Migrate::string("mac");
+            Migrate::string("name");
+            Migrate::string("device");
+            Migrate::string("project");
+            Migrate::string("location");
+        }
+    }
+
+    class wifiMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("wifi");
+            Migrate::attrib_string(255);
+            Migrate::string("uid");
+            Migrate::string("name");
+            Migrate::string("password");
         }
     }
 ?>
