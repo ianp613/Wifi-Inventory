@@ -504,8 +504,8 @@ if(document.getElementById("ipaddress")){
             }).then(res => loadIP(res))
         }
         network_dropdown.innerHTML = ""
-        res.networks.forEach(equipment => {
-            network_dropdown.innerHTML += "<li><a href=\"#\" class=\"dropdown-item\" id=\""+ equipment["id"] +"\" >"+ equipment["name"] +"</a></li>"
+        res.networks.forEach(net => {
+            network_dropdown.innerHTML += "<li><a href=\"#\" class=\"dropdown-item\" id=\""+ net["id"] +"\" >"+ net["name"] +"</a></li>"
         });
     }
 

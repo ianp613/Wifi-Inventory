@@ -7,8 +7,8 @@
         </div>
         <div class="col-md-6 d-flex justify-content-end align-items-end">
             <div class="dropdown">
-                <div id="network_dropdown_toggle" tabindex="0" title="Right-Click Network to Edit" class="dropdown-toggle d-inline-block" type="button" data-bs-toggle="dropdown" aria-expanded="false">-- Select Wifi --</div>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" id="network_dropdown">
+                <div id="wifi_dropdown_toggle" tabindex="0" title="Right-Click Wifi to Edit" class="dropdown-toggle d-inline-block" type="button" data-bs-toggle="dropdown" aria-expanded="false">-- Select Wifi --</div>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" id="wifi_dropdown">
                 <!-- DROP DOWN SSID -->
                 </ul>
             </div>

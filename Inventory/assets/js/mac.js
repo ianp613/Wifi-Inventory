@@ -22,6 +22,17 @@ if(document.getElementById("mac")){
         }
     });
 
+    loadPage();
+    // LOAD PAGE DATA
+    function loadPage(){
+        sole.get("../../controllers/mac/get_wifi.php").then(res => loadWifi(res))
+        // if(localStorage.getItem("selected_network")){
+        //     sole.post("../../controllers/ipaddress/get_ip.php", {
+        //         nid: localStorage.getItem("selected_network_id")
+        //     }).then(res => loadIP(res))
+        // }
+    }
+
     const add_wifi = new bootstrap.Modal(document.getElementById('add_wifi'),unclose);
 
     var add_wifi_btn = document.getElementById("add_wifi_btn")
@@ -31,4 +42,32 @@ if(document.getElementById("mac")){
     add_wifi_btn.addEventListener("click",function(){
         
     })
+
+
+    function loadWifi(res){
+        if(wifi_dropdown_toggle.innerText == "-- Select Wifi --"){
+            if (localStorage.getItem("selected_wifi") && res.wifis.length){
+                wifi_dropdown_toggle.innerText = localStorage.getItem("selected_wifi")
+            }else{
+                if(res.wifis.length){
+                    wifi_dropdown_toggle.innerText = res.wifis[0]["name"]
+                    localStorage.setItem("selected_wifi", res.wifis[0]["name"]);
+                    localStorage.setItem("selected_wifi_id", res.wifis[0]["id"]);
+                }else{
+                    localStorage.removeItem("selected_wifi");
+                    localStorage.removeItem("selected_wifi_id");
+                }
+            }
+        }
+        if(localStorage.getItem("selected_wifi")){
+            sole.post("../../controllers/ipaddress/get_ip.php", {
+                nid: localStorage.getItem("selected_wifi_id")
+            }).then(res => loadIP(res))
+        }
+        wifi_dropdown.innerHTML = ""
+        console.log(res)
+        res.wifis.forEach(wifi => {
+            wifi_dropdown.innerHTML += "<li><a href=\"#\" class=\"dropdown-item\" id=\""+ wifi["id"] +"\" >"+ wifi["name"] +"</a></li>"
+        });
+    }
 }
