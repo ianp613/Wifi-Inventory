@@ -17,7 +17,7 @@ if(document.getElementById("mac")){
         ],
         autoWidth: false,
         language: {
-           sLengthMenu: "Show _MENU_entries <button id=\"add_mac_entry_btn\" class=\"btn btn-sm btn-danger\"><span class=\"fa fa-plus\"></span> Add Entry</button>",
+           sLengthMenu: "Show _MENU_entries <button id=\"add_mac_entry_modal_btn\" class=\"btn btn-sm btn-danger\"><span class=\"fa fa-plus\"></span> Add Entry</button>",
            search: "<button id=\"ip_import\" style=\"margin-right: 10px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span class=\" fa fa-upload\"></span> Import</button><button id=\"ip_export\" style=\"margin-right: 10px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span class=\" fa fa-download\"></span> Export</button>   Search: "
         }
     });
@@ -48,6 +48,7 @@ if(document.getElementById("mac")){
     var edit_wifi_btn = document.getElementById("edit_wifi_btn")
     var edit_wifi_name = document.getElementById("edit_wifi_name")
     var edit_wifi_password = document.getElementById("edit_wifi_password")
+    var edit_wifi_name_temp = ""
 
     var delete_wifi_name = document.getElementById("delete_wifi_name")
     var delete_wifi_btn = document.getElementById("delete_wifi_btn")
@@ -55,9 +56,17 @@ if(document.getElementById("mac")){
     var delete_ready_state_wifi = document.getElementById("delete_ready_state_wifi")
     var delete_saving_state_wifi = document.getElementById("delete_saving_state_wifi")
 
-    var add_mac_entry_btn = document.getElementById("add_mac_entry_btn")
+    var add_mac_entry_modal_btn = document.getElementById("add_mac_entry_modal_btn")
     var add_mac = document.getElementById("add_mac")
     var add_mac_entry_title = document.getElementById("add_mac_entry_title")
+
+    var mac_address = document.getElementById("mac_address")
+    var mac_name = document.getElementById("mac_name")
+    var mac_device = document.getElementById("mac_device")
+    var mac_project = document.getElementById("mac_project")
+    var mac_location = document.getElementById("mac_location")
+    var mac_remarks = document.getElementById("mac_remarks")
+    var add_mac_entry_btn = document.getElementById("add_mac_entry_btn")
 
     var wifi_dropdown = document.getElementById("wifi_dropdown")
     var wifi_dropdown_toggle = document.getElementById("wifi_dropdown_toggle")
@@ -66,11 +75,12 @@ if(document.getElementById("mac")){
         wifi_name.focus()
     })
     edit_wifi.addEventListener('shown.bs.modal', function () {
+        edit_wifi_name_temp = edit_wifi_name.value
         edit_wifi_name.focus()
     })
     add_mac.addEventListener('shown.bs.modal', function () {
-        add_mac_entry_title.innerText = "Add MAC Entry to " + localStorage.getItem("selected_wifi")
-        // add_mac_entry_mac.focus()
+        add_mac_entry_title.innerText = "Add Entry to " + localStorage.getItem("selected_wifi")
+        mac_address.focus()
     })
 
     add_wifi_btn.addEventListener("click",function(){
@@ -100,9 +110,9 @@ if(document.getElementById("mac")){
         }).then(res => validateResponse(res,"delete_wifi"))
     })
 
-    add_mac_entry_btn.addEventListener("click",function(){
+    add_mac_entry_modal_btn.addEventListener("click",function(){
         if(localStorage.getItem("selected_wifi") != null){
-            if(localStorage.getItem("selected_wifi").toLocaleLowerCase() != "show all"){
+            if(localStorage.getItem("selected_wifi").toLowerCase() != "show all"){
                 add_mac_entry_modal.show()
             }else{
                 bs5.toast("warning","Please select wifi first.")
@@ -136,6 +146,47 @@ if(document.getElementById("mac")){
         }
     })
 
+    mac_address.addEventListener("input",function(){
+        this.value = this.value.replace(/[^a-zA-Z0-9:]/g, "")
+        if(this.value){
+            var str = this.value.replace(/:/g, "")
+            str = str.match(/.{1,2}/g)
+            this.value = str.join(":").toLowerCase()
+        }
+    })
+    // mac_address.addEventListener("change",function(){
+    //     this.value = this.value.replace(/[^a-zA-Z0-9:]/g, "")
+    //     if(this.value){
+    //         var str = this.value.replace(/:/g, "")
+    //         str = str.match(/.{1,2}/g)
+    //         this.value = str.join(":")
+    //     }
+    // })
+
+    add_mac_entry_btn.addEventListener("click",function(){
+        if(mac_address.value && mac_address.value.length == 17){
+            sole.post("../../controllers/mac/add_mac.php",{
+                uid: localStorage.getItem("userid"),
+                wid: localStorage.getItem("selected_wifi_id"),
+                mac: mac_address.value,
+                name: mac_name.value,
+                device: mac_device.value,
+                project: mac_project.value,
+                location: mac_location.value,
+                remarks: mac_remarks.value
+            }).then(res => {
+                if(res.status){
+                    validateResponse(res,"add_mac")
+                }else{
+                    alert(res.message + localStorage.getItem("selected_wifi") + ".")
+                }
+            })    
+        }else{
+            bs5.toast("warning","Please input a valid MAC address.")
+        }
+        
+    })
+
     function editwifiForm(res){
         if(res.status){
             edit_wifi_name.value = res.wifi[0].name
@@ -152,16 +203,18 @@ if(document.getElementById("mac")){
     function loadMAC(res){
         var mac_count = 0
         var mac_record = document.getElementById("mac_record")
+        macTable.clear().draw();
         res.mac.forEach(e => {
+            mac_count++
             macTable.row.add([
                 e["id"],
                 e["mac"],
-                e["name"],
+                e["name"] != "-" ? e["name"] : "",
                 e["device"] != "-" ? e["device"] : "",
                 e["project"] != "-" ? e["project"] : "",
                 e["location"] != "-" ? e["location"] : "",
                 ""
-            ]).draw(false)   
+            ]).draw(false) 
         });
         mac_record.innerText = "MAC Address: " + mac_count
 
@@ -173,7 +226,7 @@ if(document.getElementById("mac")){
             if(e.target.tagName == "BUTTON"){
                 tr = e.target.parentNode.parentNode.children    
             }
-            alert("table clicked")
+            console.log("table clicked")
             // if(e.target.classList.contains('edit_ip_row')) {
             //     edit_ip_title.innerText = "Edit IP: " + tr[0].innerText
             //     edit_ip_btn.setAttribute("i-id",e.target.getAttribute("i-id"))
@@ -210,11 +263,11 @@ if(document.getElementById("mac")){
                 }
             }
         }
-        // if(localStorage.getItem("selected_wifi")){
-        //     sole.post("../../controllers/mac/get_ip.php", {
-        //         nid: localStorage.getItem("selected_wifi_id")
-        //     }).then(res => loadIP(res))
-        // }
+        if(localStorage.getItem("selected_wifi")){
+            sole.post("../../controllers/mac/get_mac.php", {
+                wid: localStorage.getItem("selected_wifi_id")
+            }).then(res => loadMAC(res))
+        }
         wifi_dropdown.innerHTML = ""
         res.wifis.forEach(wifi => {
             wifi_dropdown.innerHTML += "<li><a href=\"#\" class=\"dropdown-item\" id=\""+ wifi["id"] +"\" >"+ wifi["name"] +"</a></li>"
@@ -234,11 +287,16 @@ if(document.getElementById("mac")){
                 sole.get("../../controllers/mac/get_wifi.php").then(res => loadWifi(res))
             }
             if(func == "edit_wifi"){
+                if(edit_wifi_name_temp == localStorage.getItem("selected_wifi")){
+                    wifi_dropdown_toggle.innerText = edit_wifi_name.value
+                    localStorage.setItem("selected_wifi", edit_wifi_name.value);
+                    localStorage.setItem("selected_wifi_id", edit_wifi_btn.getAttribute("wid"));
+                }
                 edit_wifi_modal.hide()
                 sole.get("../../controllers/mac/get_wifi.php").then(res => loadWifi(res))
             }
             if(func == "delete_wifi"){
-                if(delete_wifi_name.innerText == localStorage.getItem("selected_wifi") || localStorage.getItem("selected_wifi").toLocaleLowerCase() == "show all"){
+                if(delete_wifi_name.innerText == localStorage.getItem("selected_wifi") || localStorage.getItem("selected_wifi").toLowerCase() == "show all"){
                     wifi_dropdown_toggle.innerText = "-- Select Wifi --"
                     macTable.clear().draw();
                     localStorage.removeItem("selected_wifi");
@@ -246,6 +304,20 @@ if(document.getElementById("mac")){
                 }
                 delete_wifi_modal.hide()
                 sole.get("../../controllers/mac/get_wifi.php").then(res => loadWifi(res))
+            }
+            if(func == "add_mac"){
+                if(localStorage.getItem("selected_wifi")){
+                    sole.post("../../controllers/mac/get_mac.php", {
+                        wid: localStorage.getItem("selected_wifi_id")
+                    }).then(res => loadMAC(res))
+                }
+                mac_address.value = ""
+                mac_name.value = ""
+                mac_device.value = "Cellphone"
+                mac_project.value = ""
+                mac_location.value = ""
+                mac_remarks.value = ""
+                add_mac_entry_modal.hide()
             }
             bs5.toast(res.type,res.message,res.size)
         }else{

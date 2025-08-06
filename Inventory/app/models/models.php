@@ -347,21 +347,24 @@
             "name",
             "device",
             "project",
-            "location"
+            "location",
+            "remarks"
         ];
         public $label = [
-            "uid" => "UID:",
-            "wid" => "WID:",
-            "name" => "Name:",
-            "mac" => "MAC:",
-            "device" => "Device:",
-            "project" => "Project:",
-            "location" => "Location:"
+            "uid:" => "UID:",
+            "wid:" => "WID:",
+            "name:" => "Name:",
+            "mac:" => "MAC:",
+            "device:" => "Device:",
+            "project:" => "Project:",
+            "location:" => "Location:",
+            "remarks:" => "Remarks:"
         ];
         public $ignore = [
             "id",
             "uid",
-            "wid"
+            "wid",
+            "ma"
         ];
         public $main = "name";
     }
@@ -374,9 +377,9 @@
             "password"
         ];
         public $label = [
-            "uid" => "UID:",
-            "name" => "Name:",
-            "password" => "Password:"
+            "uid:" => "UID:",
+            "name:" => "Name:",
+            "password:" => "Password:"
         ];
         public $ignore = [
             "id",

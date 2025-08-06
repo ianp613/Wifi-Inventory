@@ -191,6 +191,7 @@
             Migrate::string("device");
             Migrate::string("project");
             Migrate::string("location");
+            Migrate::string("remarks");
         }
     }
 

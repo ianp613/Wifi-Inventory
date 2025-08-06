@@ -85,45 +85,40 @@
                 </div>
             </div>
             <div class="modal-body">
-                <label for="add_entry_description_input" class="mb-2">Description</label>
-                <input required type="text" name="" id="add_entry_description_input" class="form-control">
+                <label for="mac_address" class="mb-2">MAC Address</label>
+                <input required  type="text" name="" id="mac_address" class="form-control" maxlength="17">
                 <div class="row mt-2">
                     <div class="col-md-6">
-                        <label for="add_entry_model_no_input" class="mb-2">Model No.</label>
-                        <input required style="text-transform: uppercase" type="text" name="" id="add_entry_model_no_input" class="form-control">
+                        <label for="mac_name" class="mb-2">Name</label>
+                        <input required type="text" name="" id="mac_name" class="form-control">
                     </div>
                     <div class="col-md-6">
-                        <label for="add_entry_barcode_input" class="mb-2">Barcode (FPOSI)</label>
-
-                        <div class="btn-group form-control m-0 p-0 form-control-nooutline">
-                            <input required style="text-transform: uppercase" type="text" name="" id="add_entry_barcode_input" class="form-control">
-                            <button class="btn btn-dark" id="barcode_scanner_btn"><span class="fa fa-camera"></span></button>
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-md-6">
-                        <label for="add_entry_specifications_input" class="mb-2">Specifications</label>
-                        <input required type="text" name="" id="add_entry_specifications_input" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="add_entry_status_input" class="mb-2">Status</label>
-                        <select name="" id="add_entry_status_input" class="form-control">
-                            <option value="" selected disabled>-- Select Status --</option>
-                            <option value="Standby">Standby</option>
-                            <option value="In Use">In Use</option>
-                            <option value="For Status">For Status</option>
-                            <option value="N/A">N/A</option>
+                        <label for="mac_device" class="mb-2">Device</label>
+                        <select name="" id="mac_device" class="form-control">
+                            <option value="Cellphone">Cellphone</option>
+                            <option value="Laptop">Laptop</option>
+                            <option value="Desktop">Desktop</option>
+                            <option value="Smart TV / Android TV">Smart TV / Android TV</option>
+                            <option value="Others">Others</option>
                         </select>
                     </div>
                 </div>
-                <label for="add_entry_remarks_input" class="mb-2 mt-2">Remarks</label>
-                <textarea maxlength="1000" rows="5" name="" id="add_entry_remarks_input" class="form-control" placeholder="Aa"></textarea>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label for="mac_project" class="mb-2">Project / Office</label>
+                        <input required type="text" name="" id="mac_project" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="mac_location" class="mb-2">Location</label>
+                        <input required type="text" name="" id="mac_location" class="form-control">
+                    </div>
+                </div>
+                <label for="mac_remarks" class="mb-2 mt-2">Remarks</label>
+                <textarea maxlength="1000" rows="5" name="" id="mac_remarks" class="form-control" placeholder="Aa"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
-                <button id="add_entry_btn" type="button" data-bs-dismiss="" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>
+                <button id="add_mac_entry_btn" type="button" data-bs-dismiss="" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>
             </div>
         </div>
     </div>
