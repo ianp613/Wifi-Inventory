@@ -316,7 +316,7 @@ if(document.getElementById("ipaddress")){
     }
     function loadIP(res){
         ipTable.clear().draw();
-        ip_count = [0,0];
+        var ip_count = [0,0];
         var used_ip = document.getElementById("used_ip");
         var available_ip = document.getElementById("available_ip");
 

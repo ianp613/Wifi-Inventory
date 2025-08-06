@@ -7,7 +7,7 @@
     if($data["name"]) {
         $network = new IP_Network;
         
-            DB::prepare($network,$data["id"]);
+            $network = DB::prepare($network,$data["id"]);
             $network_name_temp = $network->name;
             $network->name = $data["name"];
             $network->subnet = $data["subnet"];

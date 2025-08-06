@@ -2,7 +2,7 @@
     <div class="d-flex mb-3">
         <div class="col-md-6">
             <div class="d-flex">
-                <h6 id="mac_record">Total MAC Address: 0</h6>
+                <h6 id="mac_record">MAC Address: 0</h6>
             </div>
         </div>
         <div class="col-md-6 d-flex justify-content-end align-items-end">
@@ -16,7 +16,7 @@
         </div>
     </div>
     <input hidden type="file" name="" id="ip_import_input"  accept=".xls, .xlsx">
-    <table id="mac_table" class="table border table-hover">
+    <table id="wifi_table" class="table border table-hover">
         <thead class="fwt-5">
             <tr>
                 <td class="text-start">ID</td>
