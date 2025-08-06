@@ -4,7 +4,10 @@
     $wifi = new Wifi;
     $wifi = DB::all($wifi);
 
-    array_push($wifi,["id" => "Show All", "name" => "Show All"]);
+    if(count($wifi) > 1){
+        array_push($wifi,["id" => "Show All", "name" => "Show All"]);
+    }
+
     $response = [
         "status" => true,
         "wifis" => $wifi

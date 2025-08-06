@@ -74,3 +74,57 @@
         </div>
     </div>
 </div>
+
+<!-- ADD MAC ENTRY MODAL -->
+<div class="modal fade" id="add_mac" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h6 id="add_mac_entry_title" class="modal-title">Add Entry to Selected Equipment</h6>    
+                </div>
+            </div>
+            <div class="modal-body">
+                <label for="add_entry_description_input" class="mb-2">Description</label>
+                <input required type="text" name="" id="add_entry_description_input" class="form-control">
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label for="add_entry_model_no_input" class="mb-2">Model No.</label>
+                        <input required style="text-transform: uppercase" type="text" name="" id="add_entry_model_no_input" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="add_entry_barcode_input" class="mb-2">Barcode (FPOSI)</label>
+
+                        <div class="btn-group form-control m-0 p-0 form-control-nooutline">
+                            <input required style="text-transform: uppercase" type="text" name="" id="add_entry_barcode_input" class="form-control">
+                            <button class="btn btn-dark" id="barcode_scanner_btn"><span class="fa fa-camera"></span></button>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label for="add_entry_specifications_input" class="mb-2">Specifications</label>
+                        <input required type="text" name="" id="add_entry_specifications_input" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="add_entry_status_input" class="mb-2">Status</label>
+                        <select name="" id="add_entry_status_input" class="form-control">
+                            <option value="" selected disabled>-- Select Status --</option>
+                            <option value="Standby">Standby</option>
+                            <option value="In Use">In Use</option>
+                            <option value="For Status">For Status</option>
+                            <option value="N/A">N/A</option>
+                        </select>
+                    </div>
+                </div>
+                <label for="add_entry_remarks_input" class="mb-2 mt-2">Remarks</label>
+                <textarea maxlength="1000" rows="5" name="" id="add_entry_remarks_input" class="form-control" placeholder="Aa"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
+                <button id="add_entry_btn" type="button" data-bs-dismiss="" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>
+            </div>
+        </div>
+    </div>
+</div>

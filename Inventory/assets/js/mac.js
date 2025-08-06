@@ -17,7 +17,7 @@ if(document.getElementById("mac")){
         ],
         autoWidth: false,
         language: {
-           sLengthMenu: "Show _MENU_entries <button class=\"btn btn-sm btn-danger\"><span class=\"fa fa-plus\"></span> Add Entry</button>",
+           sLengthMenu: "Show _MENU_entries <button id=\"add_mac_entry_btn\" class=\"btn btn-sm btn-danger\"><span class=\"fa fa-plus\"></span> Add Entry</button>",
            search: "<button id=\"ip_import\" style=\"margin-right: 10px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span class=\" fa fa-upload\"></span> Import</button><button id=\"ip_export\" style=\"margin-right: 10px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span class=\" fa fa-download\"></span> Export</button>   Search: "
         }
     });
@@ -37,6 +37,8 @@ if(document.getElementById("mac")){
     const edit_wifi_modal = new bootstrap.Modal(document.getElementById('edit_wifi'),unclose);
     const delete_wifi_modal = new bootstrap.Modal(document.getElementById('delete_wifi'),unclose);
 
+    const add_mac_entry_modal = new bootstrap.Modal(document.getElementById('add_mac'),unclose);
+
     var add_wifi = document.getElementById("add_wifi")
     var edit_wifi = document.getElementById("edit_wifi")
     var add_wifi_btn = document.getElementById("add_wifi_btn")
@@ -53,16 +55,22 @@ if(document.getElementById("mac")){
     var delete_ready_state_wifi = document.getElementById("delete_ready_state_wifi")
     var delete_saving_state_wifi = document.getElementById("delete_saving_state_wifi")
 
-        var wifi_dropdown = document.getElementById("wifi_dropdown")
-    var wifi_dropdown_toggle = document.getElementById("wifi_dropdown_toggle")
-    
+    var add_mac_entry_btn = document.getElementById("add_mac_entry_btn")
+    var add_mac = document.getElementById("add_mac")
+    var add_mac_entry_title = document.getElementById("add_mac_entry_title")
 
+    var wifi_dropdown = document.getElementById("wifi_dropdown")
+    var wifi_dropdown_toggle = document.getElementById("wifi_dropdown_toggle")
 
     add_wifi.addEventListener('shown.bs.modal', function () {
         wifi_name.focus()
     })
     edit_wifi.addEventListener('shown.bs.modal', function () {
         edit_wifi_name.focus()
+    })
+    add_mac.addEventListener('shown.bs.modal', function () {
+        add_mac_entry_title.innerText = "Add MAC Entry to " + localStorage.getItem("selected_wifi")
+        // add_mac_entry_mac.focus()
     })
 
     add_wifi_btn.addEventListener("click",function(){
@@ -92,6 +100,18 @@ if(document.getElementById("mac")){
         }).then(res => validateResponse(res,"delete_wifi"))
     })
 
+    add_mac_entry_btn.addEventListener("click",function(){
+        if(localStorage.getItem("selected_wifi") != null){
+            if(localStorage.getItem("selected_wifi").toLocaleLowerCase() != "show all"){
+                add_mac_entry_modal.show()
+            }else{
+                bs5.toast("warning","Please select wifi first.")
+            }
+        }else{
+            bs5.toast("warning","Please select wifi first.")
+        }
+    })
+
     // SELECT WIFI
     wifi_dropdown.addEventListener("click", e=>{
         if(e.target.classList.contains("dropdown-item")){
@@ -109,7 +129,7 @@ if(document.getElementById("mac")){
     wifi_dropdown.addEventListener("contextmenu", e=>{
         if(e.target.innerText.toLowerCase() != "show all"){
             if(e.target.classList.contains("dropdown-item")){
-                sole.post("../../controllers/mac/get_mac.php",{
+                sole.post("../../controllers/mac/find_wifi.php",{
                     id: e.target.getAttribute("id")
                 }).then(res => editwifiForm(res))
             }    
@@ -218,6 +238,12 @@ if(document.getElementById("mac")){
                 sole.get("../../controllers/mac/get_wifi.php").then(res => loadWifi(res))
             }
             if(func == "delete_wifi"){
+                if(delete_wifi_name.innerText == localStorage.getItem("selected_wifi") || localStorage.getItem("selected_wifi").toLocaleLowerCase() == "show all"){
+                    wifi_dropdown_toggle.innerText = "-- Select Wifi --"
+                    macTable.clear().draw();
+                    localStorage.removeItem("selected_wifi");
+                    localStorage.removeItem("selected_wifi_id");
+                }
                 delete_wifi_modal.hide()
                 sole.get("../../controllers/mac/get_wifi.php").then(res => loadWifi(res))
             }
