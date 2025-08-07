@@ -89,6 +89,7 @@ if(document.getElementById("ipaddress")){
     var edit_network_name_temp = ""
 
     var unassign_ip_name = document.getElementById("unassign_ip_name")
+    var unassign_ip_btn = document.getElementById("unassign_ip_btn")
 
     // EDIT IP FOCUS
     edit_ip.addEventListener('shown.bs.modal', function () {

@@ -38,6 +38,7 @@ if(document.getElementById("mac")){
     const delete_wifi_modal = new bootstrap.Modal(document.getElementById('delete_wifi'),unclose);
 
     const add_mac_entry_modal = new bootstrap.Modal(document.getElementById('add_mac'),unclose);
+    const edit_mac_entry_modal = new bootstrap.Modal(document.getElementById('edit_mac'),unclose);
 
     var add_wifi = document.getElementById("add_wifi")
     var edit_wifi = document.getElementById("edit_wifi")
@@ -60,6 +61,9 @@ if(document.getElementById("mac")){
     var add_mac = document.getElementById("add_mac")
     var add_mac_entry_title = document.getElementById("add_mac_entry_title")
 
+    var edit_mac = document.getElementById("edit_mac")
+    var edit_mac_entry_title = document.getElementById("edit_mac_entry_title")
+
     var mac_address = document.getElementById("mac_address")
     var mac_name = document.getElementById("mac_name")
     var mac_device = document.getElementById("mac_device")
@@ -67,6 +71,15 @@ if(document.getElementById("mac")){
     var mac_location = document.getElementById("mac_location")
     var mac_remarks = document.getElementById("mac_remarks")
     var add_mac_entry_btn = document.getElementById("add_mac_entry_btn")
+
+    var edit_mac_address = document.getElementById("edit_mac_address")
+    var edit_mac_name = document.getElementById("edit_mac_name")
+    var edit_mac_device = document.getElementById("edit_mac_device")
+    var edit_mac_project = document.getElementById("edit_mac_project")
+    var edit_mac_location = document.getElementById("edit_mac_location")
+    var edit_mac_remarks = document.getElementById("edit_mac_remarks")
+    var edit_mac_entry_btn = document.getElementById("edit_mac_entry_btn")
+
 
     var wifi_dropdown = document.getElementById("wifi_dropdown")
     var wifi_dropdown_toggle = document.getElementById("wifi_dropdown_toggle")
@@ -81,6 +94,9 @@ if(document.getElementById("mac")){
     add_mac.addEventListener('shown.bs.modal', function () {
         add_mac_entry_title.innerText = "Add Entry to " + localStorage.getItem("selected_wifi")
         mac_address.focus()
+    })
+    edit_mac.addEventListener('shown.bs.modal', function () {
+        edit_mac_address.focus()
     })
 
     add_wifi_btn.addEventListener("click",function(){
@@ -154,6 +170,14 @@ if(document.getElementById("mac")){
             this.value = str.join(":").toLowerCase()
         }
     })
+    edit_mac_address.addEventListener("input",function(){
+        this.value = this.value.replace(/[^a-zA-Z0-9:]/g, "")
+        if(this.value){
+            var str = this.value.replace(/:/g, "")
+            str = str.match(/.{1,2}/g)
+            this.value = str.join(":").toLowerCase()
+        }
+    })
     // mac_address.addEventListener("change",function(){
     //     this.value = this.value.replace(/[^a-zA-Z0-9:]/g, "")
     //     if(this.value){
@@ -187,6 +211,28 @@ if(document.getElementById("mac")){
         
     })
 
+    edit_mac_entry_btn.addEventListener("click",function(){
+        if(edit_mac_address.value && edit_mac_address.value.length == 17){
+            sole.post("../../controllers/mac/edit_mac.php",{
+                id: this.getAttribute("m-id"),
+                mac: edit_mac_address.value,
+                name: edit_mac_name.value,
+                device: edit_mac_device.value,
+                project: edit_mac_project.value,
+                location: edit_mac_location.value,
+                remarks: edit_mac_remarks.value
+            }).then(res => {
+                if(res.status){
+                    validateResponse(res,"edit_mac")
+                }else{
+                    alert(res.message + localStorage.getItem("selected_wifi") + ".")
+                }
+            })    
+        }else{
+            bs5.toast("warning","Please input a valid MAC address.")
+        }
+    })
+
     function editwifiForm(res){
         if(res.status){
             edit_wifi_name.value = res.wifi[0].name
@@ -198,6 +244,16 @@ if(document.getElementById("mac")){
         }else{
             bs5.toast(res.type,res.message,res.size)
         }
+    }
+
+    function editMACForm(res){
+        edit_mac_address.value = res.mac[0].mac
+        edit_mac_name.value = res.mac[0].name != "-" ? res.mac[0].name : ""
+        edit_mac_device.value = res.mac[0].device != "-" ? res.mac[0].device : ""
+        edit_mac_project.value = res.mac[0].project != "-" ? res.mac[0].project : ""
+        edit_mac_location.value = res.mac[0].location != "-" ? res.mac[0].location : ""
+        edit_mac_remarks.value = res.mac[0].remarks != "-" ? res.mac[0].remarks : ""
+        edit_mac_entry_modal.show()
     }
 
     function loadMAC(res){
@@ -213,7 +269,8 @@ if(document.getElementById("mac")){
                 e["device"] != "-" ? e["device"] : "",
                 e["project"] != "-" ? e["project"] : "",
                 e["location"] != "-" ? e["location"] : "",
-                ""
+                " <button id=\"edit_mac_"+ e["id"] +"\" m-id=\""+ e["id"] +"\" class=\"edit_mac_row btn btn-sm btn-secondary mb-1\"><i m-id=\""+ e["id"] +"\" class=\"edit_mac_row fa fa-edit\"></i></button>"+
+                " <button id=\"delete_mac_"+ e["id"] +"\" m-id=\""+ e["id"] +"\" class=\"delete_mac_row btn btn-sm btn-danger mb-1\"><i m-id=\""+ e["id"] +"\" class=\"delete_mac_row fa fa-trash-o\"></i></button>"
             ]).draw(false) 
         });
         mac_record.innerText = "MAC Address: " + mac_count
@@ -226,25 +283,19 @@ if(document.getElementById("mac")){
             if(e.target.tagName == "BUTTON"){
                 tr = e.target.parentNode.parentNode.children    
             }
-            console.log("table clicked")
-            // if(e.target.classList.contains('edit_ip_row')) {
-            //     edit_ip_title.innerText = "Edit IP: " + tr[0].innerText
-            //     edit_ip_btn.setAttribute("i-id",e.target.getAttribute("i-id"))
-            //     sole.post("../../controllers/ipaddress/find_ip.php",{
-            //         id: e.target.getAttribute("i-id")
-            //     }).then(res => editForm(res))
-            // }
+            if(e.target.classList.contains('edit_mac_row')) {
+                edit_mac_entry_title.innerText = "Edit MAC Address: " + tr[0].innerText.toUpperCase()
+                edit_mac_entry_btn.setAttribute("m-id",e.target.getAttribute("m-id"))
+                sole.post("../../controllers/mac/find_mac.php",{
+                    id: e.target.getAttribute("m-id")
+                }).then(res => editMACForm(res))
+            }
             // if(e.target.classList.contains('unassign_ip_row')){
             //     unassign_ip_name.innerText = "Unassign IP: " + tr[0].innerText
             //     unassign_ip_btn.setAttribute("i-id",e.target.getAttribute("i-id"))
             //     unassign_ip_modal.show()
             // }
         })
-
-
-
-
-        console.log(res)
     }
 
 
@@ -318,6 +369,20 @@ if(document.getElementById("mac")){
                 mac_location.value = ""
                 mac_remarks.value = ""
                 add_mac_entry_modal.hide()
+            }
+            if(func == "edit_mac"){
+                if(localStorage.getItem("selected_wifi")){
+                    sole.post("../../controllers/mac/get_mac.php", {
+                        wid: localStorage.getItem("selected_wifi_id")
+                    }).then(res => loadMAC(res))
+                }
+                edit_mac_address.value = ""
+                edit_mac_name.value = ""
+                mac_device.value = "Cellphone"
+                edit_mac_project.value = ""
+                edit_mac_location.value = ""
+                edit_mac_remarks.value = ""
+                edit_mac_entry_modal.hide()
             }
             bs5.toast(res.type,res.message,res.size)
         }else{

@@ -41,8 +41,6 @@
     </div>
 </div>
 
-<!-- DELETE WIFI MODAL -->
-
 <!-- DELETE wifi MODAL -->
 <div class="modal fade" id="delete_wifi" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered ">
@@ -119,6 +117,56 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
                 <button id="add_mac_entry_btn" type="button" data-bs-dismiss="" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- EDIT MAC ENTRY MODAL -->
+<div class="modal fade" id="edit_mac" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h6 id="edit_mac_entry_title" class="modal-title">Add Entry to Selected Equipment</h6>    
+                </div>
+            </div>
+            <div class="modal-body">
+                <label for="edit_mac_address" class="mb-2">MAC Address</label>
+                <input required  type="text" name="" id="edit_mac_address" class="form-control" maxlength="17">
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label for="edit_mac_name" class="mb-2">Name</label>
+                        <input required type="text" name="" id="edit_mac_name" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="edit_mac_device" class="mb-2">Device</label>
+                        <select name="" id="edit_mac_device" class="form-control">
+                            <option value="Cellphone">Cellphone</option>
+                            <option value="Laptop">Laptop</option>
+                            <option value="Desktop">Desktop</option>
+                            <option value="Smart TV / Android TV">Smart TV / Android TV</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label for="edit_mac_project" class="mb-2">Project / Office</label>
+                        <input required type="text" name="" id="edit_mac_project" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="edit_mac_location" class="mb-2">Location</label>
+                        <input required type="text" name="" id="edit_mac_location" class="form-control">
+                    </div>
+                </div>
+                <label for="edit_mac_remarks" class="mb-2 mt-2">Remarks</label>
+                <textarea maxlength="1000" rows="5" name="" id="edit_mac_remarks" class="form-control" placeholder="Aa"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
+                <button id="edit_mac_entry_btn" type="button" data-bs-dismiss="" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>
             </div>
         </div>
     </div>

@@ -329,7 +329,6 @@ if(document.getElementById("equipments")){
                     id: e.target.getAttribute("e-id")
                 }).then(res => editForm(res))
                 edit_entry_btn.addEventListener("click", e =>{
-
                     if(edit_entry_description_input.value){
                         if(localStorage.getItem("selected_equipment")){
                             var id = null;

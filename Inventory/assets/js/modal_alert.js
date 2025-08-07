@@ -86,12 +86,13 @@ class BS5_Toaster {
     alert_open(){
         const modals = document.querySelectorAll('.modal.show');
         modals.forEach((modal) => {
-        const modalInstance = bootstrap.Modal.getInstance(modal);
-        if (modalInstance) {
-            modalInstance.hide();
-        }
+            const modalInstance = bootstrap.Modal.getInstance(modal);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
         });
         this.alert_modal.show()
+        this.close_button.focus()
         let el = document.getElementsByClassName("modal-backdrop")
         for (let i = 2; i < el.length; i++) {
             if(i != 0 || i != 1){
