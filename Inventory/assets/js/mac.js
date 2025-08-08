@@ -39,6 +39,7 @@ if(document.getElementById("mac")){
 
     const add_mac_entry_modal = new bootstrap.Modal(document.getElementById('add_mac'),unclose);
     const edit_mac_entry_modal = new bootstrap.Modal(document.getElementById('edit_mac'),unclose);
+    const delete_mac_entry_modal = new bootstrap.Modal(document.getElementById('delete_mac'),unclose);
 
     var add_wifi = document.getElementById("add_wifi")
     var edit_wifi = document.getElementById("edit_wifi")
@@ -79,6 +80,9 @@ if(document.getElementById("mac")){
     var edit_mac_location = document.getElementById("edit_mac_location")
     var edit_mac_remarks = document.getElementById("edit_mac_remarks")
     var edit_mac_entry_btn = document.getElementById("edit_mac_entry_btn")
+
+    var delete_mac_address = document.getElementById("delete_mac_address")
+    var delete_mac_btn = document   .getElementById("delete_mac_btn")
 
 
     var wifi_dropdown = document.getElementById("wifi_dropdown")
@@ -233,6 +237,13 @@ if(document.getElementById("mac")){
         }
     })
 
+    delete_mac_btn.addEventListener("click",function(){
+        sole.post("../../controllers/mac/delete_mac.php",{
+            wid: localStorage.getItem("selected_wifi_id"),
+            id: this.getAttribute("m-id")
+        }).then(res => validateResponse(res,"delete_mac"))
+    })
+
     function editwifiForm(res){
         if(res.status){
             edit_wifi_name.value = res.wifi[0].name
@@ -290,11 +301,11 @@ if(document.getElementById("mac")){
                     id: e.target.getAttribute("m-id")
                 }).then(res => editMACForm(res))
             }
-            // if(e.target.classList.contains('unassign_ip_row')){
-            //     unassign_ip_name.innerText = "Unassign IP: " + tr[0].innerText
-            //     unassign_ip_btn.setAttribute("i-id",e.target.getAttribute("i-id"))
-            //     unassign_ip_modal.show()
-            // }
+            if(e.target.classList.contains('delete_mac_row')){
+                delete_mac_address.innerText = tr[0].innerText
+                delete_mac_btn.setAttribute("m-id",e.target.getAttribute("m-id"))
+                delete_mac_entry_modal.show()
+            }
         })
     }
 
@@ -383,6 +394,14 @@ if(document.getElementById("mac")){
                 edit_mac_location.value = ""
                 edit_mac_remarks.value = ""
                 edit_mac_entry_modal.hide()
+            }
+            if(func == "delete_mac"){
+                if(localStorage.getItem("selected_wifi")){
+                    sole.post("../../controllers/mac/get_mac.php", {
+                        wid: localStorage.getItem("selected_wifi_id")
+                    }).then(res => loadMAC(res))
+                }
+                delete_mac_entry_modal.hide()
             }
             bs5.toast(res.type,res.message,res.size)
         }else{
