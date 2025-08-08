@@ -46,3 +46,17 @@
         </div>
     </div>
 </div>
+
+<!-- WORK IN PROGRESS MODAL -->
+ <div class="modal" id="wip_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-center modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <code><h1>WORK IN PROGRESS</h1></code>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+ </div>
