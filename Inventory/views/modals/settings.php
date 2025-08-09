@@ -48,14 +48,18 @@
 </div>
 
 <!-- WORK IN PROGRESS MODAL -->
- <div class="modal" id="wip_modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-center modal-sm">
+ <div class="modal fade" id="wip_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <code><h1>WORK IN PROGRESS</h1></code>
+                <div class="w-100 text-center pt-2">
+                    <code><h4>WORK IN PROGRESS</h4></code>
+                </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-sm btn-primary">OK</button>
+                <div class="w-100 text-center">
+                    <button data-bs-dismiss="modal" class="w-100 btn btn-sm btn-primary rounded-pill wd-50">OK</button>
+                </div>
             </div>
         </div>
     </div>

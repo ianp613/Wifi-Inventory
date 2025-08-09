@@ -18,7 +18,7 @@ if(document.getElementById("mac")){
         autoWidth: false,
         language: {
            sLengthMenu: "Show _MENU_entries <button id=\"add_mac_entry_modal_btn\" class=\"btn btn-sm btn-danger\"><span class=\"fa fa-plus\"></span> Add Entry</button>",
-           search: "<button id=\"ip_import\" style=\"margin-right: 10px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span class=\" fa fa-upload\"></span> Import</button><button id=\"ip_export\" style=\"margin-right: 10px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span class=\" fa fa-download\"></span> Export</button>   Search: "
+           search: "<button data-bs-toggle=\"modal\" data-bs-target=\"#wip_modal\" id=\"ip_import\" style=\"margin-right: 10px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span class=\" fa fa-upload\"></span> Import</button><button data-bs-toggle=\"modal\" data-bs-target=\"#wip_modal\" id=\"ip_export\" style=\"margin-right: 10px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span class=\" fa fa-download\"></span> Export</button>   Search: "
         }
     });
 
