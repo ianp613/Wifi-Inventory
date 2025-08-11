@@ -13,6 +13,7 @@
         "LogMigration",
         "mac_addressMigration",
         "wifiMigration",
+        "ConsumablesMigration",
     ];
     class UserMigration
     {
@@ -203,6 +204,19 @@
             Migrate::string("uid");
             Migrate::string("name");
             Migrate::string("password");
+        }
+    }
+
+    class ConsumablesMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("consumables");
+            Migrate::attrib_string(255);
+            Migrate::string("uid");
+            Migrate::string("code");
+            Migrate::string("description");
+            Migrate::string("stock");
+            Migrate::string("restock_point");
         }
     }
 ?>

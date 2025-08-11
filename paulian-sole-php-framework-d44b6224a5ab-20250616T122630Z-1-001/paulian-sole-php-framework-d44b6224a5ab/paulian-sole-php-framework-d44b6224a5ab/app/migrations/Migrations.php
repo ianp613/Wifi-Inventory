@@ -1,16 +1,17 @@
 <?php
     Migrate::$migration = [
-        "UserMigration",
-        "EquipmentMigration",
-        "EquipmentEntryMigration",
-        "ip_networkMigration",
-        "ip_addressMigration",
-        "RoutersMigration",
-        "ISPMigration",
-        "cctvLocationMigration",
-        "cctvCamera",
-        "SettingsMigration",
-        "LogMigration"
+        "ConsumablesMigration",
+        // "UserMigration",
+        // "EquipmentMigration",
+        // "EquipmentEntryMigration",
+        // "ip_networkMigration",
+        // "ip_addressMigration",
+        // "RoutersMigration",
+        // "ISPMigration",
+        // "cctvLocationMigration",
+        // "cctvCamera",
+        // "SettingsMigration",
+        // "LogMigration"
     ];
     class UserMigration
     {
@@ -172,6 +173,19 @@
             Migrate::attrib_string(255);
             Migrate::string("uid");
             Migrate::string("log");
+        }
+    }
+
+    class ConsumablesMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("consumables");
+            Migrate::attrib_string(255);
+            Migrate::string("uid");
+            Migrate::string("code");
+            Migrate::string("description");
+            Migrate::string("stock");
+            Migrate::string("restock_point");
         }
     }
 ?>

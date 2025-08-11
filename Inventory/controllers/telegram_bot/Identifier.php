@@ -11,7 +11,10 @@
                 "router" => new Routers(),
                 "isp" => new ISP(),
                 "map" => new CCTV_Location(),
-                "cctv" => new CCTV_Camera()
+                "cctv" => new CCTV_Camera(),
+                "mac" => new MAC_Address(),
+                "wifi" => new Wifi(),
+                "consumable" => new Consumables()
             ];
 
             $ignore = ["en", "ent","nt","me"];  // Add any more short tokens here

@@ -4,6 +4,7 @@
     !array_key_exists("userid",$_SESSION) ? header("location: ../index.php") : null; 
     $dashboard = $_GET["loc"] == "dashboard" ? true : false;
     $equipments = $_GET["loc"] == "equipments" ? true : false;
+    $consumables = $_GET["loc"] == "consumables" ? true : false;
     $isp = $_GET["loc"] == "isp" ? true : false;
     $routers = $_GET["loc"] == "routers" ? true : false;
     $ipaddress = $_GET["loc"] == "ipaddress" ? true : false;
@@ -48,6 +49,11 @@
                     <li class="nav-item mb-2">
                         <a href="?loc=equipments" class="nav-link f-15 text-light <?php $equipments ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-wrench red-1  <?php $equipments ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Equipments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="?loc=consumables" class="nav-link f-15 text-light <?php $consumables ?  printf("bg-light text-dark rounded") :  null;?>">
+                            <i class="fa fa-cubes red-1  <?php $consumables ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Consumables</span>
                         </a>
                     </li>
                     <li class="nav-item mb-2">
@@ -111,6 +117,8 @@
                                     echo "<span class=\"fa fa-tachometer\"></span> Dashboard";
                                 }elseif($_GET["loc"] == "equipments"){
                                     echo "<span class=\"fa fa-wrench\"></span> Equipments";
+                                }elseif($_GET["loc"] == "consumables"){
+                                    echo "<span class=\"fa fa-cubes\"></span> Consumables";
                                 }elseif($_GET["loc"] == "isp"){
                                     echo "<span class=\"fa fa-wifi\"></span> Internet Service Provider";
                                 }elseif($_GET["loc"] == "routers"){
@@ -158,6 +166,8 @@
                             include("dashboard/dashboard.php");
                         }elseif($_GET["loc"] == "equipments"){
                             include("equipments/equipments.php");
+                        }elseif($_GET["loc"] == "consumables"){
+                            include("consumables/consumables.php");
                         }elseif($_GET["loc"] == "ipaddress"){
                             include("ipaddress/ipaddress.php");
                         }elseif($_GET["loc"] == "mac"){
@@ -194,6 +204,7 @@
         </div>
         <h6 class="copyright f-10 text-secondary"></h6>
         <?php include("modals/equipments.php"); ?>
+        <?php include("modals/consumables.php"); ?>
         <?php include("modals/ipaddress.php"); ?>
         <?php include("modals/cctv.php"); ?>
         <?php include("modals/isp.php"); ?>
@@ -214,6 +225,7 @@
         <script src="../assets/js/script.js"></script>
         <script src="../assets/js/dashboard.js"></script>
         <script src="../assets/js/equipments.js"></script>
+        <script src="../assets/js/consumables.js"></script>
         <script src="../assets/js/ipaddress.js"></script>
         <script src="../assets/js/mac.js"></script>
         <script src="../assets/js/cctv.js"></script>

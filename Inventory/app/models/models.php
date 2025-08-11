@@ -387,4 +387,37 @@
         ];
         public $main = "name";
     }
+
+    class Consumables{
+        public $table = "consumables";
+        public $fillable = [
+            "uid",
+            "code",
+            "description",
+            "stock",
+            "restock_point"
+        ];
+        public $label = [
+            "uid:" => "UID:",
+            "code:" => "Code:",
+            "description:" => "Description:",
+            "stock:" => "Stock:",
+            "restock_point:" => "Restock Point:"
+        ];
+        public $ignore = [
+            "id",
+            "uid",
+            "es",
+            "de",
+            "st",
+            "to",
+            "oc",
+            "ck",
+            "sto",
+            "toc",
+            "ock",
+            "stock",
+        ];
+        public $main = "description";
+    }
 ?>

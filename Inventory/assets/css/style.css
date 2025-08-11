@@ -467,6 +467,9 @@ input:checked + .slider:before {
 .wd-100 {
     width: 100px;
 }
+.wd-120 {
+    width: 120px;
+}
 .wd-150 {
     width: 150px;
 }
@@ -476,6 +479,9 @@ input:checked + .slider:before {
 
 .wd-500 {
     width: 500px;
+}
+.wd-600 {
+    width: 600px;
 }
 
 
