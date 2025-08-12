@@ -33,6 +33,8 @@ if(document.getElementById("consumables")){
     var add_consumables_btn = document.getElementById("add_consumables_btn")
 
     add_consumables.addEventListener('shown.bs.modal', function () {
+        sole.get("../../controllers/consumables/get_code.php")
+        .then(res => console.log(res))
         consumable_description.focus()
     })
 
