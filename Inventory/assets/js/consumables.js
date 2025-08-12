@@ -29,8 +29,10 @@ if(document.getElementById("consumables")){
     }
 
     const add_consumables_modal = new bootstrap.Modal(document.getElementById('add_consumables'),unclose);
+    const restock_consumables_modal = new bootstrap.Modal(document.getElementById('restock_consumables'),unclose);
 
     var add_consumables = document.getElementById("add_consumables")
+    var restock_consumables = document.getElementById("restock_consumables")
 
     var consumable_code = document.getElementById("consumable_code")
     var consumable_description = document.getElementById("consumable_description")
@@ -38,12 +40,23 @@ if(document.getElementById("consumables")){
     var consumable_restock_point = document.getElementById("consumable_restock_point")
     var add_consumables_btn = document.getElementById("add_consumables_btn")
 
+    var search_consumable = document.getElementById("search_consumable")
+    var restock_consumables_code = document.getElementById("restock_consumables_code")
+    var restock_consumables_stock = document.getElementById("restock_consumables_stock")
+    var restock_consumables_description = document.getElementById("restock_consumables_description")
+    var restock_consumables_btn = document.getElementById("restock_consumables_btn")
+    var restock_quantity = document.getElementById("restock_quantity")
+
     add_consumables.addEventListener('shown.bs.modal', function () {
         sole.get("../../controllers/consumables/get_code.php")
         .then(res => {
             consumable_code.innerHTML = "Code: <b>" + res + "</b>"
         })
         consumable_description.focus()
+    })
+
+    restock_consumables.addEventListener('shown.bs.modal', function () {
+        search_consumable.focus()
     })
 
     add_consumables_btn.addEventListener("click",function(){
@@ -76,6 +89,29 @@ if(document.getElementById("consumables")){
             consumable_restock_point.value = 0
         }
     })
+
+    search_consumable.addEventListener("input",function(){
+        sole.post("../../controllers/consumables/search_consumable.php",{
+            search: search_consumable.value
+        }).then(res => {
+            if(res.length){
+                restock_consumables_code.innerText = res[0].code
+                restock_consumables_description.innerText = res[0].description
+                restock_consumables_stock.innerText = res[0].stock    
+            }
+        })
+    })
+
+    restock_quantity.addEventListener("input",function(){
+        if(restock_quantity.value < 1){
+            restock_quantity.value = 1
+        }
+        if(!restock_quantity.value){
+            restock_quantity.value = 1
+        }
+    })
+
+    
 
     function loadConsumables(res){
         console.log(res)

@@ -1,8 +1,9 @@
+<!-- ADD CONSUMABLES -->
 <div class="modal" id="add_consumables" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h6>Add Consumable</h6>
+                <h6><span class="fa fa-cubes"></span> Add Consumable</h6>
             </div>
             <div class="modal-body">
                 <label id="consumable_code">Code: <b>0</b></label>
@@ -23,6 +24,35 @@
             <div class="modal-footer">
                 <button data-bs-dismiss="modal" class="btn btn-sm btn-secondary"><span class="fa fa-remove"></span> Cancel</button>
                 <button id="add_consumables_btn" class="btn btn-sm btn-primary"><span class="fa fa-save"></span> Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- RESTOCK CONSUMABLES -->
+<div class="modal fade" id="restock_consumables" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6><span class="fa fa-refresh"></span> Restock Consumable</h6>
+            </div>
+            <div class="modal-body">
+                <label for="search_consumable">Search by Code or Description</label>
+                <input type="text" id="search_consumable" class="form-control mt-2" placeholder="Enter code or description">
+                <div id="search_results" class="mt-2"></div>
+                <hr>
+                <div id="restock_consumable_info">
+                    <label>Code: <b id="restock_consumables_code">-</b></label><br>
+                    <label>Description: <span id="restock_consumables_description">-</span></label><br>
+                    <label>Remaining Stock: <span id="restock_consumables_stock">-</span></label>
+                </div>
+                <hr>
+                <label for="restock_quantity">Restock Quantity</label>
+                <input type="number" min="1" value="1" id="restock_quantity" class="form-control mt-2">
+            </div>
+            <div class="modal-footer">
+                <button data-bs-dismiss="modal" class="btn btn-sm btn-secondary"><span class="fa fa-remove"></span> Cancel</button>
+                <button id="restock_consumables_btn" class="btn btn-sm btn-success"><span class="fa fa-plus"></span> Restock</button>
             </div>
         </div>
     </div>
