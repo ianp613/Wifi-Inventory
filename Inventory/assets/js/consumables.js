@@ -22,8 +22,13 @@ if(document.getElementById("consumables")){
         }
     });
 
+    loadPage();
+    // LOAD PAGE DATA
+    function loadPage(){
+        sole.get("../../controllers/consumables/get_consumables.php").then(res => loadConsumables(res))
+    }
+
     const add_consumables_modal = new bootstrap.Modal(document.getElementById('add_consumables'),unclose);
-    add_consumables_modal.show()
 
     var add_consumables = document.getElementById("add_consumables")
 
@@ -44,6 +49,7 @@ if(document.getElementById("consumables")){
     add_consumables_btn.addEventListener("click",function(){
         if(consumable_description.value){
             sole.post("../../controllers/consumables/add_consumables.php",{
+                uid: localStorage.getItem("userid"),
                 description: consumable_description.value,
                 stock: consumable_stock.value,
                 restock_point: consumable_restock_point.value
@@ -53,12 +59,34 @@ if(document.getElementById("consumables")){
         }
     })
 
+    consumable_stock.addEventListener("input",function(){
+        if(consumable_stock.value < 0){
+            consumable_stock.value = 0
+        }
+        if(!consumable_stock.value){
+            consumable_stock.value = 0
+        }
+    })
+
+    consumable_restock_point.addEventListener("input",function(){
+        if(consumable_restock_point.value < 0){
+            consumable_restock_point.value = 0
+        }
+        if(!consumable_restock_point.value){
+            consumable_restock_point.value = 0
+        }
+    })
+
+    function loadConsumables(res){
+        console.log(res)
+    }
+
     function validateResponse(res,func){
         if(res.status){
             if(func == "add_consumables"){
-                description.value = ""
-                stock.value = ""
-                restock_point.value = ""
+                consumable_description.value = ""
+                consumable_stock.value = 0
+                consumable_restock_point.value = 0
                 add_consumables_modal.hide()
             }
             bs5.toast(res.type,res.message,res.size)

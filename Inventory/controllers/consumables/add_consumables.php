@@ -8,31 +8,20 @@
         $consumables = new Consumables;
         $bol = true;
 
-        $mac_temp = DB::where($mac,"wid","=",$data["wid"]);
-        foreach ($mac_temp as $mt) {
-            if($mt["mac"] == $data["mac"]){
-                $bol = false;
-            }
-        }
+        $bol = DB::validate($consumables,"description",$data["description"]) ? true : false;
 
         if($bol){
-            $mac->uid = $data["uid"];
-            $mac->wid = $data["wid"];
-            $mac->mac = $data["mac"];
-            $mac->name = $data["name"] ? $data["name"] : "-";
-            $mac->device = $data["device"] ? $data["device"] : "-";
-            $mac->project = $data["project"] ? $data["project"] : "-";
-            $mac->location = $data["location"] ? $data["location"] : "-";
-            $mac->remarks = $data["remarks"] ? $data["remarks"] : "-";
+            $consumables->uid = $data["uid"];
+            $consumables->code = $_SESSION["consumables_code"];
+            $consumables->description = $data["description"];
+            $consumables->stock = $data["stock"];
+            $consumables->restock_point = $data["restock_point"];
 
-            DB::save($mac);
-
-            $wifi = new Wifi;
-            $wifi_temp = DB::find($wifi,$data["wid"]);
+            DB::save($consumables);
 
             $log = new Logs;
             $log->uid = $_SESSION["userid"];
-            $log->log = $_SESSION["name"]." has add a MAC address \"".$data["mac"]."\" to wifi \"".$wifi_temp[0]["name"]."\".";
+            $log->log = $_SESSION["name"]." has add an entry \"".$data["description"];
             if($_SESSION["log"] != $log->log){
                 $_SESSION["log"] = $log->log;
                 DB::save($log);
@@ -42,14 +31,14 @@
                 "status" => true,
                 "type" => "success",
                 "size" => null,
-                "message" => "MAC address has been saved.",
+                "message" => "Entry has been saved.",
             ];
         }else{
             $response = [
                 "status" => false,
                 "type" => "warning",
                 "size" => null,
-                "message" => "MAC address \"".$data["mac"]."\" already exist in ",
+                "message" => "\"".$data["description"]."\" already exist.",
             ];
         }
         
