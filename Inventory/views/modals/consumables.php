@@ -5,8 +5,7 @@
                 <h6>Add Consumable</h6>
             </div>
             <div class="modal-body">
-                <label for="consumable_code">Code: <b>202653</b></label>
-                <input hidden type="text" name="" id="consumable_code" class="form-control">
+                <label id="consumable_code">Code: <b>202653</b></label>
                 <hr>
                 <label for="consumable_description">Description</label>
                 <input type="text" name="" id="consumable_description" class="form-control mt-2">

@@ -27,6 +27,7 @@ if(document.getElementById("consumables")){
 
     var add_consumables = document.getElementById("add_consumables")
 
+    var consumable_code = document.getElementById("consumable_code")
     var consumable_description = document.getElementById("consumable_description")
     var consumable_stock = document.getElementById("consumable_stock")
     var consumable_restock_point = document.getElementById("consumable_restock_point")
@@ -34,15 +35,35 @@ if(document.getElementById("consumables")){
 
     add_consumables.addEventListener('shown.bs.modal', function () {
         sole.get("../../controllers/consumables/get_code.php")
-        .then(res => console.log(res))
+        .then(res => {
+            consumable_code.innerHTML = "Code: <b>" + res + "</b>"
+        })
         consumable_description.focus()
     })
 
     add_consumables_btn.addEventListener("click",function(){
         if(consumable_description.value){
-            
+            sole.post("../../controllers/consumables/add_consumables.php",{
+                description: consumable_description.value,
+                stock: consumable_stock.value,
+                restock_point: consumable_restock_point.value
+            }).then(res => validateResponse(res,"add_consumables"))
         }else{
             bs5.toast("warning","Please add description.")
         }
     })
+
+    function validateResponse(res,func){
+        if(res.status){
+            if(func == "add_consumables"){
+                description.value = ""
+                stock.value = ""
+                restock_point.value = ""
+                add_consumables_modal.hide()
+            }
+            bs5.toast(res.type,res.message,res.size)
+        }else{
+            bs5.toast(res.type,res.message,res.size)
+        }
+    }
 }

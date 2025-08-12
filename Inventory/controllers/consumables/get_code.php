@@ -8,7 +8,7 @@
     while(!$proceed){
         $code = Data::generate(6,"numeric");
         if(DB::validate($consumables,"code",$code)){
-            $_SESSION["conumables_code"] = $code;
+            $_SESSION["consumables_code"] = $code;
             $proceed = true;
         }
     }
