@@ -79,6 +79,19 @@ if(document.getElementById("consumables")){
 
     function loadConsumables(res){
         console.log(res)
+        consumablesTable.clear().draw();
+        res.consumables.forEach(e => {
+            consumablesTable.row.add([
+                e["id"],
+                e["code"],
+                e["description"],
+                e["stock"],
+                e["stock"] == 0 || e["stock"] > e["restock_point"] ?
+                    `<span class="badge bg-danger">Low Stock</span>` :  "<span class=\"badge bg-success\">In Stock</span>",
+                " <button id=\"edit_mac_"+ e["id"] +"\" m-id=\""+ e["id"] +"\" class=\"edit_mac_row btn btn-sm btn-secondary mb-1\"><i m-id=\""+ e["id"] +"\" class=\"edit_mac_row fa fa-edit\"></i></button>"+
+                " <button id=\"delete_mac_"+ e["id"] +"\" m-id=\""+ e["id"] +"\" class=\"delete_mac_row btn btn-sm btn-danger mb-1\"><i m-id=\""+ e["id"] +"\" class=\"delete_mac_row fa fa-trash-o\"></i></button>"
+            ]).draw(false) 
+        });
     }
 
     function validateResponse(res,func){
@@ -88,6 +101,7 @@ if(document.getElementById("consumables")){
                 consumable_stock.value = 0
                 consumable_restock_point.value = 0
                 add_consumables_modal.hide()
+                loadPage()
             }
             bs5.toast(res.type,res.message,res.size)
         }else{
