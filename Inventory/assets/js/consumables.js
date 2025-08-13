@@ -34,6 +34,7 @@ if(document.getElementById("consumables")){
 
     const add_consumables_modal = new bootstrap.Modal(document.getElementById('add_consumables'),unclose);
     const restock_consumables_modal = new bootstrap.Modal(document.getElementById('restock_consumables'),unclose);
+    const add_log_modal = new bootstrap.Modal(document.getElementById('add_log'),unclose);
 
     var add_consumables = document.getElementById("add_consumables")
     var restock_consumables = document.getElementById("restock_consumables")
@@ -53,6 +54,9 @@ if(document.getElementById("consumables")){
 
     var consumable_badge_danger = document.getElementById("consumable_badge_danger")
     var consumable_badge_success = document.getElementById("consumable_badge_success")
+
+    var generate_link_btn = document.getElementById("generate_link_btn")
+    var add_log_link = document.getElementById("add_log_link")
 
     add_consumables.addEventListener('shown.bs.modal', function () {
         sole.get("../../controllers/consumables/get_code.php")
@@ -80,7 +84,9 @@ if(document.getElementById("consumables")){
     })
 
     consumable_stock.addEventListener("input",function(){
-        consumable_stock.value = consumable_stock.value.replace(/^0+(?=\d)/, '');
+        if(/^0+\d/.test(consumable_stock.value)) {
+            consumable_stock.value = consumable_stock.value.replace(/^0+(?=\d)/, '');
+        }
         if(consumable_stock.value < 0){
             consumable_stock.value = 0
         }
@@ -90,7 +96,9 @@ if(document.getElementById("consumables")){
     })
 
     consumable_restock_point.addEventListener("input",function(){
-        consumable_restock_point.value = consumable_restock_point.value.replace(/^0+(?=\d)/, '');
+        if(/^0+\d/.test(consumable_restock_point.value)) {
+            consumable_restock_point.value = consumable_restock_point.value.replace(/^0+(?=\d)/, '');
+        }
         if(consumable_restock_point.value < 0){
             consumable_restock_point.value = 0
         }
@@ -140,13 +148,25 @@ if(document.getElementById("consumables")){
     })
 
     restock_quantity.addEventListener("input",function(){
-        restock_quantity.value = restock_quantity.value.replace(/^0+(?=\d)/, '');
+        if(/^0+\d/.test(restock_quantity.value)) {
+            restock_quantity.value = restock_quantity.value.replace(/^0+(?=\d)/,    '');
+        }
         if(restock_quantity.value < 0){
             restock_quantity.value = 0
         }
         if(!restock_quantity.value){
             restock_quantity.value = 0
         }
+    })
+
+    generate_link_btn.addEventListener("click",function(){
+        let url = window.location.origin + window.location.pathname;
+        let baseUrl = url.substring(0, url.lastIndexOf('/') + 1);
+
+        add_log_link.setAttribute("target","_blank");
+
+        add_log_link.setAttribute("href",baseUrl + "consumables-log.php");
+        add_log_link.innerText = baseUrl + "consumables-log.php";
     })
 
     

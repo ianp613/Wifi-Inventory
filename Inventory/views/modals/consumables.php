@@ -59,3 +59,21 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="add_log" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6><span class="fa fa-external-link"></span> Add Log</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Click link to open add log page.</h6>
+                <h6 class="f-15"><i><a href="#" id="add_log_link">Click Generate Link</a></i></h6>
+            </div>
+            <div class="modal-footer">
+                <button id="generate_link_btn" class="btn btn-sm alert-success btn-success"><span class="fa fa-link"></span> Generate Link</button>
+            </div>
+        </div>
+    </div>
+</div>

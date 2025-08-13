@@ -17,6 +17,7 @@ Consumables
         All data in group
         View logs and data
     Supervisor
+        Generate Link for groups only
         All data in group
         All Privilege
 
