@@ -47,6 +47,9 @@ if(document.getElementById("consumables")){
     var restock_consumables_btn = document.getElementById("restock_consumables_btn")
     var restock_quantity = document.getElementById("restock_quantity")
 
+    var consumable_badge_danger = document.getElementById("consumable_badge_danger")
+    var consumable_badge_success = document.getElementById("consumable_badge_success")
+
     add_consumables.addEventListener('shown.bs.modal', function () {
         sole.get("../../controllers/consumables/get_code.php")
         .then(res => {
@@ -94,12 +97,40 @@ if(document.getElementById("consumables")){
         sole.post("../../controllers/consumables/search_consumable.php",{
             search: search_consumable.value
         }).then(res => {
-            if(res.length){
+            if(res.length && search_consumable.value){
                 restock_consumables_code.innerText = res[0].code
                 restock_consumables_description.innerText = res[0].description
-                restock_consumables_stock.innerText = res[0].stock    
+                restock_consumables_stock.innerText = res[0].stock
+                restock_consumables_btn.setAttribute("sid",res[0].id)   
+                if(res[0].stock == 0 || res[0].stock > res[0].restock_point){
+                    consumable_badge_danger.hidden = false
+                    consumable_badge_success.hidden = true
+                }else{
+                    consumable_badge_danger.hidden = true
+                    consumable_badge_success.hidden = false
+                }
+            }else{
+                restock_consumables_code.innerText = "-"
+                restock_consumables_description.innerText = "-"
+                restock_consumables_stock.innerText = "-"
+                restock_consumables_btn.setAttribute("sid","")
+                consumable_badge_danger.hidden = true
+                consumable_badge_success.hidden = true
             }
         })
+    })
+
+    restock_consumables_btn.addEventListener("click",function(){
+        if(restock_consumables_btn.getAttribute("sid")){
+            if(restock_quantity.value > 0){
+                sole.post("../../controllers/consumables/restock_consumables.php",{
+                    sid: restock_consumables_btn.getAttribute("sid"),
+                    quantity: restock_quantity.value,
+                }).then(res => validateResponse(res,"restock_consumables"))
+            }else{
+                bs5.toast("warning","Please enter a valid quantity.")
+            }
+        }
     })
 
     restock_quantity.addEventListener("input",function(){
@@ -122,8 +153,7 @@ if(document.getElementById("consumables")){
                 e["code"],
                 e["description"],
                 e["stock"],
-                e["stock"] == 0 || e["stock"] > e["restock_point"] ?
-                    `<span class="badge bg-danger">Low Stock</span>` :  "<span class=\"badge bg-success\">In Stock</span>",
+                e["stock"] < e["restock_point"] ? "<span class=\"badge bg-danger\">Low Stock</span>" :  "<span class=\"badge bg-success\">In Stock</span>",
                 " <button id=\"edit_mac_"+ e["id"] +"\" m-id=\""+ e["id"] +"\" class=\"edit_mac_row btn btn-sm btn-secondary mb-1\"><i m-id=\""+ e["id"] +"\" class=\"edit_mac_row fa fa-edit\"></i></button>"+
                 " <button id=\"delete_mac_"+ e["id"] +"\" m-id=\""+ e["id"] +"\" class=\"delete_mac_row btn btn-sm btn-danger mb-1\"><i m-id=\""+ e["id"] +"\" class=\"delete_mac_row fa fa-trash-o\"></i></button>"
             ]).draw(false) 
@@ -137,6 +167,17 @@ if(document.getElementById("consumables")){
                 consumable_stock.value = 0
                 consumable_restock_point.value = 0
                 add_consumables_modal.hide()
+                loadPage()
+            }
+            if(func == "restock_consumables"){
+                restock_quantity.value = 1
+                restock_consumables_btn.setAttribute("sid","")
+                restock_consumables_code.innerText = "-"
+                restock_consumables_description.innerText = "-"
+                restock_consumables_stock.innerText = "-"
+                consumable_badge_danger.hidden = true
+                consumable_badge_success.hidden = true
+                restock_consumables_modal.hide()
                 loadPage()
             }
             bs5.toast(res.type,res.message,res.size)

@@ -42,6 +42,8 @@
                 <div id="search_results" class="mt-2"></div>
                 <hr>
                 <div id="restock_consumable_info">
+                    <span id="consumable_badge_danger" hidden class="badge bg-danger" style="position: absolute; right: 15px;">Low Stock</span>
+                    <span id="consumable_badge_success" hidden class="badge bg-success" style="position: absolute; right: 15px;">In Stock</span>
                     <label>Code: <b id="restock_consumables_code">-</b></label><br>
                     <label>Description: <span id="restock_consumables_description">-</span></label><br>
                     <label>Remaining Stock: <span id="restock_consumables_stock">-</span></label>
@@ -52,7 +54,7 @@
             </div>
             <div class="modal-footer">
                 <button data-bs-dismiss="modal" class="btn btn-sm btn-secondary"><span class="fa fa-remove"></span> Cancel</button>
-                <button id="restock_consumables_btn" class="btn btn-sm btn-success"><span class="fa fa-plus"></span> Restock</button>
+                <button sid="" id="restock_consumables_btn" class="btn btn-sm btn-success"><span class="fa fa-plus"></span> Restock</button>
             </div>
         </div>
     </div>
