@@ -1,12 +1,12 @@
+<!-- ADD CONSUMABLES -->
 <div class="modal" id="add_consumables" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h6>Add Consumable</h6>
+                <h6><span class="fa fa-cubes"></span> Add Consumable</h6>
             </div>
             <div class="modal-body">
-                <label for="consumable_code">Code: <b>202653</b></label>
-                <input hidden type="text" name="" id="consumable_code" class="form-control">
+                <label id="consumable_code">Code: <b>0</b></label>
                 <hr>
                 <label for="consumable_description">Description</label>
                 <input type="text" name="" id="consumable_description" class="form-control mt-2">
@@ -24,6 +24,55 @@
             <div class="modal-footer">
                 <button data-bs-dismiss="modal" class="btn btn-sm btn-secondary"><span class="fa fa-remove"></span> Cancel</button>
                 <button id="add_consumables_btn" class="btn btn-sm btn-primary"><span class="fa fa-save"></span> Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- RESTOCK CONSUMABLES -->
+<div class="modal fade" id="restock_consumables" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6><span class="fa fa-refresh"></span> Restock Consumable</h6>
+            </div>
+            <div class="modal-body">
+                <label for="search_consumable">Search by Code or Description</label>
+                <input type="text" id="search_consumable" class="form-control mt-2" placeholder="Enter code or description">
+                <div id="search_results" class="mt-2"></div>
+                <hr>
+                <div id="restock_consumable_info">
+                    <span id="consumable_badge_danger" hidden class="badge bg-danger" style="position: absolute; right: 15px;">Low Stock</span>
+                    <span id="consumable_badge_success" hidden class="badge bg-success" style="position: absolute; right: 15px;">In Stock</span>
+                    <label>Code: <b id="restock_consumables_code">-</b></label><br>
+                    <label>Description: <span id="restock_consumables_description">-</span></label><br>
+                    <label>Remaining Stock: <span id="restock_consumables_stock">-</span></label>
+                </div>
+                <hr>
+                <label for="restock_quantity">Restock Quantity</label>
+                <input type="number" min="1" value="0" id="restock_quantity" class="form-control mt-2">
+            </div>
+            <div class="modal-footer">
+                <button data-bs-dismiss="modal" class="btn btn-sm btn-secondary"><span class="fa fa-remove"></span> Cancel</button>
+                <button sid="" id="restock_consumables_btn" class="btn btn-sm btn-success"><span class="fa fa-plus"></span> Restock</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add_log" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6><span class="fa fa-external-link"></span> Add Log</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Click link to open add log page.</h6>
+                <h6 class="f-15"><i><a href="#" id="add_log_link">Click Generate Link</a></i></h6>
+            </div>
+            <div class="modal-footer">
+                <button id="generate_link_btn" class="btn btn-sm alert-success btn-success"><span class="fa fa-link"></span> Generate Link</button>
             </div>
         </div>
     </div>
