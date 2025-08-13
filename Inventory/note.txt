@@ -1,9 +1,69 @@
 Add login attemp and Account Lock Function
 
-purpose
-project
-user
-
 Count add per month
-Resupply if reach 0 or minimum for need restock
 
+Equipments
+    ALL GROUPS
+    Users
+        All data in group
+        All Privilege
+    Supervisor
+        All data in group
+        All Privilege
+
+Consumables
+    ALL GROUPS
+    Users
+        All data in group
+        View logs and data
+    Supervisor
+        All data in group
+        All Privilege
+
+ISP
+    IT GROUPS ONLY
+    Users / Supervisor
+        All data in group
+        All Privilege
+
+Routers
+    IT GROUPS ONLY
+    Users / Supervisor
+        All data in group
+        All Privilege
+
+IP Address
+    IT GROUPS ONLY
+    Users / Supervisor
+        All data in group
+        All Privilege
+
+MAC Address
+    IT GROUPS ONLY
+    Users / Supervisor
+        All data in group
+        All Privilege          
+
+CCTV
+    IT GROUPS ONLY
+    Users / Supervisor
+        All data in group
+        All Privilege          
+
+Accounts
+    ALL GROUPS
+    Users
+        All data in group
+        View only
+    Supervisor 
+        All data in group
+        All Privilege
+
+logs
+    ALL GROUPS
+    Users
+        Own logs
+        View Only
+    Supervisor
+        All logs in group
+        All Privilege

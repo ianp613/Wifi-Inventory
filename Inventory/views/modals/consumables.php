@@ -50,7 +50,7 @@
                 </div>
                 <hr>
                 <label for="restock_quantity">Restock Quantity</label>
-                <input type="number" min="1" value="1" id="restock_quantity" class="form-control mt-2">
+                <input type="number" min="1" value="0" id="restock_quantity" class="form-control mt-2">
             </div>
             <div class="modal-footer">
                 <button data-bs-dismiss="modal" class="btn btn-sm btn-secondary"><span class="fa fa-remove"></span> Cancel</button>

@@ -11,7 +11,7 @@
                 <td>Description</td>
                 <td>Stock</td>
                 <td>Status</td>
-                <td>Action</td>
+                <td class="wd-100">Action</td>
             </tr>
         </thead>
         <tbody>

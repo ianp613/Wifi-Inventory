@@ -13,6 +13,10 @@ if(document.getElementById("consumables")){
             { 
                 className: 'dt-left', 
                 targets: '_all' 
+            },
+            { 
+                className: 'dt-right', 
+                targets: 5
             }
         ],
         autoWidth: false,
@@ -76,6 +80,7 @@ if(document.getElementById("consumables")){
     })
 
     consumable_stock.addEventListener("input",function(){
+        consumable_stock.value = consumable_stock.value.replace(/^0+(?=\d)/, '');
         if(consumable_stock.value < 0){
             consumable_stock.value = 0
         }
@@ -85,6 +90,7 @@ if(document.getElementById("consumables")){
     })
 
     consumable_restock_point.addEventListener("input",function(){
+        consumable_restock_point.value = consumable_restock_point.value.replace(/^0+(?=\d)/, '');
         if(consumable_restock_point.value < 0){
             consumable_restock_point.value = 0
         }
@@ -102,7 +108,7 @@ if(document.getElementById("consumables")){
                 restock_consumables_description.innerText = res[0].description
                 restock_consumables_stock.innerText = res[0].stock
                 restock_consumables_btn.setAttribute("sid",res[0].id)   
-                if(res[0].stock == 0 || res[0].stock > res[0].restock_point){
+                if(parseFloat(res[0].stock) <= parseFloat(res[0].restock_point)){
                     consumable_badge_danger.hidden = false
                     consumable_badge_success.hidden = true
                 }else{
@@ -134,11 +140,12 @@ if(document.getElementById("consumables")){
     })
 
     restock_quantity.addEventListener("input",function(){
-        if(restock_quantity.value < 1){
-            restock_quantity.value = 1
+        restock_quantity.value = restock_quantity.value.replace(/^0+(?=\d)/, '');
+        if(restock_quantity.value < 0){
+            restock_quantity.value = 0
         }
         if(!restock_quantity.value){
-            restock_quantity.value = 1
+            restock_quantity.value = 0
         }
     })
 
@@ -170,7 +177,8 @@ if(document.getElementById("consumables")){
                 loadPage()
             }
             if(func == "restock_consumables"){
-                restock_quantity.value = 1
+                restock_quantity.value = 0
+                search_consumable.value = ""
                 restock_consumables_btn.setAttribute("sid","")
                 restock_consumables_code.innerText = "-"
                 restock_consumables_description.innerText = "-"

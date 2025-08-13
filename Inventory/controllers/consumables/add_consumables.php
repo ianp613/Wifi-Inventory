@@ -21,7 +21,7 @@
 
             $log = new Logs;
             $log->uid = $_SESSION["userid"];
-            $log->log = $_SESSION["name"]." has add an entry \"".$data["description"];
+            $log->log = $_SESSION["name"]." has added an entry \"".$data["description"];
             if($_SESSION["log"] != $log->log){
                 $_SESSION["log"] = $log->log;
                 DB::save($log);
