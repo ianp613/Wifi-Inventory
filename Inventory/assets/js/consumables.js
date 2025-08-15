@@ -125,12 +125,34 @@ if(document.getElementById("consumables")){
             "Short Hundredweight (sh cwt)",
             "Long Hundredweight (lg cwt)",
             "Pound (lb)",
-            "Stone (st)",
+            "Stone (st)"
+        ];
+        var op_volume = [
+            "Liter (l)",
+            "Milliliter (ml)",
+            "Cubic Millimeter (mm³)",
+            "Cubic Decimeter (dm³)",
+            "Centiliter (cl)",
+            "Deciliter (dl)",
+            "Cubic Centimeter (cm³)",
+            "Cubic Meter (m³)",
+            "Hectoliter (hl)",
+            "Cubic Foot (ft³)",
+            "US Fluid Ounce (US fl oz)",
+            "Cubic Yard (yd³)",
+            "Cubic Inch (in³)",
+            "Acre-foot (af³)",
+            "UK Gallon (UK gal)",
+            "US Gallon (US gal)",
+            "UK Fluid Ounce (UK fl oz)"
         ];
         var op_others = [
             "Piece (pc)",
             "Box (bx)",
-            "Sachet (sac)"
+            "Sachet (sac)",
+            "Sack (fibc)",
+            "Tray (tray)",
+            "Ream (rm)"
         ];
         consumable_unit.innerText = ""
         if(this.value == "Length"){

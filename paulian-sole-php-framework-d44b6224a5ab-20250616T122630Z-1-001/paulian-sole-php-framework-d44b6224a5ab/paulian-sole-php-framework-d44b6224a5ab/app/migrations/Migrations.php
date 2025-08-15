@@ -184,6 +184,8 @@
             Migrate::string("uid");
             Migrate::string("code");
             Migrate::string("description");
+            Migrate::string("measurement");
+            Migrate::string("unit");
             Migrate::string("stock");
             Migrate::string("restock_point");
         }
