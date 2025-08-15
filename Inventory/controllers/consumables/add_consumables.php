@@ -14,6 +14,8 @@
             $consumables->uid = $data["uid"];
             $consumables->code = $_SESSION["consumables_code"];
             $consumables->description = $data["description"];
+            $consumables->measurement = $data["measurement"];
+            $consumables->unit = $data["unit"];
             $consumables->stock = $data["stock"];
             $consumables->restock_point = $data["restock_point"];
 

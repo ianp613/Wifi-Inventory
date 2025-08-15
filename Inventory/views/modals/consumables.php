@@ -12,6 +12,24 @@
                 <input type="text" name="" id="consumable_description" class="form-control mt-2">
                 <div class="row mt-2">
                     <div class="col-md-6">
+                        <label for="consumable_measurement">Measurement Type</label>
+                        <select name="" id="consumable_measurement" class="form-control mt-2">
+                            <option selected disabled value="">-- Select Measurement --</option>
+                            <option value="Length">Length</option>
+                            <option value="Weight">Weight</option>
+                            <option value="Volume">Volume</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="consumable_unit">Unit Type</label>
+                        <select name="" id="consumable_unit" class="form-control mt-2">
+                            <option value="">-- Select Unit --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
                         <label for="consumable_stock">Stock</label>
                         <input type="number" min="0" value="0" name="" id="consumable_stock" class="form-control mt-2">
                     </div>
@@ -68,7 +86,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <h6>Click link to open add log page.</h6>
+                <h6 class="f-15">Click the link to open the Add Log page. You can also copy and share the link with others so they can add a log.</h6>
                 <h6 class="f-15"><i><a href="#" id="add_log_link">Click Generate Link</a></i></h6>
             </div>
             <div class="modal-footer">

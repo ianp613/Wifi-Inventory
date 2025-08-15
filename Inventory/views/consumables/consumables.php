@@ -10,6 +10,8 @@
                 <td>ID</td>
                 <td>Code</td>
                 <td>Description</td>
+                <td>Measurement</td>
+                <td>Unit</td>
                 <td>Stock</td>
                 <td>Status</td>
                 <td class="wd-100">Action</td>

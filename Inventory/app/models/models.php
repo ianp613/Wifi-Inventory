@@ -394,6 +394,8 @@
             "uid",
             "code",
             "description",
+            "measurement",
+            "unit",
             "stock",
             "restock_point"
         ];
@@ -401,6 +403,8 @@
             "uid:" => "UID:",
             "code:" => "Code:",
             "description:" => "Description:",
+            "measurement:" => "Measurement:",
+            "unit:" => "Unit:",
             "stock:" => "Stock:",
             "restock_point:" => "Restock Point:"
         ];
@@ -409,6 +413,9 @@
             "uid",
             "es",
             "de",
+            "re",
+            "me",
+            "nt",
             "st",
             "to",
             "oc",
