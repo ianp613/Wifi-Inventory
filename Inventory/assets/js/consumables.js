@@ -149,6 +149,10 @@ if(document.getElementById("consumables")){
         consumable_description.focus()
     })
 
+    edit_consumables.addEventListener('shown.bs.modal', function () {
+        edit_consumable_description.focus()
+    })
+
     restock_consumables.addEventListener('shown.bs.modal', function () {
         search_consumable.focus()
     })
@@ -163,6 +167,22 @@ if(document.getElementById("consumables")){
                 stock: consumable_stock.value,
                 restock_point: consumable_restock_point.value
             }).then(res => validateResponse(res,"add_consumables"))
+        }else{
+            bs5.toast("warning","Please add description.")
+        }
+    })
+
+    edit_consumables_btn.addEventListener("click",function(){
+        if(edit_consumable_description.value){
+            sole.post("../../controllers/consumables/edit_consumables.php",{
+                uid: localStorage.getItem("userid"),
+                id: this.getAttribute("c-id"),
+                description: edit_consumable_description.value,
+                measurement: edit_consumable_measurement.value,
+                unit: edit_consumable_unit.value,
+                stock: edit_consumable_stock.value,
+                restock_point: edit_consumable_restock_point.value
+            }).then(res => validateResponse(res,"edit_consumables"))
         }else{
             bs5.toast("warning","Please add description.")
         }
@@ -237,6 +257,30 @@ if(document.getElementById("consumables")){
         }
     })
 
+    edit_consumable_stock.addEventListener("input",function(){
+        if(/^0+\d/.test(edit_consumable_stock.value)) {
+            edit_consumable_stock.value = edit_consumable_stock.value.replace(/^0+(?=\d)/, '');
+        }
+        if(edit_consumable_stock.value < 0){
+            edit_consumable_stock.value = 0
+        }
+        if(!edit_consumable_stock.value){
+            edit_consumable_stock.value = 0
+        }
+    })
+
+    edit_consumable_restock_point.addEventListener("input",function(){
+        if(/^0+\d/.test(edit_consumable_restock_point.value)) {
+            edit_consumable_restock_point.value = edit_consumable_restock_point.value.replace(/^0+(?=\d)/, '');
+        }
+        if(edit_consumable_restock_point.value < 0){
+            edit_consumable_restock_point.value = 0
+        }
+        if(!edit_consumable_restock_point.value){
+            edit_consumable_restock_point.value = 0
+        }
+    })
+
     search_consumable.addEventListener("input",function(){
         sole.post("../../controllers/consumables/search_consumable.php",{
             search: search_consumable.value
@@ -298,8 +342,6 @@ if(document.getElementById("consumables")){
         add_log_link.setAttribute("href",baseUrl + "consumables-log.php");
         add_log_link.innerText = baseUrl + "consumables-log.php";
     })
-
-    
 
     function loadConsumables(res){
         consumablesTable.clear().draw();
@@ -394,6 +436,15 @@ if(document.getElementById("consumables")){
                 consumable_stock.value = 0
                 consumable_restock_point.value = 0
                 add_consumables_modal.hide()
+                loadPage()
+            }
+            if(func == "edit_consumables"){
+                edit_consumable_description.value = ""
+                edit_consumable_measurement.value = ""
+                edit_consumable_unit.innerHTML = "<option value=\"\">-- Select Unit --</option>"
+                edit_consumable_stock.value = 0
+                edit_consumable_restock_point.value = 0
+                edit_consumables_modal.hide()
                 loadPage()
             }
             if(func == "delete_consumables"){
