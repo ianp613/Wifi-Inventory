@@ -23,9 +23,8 @@
                 <label for="add_privilege" class="mb-2 mt-2">Account Privilege</label>
                 <select class="form-control" name="" id="add_privilege">
                     <option value="Administrator">Administrator</option>
-                    <!-- <option value="Senior Technician">Senior Technician</option> -->
-                    <!-- <option value="Assistant Technician" selected>Assistant Technician</option> -->
-                    <option value="Assistant Technician" selected>Technician</option>
+                    <option value="Supervisor">Supervisor</option>
+                    <option selected value="User">User</option>
                 </select>
             </div>
             <div class="modal-footer">
@@ -61,9 +60,8 @@
                 <label for="edit_privilege" class="mb-2 mt-2">Account Privilege</label>
                 <select class="form-control" name="" id="edit_privilege">
                     <option value="Administrator">Administrator</option>
-                    <!-- <option value="Senior Technician">Senior Technician</option> -->
-                    <!-- <option value="Assistant Technician" selected>Assistant Technician</option> -->
-                    <option value="Assistant Technician" selected>Technician</option>
+                    <option value="Supervisor">Supervisor</option>
+                    <option selected value="User">User</option>
                 </select>
             </div>
             <div class="modal-footer">

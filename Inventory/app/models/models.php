@@ -12,6 +12,15 @@
         ];
     }
 
+    class User_Group{
+        public $table = "user_group";
+        public $fillable = [
+            "group_name",
+            "supervisors", // Format ID = [1,2,3,4,5,6,7]
+            "users" // Format ID = [1,2,3,4,5,6,7]
+        ];
+    }
+
     class Equipment
     {
         public $table = "equipment";
