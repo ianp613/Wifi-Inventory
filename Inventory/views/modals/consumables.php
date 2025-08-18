@@ -1,5 +1,5 @@
 <!-- ADD CONSUMABLES -->
-<div class="modal" id="add_consumables" tabindex="-1">
+<div class="modal fade" id="add_consumables" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -47,6 +47,55 @@
     </div>
 </div>
 
+<!-- EDIT CONSUMABLES -->
+<div class="modal fade" id="edit_consumables" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6><span class="fa fa-cubes"></span> Edit Consumable</h6>
+            </div>
+            <div class="modal-body">
+                <label id="edit_consumable_code">Code: <b>0</b></label>
+                <hr>
+                <label for="edit_consumable_description">Description</label>
+                <input type="text" name="" id="edit_consumable_description" class="form-control mt-2">
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label for="edit_consumable_measurement">Measurement Type</label>
+                        <select name="" id="edit_consumable_measurement" class="form-control mt-2">
+                            <option selected disabled value="">-- Select Measurement --</option>
+                            <option value="Length">Length</option>
+                            <option value="Weight">Weight</option>
+                            <option value="Volume">Volume</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="edit_consumable_unit">Unit Type</label>
+                        <select name="" id="edit_consumable_unit" class="form-control mt-2">
+                            <option value="">-- Select Unit --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label for="edit_consumable_stock">Stock</label>
+                        <input type="number" min="0" value="0" name="" id="edit_consumable_stock" class="form-control mt-2">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="edit_consumable_restock_point">Restock Point</label>
+                        <input type="number" min="0" value="0" name="" id="edit_consumable_restock_point" class="form-control mt-2">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button data-bs-dismiss="modal" class="btn btn-sm btn-secondary"><span class="fa fa-remove"></span> Cancel</button>
+                <button id="edit_consumables_btn" class="btn btn-sm btn-primary"><span class="fa fa-save"></span> Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- RESTOCK CONSUMABLES -->
 <div class="modal fade" id="restock_consumables" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -78,6 +127,7 @@
     </div>
 </div>
 
+<!-- GENERATE ADD LOG LINK -->
 <div class="modal fade" id="add_log" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -91,6 +141,30 @@
             </div>
             <div class="modal-footer">
                 <button id="generate_link_btn" class="btn btn-sm alert-success btn-success"><span class="fa fa-link"></span> Generate Link</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE CONSUMABLES MODAL -->
+<div class="modal fade" id="delete_consumables" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <div class="w-100">
+                    <span class="fa fa-exclamation-triangle text-danger h2"></span>
+                    <h5 id="delete_consumables_title" class="modal-title fw-bolder">Delete Consumable</h5>    
+                </div>
+            </div>
+            <div class="modal-header text-center">
+                <div class="w-100">
+                    <div>You're going to delete <b>"<span id="delete_consumables_description">consumables</span>"</b>.</div>
+                    <div>This can't be undone. Do you wish to proceed?</div>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> No</button>
+                <button id="delete_consumables_btn" e-id="" type="button" data-bs-dismiss="" class="btn btn-danger btn-sm"><span class="fa fa-trash-o"></span> Yes</button>
             </div>
         </div>
     </div>

@@ -32,12 +32,90 @@ if(document.getElementById("consumables")){
         sole.get("../../controllers/consumables/get_consumables.php").then(res => loadConsumables(res))
     }
 
+    var op_length = [
+        "Meter (m)",
+        "Centimeter (cm)",
+        "Millimeter (mm)",
+        "Foot (ft)",
+        "Inch (in)",
+        "Yard (yd)",
+        "Kilometer (km)",
+        "Decimeter (dm)",
+        "Light Year (ly)",
+        "Micrometer (µm)",
+        "Parsec (pc)",
+        "Astronomical Unit (AU)",
+        "Lunar Distance (LD)",
+        "Picometer (pm)",
+        "Nanometer (nm)",
+        "Furlong (fur)",
+        "Fathom (fm)",
+        "Nautical mile (nmi)",
+        "Mile (mi)"
+    ];
+    var op_weight = [
+        "Kilogram (kg)",
+        "Milligram (mg)",
+        "Gram (g)",
+        "Microgram (µg)",
+        "Quintal (q)",
+        "Carat (ct)",
+        "Ton (t)",
+        "Short Ton (st)",
+        "Long Ton (lt)",
+        "Ounce (oz)",
+        "Grain (gr)",
+        "Dram (dr)",
+        "Short Hundredweight (sh cwt)",
+        "Long Hundredweight (lg cwt)",
+        "Pound (lb)",
+        "Stone (st)"
+    ];
+    var op_volume = [
+        "Liter (l)",
+        "Milliliter (ml)",
+        "Cubic Millimeter (mm³)",
+        "Cubic Decimeter (dm³)",
+        "Centiliter (cl)",
+        "Deciliter (dl)",
+        "Cubic Centimeter (cm³)",
+        "Cubic Meter (m³)",
+        "Hectoliter (hl)",
+        "Cubic Foot (ft³)",
+        "US Fluid Ounce (US fl oz)",
+        "Cubic Yard (yd³)",
+        "Cubic Inch (in³)",
+        "Acre-foot (af³)",
+        "UK Gallon (UK gal)",
+        "US Gallon (US gal)",
+        "UK Fluid Ounce (UK fl oz)"
+    ];
+    var op_others = [
+        "Piece (pc)",
+        "Box (bx)",
+        "Sachet (sac)",
+        "Sack (fibc)",
+        "Tray (tray)",
+        "Ream (rm)"
+    ];
+
     const add_consumables_modal = new bootstrap.Modal(document.getElementById('add_consumables'),unclose);
+    const edit_consumables_modal = new bootstrap.Modal(document.getElementById('edit_consumables'),unclose);
     const restock_consumables_modal = new bootstrap.Modal(document.getElementById('restock_consumables'),unclose);
     const add_log_modal = new bootstrap.Modal(document.getElementById('add_log'),unclose);
+    const delete_consumables_modal = new bootstrap.Modal(document.getElementById('delete_consumables'),unclose);
 
     var add_consumables = document.getElementById("add_consumables")
+    var edit_consumables = document.getElementById("edit_consumables")
     var restock_consumables = document.getElementById("restock_consumables")
+
+    var edit_consumable_code = document.getElementById("edit_consumable_code")
+    var edit_consumable_description = document.getElementById("edit_consumable_description")
+    var edit_consumable_measurement = document.getElementById("edit_consumable_measurement")
+    var edit_consumable_unit = document.getElementById("edit_consumable_unit")
+    var edit_consumable_stock = document.getElementById("edit_consumable_stock")
+    var edit_consumable_restock_point = document.getElementById("edit_consumable_restock_point")
+    var edit_consumables_btn = document.getElementById("edit_consumables_btn")
 
     var consumable_code = document.getElementById("consumable_code")
     var consumable_description = document.getElementById("consumable_description")
@@ -46,6 +124,9 @@ if(document.getElementById("consumables")){
     var consumable_stock = document.getElementById("consumable_stock")
     var consumable_restock_point = document.getElementById("consumable_restock_point")
     var add_consumables_btn = document.getElementById("add_consumables_btn")
+
+    var delete_consumables_description = document.getElementById("delete_consumables_description")
+    var delete_consumables_btn = document.getElementById("delete_consumables_btn")
 
     var search_consumable = document.getElementById("search_consumable")
     var restock_consumables_code = document.getElementById("restock_consumables_code")
@@ -88,72 +169,6 @@ if(document.getElementById("consumables")){
     })
 
     consumable_measurement.addEventListener("change",function(){
-        var op_length = [
-            "Meter (m)",
-            "Centimeter (cm)",
-            "Millimeter (mm)",
-            "Foot (ft)",
-            "Inch (in)",
-            "Yard (yd)",
-            "Kilometer (km)",
-            "Decimeter (dm)",
-            "Light Year (ly)",
-            "Micrometer (µm)",
-            "Parsec (pc)",
-            "Astronomical Unit (AU)",
-            "Lunar Distance (LD)",
-            "Picometer (pm)",
-            "Nanometer (nm)",
-            "Furlong (fur)",
-            "Fathom (fm)",
-            "Nautical mile (nmi)",
-            "Mile (mi)"
-        ];
-        var op_weight = [
-            "Kilogram (kg)",
-            "Milligram (mg)",
-            "Gram (g)",
-            "Microgram (µg)",
-            "Quintal (q)",
-            "Carat (ct)",
-            "Ton (t)",
-            "Short Ton (st)",
-            "Long Ton (lt)",
-            "Ounce (oz)",
-            "Grain (gr)",
-            "Dram (dr)",
-            "Short Hundredweight (sh cwt)",
-            "Long Hundredweight (lg cwt)",
-            "Pound (lb)",
-            "Stone (st)"
-        ];
-        var op_volume = [
-            "Liter (l)",
-            "Milliliter (ml)",
-            "Cubic Millimeter (mm³)",
-            "Cubic Decimeter (dm³)",
-            "Centiliter (cl)",
-            "Deciliter (dl)",
-            "Cubic Centimeter (cm³)",
-            "Cubic Meter (m³)",
-            "Hectoliter (hl)",
-            "Cubic Foot (ft³)",
-            "US Fluid Ounce (US fl oz)",
-            "Cubic Yard (yd³)",
-            "Cubic Inch (in³)",
-            "Acre-foot (af³)",
-            "UK Gallon (UK gal)",
-            "US Gallon (US gal)",
-            "UK Fluid Ounce (UK fl oz)"
-        ];
-        var op_others = [
-            "Piece (pc)",
-            "Box (bx)",
-            "Sachet (sac)",
-            "Sack (fibc)",
-            "Tray (tray)",
-            "Ream (rm)"
-        ];
         consumable_unit.innerText = ""
         if(this.value == "Length"){
             op_length.forEach(op => {
@@ -186,6 +201,16 @@ if(document.getElementById("consumables")){
         }else{
             consumable_unit.innerHTML = "<option value=\"\">-- Select Unit --</option>"
         }
+    })
+
+    edit_consumable_measurement.addEventListener("change",function(){
+        editSelectMeasurement(this.value)
+    })
+
+    delete_consumables_btn.addEventListener("click",function(){
+        sole.post("../../controllers/consumables/delete_consumables.php",{
+            id: this.getAttribute("c-id")
+        }).then(res => validateResponse(res,"delete_consumables"))
     })
 
     consumable_stock.addEventListener("input",function(){
@@ -277,7 +302,6 @@ if(document.getElementById("consumables")){
     
 
     function loadConsumables(res){
-        console.log(res)
         consumablesTable.clear().draw();
         res.consumables.forEach(e => {
             consumablesTable.row.add([
@@ -288,10 +312,77 @@ if(document.getElementById("consumables")){
                 e["unit"],
                 e["stock"],
                 parseFloat(e["stock"]) <= parseFloat(e["restock_point"]) ? "<span class=\"badge bg-danger\">Low Stock</span>" :  "<span class=\"badge bg-success\">In Stock</span>",
-                " <button id=\"edit_mac_"+ e["id"] +"\" m-id=\""+ e["id"] +"\" class=\"edit_mac_row btn btn-sm btn-secondary mb-1\"><i m-id=\""+ e["id"] +"\" class=\"edit_mac_row fa fa-edit\"></i></button>"+
-                " <button id=\"delete_mac_"+ e["id"] +"\" m-id=\""+ e["id"] +"\" class=\"delete_mac_row btn btn-sm btn-danger mb-1\"><i m-id=\""+ e["id"] +"\" class=\"delete_mac_row fa fa-trash-o\"></i></button>"
+                " <button id=\"edit_consumables_"+ e["id"] +"\" c-id=\""+ e["id"] +"\" class=\"edit_consumables_row btn btn-sm btn-secondary mb-1\"><i c-id=\""+ e["id"] +"\" class=\"edit_consumables_row fa fa-edit\"></i></button>"+
+                " <button id=\"delete_consumables_"+ e["id"] +"\" c-id=\""+ e["id"] +"\" class=\"delete_consumables_row btn btn-sm btn-danger mb-1\"><i c-id=\""+ e["id"] +"\" class=\"delete_consumables_row fa fa-trash-o\"></i></button>"
             ]).draw(false) 
         });
+
+        document.querySelector('#consumables_table').addEventListener("click", e=>{
+            let tr = "";
+            if(e.target.tagName == "I"){
+                tr = e.target.parentNode.parentNode.parentNode.children
+            }
+            if(e.target.tagName == "BUTTON"){
+                tr = e.target.parentNode.parentNode.children    
+            }
+            if(e.target.classList.contains('edit_consumables_row')) {
+                edit_consumables_btn.setAttribute("c-id",e.target.getAttribute("c-id"))
+                sole.post("../../controllers/consumables/find_consumables.php",{
+                    id: e.target.getAttribute("c-id")
+                }).then(res => editConsumablesForm(res))
+            }
+            if(e.target.classList.contains('delete_consumables_row')){
+                delete_consumables_description.innerText = tr[1].innerText
+                delete_consumables_btn.setAttribute("c-id",e.target.getAttribute("c-id"))
+                delete_consumables_modal.show()
+            }
+        })
+    }
+
+    function editSelectMeasurement(data){
+        edit_consumable_unit.innerText = ""
+        if(data == "Length"){
+            op_length.forEach(op => {
+                var opt = document.createElement("option")
+                opt.value = op
+                opt.innerText = op
+                edit_consumable_unit.appendChild(opt)
+            });
+        }else if(data == "Weight"){
+            op_weight.forEach(op => {
+                var opt = document.createElement("option")
+                opt.value = op
+                opt.innerText = op
+                edit_consumable_unit.appendChild(opt)
+            });
+        }else if(data == "Volume"){
+            op_volume.forEach(op => {
+                var opt = document.createElement("option")
+                opt.value = op
+                opt.innerText = op
+                edit_consumable_unit.appendChild(opt)
+            });
+        }else if(data == "Others"){
+            op_others.forEach(op => {
+                var opt = document.createElement("option")
+                opt.value = op
+                opt.innerText = op
+                edit_consumable_unit.appendChild(opt)
+            });
+        }else{
+            edit_consumable_unit.innerHTML = "<option value=\"\">-- Select Unit --</option>"
+        }
+    }
+
+    function editConsumablesForm(res){
+        editSelectMeasurement(res["consumable"][0]["measurement"])
+        edit_consumable_code.innerHTML = "Code: <b>" + res["consumable"][0]["code"] + "</b>"
+        edit_consumable_description.value = res["consumable"][0]["description"]
+        edit_consumable_measurement.value = res["consumable"][0]["measurement"]
+        edit_consumable_unit.value = res["consumable"][0]["unit"]
+        edit_consumable_stock.value = res["consumable"][0]["stock"]
+        edit_consumable_restock_point.value = res["consumable"][0]["restock_point"]
+        edit_consumables_modal.show()
     }
 
     function validateResponse(res,func){
@@ -303,6 +394,10 @@ if(document.getElementById("consumables")){
                 consumable_stock.value = 0
                 consumable_restock_point.value = 0
                 add_consumables_modal.hide()
+                loadPage()
+            }
+            if(func == "delete_consumables"){
+                delete_consumables_modal.hide()
                 loadPage()
             }
             if(func == "restock_consumables"){
