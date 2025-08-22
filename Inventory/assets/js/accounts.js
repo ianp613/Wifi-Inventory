@@ -17,7 +17,7 @@ if(document.getElementById("accounts")){
         autoWidth: false,
         language: {
            sLengthMenu: "Show _MENU_entries",
-           search: "<button data-bs-toggle=\"modal\" data-bs-target=\"#add_account\" class=\"btn btn-sm btn-primary me-3\"><span class=\"fa fa-plus\"></span> Create Account</button> Search: "
+           search: "Search: "
         }
     });
 

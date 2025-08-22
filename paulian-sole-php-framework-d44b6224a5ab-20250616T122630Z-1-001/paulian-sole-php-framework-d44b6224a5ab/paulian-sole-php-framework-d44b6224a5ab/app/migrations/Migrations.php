@@ -1,6 +1,7 @@
 <?php
     Migrate::$migration = [
-        "ConsumablesMigration",
+        "UserGroupMigration",
+        // "ConsumablesMigration",
         // "UserMigration",
         // "EquipmentMigration",
         // "EquipmentEntryMigration",
@@ -23,6 +24,17 @@
             Migrate::string("privileges");
             Migrate::string("username");
             Migrate::string("password");
+        }
+    }
+
+    class UserGroupMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("user_group");
+            Migrate::attrib_string(1000);
+            Migrate::string("group_name");
+            Migrate::string("supervisors");
+            Migrate::string("users");
         }
     }
 
