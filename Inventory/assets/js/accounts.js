@@ -25,6 +25,12 @@ if(document.getElementById("accounts")){
 
     const edit_account_modal = new bootstrap.Modal(document.getElementById('edit_account'),unclose);
     const delete_account_modal = new bootstrap.Modal(document.getElementById('delete_account'),unclose);
+    const add_group_modal = new bootstrap.Modal(document.getElementById('add_group'),unclose);
+
+    var add_group = document.getElementById("add_group")
+    var group_name = document.getElementById("group_name")
+    var group_supervisor = document.getElementById("group_supervisor")
+    var group_user = document.getElementById("group_user")
 
     var add_account = document.getElementById("add_account")
     var add_account_btn = document.getElementById("add_account_btn")
@@ -45,6 +51,40 @@ if(document.getElementById("accounts")){
 
     var delete_account_btn = document.getElementById("delete_account_btn")
     var delete_account_name = document.getElementById("delete_account_name")
+
+    add_group.addEventListener('shown.bs.modal', function () {
+        sole.get("../../controllers/administrator/get_accounts_dropdown.php")
+        .then(res => {
+            group_supervisor.innerHTML = "<option value=\"\" selected disabled>Select User</option>"
+
+            res["supervisor"].forEach(su => {
+                var op = document.createElement("option")
+                op.value = su["username"] + " - " + su["name"]
+                op.innerText = su["username"] + " - " + su["name"]
+                group_supervisor.appendChild(op)
+            });
+
+            group_user.innerHTML = "<option value=\"\" selected disabled>Select User</option>"
+
+            res["user"].forEach(us => {
+                var op = document.createElement("option")
+                op.value = us["username"] + " - " + us["name"]
+                op.innerText = us["username"] + " - " + us["name"]
+                group_user.appendChild(op)
+            });
+        })
+        group_name.focus()
+    })
+
+    group_supervisor.addEventListener("change",function(){
+        console.log(this.value)
+        this.value = ""
+    })
+
+    group_user.addEventListener("change",function(){
+        console.log(this.value)
+        this.value = ""
+    })
 
     add_account.addEventListener('shown.bs.modal', function () {
         add_name.focus()

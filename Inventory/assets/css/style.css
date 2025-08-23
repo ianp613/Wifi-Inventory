@@ -484,6 +484,10 @@ input:checked + .slider:before {
     width: 600px;
 }
 
+.i-block{
+    display: inline-block;
+}
+
 
 .image-wrapper {
   position: relative;
