@@ -133,7 +133,7 @@
                 <h6>ADD GROUP</h6>
             </div>
             <div class="modal-body">
-                <label for="group_name" class="mb-2">Group Name</label>
+                <label for="group_name" class="mb-2">Group Name / Office / Project</label>
                 <input type="text" name="group_name" id="group_name" class="form-control mb-2">
                 <label for="group_supervisor" class="mb-2">Supervisor</label>
                 <div class="btn-group d-flex mb-2">
@@ -141,15 +141,8 @@
                         <option value="" selected disabled>Select User</option>
                     </select>
                 </div>
-                <div id="supvervisor_container">
-                    <div class="i-block rounded user-list alert-success p-1 ps-2 pe-2 mt-1">
-                        <div class="i-block user-name ft-13">703F - Paul Ian</div>
-                        <div class="i-block user-remove ms-2"><span class="fa fa-remove"></span></div>
-                    </div>
-                    <div class="i-block rounded user-list alert-success p-1 ps-2 pe-2 mt-1">
-                        <div class="i-block user-name ft-13">FPOSI - Wifi Team</div>
-                        <div class="i-block user-remove ms-2"><span class="fa fa-remove"></span></div>
-                    </div>
+                <div id="supervisor_container">
+                    <!-- SUPERVISORS HERE -->
                 </div>
                 
                 <label for="group_user" class="mb-2 mt-2">Users</label>
@@ -159,27 +152,12 @@
                     </select>
                 </div>
                 <div id="user_container">
-                    <div class="i-block rounded user-list alert-success p-1 ps-2 pe-2 mt-1">
-                        <div class="i-block user-name ft-13">703F - Paul Ian</div>
-                        <div class="i-block user-remove ms-2"><span class="fa fa-remove"></span></div>
-                    </div>
-                    <div class="i-block rounded user-list alert-success p-1 ps-2 pe-2 mt-1">
-                        <div class="i-block user-name ft-13">FPOSI - Wifi Team</div>
-                        <div class="i-block user-remove ms-2"><span class="fa fa-remove"></span></div>
-                    </div>
-                    <div class="i-block rounded user-list alert-success p-1 ps-2 pe-2 mt-1">
-                        <div class="i-block user-name ft-13">FPOSI - Wifi Team</div>
-                        <div class="i-block user-remove ms-2"><span class="fa fa-remove"></span></div>
-                    </div>
-                    <div class="i-block rounded user-list alert-success p-1 ps-2 pe-2 mt-1">
-                        <div class="i-block user-name ft-13">FPOSI - Wifi Team</div>
-                        <div class="i-block user-remove ms-2"><span class="fa fa-remove"></span></div>
-                    </div>
+                    <!-- USERS HERE -->
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
-                <button class="btn btn-sm btn-primary"><span class="fa fa-save"></span> Save</button>
+                <button id="add_group_btn" class="btn btn-sm btn-primary"><span class="fa fa-save"></span> Save</button>
             </div>
         </div>
     </div>

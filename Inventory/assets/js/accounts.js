@@ -1,5 +1,6 @@
 if(document.getElementById("accounts")){
     let accounts_table = new DataTable('#accounts_table',{
+        order: [[1, 'asc']],
         rowCallback: function(row) {
             $(row).addClass("trow");
         },
@@ -31,6 +32,13 @@ if(document.getElementById("accounts")){
     var group_name = document.getElementById("group_name")
     var group_supervisor = document.getElementById("group_supervisor")
     var group_user = document.getElementById("group_user")
+    var add_group_btn = document.getElementById("add_group_btn")
+
+    var user_container = document.getElementById("user_container")
+    var supervisor_container = document.getElementById("supervisor_container")
+
+    var user_container_temp = []
+    var supervisor_container_temp = []
 
     var add_account = document.getElementById("add_account")
     var add_account_btn = document.getElementById("add_account_btn")
@@ -77,13 +85,73 @@ if(document.getElementById("accounts")){
     })
 
     group_supervisor.addEventListener("change",function(){
-        console.log(this.value)
-        this.value = ""
+        if(!supervisor_container_temp.includes(this.value)){
+            var wrapper = document.createElement("div")
+            var name = document.createElement("div")
+            var button = document.createElement("div")
+            var button_span = document.createElement("span")
+            wrapper.setAttribute("class","i-block rounded user-list alert-success p-1 ps-2 pe-2 mt-1 ms-1")
+            name.setAttribute("class","i-block user-name ft-13")
+            button.setAttribute("class","i-block user-remove ms-2")
+            button_span.setAttribute("class","fa fa-remove")
+
+            button.addEventListener("click",function(){
+                var text_temp = this.parentNode.children[0].innerText
+                if(supervisor_container_temp.includes(text_temp)){
+                    supervisor_container_temp = supervisor_container_temp.filter(value => value !== text_temp)
+                }
+                this.parentNode.remove()
+            })
+            name.innerText = this.value
+
+            button.appendChild(button_span)
+            wrapper.appendChild(name)
+            wrapper.appendChild(button)
+            supervisor_container.appendChild(wrapper)
+            supervisor_container_temp.push(this.value)
+            this.value = ""
+        }
     })
 
     group_user.addEventListener("change",function(){
-        console.log(this.value)
-        this.value = ""
+        if(!user_container_temp.includes(this.value)){
+            var wrapper = document.createElement("div")
+            var name = document.createElement("div")
+            var button = document.createElement("div")
+            var button_span = document.createElement("span")
+            wrapper.setAttribute("class","i-block rounded user-list alert-success p-1 ps-2 pe-2 mt-1 ms-1")
+            name.setAttribute("class","i-block user-name ft-13")
+            button.setAttribute("class","i-block user-remove ms-2")
+            button_span.setAttribute("class","fa fa-remove")
+
+            button.addEventListener("click",function(){
+                var text_temp = this.parentNode.children[0].innerText
+                if(user_container_temp.includes(text_temp)){
+                    user_container_temp = user_container_temp.filter(value => value !== text_temp)
+                }
+                this.parentNode.remove()
+            })
+            name.innerText = this.value
+
+            button.appendChild(button_span)
+            wrapper.appendChild(name)
+            wrapper.appendChild(button)
+            user_container.appendChild(wrapper)
+            user_container_temp.push(this.value) 
+            this.value = ""
+        }
+    })
+
+    add_group_btn.addEventListener("click",function(){
+        if(group_name.value){
+            sole.post("../../controllers/administrator/add_group.php",{
+                group_name : group_name.value,
+                supervisor : supervisor_container_temp,
+                user : user_container_temp
+            }).then(res => validateResponse(res,"add_group"))
+        }else{
+            bs5.toast("warning","Please input group name.")
+        }
     })
 
     add_account.addEventListener('shown.bs.modal', function () {
@@ -212,6 +280,17 @@ if(document.getElementById("accounts")){
             }
             if(func == "delete_account"){
                 delete_account_modal.hide()
+                sole.get("../../controllers/administrator/get_accounts.php").then(res => loadAccounts(res))
+            }
+            if(func == "add_group"){
+                supervisor_container.innerHTML = ""
+                supervisor_container_temp = []
+                user_container.innerHTML = ""
+                user_container_temp = []
+                group_name.value = ""
+                group_supervisor.value = ""
+                group_user.value = ""
+                add_group_modal.hide()
                 sole.get("../../controllers/administrator/get_accounts.php").then(res => loadAccounts(res))
             }
             bs5.toast(res.type,res.message,res.size)

@@ -2,6 +2,16 @@ Add login attemp and Account Lock Function
 
 Count add per month
 
+
+Check if USER that will be added into group if already part of a group
+    -Exclude the user from dropdown option if user exist in group
+
+Add group type column for USER GROUP
+    -options (GROUP TYPE - [IT or NON-IT])
+
+
+
+
 Equipments
     ALL GROUPS
     Users
