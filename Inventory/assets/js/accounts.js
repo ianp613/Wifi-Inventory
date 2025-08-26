@@ -30,6 +30,7 @@ if(document.getElementById("accounts")){
 
     var add_group = document.getElementById("add_group")
     var group_name = document.getElementById("group_name")
+    var group_type = document.getElementById("group_type")
     var group_supervisor = document.getElementById("group_supervisor")
     var group_user = document.getElementById("group_user")
     var add_group_btn = document.getElementById("add_group_btn")
@@ -101,6 +102,7 @@ if(document.getElementById("accounts")){
                     supervisor_container_temp = supervisor_container_temp.filter(value => value !== text_temp)
                 }
                 this.parentNode.remove()
+                group_supervisor.value = ""
             })
             name.innerText = this.value
 
@@ -130,6 +132,7 @@ if(document.getElementById("accounts")){
                     user_container_temp = user_container_temp.filter(value => value !== text_temp)
                 }
                 this.parentNode.remove()
+                group_user.value = ""
             })
             name.innerText = this.value
 
@@ -146,6 +149,7 @@ if(document.getElementById("accounts")){
         if(group_name.value){
             sole.post("../../controllers/administrator/add_group.php",{
                 group_name : group_name.value,
+                type : group_type.value,
                 supervisor : supervisor_container_temp,
                 user : user_container_temp
             }).then(res => validateResponse(res,"add_group"))
@@ -272,6 +276,7 @@ if(document.getElementById("accounts")){
                 add_name.value = ""
                 add_email.value = ""
                 add_username.value = ""
+                add_privilege.value = "User"
                 sole.get("../../controllers/administrator/get_accounts.php").then(res => loadAccounts(res))
             }
             if(func == "edit_account"){

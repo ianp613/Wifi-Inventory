@@ -135,6 +135,11 @@
             <div class="modal-body">
                 <label for="group_name" class="mb-2">Group Name / Office / Project</label>
                 <input type="text" name="group_name" id="group_name" class="form-control mb-2">
+                <label for="group_type" class="mb-2">Type</label>
+                <select name="group_type" id="group_type" class="form-control">
+                    <option value="NON-IT" selected>NON-IT</option>
+                    <option value="IT">IT</option>
+                </select>
                 <label for="group_supervisor" class="mb-2">Supervisor</label>
                 <div class="btn-group d-flex mb-2">
                     <select name="group_supervisor" id="group_supervisor" class="form-control">

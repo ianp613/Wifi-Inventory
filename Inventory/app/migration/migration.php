@@ -36,6 +36,7 @@
             Migrate::attrib_table("user_group");
             Migrate::attrib_string(1000);
             Migrate::string("group_name");
+            Migrate::string("type");
             Migrate::string("supervisors");
             Migrate::string("users");
         }

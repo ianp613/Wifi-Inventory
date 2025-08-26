@@ -16,8 +16,9 @@
         public $table = "user_group";
         public $fillable = [
             "group_name",
-            "supervisors", // Format ID = [1,2,3,4,5,6,7]
-            "users" // Format ID = [1,2,3,4,5,6,7]
+            "type",
+            "supervisors", // Format ID = [1|2|3|4|5|6|7]
+            "users" // Format ID = [1|2|3|4|5|6|7]
         ];
     }
 

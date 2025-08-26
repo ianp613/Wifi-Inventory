@@ -47,8 +47,9 @@
             }
 
             $group->group_name = $data["group_name"];
-            $group->supervisors = implode("|",$supervisors);
-            $group->users = implode("|",$users);
+            $group->type = $data["type"];
+            $group->supervisors = implode("|",$supervisors) ? implode("|",$supervisors) : "|";
+            $group->users = implode("|",$users) ? implode("|",$users) : "|";
             DB::save($group);
 
             $response = [
