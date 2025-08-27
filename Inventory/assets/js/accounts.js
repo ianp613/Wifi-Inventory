@@ -22,11 +22,18 @@ if(document.getElementById("accounts")){
         }
     });
 
-    sole.get("../../controllers/administrator/get_accounts.php").then(res => loadAccounts(res))
+    loadPage()
+    function loadPage(){
+        sole.get("../../controllers/administrator/get_accounts.php").then(res => loadAccounts(res))
+        sole.get("../../controllers/administrator/get_group.php").then(res => loadGroup(res))
+    }
 
     const edit_account_modal = new bootstrap.Modal(document.getElementById('edit_account'),unclose);
     const delete_account_modal = new bootstrap.Modal(document.getElementById('delete_account'),unclose);
     const add_group_modal = new bootstrap.Modal(document.getElementById('add_group'),unclose);
+    const edit_group_modal = new bootstrap.Modal(document.getElementById('edit_group'),unclose);
+
+    var group_dropdown = document.getElementById("group_dropdown")
 
     var add_group = document.getElementById("add_group")
     var group_name = document.getElementById("group_name")
@@ -40,6 +47,22 @@ if(document.getElementById("accounts")){
 
     var user_container_temp = []
     var supervisor_container_temp = []
+
+
+    var edit_group = document.getElementById("edit_group")
+    var edit_group_name = document.getElementById("edit_group_name")
+    var edit_group_type = document.getElementById("edit_group_type")
+    var edit_group_supervisor = document.getElementById("edit_group_supervisor")
+    var edit_group_user = document.getElementById("edit_group_user")
+    var edit_group_btn = document.getElementById("edit_group_btn")
+
+    var edit_user_container = document.getElementById("edit_user_container")
+    var edit_supervisor_container = document.getElementById("edit_supervisor_container")
+
+    var edit_user_container_temp = []
+    var edit_supervisor_container_temp = []
+    var edit_supervisor_temp = []
+    var edit_user_temp = []
 
     var add_account = document.getElementById("add_account")
     var add_account_btn = document.getElementById("add_account_btn")
@@ -83,6 +106,46 @@ if(document.getElementById("accounts")){
             });
         })
         group_name.focus()
+    })
+
+    edit_group.addEventListener('shown.bs.modal', function () {
+        sole.get("../../controllers/administrator/get_accounts_dropdown.php")
+        .then(res => {
+            edit_group_supervisor.innerHTML = "<option value=\"\" selected disabled>Select User</option>"
+
+            res["supervisor"].forEach(su => {
+                var op = document.createElement("option")
+                op.value = su["username"] + " - " + su["name"]
+                op.innerText = su["username"] + " - " + su["name"]
+                edit_group_supervisor.appendChild(op)
+            });
+
+            edit_group_user.innerHTML = "<option value=\"\" selected disabled>Select User</option>"
+
+            res["user"].forEach(us => {
+                var op = document.createElement("option")
+                op.value = us["username"] + " - " + us["name"]
+                op.innerText = us["username"] + " - " + us["name"]
+                edit_group_user.appendChild(op)
+            });
+        })
+
+        setTimeout(() => {
+            edit_supervisor_temp.forEach(est => {
+                var op = document.createElement("option")
+                op.value = est["username"] + " - " + est["name"]
+                op.innerText = est["username"] + " - " + est["name"]
+                edit_group_supervisor.appendChild(op)
+            });
+
+            edit_user_temp.forEach(eut => {
+                var op = document.createElement("option")
+                op.value = eut["username"] + " - " + eut["name"]
+                op.innerText = eut["username"] + " - " + eut["name"]
+                edit_group_user.appendChild(op)
+            });
+        }, 1000);
+        edit_group_name.focus()
     })
 
     group_supervisor.addEventListener("change",function(){
@@ -141,6 +204,66 @@ if(document.getElementById("accounts")){
             wrapper.appendChild(button)
             user_container.appendChild(wrapper)
             user_container_temp.push(this.value) 
+            this.value = ""
+        }
+    })
+
+    edit_group_supervisor.addEventListener("change",function(){
+        if(!edit_supervisor_container_temp.includes(this.value)){
+            var wrapper = document.createElement("div")
+            var name = document.createElement("div")
+            var button = document.createElement("div")
+            var button_span = document.createElement("span")
+            wrapper.setAttribute("class","i-block rounded user-list alert-success p-1 ps-2 pe-2 mt-1 ms-1")
+            name.setAttribute("class","i-block user-name ft-13")
+            button.setAttribute("class","i-block user-remove ms-2")
+            button_span.setAttribute("class","fa fa-remove")
+
+            button.addEventListener("click",function(){
+                var text_temp = this.parentNode.children[0].innerText
+                if(edit_supervisor_container_temp.includes(text_temp)){
+                    edit_supervisor_container_temp = edit_supervisor_container_temp.filter(value => value !== text_temp)
+                }
+                this.parentNode.remove()
+                edit_group_supervisor.value = ""
+            })
+            name.innerText = this.value
+
+            button.appendChild(button_span)
+            wrapper.appendChild(name)
+            wrapper.appendChild(button)
+            edit_supervisor_container.appendChild(wrapper)
+            edit_supervisor_container_temp.push(this.value)
+            this.value = ""
+        }
+    })
+
+    edit_group_user.addEventListener("change",function(){
+        if(!edit_user_container_temp.includes(this.value)){
+            var wrapper = document.createElement("div")
+            var name = document.createElement("div")
+            var button = document.createElement("div")
+            var button_span = document.createElement("span")
+            wrapper.setAttribute("class","i-block rounded user-list alert-success p-1 ps-2 pe-2 mt-1 ms-1")
+            name.setAttribute("class","i-block user-name ft-13")
+            button.setAttribute("class","i-block user-remove ms-2")
+            button_span.setAttribute("class","fa fa-remove")
+
+            button.addEventListener("click",function(){
+                var text_temp = this.parentNode.children[0].innerText
+                if(edit_user_container_temp.includes(text_temp)){
+                    edit_user_container_temp = edit_user_container_temp.filter(value => value !== text_temp)
+                }
+                this.parentNode.remove()
+                edit_group_user.value = ""
+            })
+            name.innerText = this.value
+
+            button.appendChild(button_span)
+            wrapper.appendChild(name)
+            wrapper.appendChild(button)
+            edit_user_container.appendChild(wrapper)
+            edit_user_container_temp.push(this.value) 
             this.value = ""
         }
     })
@@ -226,6 +349,107 @@ if(document.getElementById("accounts")){
             id: this.getAttribute("u-id")
         }).then(res => validateResponse(res,"delete_account"))
     })
+
+    function loadGroup(res){
+        group_dropdown.innerHTML = ""
+        res.groups.forEach(group => {
+            group_dropdown.innerHTML += "<li><a href=\"#\" class=\"dropdown-item\" id=\""+ group["id"] +"\" >"+ group["group_name"] +"</a></li>"
+        });
+    }
+
+    group_dropdown.addEventListener("contextmenu", e=>{
+        if(e.target.classList.contains("dropdown-item")){
+            sole.post("../../controllers/administrator/find_group.php",{
+                id: e.target.getAttribute("id")
+            }).then(res => editGroupForm(res))
+        }    
+    })
+    group_dropdown.addEventListener("click", e=>{
+        if(e.target.classList.contains("dropdown-item")){
+            sole.post("../../controllers/administrator/find_group.php",{
+                id: e.target.getAttribute("id")
+            }).then(res => editGroupForm(res))
+        }    
+    })
+
+    function editGroupForm(res) {
+        edit_group_btn.setAttribute("g-id",res.group[0]["id"])
+        edit_group_name.value = res.group[0]["group_name"]
+        edit_group_type.value = res.group[0]["type"]
+
+        var supervisors = res.group[0]["supervisors"].split("|")
+        var users = res.group[0]["users"].split("|")
+
+        edit_supervisor_container.innerHTML = ""
+        edit_user_container.innerHTML = ""
+
+        supervisors.forEach(sup => {
+            res.users.forEach(user => {
+                if(user["id"] == sup){
+                    edit_supervisor_temp.push(user)
+                    var wrapper = document.createElement("div")
+                    var name = document.createElement("div")
+                    var button = document.createElement("div")
+                    var button_span = document.createElement("span")
+                    wrapper.setAttribute("class","i-block rounded user-list alert-success p-1 ps-2 pe-2 mt-1 ms-1")
+                    name.setAttribute("class","i-block user-name ft-13")
+                    button.setAttribute("class","i-block user-remove ms-2")
+                    button_span.setAttribute("class","fa fa-remove")
+
+                    button.addEventListener("click",function(){
+                        var text_temp = this.parentNode.children[0].innerText
+                        if(edit_supervisor_container_temp.includes(text_temp)){
+                            edit_supervisor_container_temp = edit_supervisor_container_temp.filter(value => value !== text_temp)
+                        }
+                        this.parentNode.remove()
+                        edit_group_supervisor.value = ""
+                    })
+
+                    name.innerText = user["username"] + " - " + user["name"]
+
+                    button.appendChild(button_span)
+                    wrapper.appendChild(name)
+                    wrapper.appendChild(button)
+                    edit_supervisor_container.appendChild(wrapper)
+                    edit_supervisor_container_temp.push(user["username"] + " - " + user["name"])
+                }
+            });
+        });
+
+        users.forEach(use => {
+            res.users.forEach(user => {
+                if(user["id"] == use){
+                    edit_user_temp.push(user)
+                    var wrapper = document.createElement("div")
+                    var name = document.createElement("div")
+                    var button = document.createElement("div")
+                    var button_span = document.createElement("span")
+                    wrapper.setAttribute("class","i-block rounded user-list alert-success p-1 ps-2 pe-2 mt-1 ms-1")
+                    name.setAttribute("class","i-block user-name ft-13")
+                    button.setAttribute("class","i-block user-remove ms-2")
+                    button_span.setAttribute("class","fa fa-remove")
+
+                    button.addEventListener("click",function(){
+                        var text_temp = this.parentNode.children[0].innerText
+                        if(edit_user_container_temp.includes(text_temp)){
+                            edit_user_container_temp = edit_user_container_temp.filter(value => value !== text_temp)
+                        }
+                        this.parentNode.remove()
+                        edit_group_user.value = ""
+                    })
+
+                    name.innerText = user["username"] + " - " + user["name"]
+
+                    button.appendChild(button_span)
+                    wrapper.appendChild(name)
+                    wrapper.appendChild(button)
+                    edit_user_container.appendChild(wrapper)
+                    edit_user_container_temp.push(user["username"] + " - " + user["name"])
+                }
+            });
+        });
+        edit_group_modal.show()
+    }
 
     function loadAccounts(res){
         accounts_table.clear().draw();

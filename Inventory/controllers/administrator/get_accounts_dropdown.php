@@ -40,7 +40,7 @@
     
     $response = [
         "status" => true,
-        "supervisor" => $supervisor,
+        "supervisor" => $supervisors,
         "user" => $users,
     ];
 

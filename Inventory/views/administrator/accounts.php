@@ -8,7 +8,7 @@
         <div class="col-md-6 d-flex justify-content-end align-items-end">
             <div class="dropdown">
                 <div id="group_dropdown_toggle" tabindex="0" title="Right-Click Group to Edit" class="dropdown-toggle d-inline-block" type="button" data-bs-toggle="dropdown" aria-expanded="false">Group List</div>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" id="group_dropdown">
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="groupDropdown" id="group_dropdown">
                     <!-- DROP DOWN GROUP -->
                 </ul>
             </div>

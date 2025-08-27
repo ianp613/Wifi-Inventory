@@ -167,3 +167,46 @@
         </div>
     </div>
  </div>
+
+ <!-- ADD GROUP -->
+ <div class="modal fade" tabindex="-1" id="edit_group">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6>EDIT GROUP</h6>
+            </div>
+            <div class="modal-body">
+                <label for="edit_group_name" class="mb-2">Group Name / Office / Project</label>
+                <input type="text" name="edit_group_name" id="edit_group_name" class="form-control mb-2">
+                <label for="edit_group_type" class="mb-2">Type</label>
+                <select name="edit_group_type" id="edit_group_type" class="form-control">
+                    <option value="NON-IT" selected>NON-IT</option>
+                    <option value="IT">IT</option>
+                </select>
+                <label for="edit_group_supervisor" class="mb-2">Supervisor</label>
+                <div class="btn-group d-flex mb-2">
+                    <select name="edit_group_supervisor" id="edit_group_supervisor" class="form-control">
+                        <option value="" selected disabled>Select User</option>
+                    </select>
+                </div>
+                <div id="edit_supervisor_container">
+                    <!-- SUPERVISORS HERE -->
+                </div>
+                
+                <label for="edit_group_user" class="mb-2 mt-2">Users</label>
+                <div class="btn-group d-flex mb-2">
+                    <select name="edit_group_user" id="edit_group_user" class="form-control">
+                        <option value="" selected disabled>Select User</option>
+                    </select>
+                </div>
+                <div id="edit_user_container">
+                    <!-- USERS HERE -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
+                <button id="edit_group_btn" class="btn btn-sm btn-primary"><span class="fa fa-save"></span> Save</button>
+            </div>
+        </div>
+    </div>
+ </div>
