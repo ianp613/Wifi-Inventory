@@ -1,19 +1,22 @@
 <?php
     Migrate::$migration = [
+        "UserMigration",
         "UserGroupMigration",
-        // "ConsumablesMigration",
-        // "UserMigration",
-        // "EquipmentMigration",
-        // "EquipmentEntryMigration",
-        // "ip_networkMigration",
-        // "ip_addressMigration",
-        // "RoutersMigration",
-        // "ISPMigration",
-        // "cctvLocationMigration",
-        // "cctvCamera",
-        // "SettingsMigration",
-        // "LogMigration"
+        "EquipmentMigration",
+        "EquipmentEntryMigration",
+        "ip_networkMigration",
+        "ip_addressMigration",
+        "RoutersMigration",
+        "ISPMigration",
+        "cctvLocationMigration",
+        "cctvCamera",
+        "SettingsMigration",
+        "LogMigration",
+        "mac_addressMigration",
+        "wifiMigration",
+        "ConsumablesMigration",
     ];
+
     class UserMigration
     {
         public static function index(){
@@ -26,6 +29,7 @@
             Migrate::string("password");
         }
     }
+
     class UserGroupMigration
     {
         public static function index(){
@@ -90,6 +94,7 @@
             Migrate::string("hostname");
             Migrate::string("site");
             Migrate::string("server");
+            Migrate::string("state");
             Migrate::string("status");
             Migrate::string("remarks");
             Migrate::string("webmgmtpt");
@@ -148,6 +153,7 @@
         public static function index(){
             Migrate::attrib_table("cctv_camera");
             Migrate::attrib_string(255);
+            Migrate::string("uid");
             Migrate::string("lid");
             Migrate::string("camera_id");
             Migrate::string("camera_type");
@@ -185,6 +191,33 @@
             Migrate::attrib_string(255);
             Migrate::string("uid");
             Migrate::string("log");
+        }
+    }
+
+    class mac_addressMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("mac_address");
+            Migrate::attrib_string(255);
+            Migrate::string("uid");
+            Migrate::string("wid");
+            Migrate::string("mac");
+            Migrate::string("name");
+            Migrate::string("device");
+            Migrate::string("project");
+            Migrate::string("location");
+            Migrate::string("remarks");
+        }
+    }
+
+    class wifiMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("wifi");
+            Migrate::attrib_string(255);
+            Migrate::string("uid");
+            Migrate::string("name");
+            Migrate::string("password");
         }
     }
 

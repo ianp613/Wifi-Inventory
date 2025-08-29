@@ -1,5 +1,5 @@
 <?php
-    Seed::$seeders = ["UserSeeder"];
+    Seed::$seeders = ["WifiInventoryUserSeeder"];
 
     class UserSeeder
     {
@@ -14,6 +14,20 @@
                     "no" => $faker->no(),
                 ]);
             }
+        }
+    }
+
+    class WifiInventoryUserSeeder
+    {
+        public static function index(){
+            Seed::table("user");
+            Seed::insert([
+                "name" => "Paul Ian Dumdum",
+                "email" => "paulian.dumdum@gmail.com",
+                "privileges" => "Administrator",
+                "username" => "703F",
+                "password" => "12345"
+            ]);
         }
     }
 ?>

@@ -2,13 +2,12 @@ Add login attemp and Account Lock Function
 
 Count add per month
 
-
-Check if USER that will be added into group if already part of a group
-    -Exclude the user from dropdown option if user exist in group
-
-Add group type column for USER GROUP
-    -options (GROUP TYPE - [IT or NON-IT])
-
+When updating account privileges, check if user is part of a group
+    - if user is part of group and is in USERS and want to update the privilege to Supervisor
+        remove the ID of the user from user column in group and add it to administrator column
+        and Vise Virsa
+    - if use is part of the group and want to update the privileges to administrator
+        check if user is part of a group, and remove the id if it exist
 
 
 

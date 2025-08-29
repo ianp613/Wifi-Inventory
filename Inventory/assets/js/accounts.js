@@ -113,6 +113,7 @@ if(document.getElementById("accounts")){
         .then(res => {
             edit_group_supervisor.innerHTML = "<option value=\"\" selected disabled>Select User</option>"
 
+            console.log(res["supervisor"])
             res["supervisor"].forEach(su => {
                 var op = document.createElement("option")
                 op.value = su["username"] + " - " + su["name"]
@@ -144,7 +145,9 @@ if(document.getElementById("accounts")){
                 op.innerText = eut["username"] + " - " + eut["name"]
                 edit_group_user.appendChild(op)
             });
-        }, 1000);
+            edit_supervisor_temp = []
+            edit_user_temp = []
+        }, 100);
         edit_group_name.focus()
     })
 
@@ -450,6 +453,8 @@ if(document.getElementById("accounts")){
                         }
                         this.parentNode.remove()
                         edit_group_user.value = ""
+                    console.log(edit_user_container_temp)
+
                     })
 
                     name.innerText = user["username"] + " - " + user["name"]
@@ -531,16 +536,23 @@ if(document.getElementById("accounts")){
                 user_container.innerHTML = ""
                 user_container_temp = []
                 group_name.value = ""
+                group_type.value = "NON-IT"
                 group_supervisor.value = ""
                 group_user.value = ""
                 add_group_modal.hide()
                 loadPage()
             }
             if(func == "edit_group"){
+                edit_group_supervisor.innerHTML = "<option value=\"\" selected disabled>Select User</option>"
+                edit_group_user.innerHTML = "<option value=\"\" selected disabled>Select User</option>"
                 edit_supervisor_container.innerHTML = ""
                 edit_supervisor_container_temp = []
                 edit_user_container.innerHTML = ""
                 edit_user_container_temp = []
+
+                edit_user_temp = []
+                edit_supervisor_temp = []
+                
                 edit_group_name.value = ""
                 edit_group_supervisor.value = ""
                 edit_group_user.value = ""

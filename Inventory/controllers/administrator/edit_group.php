@@ -4,11 +4,19 @@
     $data = json_decode(file_get_contents('php://input'), true);
 
     if($data) {
+        $bol = true;
         $user_account = new User;
         $group = new User_Group;
         $group = DB::prepare($group,$data["id"]);
+        $group_temp = DB::where($group,"group_name","=",$data["group_name"]);
 
-        if(DB::validate($group,"group_name",$data["group_name"])){
+        if(count($group_temp)){
+            if($group_temp[0]["id"] != $data["id"]){
+                $bol = false;
+            }
+        }
+
+        if($bol){
             // Supervisors
             $supervisors_temp = [];
             $supervisors = [];
