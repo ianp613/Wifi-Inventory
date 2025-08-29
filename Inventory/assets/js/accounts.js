@@ -281,6 +281,20 @@ if(document.getElementById("accounts")){
         }
     })
 
+    edit_group_btn.addEventListener("click",function(){
+        if(edit_group_name.value){
+            sole.post("../../controllers/administrator/edit_group.php",{
+                id : this.getAttribute("g-id"),
+                group_name : edit_group_name.value,
+                type : edit_group_type.value,
+                supervisor : edit_supervisor_container_temp,
+                user : edit_user_container_temp
+            }).then(res => validateResponse(res,"edit_group"))
+        }else{
+            bs5.toast("warning","Please input group name.")
+        }
+    })
+
     add_account.addEventListener('shown.bs.modal', function () {
         add_name.focus()
     })
@@ -520,7 +534,18 @@ if(document.getElementById("accounts")){
                 group_supervisor.value = ""
                 group_user.value = ""
                 add_group_modal.hide()
-                sole.get("../../controllers/administrator/get_accounts.php").then(res => loadAccounts(res))
+                loadPage()
+            }
+            if(func == "edit_group"){
+                edit_supervisor_container.innerHTML = ""
+                edit_supervisor_container_temp = []
+                edit_user_container.innerHTML = ""
+                edit_user_container_temp = []
+                edit_group_name.value = ""
+                edit_group_supervisor.value = ""
+                edit_group_user.value = ""
+                edit_group_modal.hide()
+                loadPage()
             }
             bs5.toast(res.type,res.message,res.size)
         }else{
