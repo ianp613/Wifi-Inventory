@@ -118,7 +118,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
+                <button id="account_cancel_btn" class="btn btn-sm btn-secondary" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
                 <button id="account_submit_btn" class="btn btn-sm btn-primary"><span class="fa fa-save"></span> Save</button>
             </div>
         </div>

@@ -37,14 +37,20 @@ if(document.getElementById("sidebar")){
     // Start the timer initially
     resetTimer();
 
-
-
-
     sole.get("../../controllers/settings.php").then(res => settings(res))
 
     const logout_modal = new bootstrap.Modal(document.getElementById('logout_modal'),unclose);
     const settings_modal = new bootstrap.Modal(document.getElementById('settings_modal'),unclose);
     const confirm_export_modal = new bootstrap.Modal(document.getElementById('confirm_export_modal'),unclose);
+    
+    const account_edit_modal = new bootstrap.Modal(document.getElementById('account_edit'),unclose);
+    var account = document.getElementById("account");
+    var account_email = document.getElementById("account_email");
+    var account_new_password = document.getElementById("account_new_password");
+    var account_confirm_password = document.getElementById("account_confirm_password");
+    var account_cancel_btn = document.getElementById("account_cancel_btn");
+    var account_submit_btn = document.getElementById("account_submit_btn");
+    
     sole.get("../controllers/validate_auth.php").then(res => {
         validateAuth(res);
     })
@@ -55,6 +61,7 @@ if(document.getElementById("sidebar")){
             localStorage.setItem("email",res.user[0]["email"])
             localStorage.setItem("yourname",res.user[0]["name"])
             localStorage.setItem("username",res.user[0]["username"])
+            localStorage.setItem("password",res.user[0]["password"])
             localStorage.setItem("privileges",res.user[0]["privileges"])
             if(document.getElementById("dashboard")){
                 !localStorage.getItem("email") ? alert("Your account doesn’t have an email address associated with it. Please add one to enhance your account’s security.") : null
@@ -69,6 +76,13 @@ if(document.getElementById("sidebar")){
                 document.querySelectorAll('.users_menu').forEach(element => {
                     element.remove()
                 });
+            }
+
+            if(localStorage.getItem("password") == "12345"){
+                alert("Your account password is set to the default setting. For security reasons, please update your password.")
+                account_email.value = localStorage.getItem("email") != "-" ? localStorage.getItem("email") : "";
+                account_cancel_btn.setAttribute("disabled","")
+                account_edit_modal.show()
             }
         }else{
             window.location.replace("../index.php");
@@ -223,12 +237,20 @@ if(document.getElementById("sidebar")){
     window.addEventListener('load', checkScreenSize);
     window.addEventListener('resize', checkScreenSize);
 
-    const account_edit_modal = new bootstrap.Modal(document.getElementById('account_edit'),unclose);
-    var account = document.getElementById("account");
-    var account_email = document.getElementById("account_email");
-    var account_new_password = document.getElementById("account_new_password");
-    var account_confirm_password = document.getElementById("account_confirm_password");
-    var account_submit_btn = document.getElementById("account_submit_btn");
+    
+
+   
+
+
+
+
+
+
+
+
+
+
+
 
     account.addEventListener("click",function(){
         account_email.value = localStorage.getItem("email") != "-" ? localStorage.getItem("email") : "";
@@ -259,12 +281,13 @@ if(document.getElementById("sidebar")){
             }).then(res => {
                 bs5.toast(res.type,res.message,res.size)
                 if(res.status){
+                    localStorage.setItem("password",account_new_password.value)
                     localStorage.setItem("email",account_email.value)
                     account_email.value = ""
                     account_new_password.value = ""
                     account_confirm_password.value = ""
+                    account_cancel_btn.removeAttribute("disabled")
                 }
-                console.log(res)
             })
         }
     })
