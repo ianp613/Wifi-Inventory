@@ -15,7 +15,62 @@
                 $user2->email = $data["email"] ? $data["email"] : "-";
                 $user2->username = $data["username"];
                 $user2->password = $data["password"] ? $data["password"] : "12345";
+
+                $group = new User_Group;
+                $group_data = DB::all($group);
+                
+                // If privileges update to Administrator, Check if account id exist in USER or SUPERVISOR column
+                if($data["privilege"] == "Administrator"){
+                    if($user2->privileges == "Supervisor"){
+                        foreach ($group_data as $gd) {
+                            $id_temp = explode("|",$gd["supervisors"]);
+                            $id_temp2 = [];
+                            if(in_array($data["id"],$id_temp)){
+                                foreach ($id_temp as $idt) {
+                                    $idt != $data["id"] ? array_push($id_temp2,$idt) : null;
+                                }
+                                $gd_prep = DB::prepare($group,$gd["id"]);
+                                $gd_prep->supervisors = implode("|",$id_temp2) ? implode("|",$id_temp2) : "|";
+                                DB::update($gd_prep);
+                            }
+                        }
+                    }
+                    if($user2->privileges == "User"){
+                        foreach ($group_data as $gd) {
+                            $id_temp = explode("|",$gd["users"]);
+                            $id_temp2 = [];
+                            if(in_array($data["id"],$id_temp)){
+                                foreach ($id_temp as $idt) {
+                                    $idt != $data["id"] ? array_push($id_temp2,$idt) : null;
+                                }
+                                $gd_prep = DB::prepare($group,$gd["id"]);
+                                $gd_prep->users = implode("|",$id_temp2) ? implode("|",$id_temp2) : "|";
+                                DB::update($gd_prep);
+                            }
+                        }
+                    }
+                }
                 $user2->privileges = $data["privilege"];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 DB::update($user2);
                 $response = [
                     "status" => true,
