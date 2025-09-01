@@ -50,6 +50,75 @@
                         }
                     }
                 }
+
+
+                // If privileges update to Supervisor, Check if account id exist in USER column
+                if($data["privilege"] == "Supervisor"){
+                    foreach ($group_data as $gd) {
+                        $id_users = explode("|",$gd["users"]);
+                        $id_supervisors = explode("|",$gd["supervisors"]);
+
+                        $id_users = array_filter($id_users);
+                        $id_supervisors = array_filter($id_supervisors);
+
+                        $id_users = array_unique($id_users);
+                        $id_supervisors = array_unique($id_supervisors);
+                        
+                        $id_temp = [];
+
+                        $transfer = false;
+
+                        if(in_array($data["id"],$id_users)){
+                            $transfer = true;
+                            foreach ($id_users as $idu) {
+                                $idu != $data["id"] ? array_push($id_temp,$idu) : null;
+                            }
+                        }
+
+                        if(!in_array($data["id"],$id_supervisors) && $transfer){
+                            array_push($id_supervisors,$data["id"]);
+                        }
+
+                        $gd_prep = DB::prepare($group,$gd["id"]);
+                        $gd_prep->users = implode("|",$id_temp) ? implode("|",$id_temp) : "|";
+                        $gd_prep->supervisors = implode("|",$id_supervisors) ? implode("|",$id_supervisors) : "|";
+                        DB::update($gd_prep);
+                    }
+                }
+
+                // If privileges update to Supervisor, Check if account id exist in SUPERVISOR column
+                if($data["privilege"] == "User"){
+                    foreach ($group_data as $gd) {
+                        $id_users = explode("|",$gd["users"]);
+                        $id_supervisors = explode("|",$gd["supervisors"]);
+
+                        $id_users = array_filter($id_users);
+                        $id_supervisors = array_filter($id_supervisors);
+
+                        $id_users = array_unique($id_users);
+                        $id_supervisors = array_unique($id_supervisors);
+
+                        $id_temp = [];
+
+                        $transfer = false;
+
+                        if(in_array($data["id"],$id_supervisors)){
+                            $transfer = true;
+                            foreach ($id_supervisors as $ids) {
+                                $ids != $data["id"] ? array_push($id_temp,$ids) : null;
+                            }
+                        }
+
+                        if(!in_array($data["id"],$id_users) && $transfer){
+                            array_push($id_users,$data["id"]);
+                        }
+                        
+                        $gd_prep = DB::prepare($group,$gd["id"]);
+                        $gd_prep->users = implode("|",$id_users) ? implode("|",$id_users) : "|";
+                        $gd_prep->supervisors = implode("|",$id_temp) ? implode("|",$id_temp) : "|";
+                        DB::update($gd_prep);
+                    }
+                }
                 $user2->privileges = $data["privilege"];
 
 
