@@ -31,6 +31,10 @@
     $_SESSION["log4"] = null;
     $_SESSION["mail_username"] = 'paulian.dumdum@gmail.com';
     $_SESSION["mail_password"] = 'ytrr qwdo kqox vdre';
+    $_SESSION["g_member"] = false;
+    $_SESSION["g_name"] = null;
+    $_SESSION["g_id"] = null;
+    $_SESSION["g_type"] = null;
 
     header("location: views/login.php");
 ?>

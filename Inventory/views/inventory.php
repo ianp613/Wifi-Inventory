@@ -56,27 +56,27 @@
                             <i class="fa fa-cubes red-1  <?php $consumables ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Consumables</span>
                         </a>
                     </li>
-                    <li class="nav-item mb-2">
+                    <li hidden class="g_menu nav-item mb-2">
                         <a href="?loc=isp" class="nav-link f-15 text-light <?php $isp ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-wifi red-1  <?php $isp ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>ISP</span>
                         </a>
                     </li>
-                    <li class="nav-item mb-2">
+                    <li hidden class="g_menu nav-item mb-2">
                         <a href="?loc=routers" class="nav-link f-15 text-light <?php $routers ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-gears red-1 <?php $routers ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Routers</span>
                         </a>
                     </li>
-                    <li class="nav-item mb-2">
+                    <li hidden class="g_menu nav-item mb-2">
                         <a href="?loc=ipaddress" class="nav-link f-15 text-light <?php $ipaddress ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-map-marker red-1 <?php $ipaddress ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>IP Address</span>
                         </a>
                     </li>
-                    <li class="nav-item mb-2">
+                    <li hidden class="g_menu nav-item mb-2">
                         <a href="?loc=mac" class="nav-link f-15 text-light <?php $mac ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-map-marker red-1 <?php $mac ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>MAC Address</span>
                         </a>
                     </li>
-                    <li class="nav-item mb-2">
+                    <li hidden class="g_menu nav-item mb-2">
                         <a href="?loc=cctv" class="nav-link f-15 text-light <?php $cctv ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-video-camera red-1 <?php $cctv ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>CCTV</span>
                         </a>
@@ -91,16 +91,16 @@
                             <i class="fa fa-search red-1" style="width: 13px;"></i> <span>Ping</span>
                         </a>
                     </li> -->
-                    <hr hidden class="users_menu" style="margin-top: 6px;">
-                    <div hidden class="users_menu d-flex justify-content-start align-items-center">
-                        <h5 hidden class="users_menu ms-3 red-1 f-14 fwt-5">USERS</h5>    
+                    <hr hidden class="g_account" style="margin-top: 6px;">
+                    <div hidden class="g_account d-flex justify-content-start align-items-center">
+                        <h5 hidden class="g_account ms-3 red-1 f-14 fwt-5">USERS</h5>    
                     </div>
-                    <li hidden class="users_menu nav-item mb-2">
+                    <li hidden class="g_account nav-item mb-2">
                         <a href="?loc=accounts" class="nav-link f-15 text-light <?php $accounts ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-id-card red-1 <?php $accounts ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Accounts</span>
                         </a>
                     </li>
-                    <!-- <li hidden class="users_menu nav-item mb-2">
+                    <!-- <li hidden class="g_account nav-item mb-2">
                         <a href="?loc=groups" class="nav-link f-15 text-light <?php //$groups ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-users red-1 <?php //$groups ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Groups</span>
                         </a>
@@ -113,6 +113,9 @@
                     <h5 class="mt-1 text-secondary">
                         <?php 
                             if(isset($_GET["loc"])){
+                                if($_SESSION["g_member"]){
+                                    echo "<span class=\"fa fa-users\"></span> ".$_SESSION["g_name"]." | ";
+                                }
                                 if($_GET["loc"] == "dashboard"){
                                     echo "<span class=\"fa fa-tachometer\"></span> Dashboard";
                                 }elseif($_GET["loc"] == "equipments"){
@@ -120,24 +123,21 @@
                                 }elseif($_GET["loc"] == "consumables"){
                                     echo "<span class=\"fa fa-cubes\"></span> Consumables";
                                 }elseif($_GET["loc"] == "isp"){
-                                    echo "<span class=\"fa fa-wifi\"></span> Internet Service Provider";
+                                    $_SESSION["privileges"] == "Administrator" || $_SESSION["g_type"] == "IT"? printf("<span class=\"fa fa-wifi\"></span> Internet Service Provider") : printf("404");
                                 }elseif($_GET["loc"] == "routers"){
-                                    echo "<span class=\"fa fa-gears\"></span> Routers";
+                                    $_SESSION["privileges"] == "Administrator" || $_SESSION["g_type"] == "IT"? printf("<span class=\"fa fa-gears\"></span> Routers") : printf("404");
                                 }elseif($_GET["loc"] == "ipaddress"){
-                                    echo "<span class=\"fa fa-map-marker\"></span> IP Address";
+                                    $_SESSION["privileges"] == "Administrator" || $_SESSION["g_type"] == "IT"? printf("<span class=\"fa fa-map-marker\"></span> IP Address") : printf("404");
                                 }elseif($_GET["loc"] == "mac"){
-                                    echo "<span class=\"fa fa-map-marker\"></span> MAC Address";
+                                    $_SESSION["privileges"] == "Administrator" || $_SESSION["g_type"] == "IT"? printf("<span class=\"fa fa-map-marker\"></span> MAC Address") : printf("404");
                                 }elseif($_GET["loc"] == "logs"){
                                     echo "<span class=\"fa fa-list\"></span> Activity Logs";
                                 }elseif($_GET["loc"] == "artisanry"){
                                     echo "<span class=\"fa fa-wrench\"></span> Artisanry";
                                 }elseif($_GET["loc"] == "cctv"){
-                                    echo "<span class=\"fa fa-video-camera\"></span> CCTV";
+                                    $_SESSION["privileges"] == "Administrator" || $_SESSION["g_type"] == "IT"? printf("<span class=\"fa fa-video-camera\"></span> CCTV") : printf("404");
                                 }elseif($_GET["loc"] == "accounts"){
-                                    $_SESSION["privileges"] == "Administrator" ? printf("<span class=\"fa fa-id-card\"></span> Accounts") : printf("404");
-                                }elseif($_GET["loc"] == "groups"){
-                                    echo "404";
-                                    // $_SESSION["privileges"] == "Administrator" ? printf("<span class=\"fa fa-users\"></span> Groups") : printf("404");
+                                    $_SESSION["privileges"] == "Administrator" || $_SESSION["privileges"] == "Supervisor"? printf("<span class=\"fa fa-id-card\"></span> Accounts") : printf("404");
                                 }else{
                                     echo "404";
                                 }
@@ -169,29 +169,42 @@
                         }elseif($_GET["loc"] == "consumables"){
                             include("consumables/consumables.php");
                         }elseif($_GET["loc"] == "ipaddress"){
-                            include("ipaddress/ipaddress.php");
+                            if($_SESSION["privileges"] == "Administrator" || $_SESSION["g_type"] == "IT"){
+                                include("ipaddress/ipaddress.php");
+                            }else{
+                                include "404.php";
+                            }
                         }elseif($_GET["loc"] == "mac"){
-                            include("mac/mac.php");
+                            if($_SESSION["privileges"] == "Administrator" || $_SESSION["g_type"] == "IT"){
+                                include("mac/mac.php");
+                            }else{
+                                include "404.php";
+                            }
                         }elseif($_GET["loc"] == "cctv"){
-                            include("cctv/cctv.php");
+                            if($_SESSION["privileges"] == "Administrator" || $_SESSION["g_type"] == "IT"){
+                                include("cctv/cctv.php");
+                            }else{
+                                include "404.php";
+                            }
                         }elseif($_GET["loc"] == "isp"){
-                            include("isp/isp.php");
+                            if($_SESSION["privileges"] == "Administrator" || $_SESSION["g_type"] == "IT"){
+                                include("isp/isp.php");
+                            }else{
+                                include "404.php";
+                            }
                         }elseif($_GET["loc"] == "routers"){
-                            include("routers/routers.php");
+                            if($_SESSION["privileges"] == "Administrator" || $_SESSION["g_type"] == "IT"){
+                                include("routers/routers.php");
+                            }else{
+                                include "404.php";
+                            }
                         }elseif($_GET["loc"] == "logs"){
                             include("logs/logs.php");
                         }elseif($_GET["loc"] == "artisanry"){
                             include("artisanry/artisanry.php");
                         }elseif($_GET["loc"] == "accounts"){
-                            if($_SESSION["privileges"] == "Administrator"){
+                            if($_SESSION["privileges"] == "Administrator" || $_SESSION["privileges"] == "Supervisor"){
                                 include("administrator/accounts.php");
-                            }else{
-                                include "404.php";
-                            }
-                        }elseif($_GET["loc"] == "groups"){
-                            if($_SESSION["privileges"] == "Administrator"){
-                                include "404.php";
-                                // include("administrator/groups.php");
                             }else{
                                 include "404.php";
                             }

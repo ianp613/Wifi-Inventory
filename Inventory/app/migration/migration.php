@@ -47,6 +47,7 @@
         public static function index(){
             Migrate::attrib_table("equipment");
             Migrate::attrib_string(255);
+            Migrate::string("gid");
             Migrate::string("uid");
             Migrate::string("name");
         }
@@ -57,6 +58,7 @@
         public static function index(){
             Migrate::attrib_table("equipment_entry");
             Migrate::attrib_string(255);
+            Migrate::string("gid");
             Migrate::string("uid");
             Migrate::string("eid");
             Migrate::string("description");
@@ -73,6 +75,7 @@
         public static function index(){
             Migrate::attrib_table("ip_network");
             Migrate::attrib_string(255);
+            Migrate::string("gid");
             Migrate::string("uid");
             Migrate::string("rid");
             Migrate::string("name");
@@ -108,6 +111,7 @@
         public static function index(){
             Migrate::attrib_table("routers");
             Migrate::attrib_string(255);
+            Migrate::string("gid");
             Migrate::string("uid");
             Migrate::string("name");
             Migrate::string("ip");
@@ -123,6 +127,7 @@
         public static function index(){
             Migrate::attrib_table("isp");
             Migrate::attrib_string(255);
+            Migrate::string("gid");
             Migrate::string("uid");
             Migrate::string("isp_name");
             Migrate::string("name");
@@ -140,6 +145,7 @@
         public static function index(){
             Migrate::attrib_table("cctv_location");
             Migrate::attrib_string(255);
+            Migrate::string("gid");
             Migrate::string("uid");
             Migrate::string("map_location");
             Migrate::string("floorplan");
@@ -153,6 +159,7 @@
         public static function index(){
             Migrate::attrib_table("cctv_camera");
             Migrate::attrib_string(255);
+            Migrate::string("gid");
             Migrate::string("uid");
             Migrate::string("lid");
             Migrate::string("camera_id");
@@ -179,6 +186,7 @@
         public static function index(){
             Migrate::attrib_table("settings");
             Migrate::attrib_string(255);
+            Migrate::string("gid");
             Migrate::string("uid");
             Migrate::string("sound");
             Migrate::string("theme");
@@ -189,6 +197,7 @@
         public static function index(){
             Migrate::attrib_table("logs");
             Migrate::attrib_string(255);
+            Migrate::string("gid");
             Migrate::string("uid");
             Migrate::string("log");
         }
@@ -199,6 +208,7 @@
         public static function index(){
             Migrate::attrib_table("mac_address");
             Migrate::attrib_string(255);
+            Migrate::string("gid");
             Migrate::string("uid");
             Migrate::string("wid");
             Migrate::string("mac");
@@ -215,6 +225,7 @@
         public static function index(){
             Migrate::attrib_table("wifi");
             Migrate::attrib_string(255);
+            Migrate::string("gid");
             Migrate::string("uid");
             Migrate::string("name");
             Migrate::string("password");
@@ -226,6 +237,7 @@
         public static function index(){
             Migrate::attrib_table("consumables");
             Migrate::attrib_string(255);
+            Migrate::string("gid");
             Migrate::string("uid");
             Migrate::string("code");
             Migrate::string("description");

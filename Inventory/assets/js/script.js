@@ -69,13 +69,35 @@ if(document.getElementById("sidebar")){
             document.getElementById("userDropdown").innerHTML = "<div class=\"d-flex gray-2\" style=\"margin-top: 10px;\"><span class=\"fa fa-user-circle-o me-2 mt-2 f-20\"></span> <div>" + res.user[0]["name"] + "<br><p class=\"f-10\" style=\"margin-top: -4px;\"> Account: " + (res.user[0]["privileges"] == "Assistant Technician" ? "Technician" : res.user[0]["privileges"]) + "</p></div></div>"
 
             if(res.user[0]["privileges"] == "Administrator"){
-                document.querySelectorAll('.users_menu').forEach(element => {
+                document.querySelectorAll('.g_menu').forEach(element => {
+                    element.removeAttribute("hidden")
+                });
+                document.querySelectorAll('.g_account').forEach(element => {
                     element.removeAttribute("hidden")
                 });
             }else{
-                document.querySelectorAll('.users_menu').forEach(element => {
-                    element.remove()
-                });
+                if(res.group){
+                    if(res.group[0]["type"] == "IT"){
+                        document.querySelectorAll('.g_menu').forEach(element => {
+                            element.removeAttribute("hidden")
+                        });
+                    }else{
+                        document.querySelectorAll('.g_menu').forEach(element => {
+                            element.remove()
+                        }); 
+                    }
+                }
+
+                if(res.user[0]["privileges"] == "Supervisor"){
+                    document.querySelectorAll('.g_account').forEach(element => {
+                        element.removeAttribute("hidden")
+                    });
+                }else{
+                    document.querySelectorAll('.g_account').forEach(element => {
+                        element.remove()
+                    });
+                }
+                
             }
 
             if(localStorage.getItem("password") == "12345"){

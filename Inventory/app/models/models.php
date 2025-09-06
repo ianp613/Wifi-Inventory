@@ -26,10 +26,12 @@
     {
         public $table = "equipment";
         public $fillable = [
+            "gid",
             "uid",
             "name"
         ];
         public $label = [
+            "gid:" => "GID:",
             "uid:" => "UID:",
             "name:" => "Name:"
         ];
@@ -44,6 +46,7 @@
     {
         public $table = "equipment_entry";
         public $fillable = [
+            "gid",
             "uid",
             "eid",
             "description",
@@ -54,6 +57,7 @@
             "remarks"
         ];
         public $label = [
+            "gid:" => "GID:",
             "uid:" => "UID:",
             "eid:" => "EID:",
             "description:" => "Description:",
@@ -64,6 +68,7 @@
             "remarks:" => "Remarks:"
         ];
         public $ignore = [
+            "gid",
             "uid",
             "eid",
             "at",
@@ -80,6 +85,7 @@
     {
         public $table = "ip_network";
         public $fillable = [
+            "gid",
             "uid",
             "rid",
             "name",
@@ -88,6 +94,7 @@
             "subnet"
         ];
         public $label = [
+            "gid:" => "GID:",
             "uid:" => "UID:",
             "rid:" => "RID:",
             "name:" => "Name:",
@@ -97,6 +104,7 @@
         ];
         public $ignore = [
             "id",
+            "gid",
             "uid",
             "rid",
             "ne",
@@ -158,6 +166,7 @@
     class Routers{
         public $table = "routers";
         public $fillable = [
+            "gid",
             "uid",
             "name",
             "ip",
@@ -167,6 +176,7 @@
             "active"
         ];
         public $label = [
+            "gid:" => "GID:",
             "uid:" => "UID:",
             "name:" => "Name:",
             "ip:" => "IP:",
@@ -177,6 +187,7 @@
         ];
         public $ignore = [
             "id",
+            "gid",
             "uid",
             "wan",
             "wa",
@@ -189,6 +200,7 @@
     class ISP{
         public $table = "isp";
         public $fillable = [
+            "gid",
             "uid",
             "isp_name",
             "name",
@@ -200,6 +212,7 @@
             "webmgmtpt"
         ];
         public $label = [
+            "gid:" => "GID:",
             "uid:" => "UID:",
             "isp_name:" => "ISP Name:",
             "name:" => "Name:",
@@ -212,6 +225,7 @@
         ];
         public $ignore = [
             "id",
+            "gid",
             "uid",
             "name",
             "na",
@@ -232,6 +246,7 @@
     class Settings{
         public $table = "settings";
         public $fillable = [
+            "gid",
             "uid",
             "sound",
             "theme",
@@ -245,6 +260,7 @@
     class Logs{
         public $table = "logs";
         public $fillable = [
+            "gid",
             "uid",
             "log"
         ];
@@ -258,6 +274,7 @@
     class CCTV_Location{
         public $table = "cctv_location";
         public $fillable = [
+            "gid",
             "uid",
             "map_location",
             "floorplan",
@@ -265,6 +282,7 @@
             "camera_size",
         ];
         public $label = [
+            "gid:" => "GID:",
             "uid:" => "UID:",
             "map_location:" => "Location:",
             "floorplan:" => "Floorplan:",
@@ -273,6 +291,7 @@
         ];
         public $ignore = [
             "id",
+            "gid",
             "uid",
             "lo",
             "ma",
@@ -287,6 +306,7 @@
     class CCTV_Camera{
         public $table = "cctv_camera";
         public $fillable = [
+            "gid",
             "uid",
             "lid",
             "camera_id",
@@ -307,6 +327,7 @@
             "cy"
         ];
         public $label = [
+            "gid:" => "GID:",
             "uid:" => "UID:",
             "lid:" => "LID:",
             "camera_id:" => "Name:",
@@ -328,6 +349,7 @@
         ];
         public $ignore = [
             "id",
+            "gid",
             "uid",
             "lid",
             "camera",
@@ -351,6 +373,7 @@
     class MAC_Address{
         public $table = "mac_address";
         public $fillable = [
+            "gid",
             "uid",
             "wid",
             "mac",
@@ -361,6 +384,7 @@
             "remarks"
         ];
         public $label = [
+            "gid:" => "GID:",
             "uid:" => "UID:",
             "wid:" => "WID:",
             "name:" => "Name:",
@@ -372,6 +396,7 @@
         ];
         public $ignore = [
             "id",
+            "gid",
             "uid",
             "wid",
             "ma"
@@ -382,11 +407,13 @@
     class Wifi{
         public $table = "wifi";
         public $fillable = [
+            "gid",
             "uid",
             "name",
             "password"
         ];
         public $label = [
+            "gid:" => "GID:",
             "uid:" => "UID:",
             "name:" => "Name:",
             "password:" => "Password:"
@@ -401,6 +428,7 @@
     class Consumables{
         public $table = "consumables";
         public $fillable = [
+            "gid",
             "uid",
             "code",
             "description",
@@ -410,6 +438,7 @@
             "restock_point"
         ];
         public $label = [
+            "gid:" => "GID:",
             "uid:" => "UID:",
             "code:" => "Code:",
             "description:" => "Description:",
@@ -420,6 +449,7 @@
         ];
         public $ignore = [
             "id",
+            "gid",
             "uid",
             "es",
             "de",

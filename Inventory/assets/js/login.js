@@ -75,12 +75,16 @@ if(document.getElementById("login")){
 
     function validateLogin(res){
         if(res.status){
-            bs5.toast(res.type,res.message + " " + res.user[0]["name"],res.size, true, false)
-            login_sound ? audio.play() : null;
-            login_btn.setAttribute("disabled","")
-            setTimeout(() => {
-                window.location.replace("inventory.php?loc=dashboard");
-            }, 3000);
+            if(res.g_member){
+                bs5.toast(res.type,res.message + " " + res.user[0]["name"],res.size, true, false)    
+                login_sound ? audio.play() : null;
+                login_btn.setAttribute("disabled","")
+                setTimeout(() => {
+                    window.location.replace("inventory.php?loc=dashboard");
+                }, 3000);
+            }else{
+                bs5.toast(res.type,res.message,res.size, true, true)
+            }
         }else{
             login_alert.style = "display: flex !important; height: 30px;"
             login_alert.innerText = res.message
