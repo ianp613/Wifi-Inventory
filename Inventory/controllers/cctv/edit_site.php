@@ -49,7 +49,7 @@
                         "status" => true,
                         "type" => "success",
                         "size" => null,
-                        "cctvs" => DB::all($cctv_location),
+                        "cctvs" => $_SESSION["g_id"] ? DB::where($cctv_location,"gid","=",$_SESSION["g_id"]) : DB::all($cctv_location),
                         "message" => "Map has been updated."
                     ];
                 }else{
@@ -57,7 +57,7 @@
                         "status" => false,
                         "type" => "error",
                         "size" => null,
-                        "cctvs" => DB::all($cctv_location),
+                        "cctvs" => $_SESSION["g_id"] ? DB::where($cctv_location,"gid","=",$_SESSION["g_id"]) : DB::all($cctv_location),
                         "message" => "Something went wrong, please try again."
                     ];
                 }
@@ -66,7 +66,7 @@
                     "status" => false,
                     "type" => "warning",
                     "size" => null,
-                    "cctvs" => DB::all($cctv_location),
+                    "cctvs" => $_SESSION["g_id"] ? DB::where($cctv_location,"gid","=",$_SESSION["g_id"]) : DB::all($cctv_location),
                     "message" => "Site location already exist."
                 ];
             }
@@ -110,7 +110,7 @@
                     "status" => true,
                     "type" => "success",
                     "size" => null,
-                    "cctvs" => DB::all($cctv_location),
+                    "cctvs" => $_SESSION["g_id"] ? DB::where($cctv_location,"gid","=",$_SESSION["g_id"]) : DB::all($cctv_location),
                     "message" => "Map has been updated."
                 ];
             }else{
@@ -118,7 +118,7 @@
                     "status" => false,
                     "type" => "error",
                     "size" => null,
-                    "cctvs" => DB::all($cctv_location),
+                    "cctvs" => $_SESSION["g_id"] ? DB::where($cctv_location,"gid","=",$_SESSION["g_id"]) : DB::all($cctv_location),
                     "message" => "Something went wrong, please try again."
                 ];
             }

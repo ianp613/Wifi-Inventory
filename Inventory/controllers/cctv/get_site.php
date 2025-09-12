@@ -1,8 +1,9 @@
 <?php
+    session_start();
     header('Content-Type: application/json');
     include("../../includes.php");
     $cctv = new CCTV_Location;
-    $cctv = DB::all($cctv);
+    $cctv = $_SESSION["g_id"] ? DB::where($cctv,"gid","=",$_SESSION["g_id"]) : DB::all($cctv);
 
     // Remove files in mpas that are not in database
     $imgs_db = [];
@@ -13,7 +14,7 @@
     $img_remove_maps = array_diff($imgs,$imgs_db);
 
     foreach ($img_remove_maps as $remove) {
-        if(file_exists($remove)){
+        if(file_exists($remove) && !$_SESSION["g_id"]){
             unlink($remove);
         }
     }
@@ -28,7 +29,7 @@
     $img_remove_maps = array_diff($imgs,$imgs_db);
 
     foreach ($img_remove_maps as $remove) {
-        if(file_exists($remove)){
+        if(file_exists($remove) && !$_SESSION["g_id"]){
             unlink($remove);
         }
     }

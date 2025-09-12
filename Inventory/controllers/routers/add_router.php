@@ -58,8 +58,7 @@
             "status" => true,
             "type" => "success",
             "size" => null,
-            "message" => "Router has been saved.",
-            "router" => DB::all($router)
+            "message" => "Router has been saved."
         ];
     }else{
         $response = [

@@ -26,7 +26,7 @@
         "status" => true,
         "type" => "info",
         "size" => null,
-        "cctvs" => DB::all($cctv_location),
+        "cctvs" => $_SESSION["g_id"] ? DB::where($cctv_location,"gid","=",$_SESSION["g_id"]) : DB::all($cctv_location),
         "message" => "Map has been deleted."
     ];
 

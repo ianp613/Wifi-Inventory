@@ -135,8 +135,7 @@
             "status" => true,
             "type" => "success",
             "size" => null,
-            "message" => "Router has been updated.",
-            "router" => DB::all($router)
+            "message" => "Router has been updated."
         ];
     }else{
         $response = [

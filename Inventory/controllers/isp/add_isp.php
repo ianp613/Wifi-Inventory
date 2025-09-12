@@ -32,8 +32,7 @@
             "status" => true,
             "type" => "success",
             "size" => null,
-            "message" => "ISP has been saved.",
-            "isp" => DB::all($isp)
+            "message" => "ISP has been saved."
         ];
     }else{
         $response = [

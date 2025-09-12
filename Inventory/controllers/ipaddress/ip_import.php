@@ -61,6 +61,7 @@
 
                     if($ip_count <= 1000){
                         $network = new IP_Network;
+                        $network->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                         $network->uid = $_SESSION["userid"];
                         $network->rid = "-";
                         $network->name = $network_name;
@@ -88,6 +89,7 @@
                             $count++;
                         }
                         $log = new Logs;
+                        $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                         $log->uid = $_SESSION["userid"];
                         $log->log = $_SESSION["name"]." has imported data of network \"".$network_name."\".";
                         if($_SESSION["log"] != $log->log){

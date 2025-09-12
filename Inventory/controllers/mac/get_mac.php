@@ -1,4 +1,5 @@
 <?php
+    session_start();
     header('Content-Type: application/json');
     include("../../includes.php");
     $data = json_decode(file_get_contents('php://input'), true);
@@ -6,9 +7,9 @@
     if($data["wid"]){
         $mac = new MAC_Address;
         if(strtolower($data["wid"]) == "show all"){
-            $mac = DB::all($mac);
+            $mac = $_SESSION["g_id"] ? DB::where($mac,"gid","=",$_SESSION["g_id"]) : DB::all($mac);
         }else{
-            $mac = DB::where($mac,"wid","=",$data["wid"]);    
+            $mac = DB::where($mac,"wid","=",$data["wid"]); 
         }
         
         $response = [
