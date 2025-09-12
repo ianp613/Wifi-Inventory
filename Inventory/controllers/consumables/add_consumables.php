@@ -11,6 +11,7 @@
         $bol = DB::validate($consumables,"description",$data["description"]) ? true : false;
 
         if($bol){
+            $consumables->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
             $consumables->uid = $data["uid"];
             $consumables->code = $_SESSION["consumables_code"];
             $consumables->description = $data["description"];
@@ -22,6 +23,7 @@
             DB::save($consumables);
 
             $log = new Logs;
+            $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
             $log->uid = $_SESSION["userid"];
             $log->log = $_SESSION["name"]." has added an entry \"".$data["description"];
             if($_SESSION["log"] != $log->log){

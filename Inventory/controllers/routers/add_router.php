@@ -6,6 +6,7 @@
 
     if($data) {
         $router = new Routers;
+        $router->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
         $router->uid = $data["uid"];
         $router->name = $data["router_name"];
         $router->ip = $data["router_ip"];
@@ -17,6 +18,7 @@
         DB::save($router);
 
         $log = new Logs;
+        $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
         $log->uid = $_SESSION["userid"];
         $log->log = $_SESSION["name"]." has added a router \"".$data["router_name"]."\".";
         if($_SESSION["log1"] != $log->log){
@@ -29,6 +31,7 @@
             $isp_temp = DB::find($isp,$router->wan1);
 
             $log = new Logs;
+            $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
             $log->uid = $_SESSION["userid"];
             $log->log = $_SESSION["name"]." has set ISP \"".$isp_temp[0]["name"]."\" as WAN 1 of router \"".$data["router_name"]."\".";
             if($_SESSION["log2"] != $log->log){
@@ -42,6 +45,7 @@
             $isp_temp = DB::find($isp,$router->wan2);
 
             $log = new Logs;
+            $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
             $log->uid = $_SESSION["userid"];
             $log->log = $_SESSION["name"]." has set ISP \"".$isp_temp[0]["name"]."\" as WAN 2 of router \"".$data["router_name"]."\".";
             if($_SESSION["log3"] != $log->log){

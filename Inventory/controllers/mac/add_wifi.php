@@ -8,6 +8,7 @@
         $wifi = new Wifi;
         $bol = DB::validate($wifi,"name",$data["wifi_name"]);
         if($bol){
+            $wifi->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
             $wifi->uid = $data["uid"];
             $wifi->name = $data["wifi_name"];
             $wifi->password = $data["wifi_password"] ? $data["wifi_password"] : "-";
@@ -15,6 +16,7 @@
 
 
             $log = new Logs;
+            $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
             $log->uid = $_SESSION["userid"];
             $log->log = $_SESSION["name"]." has added a wifi \"".$data["wifi_name"]."\".";
             if($_SESSION["log1"] != $log->log){

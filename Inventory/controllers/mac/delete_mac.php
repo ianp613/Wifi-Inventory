@@ -12,6 +12,7 @@
         $wifi_temp = DB::find($wifi,$data["wid"]);
         
         $log = new Logs;
+        $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
         $log->uid = $_SESSION["userid"];
         $log->log = $_SESSION["name"]." has deleted a MAC Address \"".$mac_temp[0]["mac"]."\" from wifi \"".$wifi_temp[0]["name"]."\".";
         if($_SESSION["log"] != $log->log){

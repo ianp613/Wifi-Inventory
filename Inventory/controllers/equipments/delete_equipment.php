@@ -16,6 +16,7 @@
         DB::delete($equipment,$data["id"]);
 
         $log = new Logs;
+        $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
         $log->uid = $_SESSION["userid"];
         $log->log = $_SESSION["name"]." has deleted an equipment \"".$equipment_temp[0]["name"]."\".";
         if($_SESSION["log"] != $log->log){

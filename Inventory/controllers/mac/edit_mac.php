@@ -32,6 +32,7 @@
 
             if($mac_mac_temp != $data["mac"]){
                 $log = new Logs;
+                $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                 $log->uid = $_SESSION["userid"];
                 $log->log = $_SESSION["name"]." has updated a MAC Address from \"".$mac_mac_temp."\" to \"".$data["mac"].".\"";
                 if($_SESSION["log"] != $log->log){

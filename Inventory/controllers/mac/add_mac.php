@@ -16,6 +16,7 @@
         }
 
         if($bol){
+            $mac->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
             $mac->uid = $data["uid"];
             $mac->wid = $data["wid"];
             $mac->mac = $data["mac"];
@@ -31,6 +32,7 @@
             $wifi_temp = DB::find($wifi,$data["wid"]);
 
             $log = new Logs;
+            $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
             $log->uid = $_SESSION["userid"];
             $log->log = $_SESSION["name"]." has add a MAC address \"".$data["mac"]."\" to wifi \"".$wifi_temp[0]["name"]."\".";
             if($_SESSION["log"] != $log->log){

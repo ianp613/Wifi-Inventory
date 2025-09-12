@@ -6,6 +6,7 @@
 
     if($data) {
         $entry = new Equipment_Entry;
+        $entry->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
         $entry->uid = $data["uid"];
         $entry->eid = $data["eid"];
         $entry->description = $data["description"];
@@ -21,6 +22,7 @@
         $equipment_temp = DB::find($equipment,$data["eid"]);
 
         $log = new Logs;
+        $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
         $log->uid = $_SESSION["userid"];
         $log->log = $_SESSION["name"]." has add an entry \"".$data["description"]."\" to equipment \"".$equipment_temp[0]["name"]."\".";
         if($_SESSION["log"] != $log->log){

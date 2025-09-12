@@ -27,6 +27,7 @@
 
             if($network_name_temp != $data["name"]){
                 $log = new Logs;
+                $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                 $log->uid = $_SESSION["userid"];
                 $log->log = $_SESSION["name"]." has updated a network name from \"".$network_name_temp."\" to \"".$data["name"].".\"";
                 if($_SESSION["log"] != $log->log){
@@ -42,6 +43,7 @@
                     $router_temp2 = DB::find($router,$data["gateway"]);
 
                     $log = new Logs;
+                    $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                     $log->uid = $_SESSION["userid"];
                     $log->log = $_SESSION["name"]." has removed the connection of the network \"".$data["name"]."\" from router \"".$router_temp1[0]["name"]."\" and connected it to router \"".$router_temp2[0]["name"]."\".";
                     if($_SESSION["log2"] != $log->log){
@@ -53,6 +55,7 @@
                     $router_temp = DB::find($router,$data["gateway"]);
 
                     $log = new Logs;
+                    $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                     $log->uid = $_SESSION["userid"];
                     $log->log = $_SESSION["name"]." has connected network \"".$data["name"]."\" to router \"".$router_temp[0]["name"]."\".";
                     if($_SESSION["log2"] != $log->log){
@@ -66,6 +69,7 @@
                     $router_temp = DB::find($router,$network_rid_temp);
 
                     $log = new Logs;
+                    $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                     $log->uid = $_SESSION["userid"];
                     $log->log = $_SESSION["name"]." has removed the connection of the network \"".$data["name"]."\" from router \"".$router_temp[0]["name"]."\"";
                     if($_SESSION["log2"] != $log->log){

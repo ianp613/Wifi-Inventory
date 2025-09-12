@@ -6,6 +6,7 @@
 
     if($data) {
         $isp = new ISP;
+        $isp->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
         $isp->uid = $data["uid"];
         $isp->name = $data["name"] ? $data["name"] : "-";
         $isp->isp_name = $data["isp_name"] ? $data["isp_name"] : "-";
@@ -19,6 +20,7 @@
         DB::save($isp);
 
         $log = new Logs;
+        $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
         $log->uid = $_SESSION["userid"];
         $log->log = $_SESSION["name"]." has added an ISP \"".$data["name"]."\".";
         if($_SESSION["log"] != $log->log){

@@ -47,6 +47,7 @@
             }
             
             $log = new Logs;
+            $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
             $log->uid = $user[0]["id"];
             $log->log = $user[0]["name"]." has logged into the system.";
             DB::save($log);

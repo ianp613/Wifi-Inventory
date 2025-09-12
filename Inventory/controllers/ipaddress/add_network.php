@@ -24,6 +24,7 @@
                                 $ip_network = new IP_Network;
                                 $bol = DB::validate($ip_network,"name",$data["name"]);
                                 if($bol){
+                                    $ip_network->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                                     $ip_network->uid = $data["uid"];
                                     $ip_network->name = $data["name"];
                                     $ip_network->from = $data["from"];
@@ -52,6 +53,7 @@
                                         DB::save($ip_address);
 
                                         $log = new Logs;
+                                        $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                                         $log->uid = $_SESSION["userid"];
                                         $log->log = $_SESSION["name"]." has added a network \"".$data["name"]."\".";
                                         if($_SESSION["log1"] != $log->log){
@@ -64,6 +66,7 @@
                                             $router_temp = DB::find($router,$data["gateway"]);
 
                                             $log = new Logs;
+                                            $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                                             $log->uid = $_SESSION["userid"];
                                             $log->log = $_SESSION["name"]." has connected network \"".$data["name"]."\" to router \"".$router_temp[0]["name"]."\".";
                                             if($_SESSION["log2"] != $log->log){

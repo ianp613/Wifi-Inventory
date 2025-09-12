@@ -16,6 +16,7 @@
 
             if($equipment_name_temp != $data["name"]){
                 $log = new Logs;
+                $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                 $log->uid = $_SESSION["userid"];
                 $log->log = $_SESSION["name"]." has updated an equipment name from \"".$equipment_name_temp."\" to \"".$data["name"].".\"";
                 if($_SESSION["log"] != $log->log){

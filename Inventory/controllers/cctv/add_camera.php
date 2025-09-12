@@ -6,6 +6,7 @@
 
     if($data["camera_id"]) {
         $camera = new CCTV_Camera;
+        $camera->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
         $camera->uid = $data["uid"];
         $camera->lid = $data["camera_lid"];
         $camera->camera_id = $data["camera_id"];

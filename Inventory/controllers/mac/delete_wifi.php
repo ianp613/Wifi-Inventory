@@ -24,6 +24,7 @@
         ];
 
         $log = new Logs;
+        $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
         $log->uid = $_SESSION["userid"];
         $log->log = $_SESSION["name"]." has deleted a wifi \"".$wifi_temp[0]["name"]."\".";
         if($_SESSION["log"] != $log->log){

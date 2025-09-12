@@ -18,6 +18,7 @@
     DB::update($isp);
 
     $log = new Logs;
+    $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
     $log->uid = $_SESSION["userid"];
     $log->log = $_SESSION["name"]." has updated an information of ISP \"".$data["name"]."\".";
     if($_SESSION["log1"] != $log->log){

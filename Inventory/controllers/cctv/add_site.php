@@ -13,6 +13,7 @@
             $filePath = "../../assets/img/maps/" . uniqid() . "." . $extension;
             
             if(move_uploaded_file($file["tmp_name"], $filePath)) {
+                $cctv_location->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                 $cctv_location->uid = $_POST["uid"];
                 $cctv_location->map_location = $_POST["map_location"];
                 $cctv_location->floorplan = $filePath;
@@ -21,6 +22,7 @@
                 DB::save($cctv_location);
 
                 $log = new Logs;
+                $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                 $log->uid = $_SESSION["userid"];
                 $log->log = $_SESSION["name"]." has added a map \"".$_POST["map_location"]."\".";
                 if($_SESSION["log"] != $log->log){

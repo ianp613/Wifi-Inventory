@@ -25,6 +25,7 @@
                 $isp_temp2 = DB::find($isp,$data["active_wan"]);
 
                 $log = new Logs;
+                $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                 $log->uid = $_SESSION["userid"];
                 $log->log = $_SESSION["name"]." has remove ISP \"".$isp_temp1[0]["name"]."\" and set ISP \"".$isp_temp2[0]["name"]."\" as ACTIVE for router \"".$router->name."\".";
                 if($_SESSION["log"] != $log->log){
@@ -36,6 +37,7 @@
                 $isp_temp = DB::find($isp,$data["active_wan"]);
 
                 $log = new Logs;
+                $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                 $log->uid = $_SESSION["userid"];
                 $log->log = $_SESSION["name"]." has set ISP \"".$isp_temp[0]["name"]."\" as ACTIVE for router \"".$router->name."\".";
                 if($_SESSION["log"] != $log->log){
@@ -49,6 +51,7 @@
                 $isp_temp = DB::find($isp,$router_active_temp);
 
                 $log = new Logs;
+                $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                 $log->uid = $_SESSION["userid"];
                 $log->log = $_SESSION["name"]." has remove ISP \"".$isp_temp[0]["name"]."\" as ACTIVE for router \"".$router->name."\".";
                 if($_SESSION["log"] != $log->log){
