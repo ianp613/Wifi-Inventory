@@ -91,13 +91,18 @@
                             <i class="fa fa-search red-1" style="width: 13px;"></i> <span>Ping</span>
                         </a>
                     </li> -->
-                    <hr hidden class="g_account" style="margin-top: 6px;">
-                    <div hidden class="g_account d-flex justify-content-start align-items-center">
-                        <h5 hidden class="g_account ms-3 red-1 f-14 fwt-5">USERS</h5>    
+                    <hr class="" style="margin-top: 6px;">
+                    <div class="d-flex justify-content-start align-items-center">
+                        <h5 class="ms-3 red-1 f-14 fwt-5">USERS</h5>    
                     </div>
-                    <li hidden class="g_account nav-item mb-2">
+                    <li class="nav-item mb-2">
                         <a href="?loc=accounts" class="nav-link f-15 text-light <?php $accounts ?  printf("bg-light text-dark rounded") :  null;?>">
                             <i class="fa fa-id-card red-1 <?php $accounts ?  printf("text-dark rounded") :  null;?>" style="width: 13px;"></i> <span>Accounts</span>
+                        </a>
+                    </li>
+                    <li hidden class="g_op nav-item mb-2">
+                        <a href="#" class="nav-link f-15 text-light" data-bs-toggle="modal" data-bs-target="#operate_as">
+                            <i class="fa fa-users red-1" style="width: 13px;"></i> <span>Operate as</span>
                         </a>
                     </li>
                     <!-- <li hidden class="g_account nav-item mb-2">
@@ -137,7 +142,7 @@
                                 }elseif($_GET["loc"] == "cctv"){
                                     $_SESSION["privileges"] == "Administrator" || $_SESSION["g_type"] == "IT"? printf("<span class=\"fa fa-video-camera\"></span> CCTV") : printf("404");
                                 }elseif($_GET["loc"] == "accounts"){
-                                    $_SESSION["privileges"] == "Administrator" || $_SESSION["privileges"] == "Supervisor"? printf("<span class=\"fa fa-id-card\"></span> Accounts") : printf("404");
+                                    echo "<span class=\"fa fa-id-card\"></span> Accounts";
                                 }else{
                                     echo "404";
                                 }
@@ -203,11 +208,7 @@
                         }elseif($_GET["loc"] == "artisanry"){
                             include("artisanry/artisanry.php");
                         }elseif($_GET["loc"] == "accounts"){
-                            if($_SESSION["privileges"] == "Administrator" || $_SESSION["privileges"] == "Supervisor"){
                                 include("administrator/accounts.php");
-                            }else{
-                                include "404.php";
-                            }
                         }else{
                             include "404.php";
                         }  

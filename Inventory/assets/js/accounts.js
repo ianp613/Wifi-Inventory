@@ -10,6 +10,11 @@ if(document.getElementById("accounts")){
                 visible: false,
                 searchable: false
             },
+            {
+                target: 5,
+                visible: getPrivilege(),
+                searchable: false
+            },
             { 
                 className: 'dt-left', 
                 targets: '_all'
@@ -21,6 +26,15 @@ if(document.getElementById("accounts")){
            search: "Search: "
         }
     });
+
+    function getPrivilege(){
+        if(localStorage.getItem("privileges") == "User"){
+            return false;    
+        }else{
+            return true;
+        }
+        
+    }
 
     loadPage()
     function loadPage(){

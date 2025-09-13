@@ -40,6 +40,7 @@ if(document.getElementById("sidebar")){
     sole.get("../../controllers/settings.php").then(res => settings(res))
 
     const logout_modal = new bootstrap.Modal(document.getElementById('logout_modal'),unclose);
+    const operate_as_modal = new bootstrap.Modal(document.getElementById('operate_as'),unclose);
     const settings_modal = new bootstrap.Modal(document.getElementById('settings_modal'),unclose);
     const confirm_export_modal = new bootstrap.Modal(document.getElementById('confirm_export_modal'),unclose);
     
@@ -50,7 +51,67 @@ if(document.getElementById("sidebar")){
     var account_confirm_password = document.getElementById("account_confirm_password");
     var account_cancel_btn = document.getElementById("account_cancel_btn");
     var account_submit_btn = document.getElementById("account_submit_btn");
+
+    var operate_as = document.getElementById("operate_as");
+    var group_list = document.getElementById("group_list");
+    var operate_as_btn = document.getElementById("operate_as_btn");
+
+    sole.get("../../controllers/administrator/get_operate_as.php")
+    .then(res => {
+        if(res.operate_as){
+            exit_group_btn.removeAttribute("hidden")
+        }
+    })
+
+    operate_as.addEventListener('shown.bs.modal', function () {
+        sole.get("../../controllers/administrator/get_group.php")
+        .then(res => {
+            group_list.innerHTML = "<option selected disabled value=\"\">-- Select Group --</option>"
+            res.groups.forEach(group => {
+                var op = document.createElement("option")
+                op.innerText = group["group_name"]
+                op.value = group["id"]
+                group_list.appendChild(op)
+            });
+        })
+    })
+
+    operate_as_btn.addEventListener("click",function(){
+        if(group_list.value){
+            sole.post("../../controllers/administrator/operate_as.php",{
+                gid : group_list.value
+            }).then(res => {
+                if(res.status){
+                    setTimeout(() => {
+                        localStorage.clear();
+                        location.reload();
+                    }, 2000);
+                    bs5.toast(res.type,res.message,res.size)
+                }else{
+                    bs5.toast(res.type,res.message,res.size)
+                }
+            })
+        }else{
+            bs5.toast("warning","Please select group.")
+        }
+    })
     
+    exit_group_btn.addEventListener("click",function(){
+        sole.post("../../controllers/administrator/operate_as_remove.php",{
+            exit : true
+        }).then(res => {
+            if(res.status){
+                setTimeout(() => {
+                    localStorage.clear();
+                    location.reload();
+                }, 2000);
+                bs5.toast(res.type,res.message,res.size)
+            }else{
+                bs5.toast(res.type,res.message,res.size)
+            }
+        })
+    })
+
     sole.get("../controllers/validate_auth.php").then(res => {
         validateAuth(res);
     })
@@ -75,6 +136,9 @@ if(document.getElementById("sidebar")){
                 document.querySelectorAll('.g_account').forEach(element => {
                     element.removeAttribute("hidden")
                 });
+                document.querySelectorAll('.g_op').forEach(element => {
+                    element.removeAttribute("hidden")
+                });
             }else{
                 if(res.group){
                     if(res.group[0]["type"] == "IT"){
@@ -97,6 +161,10 @@ if(document.getElementById("sidebar")){
                         element.remove()
                     });
                 }
+
+                document.querySelectorAll('.g_op').forEach(element => {
+                    element.remove()
+                });
                 
             }
 
@@ -258,20 +326,6 @@ if(document.getElementById("sidebar")){
     // Call checkScreenSize on load and resize
     window.addEventListener('load', checkScreenSize);
     window.addEventListener('resize', checkScreenSize);
-
-    
-
-   
-
-
-
-
-
-
-
-
-
-
 
 
     account.addEventListener("click",function(){

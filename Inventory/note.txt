@@ -2,6 +2,17 @@ Add login attemp and Account Lock Function
 
 Count add per month
 
+Account Module
+    Fetch all account if privilege is admin, group members otherwise
+    Before updating account to administrator privilege, check if the $_SESSION["privileges"] is administrator
+    because only the administrator account have the authority to set an Admin Privilege.
+
+
+
+
+
+
+
 When updating account privileges, check if user is part of a group
     - if user is part of group and is in USERS and want to update the privilege to Supervisor
         remove the ID of the user from user column in group and add it to administrator column

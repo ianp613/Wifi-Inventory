@@ -35,6 +35,7 @@
     $_SESSION["g_name"] = null;
     $_SESSION["g_id"] = null;
     $_SESSION["g_type"] = null;
+    $_SESSION["operate_as_group"] = null;
 
     header("location: views/login.php");
 ?>

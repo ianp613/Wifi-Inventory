@@ -210,3 +210,25 @@
         </div>
     </div>
  </div>
+
+ <div class="modal fade" tabindex="-1" id="operate_as">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6>Operate as Group Member</h6>
+                <button hidden class="btn btn-sm btn-danger" id="exit_group_btn"><span class="fa fa-sign-out"></span> Exit Group</button>
+
+            </div>
+            <div class="modal-body">
+                <label for="group_list" class="mb-2">Group List</label>
+                <select name="group_list" id="group_list" class="form-control">
+                    <option selected disabled value="">-- Select Group --</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
+                <button class="btn btn-sm btn-primary" id="operate_as_btn"><span class="fa fa-sign-in"></span> Proceed</button>
+            </div>
+        </div>
+    </div>
+ </div>

@@ -1,6 +1,6 @@
 <div id="accounts">
-    <div class="d-flex mb-3">
-        <div class="col-md-6">
+    <div class="g_op d-flex mb-3">
+        <div class="g-op col-md-6">
             <div class="d-flex">
                 <button data-bs-toggle="modal" data-bs-target="#add_account" class="btn btn-sm btn-primary"><span class="fa fa-plus"></span> Create Account</button> 
             </div>
