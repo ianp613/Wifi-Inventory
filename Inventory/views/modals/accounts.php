@@ -22,7 +22,9 @@
                 </div>
                 <label for="add_privilege" class="mb-2 mt-2">Account Privilege</label>
                 <select class="form-control" name="" id="add_privilege">
+                    <?php if($_SESSION["privileges"] == "Administrator"){ ?>
                     <option value="Administrator">Administrator</option>
+                    <?php } ?>
                     <option value="Supervisor">Supervisor</option>
                     <option selected value="User">User</option>
                 </select>
@@ -59,7 +61,9 @@
                 </div>
                 <label for="edit_privilege" class="mb-2 mt-2">Account Privilege</label>
                 <select class="form-control" name="" id="edit_privilege">
+                    <?php if($_SESSION["privileges"] == "Administrator"){ ?>
                     <option value="Administrator">Administrator</option>
+                    <?php } ?>
                     <option value="Supervisor">Supervisor</option>
                     <option selected value="User">User</option>
                 </select>

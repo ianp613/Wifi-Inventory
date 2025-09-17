@@ -1,6 +1,7 @@
 <div id="accounts">
-    <div class="g_op d-flex mb-3">
-        <div class="g-op col-md-6">
+    <?php if($_SESSION["privileges"] == "Administrator"){ ?>
+    <div class="d-flex mb-3">
+        <div class="col-md-6">
             <div class="d-flex">
                 <button data-bs-toggle="modal" data-bs-target="#add_account" class="btn btn-sm btn-primary"><span class="fa fa-plus"></span> Create Account</button> 
             </div>
@@ -15,6 +16,7 @@
             <button data-bs-target="#add_group" data-bs-toggle="modal" class="btn btn-sm btn-primary" style="margin-bottom: -5px; margin-left: 10px;"><span class="fa fa-plus"></span> Add Group</button>
         </div>
     </div>
+    <?php } ?>
     <table id="accounts_table" class="table border table-hover">
         <thead class="fwt-5">
             <tr>

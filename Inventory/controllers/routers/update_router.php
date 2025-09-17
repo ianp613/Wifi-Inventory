@@ -140,7 +140,7 @@
     }else{
         $response = [
             "status" => false,
-            "type" => "warning",
+            "type" => "error",
             "size" => null,
             "message" => "Something went wrong."
         ];

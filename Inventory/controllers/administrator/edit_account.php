@@ -1,9 +1,16 @@
 <?php
+    session_start();
     header('Content-Type: application/json');
     include("../../includes.php");
     $data = json_decode(file_get_contents('php://input'), true);
+    $update_privileges = true;
+    if($data["privilege"] == "Administrator"){
+        $update_privileges = $_SESSION["privileges"] == "Administrator" ? true : false;    
+    }
+    
 
-    if($data) {
+
+    if($data && $update_privileges) {
         $user = new User;
 
         $user1 = DB::where($user,"username","=",$data["username"]);
@@ -121,25 +128,6 @@
                 }
                 $user2->privileges = $data["privilege"];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 DB::update($user2);
                 $response = [
                     "status" => true,
@@ -179,7 +167,7 @@
     }else{
         $response = [
             "status" => false,
-            "type" => "warning",
+            "type" => "error",
             "size" => null,
             "message" => "Something went wrong."
         ];

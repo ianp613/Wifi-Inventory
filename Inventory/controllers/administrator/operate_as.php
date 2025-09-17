@@ -24,7 +24,7 @@
     }else{
         $response = [
            "status" => true,
-            "type" => "warning",
+            "type" => "error",
             "size" => null,
             "message" => "Something went wrong." 
         ];
