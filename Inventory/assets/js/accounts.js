@@ -388,20 +388,23 @@ if(document.getElementById("accounts")){
         });
     }
 
-    group_dropdown.addEventListener("contextmenu", e=>{
-        if(e.target.classList.contains("dropdown-item")){
-            sole.post("../../controllers/administrator/find_group.php",{
-                id: e.target.getAttribute("id")
-            }).then(res => editGroupForm(res))
-        }    
-    })
-    group_dropdown.addEventListener("click", e=>{
-        if(e.target.classList.contains("dropdown-item")){
-            sole.post("../../controllers/administrator/find_group.php",{
-                id: e.target.getAttribute("id")
-            }).then(res => editGroupForm(res))
-        }    
-    })
+    if(localStorage.getItem("privileges") != "Administrator"){
+        group_dropdown.addEventListener("contextmenu", e=>{
+            if(e.target.classList.contains("dropdown-item")){
+                sole.post("../../controllers/administrator/find_group.php",{
+                    id: e.target.getAttribute("id")
+                }).then(res => editGroupForm(res))
+            }    
+        })
+        group_dropdown.addEventListener("click", e=>{
+            if(e.target.classList.contains("dropdown-item")){
+                sole.post("../../controllers/administrator/find_group.php",{
+                    id: e.target.getAttribute("id")
+                }).then(res => editGroupForm(res))
+            }    
+        })    
+    }
+    
 
     function editGroupForm(res) {
         edit_group_btn.setAttribute("g-id",res.group[0]["id"])
@@ -485,6 +488,7 @@ if(document.getElementById("accounts")){
     }
 
     function loadAccounts(res){
+        console.log(res)
         accounts_table.clear().draw();
         res.user.forEach(e => {
             accounts_table.row.add([
@@ -492,7 +496,7 @@ if(document.getElementById("accounts")){
                 e["name"],
                 e["email"] != "-" ? e["email"] : "",
                 e["username"],
-                e["privileges"] == "Administrator" ? "<div class=\"text-primary\">"+e["privileges"]+"</div>" : e["privileges"] == "Senior Technician" ? "<div class=\"text-success\">"+e["privileges"]+"</div>" : e["privileges"],
+                e["privileges"] == "Administrator" ? "<div class=\"text-primary\">"+e["privileges"]+"</div>" : e["privileges"] == "Supervisor" ? "<div class=\"text-success\">"+e["privileges"]+"</div>" : e["privileges"],
                 e["id"] != localStorage.getItem("userid") ? "<button id=\"edit_account_"+ e["id"] +"\" u-id=\""+ e["id"] +"\" class=\"edit_account_row btn btn-sm btn-secondary\"><i u-id=\""+ e["id"] +"\" class=\"edit_account_row fa fa-edit\"></i></button>" +
                 "<button id=\"delete_account_"+ e["id"] +"\" u-id=\""+ e["id"] +"\" class=\"delete_account_row btn btn-sm btn-danger ms-1\"><i u-id=\""+ e["id"] +"\" class=\"delete_account_row fa fa-trash\"></i></button>" : ""
             ]).draw(false)   
