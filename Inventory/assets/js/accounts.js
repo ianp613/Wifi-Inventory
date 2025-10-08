@@ -388,7 +388,7 @@ if(document.getElementById("accounts")){
         });
     }
 
-    if(localStorage.getItem("privileges") != "Administrator"){
+    if(localStorage.getItem("privileges") == "Administrator"){
         group_dropdown.addEventListener("contextmenu", e=>{
             if(e.target.classList.contains("dropdown-item")){
                 sole.post("../../controllers/administrator/find_group.php",{
