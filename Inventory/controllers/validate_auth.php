@@ -30,6 +30,7 @@
                 "type" => "success",
                 "size" => null,
                 "message" => "Welcome",
+                "g_member" => $_SESSION["g_member"],
                 "user" => $user,
                 "group" => $group
             ]; 

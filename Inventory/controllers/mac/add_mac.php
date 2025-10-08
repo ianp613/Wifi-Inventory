@@ -48,11 +48,13 @@
                     "message" => "MAC address has been saved.",
                 ];
             }else{
+                $wifi = new Wifi;
+                $wifi = DB::find($wifi,$data["wid"]);
                 $response = [
                     "status" => false,
                     "type" => "warning",
                     "size" => null,
-                    "message" => "MAC address \"".$data["mac"]."\" already exist in ",
+                    "message" => "MAC address \"".$data["mac"]."\" already exist in ".$wifi[0]["name"].".",
                 ];
             }
             

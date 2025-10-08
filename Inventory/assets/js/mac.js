@@ -206,7 +206,7 @@ if(document.getElementById("mac")){
                 if(res.status){
                     validateResponse(res,"add_mac")
                 }else{
-                    alert(res.message + localStorage.getItem("selected_wifi") + ".")
+                    alert(res.message)
                 }
             })    
         }else{
@@ -229,7 +229,7 @@ if(document.getElementById("mac")){
                 if(res.status){
                     validateResponse(res,"edit_mac")
                 }else{
-                    alert(res.message + localStorage.getItem("selected_wifi") + ".")
+                    alert(res.message)
                 }
             })    
         }else{

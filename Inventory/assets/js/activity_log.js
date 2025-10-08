@@ -34,7 +34,11 @@ if(document.getElementById("logs")){
         paging: false,
         info: false,
         emptyTable: false
-    }); 
+    });
+
+    if(localStorage.getItem("g_member") == "true"){
+        document.getElementById("clear_log_toggle").remove()
+    }
     
     var select_log = document.getElementById("select_log")
 

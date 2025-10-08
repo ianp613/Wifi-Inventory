@@ -124,6 +124,7 @@ if(document.getElementById("sidebar")){
             localStorage.setItem("username",res.user[0]["username"])
             localStorage.setItem("password",res.user[0]["password"])
             localStorage.setItem("privileges",res.user[0]["privileges"])
+            localStorage.setItem("g_member",res.g_member)
             if(document.getElementById("dashboard")){
                 !localStorage.getItem("email") ? alert("Your account doesn’t have an email address associated with it. Please add one to enhance your account’s security.") : null
             }
