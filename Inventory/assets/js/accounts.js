@@ -382,13 +382,15 @@ if(document.getElementById("accounts")){
     })
 
     function loadGroup(res){
-        group_dropdown.innerHTML = ""
-        res.groups.forEach(group => {
-            group_dropdown.innerHTML += "<li><a href=\"#\" class=\"dropdown-item\" id=\""+ group["id"] +"\" >"+ group["group_name"] +"</a></li>"
-        });
+        if(document.getElementById("group_dropdown")){
+            group_dropdown.innerHTML = ""
+            res.groups.forEach(group => {
+                group_dropdown.innerHTML += "<li><a href=\"#\" class=\"dropdown-item\" id=\""+ group["id"] +"\" >"+ group["group_name"] +"</a></li>"
+            });    
+        }
     }
 
-    if(localStorage.getItem("privileges") == "Administrator"){
+    if(localStorage.getItem("privileges") == "Administrator" && document.getElementById("group_dropdown")){
         group_dropdown.addEventListener("contextmenu", e=>{
             if(e.target.classList.contains("dropdown-item")){
                 sole.post("../../controllers/administrator/find_group.php",{

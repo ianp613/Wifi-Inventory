@@ -844,7 +844,7 @@ if(document.getElementById("routers")){
                 ]).draw(false)
             }
         }else{
-            bs5.toast("warning","Something went wrong.")
+            bs5.toast(res.type,res.message,res.size)
         }    
     }
     function validateResponse(res, func){
