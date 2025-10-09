@@ -7,8 +7,15 @@
     if($_SESSION["g_member"]){
         if($data["name"]) {
             $equipment = new Equipment;
-            $bol = DB::validate($equipment,"name",$data["name"]);
-
+            $bol = true;
+            $equip = DB::where($equipment,"name","=",$data["name"]);
+            if(count($equip)){
+                foreach ($equip as $eq) {
+                    if($eq["gid"] == $_SESSION["g_id"]){
+                        $bol = false;
+                    }
+                }
+            }
             if($bol){
                 $equipment->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                 $equipment->uid = $data["uid"];
