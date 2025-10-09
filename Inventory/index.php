@@ -6,12 +6,14 @@
         if(array_key_exists("inactivity",$_GET)){
             if($_GET["inactivity"] == "true"){
                 $log = new Logs;
+                $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                 $log->uid = $_SESSION["userid"];
                 $log->log = $_SESSION["name"]." has been logged out from the system due to inactivity.";
                 DB::save($log);
             }
         }else{
             $log = new Logs;
+            $log->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
             $log->uid = $_SESSION["userid"];
             $log->log = $_SESSION["name"]." has logged out from the system.";
             DB::save($log);

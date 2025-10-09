@@ -36,9 +36,9 @@ if(document.getElementById("logs")){
         emptyTable: false
     });
 
-    if(localStorage.getItem("g_member") == "true"){
-        document.getElementById("clear_log_toggle").remove()
-    }
+    // if(JSON.parse(localStorage.getItem("g_member"))){
+    //     document.getElementById("clear_log_toggle").remove()
+    // }
     
     var select_log = document.getElementById("select_log")
 
@@ -49,19 +49,21 @@ if(document.getElementById("logs")){
         var clear_log_btn = document.getElementById("clear_log_btn")
         var clear_log_name = document.getElementById("clear_log_name")
         var clear_log_toggle = document.getElementById("clear_log_toggle")
-        select_log.addEventListener("change",function(){
-            loadLogs(select_log.value)
-        })
-        clear_log_toggle.addEventListener("click",function(){
-            if(select_log.value == "All"){
-                clear_log_name.innerHTML = "for all users"
-            }else if(select_log.value == localStorage.getItem("userid")){
-                clear_log_name.innerHTML = "for your account"
-            }else{
-                clear_log_name.innerHTML = "for user <b>\""+select_log.options[select_log.selectedIndex].text+"\"</b>"
-            }
-            clear_log_btn.setAttribute("uid",select_log.value)
-        })
+        if(!JSON.parse(localStorage.getItem("g_member"))){
+            select_log.addEventListener("change",function(){
+                loadLogs(select_log.value)
+            })
+            clear_log_toggle.addEventListener("click",function(){
+                if(select_log.value == "All"){
+                    clear_log_name.innerHTML = "for all users"
+                }else if(select_log.value == localStorage.getItem("userid")){
+                    clear_log_name.innerHTML = "for your account"
+                }else{
+                    clear_log_name.innerHTML = "for user <b>\""+select_log.options[select_log.selectedIndex].text+"\"</b>"
+                }
+                clear_log_btn.setAttribute("uid",select_log.value)
+            })   
+        }
         const clear_log_modal = new bootstrap.Modal(document.getElementById('clear_log'),unclose);
         clear_log_btn.addEventListener("click",function(){
             sole.post("../../controllers/logs/delete_logs.php",{
@@ -111,21 +113,23 @@ if(document.getElementById("logs")){
     }
 
     function loadUsers(){
-        sole.get("../../controllers/logs/get_users.php")
-        .then(res => {
-            res.forEach(e => {
-                var op = document.createElement("option")
-                op.value = e["id"]
-                op.innerText = e["id"] == localStorage.getItem("userid") ? "Your logs" : e["name"]
-                e["id"] == localStorage.getItem("userid") ? select_log.appendChild(op) : null
-            });
-            res.forEach(e => {
-                var op = document.createElement("option")
-                op.value = e["id"]
-                op.innerText = e["id"] == localStorage.getItem("userid") ? "Your logs" : e["name"]
-                e["id"] != localStorage.getItem("userid") ? select_log.appendChild(op) : null
-            });
-        })
+        if(!JSON.parse(localStorage.getItem("g_member"))){
+            sole.get("../../controllers/logs/get_users.php")
+            .then(res => {
+                res.forEach(e => {
+                    var op = document.createElement("option")
+                    op.value = e["id"]
+                    op.innerText = e["id"] == localStorage.getItem("userid") ? "Your logs" : e["name"]
+                    e["id"] == localStorage.getItem("userid") ? select_log.appendChild(op) : null
+                });
+                res.forEach(e => {
+                    var op = document.createElement("option")
+                    op.value = e["id"]
+                    op.innerText = e["id"] == localStorage.getItem("userid") ? "Your logs" : e["name"]
+                    e["id"] != localStorage.getItem("userid") ? select_log.appendChild(op) : null
+                });
+            })    
+        }
     }
 }
 

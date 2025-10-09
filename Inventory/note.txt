@@ -7,7 +7,8 @@ Account Module
     Before updating account to administrator privilege, check if the $_SESSION["privileges"] is administrator
     because only the administrator account have the authority to set an Admin Privilege.
 
-
+EQUIPMENTS
+    Add equipment - should not check the list of equipments in another group
 
 
 
