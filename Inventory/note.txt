@@ -2,6 +2,16 @@ Add login attemp and Account Lock Function
 
 Count add per month
 
+
+
+CCTV
+    Save Map (Download Map Image) - Download name should also change when user update the Map Name (Recheck SESSION or LOCALSTORAGE)
+
+
+
+
+
+
 Account Module
     Fetch all account if privilege is admin, group members otherwise
     Before updating account to administrator privilege, check if the $_SESSION["privileges"] is administrator
