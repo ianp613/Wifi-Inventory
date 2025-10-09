@@ -10,10 +10,6 @@ Account Module
 EQUIPMENTS
     Add equipment - should not check the list of equipments in another group
 
-
-
-
-
 When updating account privileges, check if user is part of a group
     - if user is part of group and is in USERS and want to update the privilege to Supervisor
         remove the ID of the user from user column in group and add it to administrator column
