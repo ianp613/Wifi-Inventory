@@ -128,7 +128,7 @@
 </div>
 
 <!-- GENERATE ADD LOG LINK -->
-<div class="modal fade" id="add_log" tabindex="-1">
+<div class="modal fade" id="add_log_modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">

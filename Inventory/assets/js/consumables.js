@@ -102,12 +102,13 @@ if(document.getElementById("consumables")){
     const add_consumables_modal = new bootstrap.Modal(document.getElementById('add_consumables'),unclose);
     const edit_consumables_modal = new bootstrap.Modal(document.getElementById('edit_consumables'),unclose);
     const restock_consumables_modal = new bootstrap.Modal(document.getElementById('restock_consumables'),unclose);
-    const add_log_modal = new bootstrap.Modal(document.getElementById('add_log'),unclose);
+    const add_log_modal = new bootstrap.Modal(document.getElementById('add_log_modal'),unclose);
     const delete_consumables_modal = new bootstrap.Modal(document.getElementById('delete_consumables'),unclose);
 
     var add_consumables = document.getElementById("add_consumables")
     var edit_consumables = document.getElementById("edit_consumables")
     var restock_consumables = document.getElementById("restock_consumables")
+    var add_log = document.getElementById("add_log")
 
     var edit_consumable_code = document.getElementById("edit_consumable_code")
     var edit_consumable_description = document.getElementById("edit_consumable_description")
@@ -155,6 +156,14 @@ if(document.getElementById("consumables")){
 
     restock_consumables.addEventListener('shown.bs.modal', function () {
         search_consumable.focus()
+    })
+
+    add_log.addEventListener("click",function(){
+        if(JSON.parse(localStorage.getItem("g_member"))){
+            add_log_modal.show()
+        }else{
+            bs5.toast("info","Please operate as group member.")
+        }
     })
 
     add_consumables_btn.addEventListener("click",function(){
@@ -334,13 +343,20 @@ if(document.getElementById("consumables")){
     })
 
     generate_link_btn.addEventListener("click",function(){
-        let url = window.location.origin + window.location.pathname;
-        let baseUrl = url.substring(0, url.lastIndexOf('/') + 1);
+        if(JSON.parse(localStorage.getItem("g_member"))){
+            sole.get("../../controllers/consumables/generate_link.php")
+            .then(res => console.log(res))
+            let url = window.location.origin + window.location.pathname;
+            let baseUrl = url.substring(0, url.lastIndexOf('/') + 1);
 
-        add_log_link.setAttribute("target","_blank");
+            add_log_link.setAttribute("target","_blank");
 
-        add_log_link.setAttribute("href",baseUrl + "consumables-log.php");
-        add_log_link.innerText = baseUrl + "consumables-log.php";
+            add_log_link.setAttribute("href",baseUrl + "consumables-log.php");
+            add_log_link.innerText = baseUrl + "consumables-log.php";
+        }else{
+            bs5.toast("info","Please operate as group member.")
+        }
+        
     })
 
     function loadConsumables(res){
