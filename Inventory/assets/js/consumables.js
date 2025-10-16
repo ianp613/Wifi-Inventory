@@ -154,6 +154,11 @@ if(document.getElementById("consumables")){
         edit_consumable_description.focus()
     })
 
+    // add_log.addEventListener('shown.bs.modal', function () {
+    //     sole.get("../../controllers/consumables/find_link.php")
+    //     .then(res => console.log(res))
+    // })
+
     restock_consumables.addEventListener('shown.bs.modal', function () {
         search_consumable.focus()
     })
@@ -345,14 +350,15 @@ if(document.getElementById("consumables")){
     generate_link_btn.addEventListener("click",function(){
         if(JSON.parse(localStorage.getItem("g_member"))){
             sole.get("../../controllers/consumables/generate_link.php")
-            .then(res => console.log(res))
-            let url = window.location.origin + window.location.pathname;
-            let baseUrl = url.substring(0, url.lastIndexOf('/') + 1);
-
-            add_log_link.setAttribute("target","_blank");
-
-            add_log_link.setAttribute("href",baseUrl + "consumables-log.php");
-            add_log_link.innerText = baseUrl + "consumables-log.php";
+            .then(res => {
+                console.log(res)
+                let url = window.location.origin + window.location.pathname;
+                let baseUrl = url.substring(0, url.lastIndexOf('/') + 1);
+                add_log_link.setAttribute("target","_blank");
+                add_log_link.setAttribute("href",baseUrl + "consumables-log.php?glog="+res);
+                add_log_link.innerText = baseUrl + "consumables-log.php?glog="+res;
+            })
+            
         }else{
             bs5.toast("info","Please operate as group member.")
         }

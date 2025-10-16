@@ -129,7 +129,7 @@
 
 <!-- GENERATE ADD LOG LINK -->
 <div class="modal fade" id="add_log_modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h6><span class="fa fa-external-link"></span> Add Log</h6>
