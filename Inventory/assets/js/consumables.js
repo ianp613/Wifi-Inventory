@@ -105,10 +105,12 @@ if(document.getElementById("consumables")){
     const add_log_modal = new bootstrap.Modal(document.getElementById('add_log_modal'),unclose);
     const delete_consumables_modal = new bootstrap.Modal(document.getElementById('delete_consumables'),unclose);
 
+
     var add_consumables = document.getElementById("add_consumables")
     var edit_consumables = document.getElementById("edit_consumables")
     var restock_consumables = document.getElementById("restock_consumables")
     var add_log = document.getElementById("add_log")
+    var add_log_m = document.getElementById("add_log_modal")
 
     var edit_consumable_code = document.getElementById("edit_consumable_code")
     var edit_consumable_description = document.getElementById("edit_consumable_description")
@@ -140,6 +142,8 @@ if(document.getElementById("consumables")){
     var consumable_badge_success = document.getElementById("consumable_badge_success")
 
     var generate_link_btn = document.getElementById("generate_link_btn")
+    var regenerate_link_btn = document.getElementById("regenerate_link_btn")
+    var delete_link_btn = document.getElementById("delete_link_btn")
     var add_log_link = document.getElementById("add_log_link")
 
     add_consumables.addEventListener('shown.bs.modal', function () {
@@ -154,10 +158,28 @@ if(document.getElementById("consumables")){
         edit_consumable_description.focus()
     })
 
-    // add_log.addEventListener('shown.bs.modal', function () {
-    //     sole.get("../../controllers/consumables/find_link.php")
-    //     .then(res => console.log(res))
-    // })
+    add_log_m.addEventListener('shown.bs.modal', function () {
+        sole.get("../../controllers/consumables/find_link.php")
+        .then(res => {
+            if(res.status){
+                let url = window.location.origin + window.location.pathname;
+                let baseUrl = url.substring(0, url.lastIndexOf('/') + 1);
+                add_log_link.setAttribute("target","_blank");
+                add_log_link.setAttribute("href",baseUrl + "consumables-log.php?glog="+res.link);
+                add_log_link.innerText = baseUrl + "consumables-log.php?glog="+res.link;
+                regenerate_link_btn.hidden = false
+                delete_link_btn.hidden = false
+                generate_link_btn.hidden = true
+            }else{ 
+                add_log_link.innerText = "Click Generate Link"
+                add_log_link.removeAttribute("target");
+                add_log_link.setAttribute("href","#");
+                regenerate_link_btn.hidden = true
+                delete_link_btn.hidden = true
+                generate_link_btn.hidden = false
+            }
+        })
+    })
 
     restock_consumables.addEventListener('shown.bs.modal', function () {
         search_consumable.focus()
@@ -349,20 +371,38 @@ if(document.getElementById("consumables")){
 
     generate_link_btn.addEventListener("click",function(){
         if(JSON.parse(localStorage.getItem("g_member"))){
-            sole.get("../../controllers/consumables/generate_link.php")
-            .then(res => {
-                console.log(res)
+            sole.post("../../controllers/consumables/generate_link.php",{
+                type: "generate"
+            }).then(res => {
+                let url = window.location.origin + window.location.pathname;
+                let baseUrl = url.substring(0, url.lastIndexOf('/') + 1);
+                add_log_link.setAttribute("target","_blank");
+                add_log_link.setAttribute("href",baseUrl + "consumables-log.php?glog="+res);
+                add_log_link.innerText = baseUrl + "consumables-log.php?glog="+res;
+
+                regenerate_link_btn.hidden = false
+                delete_link_btn.hidden = false
+                generate_link_btn.hidden = true
+            })
+            
+        }else{
+            bs5.toast("info","Please operate as group member.")
+        }
+    })
+
+    regenerate_link_btn.addEventListener("click",function(){
+        if(JSON.parse(localStorage.getItem("g_member"))){
+            sole.post("../../controllers/consumables/generate_link.php",{
+                type: "regenerate",
+                link: add_log_link.getAttribute("href").split("glog=")[1]
+            }).then(res => {
                 let url = window.location.origin + window.location.pathname;
                 let baseUrl = url.substring(0, url.lastIndexOf('/') + 1);
                 add_log_link.setAttribute("target","_blank");
                 add_log_link.setAttribute("href",baseUrl + "consumables-log.php?glog="+res);
                 add_log_link.innerText = baseUrl + "consumables-log.php?glog="+res;
             })
-            
-        }else{
-            bs5.toast("info","Please operate as group member.")
         }
-        
     })
 
     function loadConsumables(res){
