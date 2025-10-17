@@ -9,6 +9,5 @@
             unlink("links/".$data["link"]);
         }
     }
-
     echo json_encode(["status" => true]);
 ?>
