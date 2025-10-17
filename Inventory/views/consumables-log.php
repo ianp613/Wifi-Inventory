@@ -18,9 +18,9 @@
     <body>
         <div class="w-100 d-flex justify-content-center">
             <div class="wd-600 p-4">
-                <h5 class="text-secondary mb-3"><span class="fa fa-cubes"></span> Consumables</h5>
+                <h5 class="text-secondary mb-3 d-flex"><div id="g_name_display"></div><span class="fa fa-cubes"></span> Consumables</h5>
                 <div class="w-100 btn-group">
-                    <input type="text" name="" id="" class="form-control" placeholder="Search code or description">
+                    <input type="text" name="" id="g_search" class="form-control" placeholder="Search code or description">
                     <button class="btn btn-sm alert-dark btn-dark wd-40"><span class="fa fa-search"></span></button>
                 </div>
                 
@@ -34,6 +34,7 @@
         <script src="../assets/js/sole.splash/splash.js"></script>
         <script src="../assets/js/quagga/quagga.min.js"></script>
         <script src="../assets/js/sole.js"></script>
+        <script src="../assets/js/script.js"></script>
         <script src="../assets/js/consumables_log.js"></script>
         <script src="../assets/js/modal_alert.js"></script>
     </body>
