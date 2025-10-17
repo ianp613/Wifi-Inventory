@@ -34,7 +34,7 @@
         <script src="../assets/js/sole.splash/splash.js"></script>
         <script src="../assets/js/quagga/quagga.min.js"></script>
         <script src="../assets/js/sole.js"></script>
-        <script src="../assets/js/script.js"></script>
+        <script src="../assets/js/consumables_log.js"></script>
         <script src="../assets/js/modal_alert.js"></script>
     </body>
 </html>
