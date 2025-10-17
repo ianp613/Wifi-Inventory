@@ -405,6 +405,22 @@ if(document.getElementById("consumables")){
         }
     })
 
+    delete_link_btn.addEventListener("click",function(){
+        if(JSON.parse(localStorage.getItem("g_member"))){
+            sole.post("../../controllers/consumables/delete_link.php",{
+                link: add_log_link.getAttribute("href").split("glog=")[1]
+            }).then(res => {
+                add_log_link.innerText = "Click Generate Link"
+                add_log_link.removeAttribute("target");
+                add_log_link.setAttribute("href","#");
+                
+                regenerate_link_btn.hidden = true
+                delete_link_btn.hidden = true
+                generate_link_btn.hidden = false
+            })
+        }
+    })
+
     function loadConsumables(res){
         consumablesTable.clear().draw();
         res.consumables.forEach(e => {
