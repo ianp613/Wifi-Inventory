@@ -129,7 +129,7 @@
 
 <!-- GENERATE ADD LOG LINK -->
 <div class="modal fade" id="add_log_modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h6><span class="fa fa-external-link"></span> Add Log</h6>
@@ -140,6 +140,8 @@
                 <h6 class="f-15"><i><a href="#" id="add_log_link">Click Generate Link</a></i></h6>
             </div>
             <div class="modal-footer">
+                <button hidden id="regenerate_link_btn" class="btn btn-sm alert-success btn-success"><span class="fa fa-link"></span> Regenerate Link</button>
+                <button hidden id="delete_link_btn" class="btn btn-sm alert-danger btn-danger"><span class="fa fa-trash"></span> Delete Link</button>
                 <button id="generate_link_btn" class="btn btn-sm alert-success btn-success"><span class="fa fa-link"></span> Generate Link</button>
             </div>
         </div>
