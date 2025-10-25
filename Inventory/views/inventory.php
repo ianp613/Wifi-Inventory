@@ -161,7 +161,7 @@
                             <li id="activity_log"><a class="dropdown-item f-13" href="#"><span class="fa fa-list me-2 text-secondary" style="width: 12px;"></span> Activity Logs</a></li>
                             <li id="artisanry"><a class="dropdown-item f-13" href="#"><span class="fa fa-wrench me-2 text-secondary" style="width: 12px;"></span> Artisanry</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li id="logout"><a class="dropdown-item f-13"><span class="fa fa-sign-out me-2 text-secondary" style="width: 12px;"></span> Log Out</a></li>
+                            <li title="Shift + L" id="logout"><a class="dropdown-item f-13"><span class="fa fa-sign-out me-2 text-secondary" style="width: 12px;"></span> Log Out</a></li>
                         </ul>
                     </div>
                 </div>

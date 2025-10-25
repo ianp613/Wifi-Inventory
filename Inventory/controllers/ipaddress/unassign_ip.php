@@ -21,6 +21,7 @@
             $ip->webmgmtpt = "-";
             $ip->username = "-";
             $ip->password = "-";
+            $ip->state = "DOWN";
             DB::update($ip);
 
             $response = [

@@ -10,7 +10,7 @@
                 </div>
                 <hr>
                 <div class="text-end">
-                    <button id="alert_button" class="btn btn-sm btn-secondary rounded-pill" style="width: 50px; margin-right: 1px;" data-bs-dismiss="modal">NO</button>
+                    <button id="cancel_button" class="btn btn-sm btn-secondary rounded-pill" style="width: 50px; margin-right: 1px;" data-bs-dismiss="modal">NO</button>
                     <button id="confirm_logout" class="btn btn-sm btn-danger rounded-pill" style="width: 50px; margin-left: 1px;">YES</button>
                 </div>
             </div>

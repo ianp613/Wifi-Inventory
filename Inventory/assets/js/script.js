@@ -51,6 +51,8 @@ if(document.getElementById("sidebar")){
     var account_confirm_password = document.getElementById("account_confirm_password");
     var account_cancel_btn = document.getElementById("account_cancel_btn");
     var account_submit_btn = document.getElementById("account_submit_btn");
+    var logout_modal_modal = document.getElementById('logout_modal');
+    var confirm_logout = document.getElementById("confirm_logout");
 
     var operate_as = document.getElementById("operate_as");
     var group_list = document.getElementById("group_list");
@@ -192,9 +194,21 @@ if(document.getElementById("sidebar")){
     document.getElementById("logout").addEventListener("click",function(){
         sound ? audio.play() : null
         logout_modal.show()
-        document.getElementById("confirm_logout").addEventListener("click",function(){
-            window.location.replace("../index.php");
-        })
+    })
+
+    document.addEventListener('keydown', e => {
+        if (e.shiftKey && e.key.toLowerCase() === 'l') {
+            sound ? audio.play() : null
+            logout_modal.show()
+        }
+    })
+
+    confirm_logout.addEventListener("click",function(){
+        window.location.replace("../index.php");
+    })
+
+    logout_modal_modal.addEventListener('shown.bs.modal', function () {
+        confirm_logout.focus()
     })
 
     var export_password = document.getElementById("export_password");
