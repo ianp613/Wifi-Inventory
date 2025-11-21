@@ -10,7 +10,7 @@ if "%host%"=="" for /f "tokens=2 delims=:" %%i in ('ipconfig ^| findstr /i "IPv4
 
 :: Get port input
 set /p port=Enter Port: 
-if "%port%"=="" set port=8000
+if "%port%"=="" set port=8552
 
 echo.
 echo System will be running in http://%host%:%port%

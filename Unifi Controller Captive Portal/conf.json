@@ -1,0 +1,41 @@
+{
+    "Unifi": {
+        "SSID" : ["DDC Open Wifi","DDC Planning Wifi"],
+        "Server": "192.168.15.220",
+        "Port": "8443",
+        "Site_ID": "0gl2yah5",
+        "Username": "captive_user",
+        "Password": "CmoS32828324",
+        "Authentication": true,
+        "Open": {
+            "Time": "1",
+            "Type": "1"
+        }
+    },
+    "Landing_Page": {
+        "Logo": {
+            "Image": "default",
+            "Size": "default",
+            "Position": "Center"
+        },
+        "Background": {
+            "Box_Color": "#FFFFFF",
+            "Text_Color": "#232326",
+            "Header_Color": "#000000",
+            "Button_Color": "#187480",
+            "Button_Text_Color": "#FFFFFF",
+            "Link_Color": "#006FFF",
+            "Box_Opacity": 100,
+            "Box_Corner_Radius": 20
+        },
+        "Success_Landing_Page": {
+            "Status": "message",
+            "Text": "You can now access the internet!"
+        },
+        "Title": "DDC Open Wifi",
+        "Welcome_Text": "Access Code: 926196",
+        "Button_Text": "Get Wifi Access",
+        "TOS": false,
+        "TOS_Text": ""
+    }
+}

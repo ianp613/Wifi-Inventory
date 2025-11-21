@@ -1,0 +1,7 @@
+authentication
+    client_id       target          type                    voucherid (Use only to unauthorize client if voucher is revoked or voucher authentication is disabled)
+    get mac         1440            voucher or open         id : null
+
+upv
+    client_id       voucherid       count
+    get mac         get code        

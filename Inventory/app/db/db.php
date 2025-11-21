@@ -6,7 +6,7 @@
      */
     class DB{
         public static $DB_HOST = "localhost";
-        public static $DB_DATABASE = "wifi_inventory";
+        public static $DB_DATABASE = "wifi_invetory_beta";
         public static $DB_USERNAME = "root";
         public static $DB_PASSWORD = "";
         /**
