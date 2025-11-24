@@ -137,11 +137,21 @@ function loadClients(){
             getSimplifiedClientExperienceRating(r),
             r.ip,
             formatUptime(r.uptime),
-            "Unauthorize",
+            getButtons(conf,r),
         ]).draw(false)
       }
     });
   })
+}
+
+function getButtons(conf,r){
+  var buttons = "<button class=\"btn btn-sm btn-secondary\" style=\"width: 95px;\">Reconnect</button>"
+
+  if(conf.Unifi.Captive_SSID.includes(r.essid)){
+    return buttons += "<button class=\"btn btn-sm btn-danger mt-1\" style=\"width: 95px;\">Unauthorize</button>"
+  }else{
+    return buttons
+  }
 }
 
 function getSimplifiedClientExperienceRating(clientData) {
