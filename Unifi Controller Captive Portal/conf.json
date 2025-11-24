@@ -1,6 +1,6 @@
 {
     "Unifi": {
-        "SSID" : ["DDC Open Wifi","DDC Planning Wifi"],
+        "SSID" : ["DDC Open Wifi","Text Captive"],
         "Server": "192.168.15.220",
         "Port": "8443",
         "Site_ID": "0gl2yah5",

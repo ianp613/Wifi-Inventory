@@ -2,6 +2,7 @@ let clientTable = new DataTable('#tb_client',{
     rowCallback: function(row) {
         $(row).addClass("trow");
     },
+    scrollX: true,
     autoWidth: true,
     columnDefs: [
         {
@@ -127,19 +128,73 @@ function loadClients(){
     clientTable.clear().draw();
     res.data.forEach(r => {
       if(conf.Unifi.SSID.includes(r.essid)){
+        console.log(r)
         clientTable.row.add([
             "",
-            r.hostname,
-            r.mac,
-            "",
-            "",
-            "",
-            ""
+            r.hostname ? r.hostname : "Guest User",
+            r.mac ? r.mac : "",
+            r.essid,
+            getSimplifiedClientExperienceRating(r),
+            r.ip,
+            formatUptime(r.uptime),
+            "Unauthorize",
         ]).draw(false)
       }
     });
   })
 }
+
+function getSimplifiedClientExperienceRating(clientData) {
+    const score = clientData.satisfaction_real;
+    const anomalies = clientData.anomalies;
+    const retryPercentage = clientData.wifi_tx_retries_percentage;
+
+    // A hard failure indicator will immediately override the score
+    if (anomalies > 0) {
+        return "<span style=\"color: red\">Poor</span>";
+    }
+
+    // High retry rates often indicate underlying physical layer issues, even if the score is high
+    if (retryPercentage >= 40.0) {
+        // If the score is high despite this, it's still functionally 'good',
+        // but if the score is already trending down, force it to 'Poor'
+        if (score < 80) {
+           return "<span style=\"color: red\">Poor</span>"; 
+        }
+    }
+    
+    // Determine the rating based on the UniFi satisfaction score thresholds:
+    if (score >= 90) {
+        return "<span style=\"color: green\">Excellent</span>";
+    } else if (score >= 70 && score < 90) {
+        return "<span style=\"color: #9bd303\">Good</span>";
+    } else {
+        // Includes scores 0-69
+        return "<span style=\"color: red\">Poor</span>";
+    }
+}
+
+function formatUptime(seconds) {
+  if (seconds < 0) seconds = 0;
+
+  const days = Math.floor(seconds / (24 * 3600));
+  seconds %= 24 * 3600;
+
+  const hours = Math.floor(seconds / 3600);
+  seconds %= 3600;
+
+  const minutes = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+
+  const parts = [];
+  if (days > 0) parts.push(`${days}d`);
+  if (hours > 0) parts.push(`${hours}h`);
+  if (minutes > 0) parts.push(`${minutes}m`);
+  if (secs > 0 || parts.length === 0) parts.push(`${secs}s`);
+
+  return parts.join(" ");
+}
+
 
 function loadUsergroups(){
   sole.get("../controllers/admin/get_usergroup.php").then(res => {

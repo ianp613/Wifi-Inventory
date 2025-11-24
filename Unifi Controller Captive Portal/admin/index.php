@@ -35,7 +35,8 @@
                         <td>MAC</td>
                         <td>Connection</td>
                         <td>Experience</td>
-                        <td>IP Address</td>    
+                        <td>IP Address</td>
+                        <td>Uptime</td>
                         <td>Action</td>    
                     </tr>
                 </thead>
