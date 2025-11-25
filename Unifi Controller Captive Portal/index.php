@@ -82,7 +82,6 @@
                 var captive_codes = document.getElementById("captive_codes")
                 var authentication = document.getElementById("authentication")
                 var urlOrigin = window.location.origin
-                var targetTime_cooldown = 0
                 var voucher = false;
                 
                 
@@ -173,7 +172,6 @@
 
                             // Target time is start + targetMinutes
                             const targetTime = new Date(startTime.getTime() + targetMinutes * 60 * 1000);
-                            targetTime_cooldown = new Date(startTime.getTime() + (targetMinutes * 60 * 1000) + (1 * 60 * 1000));
                             var now = new Date();
                             var cooldownInterval = null
 
@@ -298,7 +296,16 @@
                             }
                         })    
                     }else{
-                        alert("Please try again after " + time)
+                        const totalSeconds = Math.floor(time / 1000);
+                        const days = Math.floor(totalSeconds / 86400); // 86400 seconds in a day
+                        const hours = Math.floor((totalSeconds % 86400) / 3600);
+                        const minutes = Math.floor((totalSeconds % 3600) / 60);
+                        const seconds = totalSeconds % 60;
+
+                        // Build display string
+                        let display = "";
+                        display += (days > 0 ? days + "d " : "") + (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") + (seconds > 0 ? seconds + "s" : "")
+                        alert("Please try again after " + display)
                     }
                 }
                 
@@ -314,16 +321,30 @@
                     sole.post(urlOrigin + "/controllers/captive_portal/get_client.php",{
                         mac : mac
                     }).then(res => {
-                        diff_col = new Date(new Date(res.client[0].time).getTime() + (3 * 60 * 1000)) - now
+                        if(res.status){
+                            const targetMinutes = res.authentication.target; // you can set this dynamically
+                            const startTime = new Date(res.client[0].time);
+                            const targetCooldown = 20 //Change to cooldown Minutes
+
+                            // Target time is start + targetMinutes
+                            const targetTime = new Date(startTime.getTime() + (targetMinutes * 60 * 1000) + (50 * 60 * 1000));
+
+
+                            // var startTime = res.client.length ? new Date(res.client[0].time) : 0
+                            // var targetTime = new Date(startTime.getTime() + res.authentication ? res.authentication.target * 60 * 1000 : 0)
+
+                            // const targetTime = new Date(startTime.getTime() + targetMinutes * 60 * 1000);
+                            diff_col = targetTime - now
+                        }
                         if(diff_col > 0){
                             submitAuthentication(true,diff_col,code)
                         }else{
                             submitAuthentication(false,diff_col,code)
-                        }
+                        } 
                     })
 
                     setTimeout(() => {
-                        console.log(diff_col)
+                        // alert("sample")
                     }, 200);
                 })
 

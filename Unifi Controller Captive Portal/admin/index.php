@@ -37,7 +37,7 @@
                         <td>Experience</td>
                         <td>IP Address</td>
                         <td>Uptime</td>
-                        <td>Action</td>    
+                        <td style="width: 90px">Action</td>    
                     </tr>
                 </thead>
                 <tbody>

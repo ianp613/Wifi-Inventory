@@ -7,12 +7,12 @@
     $client = DB::where($client,"mac","=",$data["mac"],"desc");
     $cid = count($client) ? $client[0]["id"] : null;
 
-    $authenticaion = new Authentication;
-    $authenticaion = DB::where($authenticaion,"cid","=",$cid,"created_at","desc");
+    $authentication = new Authentication;
+    $authentication = DB::where($authentication,"cid","=",$cid,"created_at","desc");
 
     $response = [
-        "status" => count($authenticaion) ? true : false,
-        "authentication" => $authenticaion[0],
+        "status" => count($authentication) ? true : false,
+        "authentication" => count($authentication) ? $authentication[0] : null,
         "client" => $client
     ];
     echo json_encode($response);

@@ -132,10 +132,10 @@ function loadClients(){
         clientTable.row.add([
             "",
             r.hostname ? r.hostname : "Guest User",
-            r.mac ? r.mac : "",
-            r.essid,
+            r.mac ? r.mac : "-",
+            r.essid ? r.essid : "-",
             getSimplifiedClientExperienceRating(r),
-            r.ip,
+            r.ip ? r.ip : "-",
             formatUptime(r.uptime),
             getButtons(conf,r),
         ]).draw(false)
@@ -145,10 +145,12 @@ function loadClients(){
 }
 
 function getButtons(conf,r){
-  var buttons = "<button class=\"btn btn-sm btn-secondary\" style=\"width: 95px;\">Reconnect</button>"
-
+  var buttons = "<button class=\"btn btn-sm btn-secondary\"><span class=\"fa fa-refresh\"></span></button>"
+  var disabled = ""
+  
   if(conf.Unifi.Captive_SSID.includes(r.essid)){
-    return buttons += "<button class=\"btn btn-sm btn-danger mt-1\" style=\"width: 95px;\">Unauthorize</button>"
+    disabled = r.authorized ? "" : "disabled"
+    return buttons += "<button hostname=\""+r.hostname+"\" mac=\""+r.mac+"\" class=\"btn btn-sm btn-danger ms-1 unauthorize " + disabled + "\"><span hostname=\""+r.hostname+"\" mac=\""+r.mac+"\" class=\"fa fa-unlink unauthorize\"></span></button>"
   }else{
     return buttons
   }
@@ -296,6 +298,25 @@ document.querySelector('#tb_voucher').addEventListener("click", e=>{
             loadVouchers()
           })
         }
+    }
+})
+
+document.querySelector('#tb_client').addEventListener("click", e=>{
+    if (e.target.classList.contains('unauthorize')) {
+      if(confirm("Do you wish the connection of " + e.target.getAttribute("hostname") + " to be unauthorized?")){
+        sole.post("../controllers/admin/delete_client.php",{
+          mac : e.target.getAttribute("mac")
+        }).then(res => {
+          console.log(res)
+        })
+        sole.post("../controllers/captive_portal/unauthorize.php",{
+          mac : e.target.getAttribute("mac")
+        }).then(res => {
+          setTimeout(() => {
+            loadClients()
+          }, 1000);
+        })
+      }
     }
 })
 

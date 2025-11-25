@@ -1,7 +1,13 @@
 {
     "Unifi": {
-        "SSID" : ["ITAdmin","Text Captive","DDC Open Wifi"],
-        "Captive_SSID" : ["Text Captive"],
+        "SSID": [
+            "ITAdmin",
+            "Text Captive",
+            "DDC Open Wifi"
+        ],
+        "Captive_SSID": [
+            "Text Captive"
+        ],
         "Server": "192.168.15.220",
         "Port": "8443",
         "Site_ID": "0gl2yah5",
@@ -34,7 +40,7 @@
             "Text": "You can now access the internet!"
         },
         "Title": "DDC Open Wifi",
-        "Welcome_Text": "Access Code: 926196",
+        "Welcome_Text": "Access Code: 467711",
         "Button_Text": "Get Wifi Access",
         "TOS": false,
         "TOS_Text": ""
