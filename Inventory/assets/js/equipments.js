@@ -3,6 +3,7 @@ if(document.getElementById("equipments")){
         rowCallback: function(row) {
             $(row).addClass("trow");
         },
+        scrollX: true,
         columnDefs: [
             {
                 target: 0,

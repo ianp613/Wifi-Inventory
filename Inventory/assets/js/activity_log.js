@@ -10,6 +10,7 @@ if(document.getElementById("logs")){
         rowCallback: function(row) {
             $(row).addClass("trow");
         },
+        scrollX: true,
         columnDefs: [
             {
                 target: 0,

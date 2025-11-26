@@ -4,6 +4,7 @@ if(document.getElementById("ipaddress")){
         rowCallback: function(row) {
             $(row).addClass("trow");
         },
+        scrollX: true,
         columnDefs: [
             {
                 target: 0,
@@ -259,13 +260,16 @@ if(document.getElementById("ipaddress")){
         op.innerText = "-- Select Router --"
         edit_ip_gateway_select.appendChild(op)
 
+        var gateway_ip = false
         res.router.forEach(r => {
             var op = document.createElement("option")
             op.value = r["id"] +  "|" + r["ip"]
             if(res.network[0]["rid"] == r["id"]){
                 op.setAttribute("selected","true")
                 edit_ip_gateway.value = r["ip"]
+                gateway_ip = true
             }
+            gateway_ip ? edit_ip_gateway.value = r["ip"] : edit_ip_gateway.value = ""
             op.innerText = r["name"]
             edit_ip_gateway_select.appendChild(op)
         });

@@ -3,6 +3,7 @@ if(document.getElementById("routers")){
         rowCallback: function(row) {
             $(row).addClass("trow");
         },
+        scrollX: true,
         columnDefs: [
             {
                 target: 0,
@@ -25,6 +26,7 @@ if(document.getElementById("routers")){
         rowCallback: function(row) {
             $(row).addClass("trow");
         },
+        scrollX: true,
         columnDefs: [
             { 
                 className: 'dt-left', 
@@ -47,6 +49,7 @@ if(document.getElementById("routers")){
         rowCallback: function(row) {
             $(row).addClass("trow");
         },
+        scrollX: true,
         columnDefs: [
             { 
                 className: 'dt-left', 

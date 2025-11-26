@@ -196,12 +196,49 @@ if(document.getElementById("sidebar")){
         logout_modal.show()
     })
 
-    document.addEventListener('keydown', e => {
-        if (e.ctrlKey && e.key.toLowerCase() === 'l') {
-            sound ? audio.play() : null
-            logout_modal.show()
-        }
-    })
+    // document.addEventListener('keydown', e => {
+    //     console.log(e.ctrlKey)
+    //     if (e.ctrlKey && e.key.toLowerCase() === 'l') {
+    //         sound ? audio.play() : null
+    //         logout_modal.show()
+    //     }
+    // })
+
+    const pressedKeys = {};
+    const LONG_PRESS_DURATION = 600; // milliseconds
+
+    function handleKeyDown(event) {
+        const key = event.key;
+
+        // Prevent repeated keydown events from resetting the timer
+        if (pressedKeys[key]) return; 
+
+        // Record the key as pressed and set the timer
+        pressedKeys[key] = setTimeout(() => {
+            // console.log(`Long press detected for key: ${key}`);
+            // Perform long press action here
+            if(key == "l" || key == "L"){
+                sound ? audio.play() : null
+                logout_modal.show()
+            }
+        }, LONG_PRESS_DURATION);
+    }
+
+    function handleKeyUp(event) {
+        const key = event.key;
+        
+        // Clear the timeout when the key is released
+        clearTimeout(pressedKeys[key]);
+        delete pressedKeys[key];
+        
+        // Optional: add logic here for a short press if needed
+        // Example: if a long press didn't happen, a short press did
+        // (This requires additional tracking to distinguish)
+    }
+
+    // Add event listeners to the document
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
 
     confirm_logout.addEventListener("click",function(){
         window.location.replace("../index.php");

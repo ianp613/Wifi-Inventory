@@ -4,6 +4,7 @@ if(document.getElementById("mac")){
         rowCallback: function(row) {
             $(row).addClass("trow");
         },
+        scrollX: true,
         columnDefs: [
             {
                 target: 0,

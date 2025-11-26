@@ -5,6 +5,7 @@ if(document.getElementById("cctv")){
         rowCallback: function(row) {
             $(row).addClass("trow");
         },
+        scrollX: true,
         columnDefs: [
             {
                 target: 0,
@@ -27,6 +28,7 @@ if(document.getElementById("cctv")){
         rowCallback: function(row) {
             $(row).addClass("trow");
         },
+        scrollX: true,
         columnDefs: [
             { 
                 className: 'dt-left', 

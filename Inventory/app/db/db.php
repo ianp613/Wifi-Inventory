@@ -301,8 +301,15 @@
                 $table = $data->table;
                 $fillable = [];
                 $bool = false;
-                $SQL = $DB_CONN->prepare("SELECT * FROM `$table` WHERE `username` = '$a' AND `password` = '$b'");
+
+                // This line is not case-sensitive
+                // $SQL = $DB_CONN->prepare("SELECT * FROM `$table` WHERE `username` = '$a' AND `password` = '$b'");
+
+                // This line is case-sensitive
+                $SQL = $DB_CONN->prepare("SELECT * FROM `$table` WHERE BINARY `username` = '$a' AND BINARY `password` = '$b'");
+                
                 $SQL->execute();
+
                 $fillable = $SQL->fetchAll(PDO::FETCH_ASSOC);
                 if($fillable){
                     $bool = true;
