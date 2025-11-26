@@ -197,7 +197,7 @@ if(document.getElementById("sidebar")){
     })
 
     document.addEventListener('keydown', e => {
-        if (e.shiftKey && e.key.toLowerCase() === 'l') {
+        if (e.ctrlKey && e.key.toLowerCase() === 'l') {
             sound ? audio.play() : null
             logout_modal.show()
         }

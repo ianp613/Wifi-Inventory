@@ -18,8 +18,7 @@ let clientTable = new DataTable('#tb_client',{
     autoWidth: false,
     language: {
         sLengthMenu: "Show _MENU_entries",
-    //    search: "Search: "
-        search: "<button hidden id=\"for_status_btn\" data-bs-toggle=\"modal\" data-bs-target=\"#for_status\" style=\"margin-right: 20px; padding-left: 10px;\" class=\"btn btn-sm btn-secondary rounded-pill position-relative\"><span id=\"for_status_count\" class=\"position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger\"></span><span class=\" fa fa-file-pdf-o\"></span> For Status</button>   Search: "
+        search: "Search: "
     }
 });
 
@@ -145,7 +144,8 @@ function loadClients(){
 }
 
 function getButtons(conf,r){
-  var buttons = "<button class=\"btn btn-sm btn-secondary\"><span class=\"fa fa-refresh\"></span></button>"
+  r.hostname = r.hostname ? r.hostname : "Guest User"
+  var buttons = "<button hostname=\""+r.hostname+"\" mac=\""+r.mac+"\" class=\"btn btn-sm btn-secondary kick\"><span hostname=\""+r.hostname+"\" mac=\""+r.mac+"\" class=\"fa fa-refresh kick\"></span></button>"
   var disabled = ""
   
   if(conf.Unifi.Captive_SSID.includes(r.essid)){
@@ -310,6 +310,18 @@ document.querySelector('#tb_client').addEventListener("click", e=>{
           console.log(res)
         })
         sole.post("../controllers/captive_portal/unauthorize.php",{
+          mac : e.target.getAttribute("mac")
+        }).then(res => {
+          setTimeout(() => {
+            loadClients()
+          }, 1000);
+        })
+      }
+    }
+
+    if (e.target.classList.contains('kick')) {
+      if(confirm("Do you to reconnect " + e.target.getAttribute("hostname") + " from the wifi?")){
+        sole.post("../controllers/admin/reconnect.php",{
           mac : e.target.getAttribute("mac")
         }).then(res => {
           setTimeout(() => {
