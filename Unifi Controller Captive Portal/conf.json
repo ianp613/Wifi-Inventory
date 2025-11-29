@@ -32,14 +32,14 @@
             "Button_Color": "#187480",
             "Button_Text_Color": "#FFFFFF",
             "Link_Color": "#006FFF",
-            "Box_Opacity": 100,
+            "Box_Opacity": 50,
             "Box_Corner_Radius": 20
         },
         "Success_Landing_Page": {
             "Status": "message",
             "Text": "You can now access the internet!"
         },
-        "Title": "DDC Open Wifi",
+        "Title": "Merry Christmas 🎅",
         "Welcome_Text": "Access Code: 631562",
         "Button_Text": "Get Wifi Access",
         "TOS": false,

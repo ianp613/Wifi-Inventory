@@ -769,3 +769,23 @@ body{
     outline: solid 1px #ffffff96;
     border: solid 1px #36363696;
 }
+.captive-inp::-webkit-outer-spin-button,
+.captive-inp::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+canvas {
+    position: fixed; /* Fixes the canvas as the background */
+    top: 0;
+    left: 0;
+    z-index: -1; /* Ensures content is on top of the effect */
+    pointer-events: none; /* Allows clicks to pass through the canvas */
+}
+
+#content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding-top: 20vh;
+}

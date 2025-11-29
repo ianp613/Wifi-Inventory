@@ -27,22 +27,22 @@
                     <h6 class="mt-3 mb-3"><strong>Enter Access Code</strong></h6>
                     <div id="captive_codes" class=" w-100 captive-code">
                         <div class="col-md-2 ps-1 pe-1">
-                            <input maxlength="1" type="text" name="" id="1" class="inp1 captive-inp form-control">
+                            <input maxlength="1" type="number" name="" id="1" class="inp1 captive-inp form-control">
                         </div>
                         <div class="col-md-2 ps-1 pe-1">
-                            <input maxlength="1" type="text" name="" id="2" class="inp2 captive-inp form-control">
+                            <input maxlength="1" type="number" name="" id="2" class="inp2 captive-inp form-control">
                         </div>
                         <div class="col-md-2 ps-1 pe-1">
-                            <input maxlength="1" type="text" name="" id="3" class="inp3 captive-inp form-control">
+                            <input maxlength="1" type="number" name="" id="3" class="inp3 captive-inp form-control">
                         </div>
                         <div class="col-md-2 ps-1 pe-1">
-                            <input maxlength="1" type="text" name="" id="4" class="inp4 captive-inp form-control">
+                            <input maxlength="1" type="number" name="" id="4" class="inp4 captive-inp form-control">
                         </div>
                         <div class="col-md-2 ps-1 pe-1">
-                            <input maxlength="1" type="text" name="" id="5" class="inp5 captive-inp form-control">
+                            <input maxlength="1" type="number" name="" id="5" class="inp5 captive-inp form-control">
                         </div>
                         <div class="col-md-2 ps-1 pe-1">
-                            <input maxlength="1" type="text" name="" id="6" class="inp6 captive-inp form-control">
+                            <input maxlength="1" type="number" name="" id="6" class="inp6 captive-inp form-control">
                         </div>
                 </div>
                 </div>
@@ -54,8 +54,8 @@
                 <h6 style="margin-top: 95px" class="text-dark blink"><strong>Powered By: DDC Wifi Team</strong></h6>
             </div>
         </div>
+        <canvas id="weatherCanvas"></canvas>
         <script>
-            
             class Sole{
                 get(url) {
                     var request = fetch(url)
@@ -401,6 +401,114 @@
             }, seconds);
             }
             splash(null, 200)
+
+
+
+
+
+
+
+
+
+
+
+
+            // JavaScript Code
+            const canvas = document.getElementById('weatherCanvas');
+            const ctx = canvas.getContext('2d');
+            let W = window.innerWidth;
+            let H = window.innerHeight;
+            canvas.width = W;
+            canvas.height = H;
+
+            // Configuration
+            const MAX_PARTICLES = 80;
+            const particles = [];
+            
+            // --- Load a Snowflake Image (used for image particles) ---
+            const snowflakeImage = new Image();
+            // !! IMPORTANT: Replace the URL below with a link to your hosted snowflake PNG image !!
+            snowflakeImage.src = urlOrigin + '/assets/img/captive/snowflake.svg'; 
+
+            function init() {
+                for (let i = 0; i < MAX_PARTICLES; i++) {
+                    const isImage = Math.random() > 0.5; // 50% chance of being an image
+                    
+                    let size;
+                    if (isImage) {
+                        // BIGGER SIZE FOR IMAGES (20px to 40px)
+                        size = Math.random() * 20 + 20; 
+                    } else {
+                        // UNCHANGED SIZE FOR CIRCLES (4px to 12px)
+                        size = Math.random() * 8 + 4;
+                    }
+
+                    particles.push({
+                        x: Math.random() * W,
+                        y: Math.random() * H,
+                        r: size, // Apply the determined size
+                        d: Math.random() * MAX_PARTICLES, // Density/speed variation
+                        type: isImage ? 'image' : 'circle' // Define particle type
+                    });
+                }
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, W, H);
+                for (let i = 0; i < MAX_PARTICLES; i++) {
+                    const p = particles[i];
+
+                    if (p.type === 'image' && snowflakeImage.complete) {
+                        // Draw the image if loaded
+                        ctx.drawImage(snowflakeImage, p.x, p.y, p.r, p.r);
+                    } else {
+                        // Draw a circle for rain or simple snow (CODE UNALTERED)
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.arc(p.x, p.y, p.r/2, 0, Math.PI * 2, true); 
+                        ctx.fill();
+                    }
+                }
+                update();
+            }
+
+            function update() {
+                for (let i = 0; i < MAX_PARTICLES; i++) {
+                    const p = particles[i];
+
+                    // Snow movement (slower fall, slight sway)
+                    p.y += Math.cos(p.d) + 1 + p.r / 10; 
+                    p.x += Math.sin(p.d) * 0.4;
+                    
+                    // If the particle is off-screen, reset its position
+                    if (p.y > H || p.x > W || p.x < 0) {
+                        p.x = Math.random() * W;
+                        p.y = -50; // Start higher above the top
+                        // When resetting, we also need to maintain the original size/type properties:
+                        // Note: The size defined in 'init' is maintained when it loops back to the top
+                    }
+                }
+            }
+
+            window.addEventListener('resize', () => {
+                W = window.innerWidth;
+                H = window.innerHeight;
+                canvas.width = W;
+                canvas.height = H;
+            });
+
+            // Wait for the image to load before starting the animation loop
+            snowflakeImage.onload = () => {
+                init();
+                setInterval(draw, 30);
+            };
+            
+            // If the image is already loaded (cached), initialize immediately
+            if (snowflakeImage.complete) {
+                init();
+                setInterval(draw, 30);
+            }
         </script>
         <script src="<?php echo $pathToRoot; ?>assets/js/jquery/jquery-3.7.1.js"></script>
         <script src="<?php echo $pathToRoot; ?>assets/js/popper/popper.min.js"></script>

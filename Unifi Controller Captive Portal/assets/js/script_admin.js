@@ -121,13 +121,28 @@ loadVouchers()
 loadUsergroups()
 loadClients()
 
+sole.get("../controllers/telebot_unifi/remove_mac.php").then(res => {
+  console.log(res)
+})
+
+sole.get("../controllers/telebot_unifi/get_ssid.php").then(res => {
+  if(res.status){
+    JSON.parse(res.data).data.forEach(wifi => {
+      console.log(wifi.name + " " + wifi.x_passphrase + " " + wifi.mac_filter_enabled)
+      if(wifi.mac_filter_enabled){
+        console.log(wifi.mac_filter_list)
+      }
+    });
+  }else{
+    console.log("error")
+  }
+})
+
 function loadClients(){
   sole.get("../controllers/admin/get_clients.php").then(res => {
-    console.log(conf)
     clientTable.clear().draw();
     res.data.forEach(r => {
       if(conf.Unifi.SSID.includes(r.essid)){
-        console.log(r)
         clientTable.row.add([
             "",
             r.hostname ? r.hostname : "Guest User",
