@@ -1,12 +1,12 @@
 <?php
-class get_ssid{
-  public static function index(){
+class get_ssid {
+  public static function index($ssidName) {
 
-    $controllerUrl = 'https://192.168.15.220:8443';
-    $conf = json_decode(file_get_contents("../../conf.json"));
-    $siteId = $conf->Unifi->Site_ID;
-    $username = $conf->Unifi->Username;
-    $password = $conf->Unifi->Password;
+    $conf = json_decode(file_get_contents("../bot/config.json"));
+    $controllerUrl = 'https://'.$conf->unifi_host.':'.$conf->unifi_port;
+    $siteId = $conf->site[0][1];
+    $username = $conf->username;
+    $password = $conf->password;
 
     // Step 1: Login to UniFi Controller
     $loginData = json_encode([
@@ -26,7 +26,8 @@ class get_ssid{
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     $loginResponse = curl_exec($ch);
     curl_close($ch);
-    
+
+    // Step 2: Get WLAN configs
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, "$controllerUrl/api/s/$siteId/rest/wlanconf");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -39,11 +40,33 @@ class get_ssid{
 
     $meta = json_decode($clientsResponse);
 
-    $result = [
-      "status" => $meta->meta->rc != "ok" ? false : true ,
-      "data" => $clientsResponse 
-    ];
+    if ($meta->meta->rc != "ok") {
+      return [
+        "status" => false,
+        "message" => "⚠ Failed to retrieve WLAN configs."
+      ];
+    }
 
-    return $result;
+    // Step 3: Find the SSID by name
+    $target = null;
+    foreach ($meta->data as $wlan) {
+      if (isset($wlan->name) && strtolower($wlan->name) === strtolower($ssidName)) {
+          $target = $wlan;
+          break;
+      }
+    }
+
+    if ($target) {
+      return [
+        "status" => true,
+        "ssid"   => $ssidName,
+        "data"   => $target
+      ];
+    } else {
+      return [
+        "status" => false,
+        "message" => "⚠ SSID '$ssidName' not found."
+      ];
+    }
   }
 }

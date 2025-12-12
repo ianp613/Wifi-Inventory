@@ -121,23 +121,6 @@ loadVouchers()
 loadUsergroups()
 loadClients()
 
-sole.get("../controllers/telebot_unifi/remove_mac.php").then(res => {
-  console.log(res)
-})
-
-sole.get("../controllers/telebot_unifi/get_ssid.php").then(res => {
-  if(res.status){
-    JSON.parse(res.data).data.forEach(wifi => {
-      console.log(wifi.name + " " + wifi.x_passphrase + " " + wifi.mac_filter_enabled)
-      if(wifi.mac_filter_enabled){
-        console.log(wifi.mac_filter_list)
-      }
-    });
-  }else{
-    console.log("error")
-  }
-})
-
 function loadClients(){
   sole.get("../controllers/admin/get_clients.php").then(res => {
     clientTable.clear().draw();
@@ -401,7 +384,7 @@ authentication_save.addEventListener("click",function(){
         document.getElementById("upv_").hidden  = true
         document.getElementById("single").checked = true
         voucher_name.value = ""
-        voucher_amount.value = "10"
+        voucher_amount.value = "1"
         voucher_use_per_voucher.value = "2"
         voucher_expiration.value = ""
         voucher_expiration_type.value = "1"

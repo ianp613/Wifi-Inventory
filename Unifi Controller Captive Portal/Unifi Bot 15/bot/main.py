@@ -1,7 +1,6 @@
 import logging
 import json
 import os
-import time
 
 # Disable INFO logs from httpx and telegram
 logging.getLogger("httpx").setLevel(logging.CRITICAL)
@@ -10,7 +9,6 @@ logging.getLogger("telegram").setLevel(logging.CRITICAL)
 
 from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters
-import logging
 import sole  # Your custom business logic module
 
 # Bot config
@@ -35,53 +33,65 @@ async def reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
             user_message = update.message.text
             bot_reply = sole.index(user_message)
 
+            # 🚫 If backend reply is empty or None, do nothing
+            if not bot_reply or not bot_reply.strip():
+                return
+
             try:
                 # Try to parse as JSON
                 parsed = json.loads(bot_reply)
 
                 if isinstance(parsed, list):
-                    # It's an array from PHP
-                    print("It's an array from PHP")
-                    if parsed[0] == "string":
+                    if parsed and parsed[0] == "string":
                         for part in split_message(parsed[1]):
-                            await update.message.reply_text(part)
-                            # await update.message.reply_text(part)
+                            await context.bot.send_message(
+                                chat_id=update.effective_chat.id,
+                                text=part
+                            )
                 else:
-                    # It's a JSON string or object, not an array
-                    print("It's a JSON string or object, not an array")
-                    await update.message.reply_text(str(parsed))
+                    await context.bot.send_message(
+                        chat_id=update.effective_chat.id,
+                        text=str(parsed)
+                    )
 
             except json.JSONDecodeError:
                 # Not JSON — treat as plain string
-                await update.message.reply_text(bot_reply)
-
+                await context.bot.send_message(
+                    chat_id=update.effective_chat.id,
+                    text=bot_reply
+                )
 
         except Exception as e:
             logging.error("Error in reply(): %s", str(e), exc_info=True)
-            try:
-                await update.message.reply_text("⚠️ Something went wrong while processing your request. [python]")
-            except:
-                pass  # Prevent bot from crashing if reply fails
+            # 🚫 Do not send error message if backend reply was empty
+            if bot_reply and bot_reply.strip():
+                try:
+                    await context.bot.send_message(
+                        chat_id=update.effective_chat.id,
+                        text="⚠️ Something went wrong while processing your request. [python]"
+                    )
+                except:
+                    pass
 
 # ❗ Global error handler
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE):
     logging.error("Exception while handling update:", exc_info=context.error)
-
-    # Attempt to notify the user if possible
+    # Only send error if there was a message and not empty
     if isinstance(update, Update) and update.message:
-        try:
-            await update.message.reply_text("⚠️ Bot encountered an error. Please try again later. [python]")
-        except:
-            pass
+        if update.message.text and update.message.text.strip():
+            try:
+                await context.bot.send_message(
+                    chat_id=update.effective_chat.id,
+                    text="⚠️ Bot encountered an error. Please try again later. [python]"
+                )
+            except:
+                pass
 
 # 🛎️ Entry point
 if __name__ == "__main__":
     app = ApplicationBuilder().token(BOT_TOKEN).build()
 
-    # Add message handler (ignores commands)
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, reply))
-
-    # Register error handler
     app.add_error_handler(error_handler)
 
     print("Unifi Wifi Bot is running ...")

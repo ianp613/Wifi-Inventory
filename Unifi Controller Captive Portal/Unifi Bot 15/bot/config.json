@@ -1,0 +1,12 @@
+{
+    "bot_host": "192.168.15.221",
+    "bot_port": "1525",
+    "unifi_host": "192.168.15.220",
+    "unifi_port": "8443",
+    "network" : "15",
+    "site" : [
+        ["DDPO FREE WIFI MAIN","0gl2yah5"]
+    ],
+    "username" : "tech",
+    "password" : "CmoS23826867"
+}

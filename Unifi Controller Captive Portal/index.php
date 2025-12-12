@@ -324,10 +324,10 @@
                         if(res.status){
                             const targetMinutes = res.authentication.target; // you can set this dynamically
                             const startTime = new Date(res.client[0].time);
-                            const targetCooldown = 20 //Change to cooldown Minutes
+                            const targetCooldown = 10 //Change to cooldown Minutes
 
                             // Target time is start + targetMinutes
-                            const targetTime = new Date(startTime.getTime() + (targetMinutes * 60 * 1000) + (50 * 60 * 1000));
+                            const targetTime = new Date(startTime.getTime() + (targetMinutes * 60 * 1000) + (targetCooldown * 60 * 1000));
 
 
                             // var startTime = res.client.length ? new Date(res.client[0].time) : 0

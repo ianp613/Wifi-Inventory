@@ -3,10 +3,11 @@
         "SSID": [
             "ITAdmin",
             "Text Captive",
-            "DDC Open Wifi"
+            "DDC Christmas Party"
         ],
         "Captive_SSID": [
-            "Text Captive"
+            "Text Captive",
+            "DDC Christmas Party"
         ],
         "Server": "192.168.15.220",
         "Port": "8443",
@@ -39,8 +40,8 @@
             "Status": "message",
             "Text": "You can now access the internet!"
         },
-        "Title": "Merry Christmas 🎅",
-        "Welcome_Text": "Access Code: 631562",
+        "Title": "Merry Christmas \ud83c\udf85",
+        "Welcome_Text": "Access Code: 742886",
         "Button_Text": "Get Wifi Access",
         "TOS": false,
         "TOS_Text": ""
