@@ -26,7 +26,7 @@
         $first_line = explode(" ",$message_break[0]);
         if(count($first_line) > 1){
             $command = $first_line[1];
-            if($first_line[0] != $network){
+            if($first_line[0] != $network && strtolower($first_line[0]) != "all"){
                 die;
             }
         }else{
