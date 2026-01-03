@@ -2,12 +2,13 @@
     "Unifi": {
         "SSID": [
             "ITAdmin",
-            "Text Captive",
-            "DDC Christmas Party"
+            "DDC Admin Wifi",
+            "DDC Planning Wifi",
+            "Wifi Tester",
+            "DDC Free WiFi"
         ],
         "Captive_SSID": [
-            "Text Captive",
-            "DDC Christmas Party"
+            "DDC Free WiFi"
         ],
         "Server": "192.168.15.220",
         "Port": "8443",
@@ -40,7 +41,7 @@
             "Status": "message",
             "Text": "You can now access the internet!"
         },
-        "Title": "Merry Christmas \ud83c\udf85",
+        "Title": "DDC Free WiFi 🛜",
         "Welcome_Text": "Access Code: 156292",
         "Button_Text": "Get Wifi Access",
         "TOS": false,

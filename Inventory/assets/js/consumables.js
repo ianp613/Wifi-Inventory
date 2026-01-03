@@ -335,9 +335,9 @@ if(document.getElementById("consumables")){
                     consumable_badge_success.hidden = false
                 }
             }else{
-                restock_consumables_code.innerText = "-"
-                restock_consumables_description.innerText = "-"
-                restock_consumables_stock.innerText = "-"
+                restock_consumables_code.innerText = ""
+                restock_consumables_description.innerText = ""
+                restock_consumables_stock.innerText = ""
                 restock_consumables_btn.setAttribute("sid","")
                 consumable_badge_danger.hidden = true
                 consumable_badge_success.hidden = true
@@ -534,9 +534,9 @@ if(document.getElementById("consumables")){
                 restock_quantity.value = 0
                 search_consumable.value = ""
                 restock_consumables_btn.setAttribute("sid","")
-                restock_consumables_code.innerText = "-"
-                restock_consumables_description.innerText = "-"
-                restock_consumables_stock.innerText = "-"
+                restock_consumables_code.innerText = ""
+                restock_consumables_description.innerText = ""
+                restock_consumables_stock.innerText = ""
                 consumable_badge_danger.hidden = true
                 consumable_badge_success.hidden = true
                 restock_consumables_modal.hide()

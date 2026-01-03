@@ -1,7 +1,17 @@
 {
     "Unifi": {
-        "Server" : "192.168.15.220",
-        "Port" : "8443",
+        "SSID": [
+            "ITAdmin",
+            "DDC Admin Wifi",
+            "DDC Planning Wifi",
+            "Wifi Tester",
+            "DDC Free WiFi"
+        ],
+        "Captive_SSID": [
+            "DDC Free WiFi"
+        ],
+        "Server": "192.168.15.220",
+        "Port": "8443",
         "Site_ID": "0gl2yah5",
         "Username": "captive_user",
         "Password": "CmoS32828324",
@@ -24,16 +34,16 @@
             "Button_Color": "#187480",
             "Button_Text_Color": "#FFFFFF",
             "Link_Color": "#006FFF",
-            "Box_Opacity": 100,
+            "Box_Opacity": 50,
             "Box_Corner_Radius": 20
         },
         "Success_Landing_Page": {
             "Status": "message",
             "Text": "You can now access the internet!"
         },
-        "Title": "UniFi Guest Wifi",
-        "Welcome_Text": "Welcome to UniFi Guest Wifi Hotspot",
-        "Button_Text": "Login",
+        "Title": "DDC Free WiFi",
+        "Welcome_Text": "Access Code: 156292",
+        "Button_Text": "Get Wifi Access",
         "TOS": false,
         "TOS_Text": ""
     }

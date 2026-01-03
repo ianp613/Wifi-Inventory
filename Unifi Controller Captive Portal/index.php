@@ -413,102 +413,296 @@
 
 
 
-            // JavaScript Code
-            const canvas = document.getElementById('weatherCanvas');
-            const ctx = canvas.getContext('2d');
-            let W = window.innerWidth;
-            let H = window.innerHeight;
-            canvas.width = W;
-            canvas.height = H;
 
-            // Configuration
-            const MAX_PARTICLES = 80;
-            const particles = [];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            /* ------------------------- NEW YEAR START ------------------------------------------------------------------------- */
+
+            // const canvas = document.getElementById('weatherCanvas');
+            // const ctx = canvas.getContext('2d');
+            // let W = window.innerWidth;
+            // let H = window.innerHeight;
+            // canvas.width = W;
+            // canvas.height = H;
+
+            // // Arrays
+            // const fireworks = [];
+            // const particles = [];
+            // const stars = [];
+
+            // // Colors
+            // const colors = ['#ff0043', '#00ffd5', '#fffc00', '#ff7f00', '#00ff00', '#00aaff', '#ff00ff'];
+
+            // // --- Create Stars ---
+            // function initStars() {
+            //     const MAX_STARS = 150;
+            //     for (let i = 0; i < MAX_STARS; i++) {
+            //         stars.push({
+            //             x: Math.random() * W,
+            //             y: Math.random() * H,
+            //             r: Math.random() * 1.5 + 0.5,
+            //             alpha: Math.random(),
+            //             fade: Math.random() * 0.02 + 0.01 // twinkle speed
+            //         });
+            //     }
+            // }
+
+            // // --- Firework constructor ---
+            // function Firework(x, y) {
+            //     this.x = x;
+            //     this.y = H;
+            //     this.targetY = y;
+            //     this.speed = 5;
+            //     this.exploded = false;
+            //     this.color = colors[Math.floor(Math.random() * colors.length)];
+            // }
+
+            // // --- Particle constructor ---
+            // function Particle(x, y, color) {
+            //     this.x = x;
+            //     this.y = y;
+            //     this.r = Math.random() * 3 + 2;
+            //     this.color = color;
+            //     this.alpha = 1;
+            //     this.velX = (Math.random() - 0.5) * 8;
+            //     this.velY = (Math.random() - 0.5) * 8;
+            // }
+
+            // // --- Launch Firework ---
+            // function launchFirework() {
+            //     const x = Math.random() * W;
+            //     const y = Math.random() * (H / 2);
+            //     fireworks.push(new Firework(x, y));
+            // }
+
+            // // --- Draw Stars ---
+            // function drawStars() {
+            //     for (let i = 0; i < stars.length; i++) {
+            //         const s = stars[i];
+            //         ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
+            //         ctx.beginPath();
+            //         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            //         ctx.fill();
+
+            //         // Twinkle effect
+            //         s.alpha += s.fade;
+            //         if (s.alpha <= 0 || s.alpha >= 1) {
+            //             s.fade = -s.fade;
+            //         }
+            //     }
+            // }
+
+            // // --- Draw Fireworks ---
+            // function draw() {
+            //     ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; 
+            //     ctx.fillRect(0, 0, W, H);
+
+            //     drawStars();
+
+            //     // Fireworks
+            //     for (let i = fireworks.length - 1; i >= 0; i--) {
+            //         const f = fireworks[i];
+            //         if (!f.exploded) {
+            //             ctx.fillStyle = f.color;
+            //             ctx.beginPath();
+            //             ctx.arc(f.x, f.y, 3, 0, Math.PI * 2);
+            //             ctx.fill();
+
+            //             f.y -= f.speed;
+            //             if (f.y <= f.targetY) {
+            //                 f.exploded = true;
+            //                 for (let j = 0; j < 50; j++) {
+            //                     particles.push(new Particle(f.x, f.y, f.color));
+            //                 }
+            //                 fireworks.splice(i, 1);
+            //             }
+            //         }
+            //     }
+
+            //     // Particles
+            //     for (let i = particles.length - 1; i >= 0; i--) {
+            //         const p = particles[i];
+            //         ctx.fillStyle = `rgba(${hexToRgb(p.color)}, ${p.alpha})`;
+            //         ctx.beginPath();
+            //         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            //         ctx.fill();
+
+            //         p.x += p.velX;
+            //         p.y += p.velY;
+            //         p.alpha -= 0.02;
+
+            //         if (p.alpha <= 0) {
+            //             particles.splice(i, 1);
+            //         }
+            //     }
+            // }
+
+            // function hexToRgb(hex) {
+            //     const bigint = parseInt(hex.slice(1), 16);
+            //     const r = (bigint >> 16) & 255;
+            //     const g = (bigint >> 8) & 255;
+            //     const b = bigint & 255;
+            //     return `${r},${g},${b}`;
+            // }
+
+            // window.addEventListener('resize', () => {
+            //     W = window.innerWidth;
+            //     H = window.innerHeight;
+            //     canvas.width = W;
+            //     canvas.height = H;
+            //     stars.length = 0;
+            //     initStars();
+            // });
+
+            // // Initialize
+            // initStars();
+            // setInterval(launchFirework, 800);
+            // setInterval(draw, 30);
+
+           /*  ------------------------- NEW YEAR END ------------------------------------------------------------------------- */
+
+
+
+
+
+
+
+
+            /* ------------------------- CHRISTMAS START ------------------------------------------------------------------------- */
+
+            // // JavaScript Code
+            // const canvas = document.getElementById('weatherCanvas');
+            // const ctx = canvas.getContext('2d');
+            // let W = window.innerWidth;
+            // let H = window.innerHeight;
+            // canvas.width = W;
+            // canvas.height = H;
+
+            // // Configuration
+            // const MAX_PARTICLES = 80;
+            // const particles = [];
             
-            // --- Load a Snowflake Image (used for image particles) ---
-            const snowflakeImage = new Image();
-            // !! IMPORTANT: Replace the URL below with a link to your hosted snowflake PNG image !!
-            snowflakeImage.src = urlOrigin + '/assets/img/captive/snowflake.svg'; 
+            // // --- Load a Snowflake Image (used for image particles) ---
+            // const snowflakeImage = new Image();
+            // // !! IMPORTANT: Replace the URL below with a link to your hosted snowflake PNG image !!
+            // snowflakeImage.src = urlOrigin + '/assets/img/captive/snowflake.svg'; 
 
-            function init() {
-                for (let i = 0; i < MAX_PARTICLES; i++) {
-                    const isImage = Math.random() > 0.5; // 50% chance of being an image
+            // function init() {
+            //     for (let i = 0; i < MAX_PARTICLES; i++) {
+            //         const isImage = Math.random() > 0.5; // 50% chance of being an image
                     
-                    let size;
-                    if (isImage) {
-                        // BIGGER SIZE FOR IMAGES (20px to 40px)
-                        size = Math.random() * 20 + 20; 
-                    } else {
-                        // UNCHANGED SIZE FOR CIRCLES (4px to 12px)
-                        size = Math.random() * 8 + 4;
-                    }
+            //         let size;
+            //         if (isImage) {
+            //             // BIGGER SIZE FOR IMAGES (20px to 40px)
+            //             size = Math.random() * 20 + 20; 
+            //         } else {
+            //             // UNCHANGED SIZE FOR CIRCLES (4px to 12px)
+            //             size = Math.random() * 8 + 4;
+            //         }
 
-                    particles.push({
-                        x: Math.random() * W,
-                        y: Math.random() * H,
-                        r: size, // Apply the determined size
-                        d: Math.random() * MAX_PARTICLES, // Density/speed variation
-                        type: isImage ? 'image' : 'circle' // Define particle type
-                    });
-                }
-            }
+            //         particles.push({
+            //             x: Math.random() * W,
+            //             y: Math.random() * H,
+            //             r: size, // Apply the determined size
+            //             d: Math.random() * MAX_PARTICLES, // Density/speed variation
+            //             type: isImage ? 'image' : 'circle' // Define particle type
+            //         });
+            //     }
+            // }
 
-            function draw() {
-                ctx.clearRect(0, 0, W, H);
-                for (let i = 0; i < MAX_PARTICLES; i++) {
-                    const p = particles[i];
+            // function draw() {
+            //     ctx.clearRect(0, 0, W, H);
+            //     for (let i = 0; i < MAX_PARTICLES; i++) {
+            //         const p = particles[i];
 
-                    if (p.type === 'image' && snowflakeImage.complete) {
-                        // Draw the image if loaded
-                        ctx.drawImage(snowflakeImage, p.x, p.y, p.r, p.r);
-                    } else {
-                        // Draw a circle for rain or simple snow (CODE UNALTERED)
-                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                        ctx.beginPath();
-                        ctx.moveTo(p.x, p.y);
-                        ctx.arc(p.x, p.y, p.r/2, 0, Math.PI * 2, true); 
-                        ctx.fill();
-                    }
-                }
-                update();
-            }
+            //         if (p.type === 'image' && snowflakeImage.complete) {
+            //             // Draw the image if loaded
+            //             ctx.drawImage(snowflakeImage, p.x, p.y, p.r, p.r);
+            //         } else {
+            //             // Draw a circle for rain or simple snow (CODE UNALTERED)
+            //             ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            //             ctx.beginPath();
+            //             ctx.moveTo(p.x, p.y);
+            //             ctx.arc(p.x, p.y, p.r/2, 0, Math.PI * 2, true); 
+            //             ctx.fill();
+            //         }
+            //     }
+            //     update();
+            // }
 
-            function update() {
-                for (let i = 0; i < MAX_PARTICLES; i++) {
-                    const p = particles[i];
+            // function update() {
+            //     for (let i = 0; i < MAX_PARTICLES; i++) {
+            //         const p = particles[i];
 
-                    // Snow movement (slower fall, slight sway)
-                    p.y += Math.cos(p.d) + 1 + p.r / 10; 
-                    p.x += Math.sin(p.d) * 0.4;
+            //         // Snow movement (slower fall, slight sway)
+            //         p.y += Math.cos(p.d) + 1 + p.r / 10; 
+            //         p.x += Math.sin(p.d) * 0.4;
                     
-                    // If the particle is off-screen, reset its position
-                    if (p.y > H || p.x > W || p.x < 0) {
-                        p.x = Math.random() * W;
-                        p.y = -50; // Start higher above the top
-                        // When resetting, we also need to maintain the original size/type properties:
-                        // Note: The size defined in 'init' is maintained when it loops back to the top
-                    }
-                }
-            }
+            //         // If the particle is off-screen, reset its position
+            //         if (p.y > H || p.x > W || p.x < 0) {
+            //             p.x = Math.random() * W;
+            //             p.y = -50; // Start higher above the top
+            //             // When resetting, we also need to maintain the original size/type properties:
+            //             // Note: The size defined in 'init' is maintained when it loops back to the top
+            //         }
+            //     }
+            // }
 
-            window.addEventListener('resize', () => {
-                W = window.innerWidth;
-                H = window.innerHeight;
-                canvas.width = W;
-                canvas.height = H;
-            });
+            // window.addEventListener('resize', () => {
+            //     W = window.innerWidth;
+            //     H = window.innerHeight;
+            //     canvas.width = W;
+            //     canvas.height = H;
+            // });
 
-            // Wait for the image to load before starting the animation loop
-            snowflakeImage.onload = () => {
-                init();
-                setInterval(draw, 30);
-            };
+            // // Wait for the image to load before starting the animation loop
+            // snowflakeImage.onload = () => {
+            //     init();
+            //     setInterval(draw, 30);
+            // };
             
-            // If the image is already loaded (cached), initialize immediately
-            if (snowflakeImage.complete) {
-                init();
-                setInterval(draw, 30);
-            }
+            // // If the image is already loaded (cached), initialize immediately
+            // if (snowflakeImage.complete) {
+            //     init();
+            //     setInterval(draw, 30);
+            // }
+
+            /* ------------------------- CHRISTMAS END ------------------------------------------------------------------------- */
         </script>
         <script src="<?php echo $pathToRoot; ?>assets/js/jquery/jquery-3.7.1.js"></script>
         <script src="<?php echo $pathToRoot; ?>assets/js/popper/popper.min.js"></script>

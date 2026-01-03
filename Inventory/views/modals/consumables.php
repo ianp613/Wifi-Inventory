@@ -111,9 +111,9 @@
                 <div id="restock_consumable_info">
                     <span id="consumable_badge_danger" hidden class="badge bg-danger" style="position: absolute; right: 15px;">Low Stock</span>
                     <span id="consumable_badge_success" hidden class="badge bg-success" style="position: absolute; right: 15px;">In Stock</span>
-                    <label>Code: <b id="restock_consumables_code">-</b></label><br>
-                    <label>Description: <span id="restock_consumables_description">-</span></label><br>
-                    <label>Remaining Stock: <span id="restock_consumables_stock">-</span></label>
+                    <label>Code: <b id="restock_consumables_code"></b></label><br>
+                    <label>Description: <span id="restock_consumables_description"></span></label><br>
+                    <label>Remaining Stock: <span id="restock_consumables_stock"></span></label>
                 </div>
                 <hr>
                 <label for="restock_quantity">Restock Quantity</label>

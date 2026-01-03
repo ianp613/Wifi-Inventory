@@ -1,0 +1,64 @@
+:root {
+    --bs-primary: #ff5722; /* Your custom primary color */
+    --bs-primary-rgb: 255, 87, 34; /* RGB version for transparency utilities */ 
+}
+body {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Standard property */
+}
+
+.tms-menu{
+    cursor: pointer;
+}
+
+.notification-pane{
+    height: calc(100vh - 140px);
+    padding-bottom: 20px;
+    /* Optional: Add a background color to visualize the area */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.notification-pane::-webkit-scrollbar{
+    width: 0px;
+    display: none;
+}
+
+.tms-message-field {
+    margin-bottom: -18px;
+}
+.tms-message-field:hover{
+    color: #145b5d;
+    cursor: pointer;
+}
+.tms-message-field::selection{
+    background-color: #ffffff;
+}
+
+.tms-message { 
+    position: relative; 
+    display: inline-block; 
+    max-width: calc(100% - 120px); /* adjust width as needed */ 
+    white-space: nowrap; overflow: hidden; 
+    padding-left: 10px;
+} 
+.tms-message::after { 
+    content: ""; 
+    position: absolute; 
+    right: 0; 
+    top: 0; 
+    width: 100px; /* fade width */ 
+    height: 100%; 
+    background: linear-gradient(to right, transparent, white); 
+}
+
+.tms-canvas{
+    /* Apply the mirror effect immediately */
+    transform: scaleX(-1);
+    /* Vendor prefixes were a historical necessity, less so now, but safe practice: */
+    -webkit-transform: scaleX(-1); /* For older Safari/Chrome versions */
+    -moz-transform: scaleX(-1);    /* For older Firefox versions */
+}

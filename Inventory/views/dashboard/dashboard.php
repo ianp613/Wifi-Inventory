@@ -1,6 +1,6 @@
 <div id="dashboard">
     <h6 style="margin-bottom: -2px;">Equipments</h6>
-    <div class="row">
+    <div class="row" hidden>
         <div class="col-md-3 p-2">
             <div class="border border-secondary border-1 rounded">
                 <div class="w-100 ht-60 p-2 d-flex flex-row justify-content-between">
@@ -58,8 +58,8 @@
             </div>
         </div>
     </div>
-    <h6 class="mt-4" style="margin-bottom: -2px;">Current Configurations</h6>
-    <div class="p-3">
+    <h6 hidden class="mt-4" style="margin-bottom: -2px;">Current Configurations</h6>
+    <div hidden class="p-3">
         <div class="row">
             <div class="col-md-6">
                 <h6 class="f-14"><span class="fa fa-wifi"></span> Assigned ISP</h6>

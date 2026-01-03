@@ -23,6 +23,46 @@
                     <input type="text" name="" id="g_search" class="form-control" placeholder="Search code or description">
                     <button class="btn btn-sm alert-dark btn-dark wd-40"><span class="fa fa-search"></span></button>
                 </div>
+                <div id="search_results" class="mt-2"></div>
+                <div id="log_consumable_info">
+                    <label>Code: <b id="log_consumables_code"></b></label><br>
+                    <label>Description: <span id="log_consumables_description"></span></label><br>
+                    <label>Remaining Stock: <span id="log_consumables_stock"></span></label>
+                    <br>
+                    <span>Status: </span>
+                    <span id="log_consumable_badge_danger" hidden class="badge bg-danger">Low Stock</span>
+                    <span id="log_consumable_badge_success" hidden class="badge bg-success">In Stock</span>
+                </div>
+                <hr>
+
+                <label for="" class="mb-2">Quantity</label>
+                <input type="number" name="" id="" class="form-control" min="0" value="0">
+                <div class="row mt-2 mb-2">
+                    <div class="col-6">
+                        <label for="date_today" class="mb-2">Date</label>
+                        <input type="date" name="" id="date_today" class="form-control">
+                    </div>
+                    <div class="col-6">
+                        <label for="time_today" class="mb-2">Time</label>
+                        <input type="time" name="" id="time_today" class="form-control">
+                    </div>
+                </div>
+                <label for="" class="mb-2">Reason</label>
+                <textarea name="" id="" rows="5" class="form-control" placeholder="Aa"></textarea>
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <label for="" class="mb-2">User ID</label>
+                        <input type="text" name="" id="" class="form-control">
+                    </div>
+                    <div class="col-6">
+                        <label for="" class="mb-2">Password</label>
+                        <input type="text" name="" id="" class="form-control">
+                    </div>
+                </div>
+                <div class="w-100 d-flex justify-content-end">
+                    <button class="btn btn-secondary mt-3"><span class="fa fa-remove"></span> CANCEL</button>
+                    <button class="btn btn-primary mt-3 ms-1"><span class="fa fa-save"></span> SUBMIT</button>    
+                </div>
                 
             </div>
         </div>
