@@ -25,6 +25,7 @@
             Migrate::string("name");
             Migrate::string("email");
             Migrate::string("privileges");
+            Migrate::string("passkey");
             Migrate::string("username");
             Migrate::string("password");
         }

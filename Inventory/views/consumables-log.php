@@ -17,7 +17,7 @@
     </head>
     <body>
         <div class="w-100 d-flex justify-content-center">
-            <div class="wd-600 p-4">
+            <div class="wd-500 p-4">
                 <h5 class="text-secondary mb-3 d-flex"><div id="g_name_display"></div><span class="fa fa-cubes"></span> Consumables</h5>
                 <div class="w-100 btn-group">
                     <input type="text" name="" id="g_search" class="form-control" placeholder="Search code or description">
@@ -55,13 +55,16 @@
                         <input type="text" name="" id="" class="form-control">
                     </div>
                     <div class="col-6">
-                        <label for="" class="mb-2">Password</label>
+                        <label for="" class="mb-2">Passkey</label>
                         <input type="text" name="" id="" class="form-control">
                     </div>
                 </div>
                 <div class="w-100 d-flex justify-content-end">
                     <button class="btn btn-secondary mt-3"><span class="fa fa-remove"></span> CANCEL</button>
                     <button class="btn btn-primary mt-3 ms-1"><span class="fa fa-save"></span> SUBMIT</button>    
+                </div>
+                <div class="mt-2 f-13 text-danger ">
+                    <span><i>Note: Kindly use a different browser to open this link if you are currently logged into the Inventory System.</i></span>
                 </div>
                 
             </div>

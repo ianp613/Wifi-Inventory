@@ -7,6 +7,7 @@
             "name",
             "email",
             "privileges",
+            "passkey",
             "username",
             "password"
         ];

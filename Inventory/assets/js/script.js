@@ -54,6 +54,10 @@ if(document.getElementById("sidebar")){
     var logout_modal_modal = document.getElementById('logout_modal');
     var confirm_logout = document.getElementById("confirm_logout");
 
+    var passkey = document.getElementById("passkey");
+    var btn_generate_passkey = document.getElementById("btn_generate_passkey");
+    var passkey_field = document.getElementById("passkey_field");
+
     var operate_as = document.getElementById("operate_as");
     var group_list = document.getElementById("group_list");
     var operate_as_btn = document.getElementById("operate_as_btn");
@@ -126,6 +130,7 @@ if(document.getElementById("sidebar")){
             localStorage.setItem("username",res.user[0]["username"])
             localStorage.setItem("password",res.user[0]["password"])
             localStorage.setItem("privileges",res.user[0]["privileges"])
+            localStorage.setItem("passkey",res.user[0]["passkey"])
             localStorage.setItem("g_member",res.g_member)
             if(document.getElementById("dashboard")){
                 !localStorage.getItem("email") ? alert("Your account doesn’t have an email address associated with it. Please add one to enhance your account’s security.") : null
@@ -174,6 +179,7 @@ if(document.getElementById("sidebar")){
             if(localStorage.getItem("password") == "12345"){
                 alert("Your account password is set to the default setting. For security reasons, please update your password.")
                 account_email.value = localStorage.getItem("email") != "-" ? localStorage.getItem("email") : "";
+                passkey_field.hidden = true
                 account_cancel_btn.setAttribute("disabled","")
                 account_edit_modal.show()
             }
@@ -381,9 +387,20 @@ if(document.getElementById("sidebar")){
 
 
     account.addEventListener("click",function(){
+        passkey_field.hidden = false
         account_email.value = localStorage.getItem("email") != "-" ? localStorage.getItem("email") : "";
+        passkey.value = localStorage.getItem("passkey");
         account_edit_modal.show()
     })
+
+    btn_generate_passkey.addEventListener("click",function(){
+        sole.post("../../controllers/generate_key.php",{
+            id : localStorage.getItem("userid")
+        }).then(res => {
+            passkey.value = res.key
+        })
+    })
+    
     account_submit_btn.addEventListener("click",function(){
         var bol = false;
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

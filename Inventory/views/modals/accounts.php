@@ -106,6 +106,7 @@
         <div class="modal-content">
             <div class="modal-header text-center">
                 <h6 class="modal-title" id="edit_account_title"><span class="fa fa-user"></span> Account Information</h6>
+                <button class="btn btn-sm btn-light" data-bs-dismiss="modal"><span class="fa fa-remove"></span></button>
             </div>
             <div class="modal-body">
                 <label for="account_email" class="mb-2 mt-2">Email <i class="f-13">(recommended)</i></label>
@@ -120,9 +121,20 @@
                         <input required type="password" name="" id="account_confirm_password" class="form-control">
                     </div>
                 </div>
+                <div hidden id="passkey_field" class="row mt-2">
+                    <div class="col">
+                        <label for="passkey" class="mb-2">Passkey</label>
+                        <div class="d-flex">
+                            <div class="col-5">
+                                <input readonly required type="text" name="" id="passkey" class="form-control">
+                            </div>
+                            <button id="btn_generate_passkey" class="btn btn-success ms-1"><span class="fa fa-refresh"></span></button>     
+                        </div>
+                    </div>
+                    
+                </div>
             </div>
             <div class="modal-footer">
-                <button id="account_cancel_btn" class="btn btn-sm btn-secondary" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
                 <button id="account_submit_btn" class="btn btn-sm btn-primary"><span class="fa fa-save"></span> Save</button>
             </div>
         </div>

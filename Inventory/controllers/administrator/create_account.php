@@ -6,12 +6,19 @@
     if($data) {
         $user = new User;
         
+        $passkey = Data::generate(6,"numeric");
+        while(!DB::validate($user,"passkey",$passkey)){
+            $passkey = Data::generate(6,"numeric");
+        }
+        
         if(DB::validate($user,"username",$data["username"])){
             $user->name = $data["name"];
             $user->email = $data["email"] ? $data["email"] : "-";
             $user->username = $data["username"];
             $user->password = $data["password"];
             $user->privileges = $data["privilege"];
+            $user->passkey = $passkey;
+            
             DB::save($user);
             $response = [
                 "status" => true,

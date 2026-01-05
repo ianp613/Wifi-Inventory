@@ -48,6 +48,7 @@ function search(){
             log_consumables_code.innerText = res[0].code
             log_consumables_description.innerText = res[0].description
             log_consumables_stock.innerText = res[0].stock
+            console.log(res[0].stock)
             if(parseFloat(res[0].stock) <= parseFloat(res[0].log_point)){
                 log_consumable_badge_danger.hidden = false
                 log_consumable_badge_success.hidden = true
