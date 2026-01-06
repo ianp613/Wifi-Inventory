@@ -106,7 +106,7 @@
         <div class="modal-content">
             <div class="modal-header text-center">
                 <h6 class="modal-title" id="edit_account_title"><span class="fa fa-user"></span> Account Information</h6>
-                <button class="btn btn-sm btn-light" data-bs-dismiss="modal"><span class="fa fa-remove"></span></button>
+                <button id="account_cancel_btn" class="btn btn-sm btn-light" data-bs-dismiss="modal"><span class="fa fa-remove"></span></button>
             </div>
             <div class="modal-body">
                 <label for="account_email" class="mb-2 mt-2">Email <i class="f-13">(recommended)</i></label>

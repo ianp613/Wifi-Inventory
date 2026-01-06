@@ -480,6 +480,9 @@ input:checked + .slider:before {
 .wd-500 {
     width: 500px;
 }
+.wd-550 {
+    width: 550px;
+}
 .wd-600 {
     width: 600px;
 }
@@ -704,4 +707,10 @@ input:checked + .slider:before {
 
 #chatbot_input{
     resize: none;
+}
+
+.passkey::-webkit-outer-spin-button,
+.passkey::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

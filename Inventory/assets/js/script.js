@@ -180,7 +180,7 @@ if(document.getElementById("sidebar")){
                 alert("Your account password is set to the default setting. For security reasons, please update your password.")
                 account_email.value = localStorage.getItem("email") != "-" ? localStorage.getItem("email") : "";
                 passkey_field.hidden = true
-                account_cancel_btn.setAttribute("disabled","")
+                account_cancel_btn.hidden = true
                 account_edit_modal.show()
             }
         }else{
@@ -431,7 +431,7 @@ if(document.getElementById("sidebar")){
                     account_email.value = ""
                     account_new_password.value = ""
                     account_confirm_password.value = ""
-                    account_cancel_btn.removeAttribute("disabled")
+                    account_cancel_btn.hidden = false
                 }
             })
         }

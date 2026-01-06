@@ -468,4 +468,34 @@
         ];
         public $main = "description";
     }
+
+    class Consumable_Log{
+        public $table = "consumable_logs";
+        public $fillable = [
+            "gid",
+            "uid",
+            "cid",
+            "date",
+            "time",
+            "quantity_deduction",
+            "remarks",
+        ];
+        public $label = [
+            "gid:" => "GID:",
+            "uid:" => "UID:",
+            "cid:" => "CID:",
+            "date:" => "Date:",
+            "time:" => "Time:",
+            "quantity_deduction:" => "Quantity Deduction:",
+            "remarks:" => "Remarks:",
+        ];
+        public $ignore = [
+            "id",
+            "gid",
+            "uid",
+            "cid",
+            "ti"
+        ];
+        public $main = "description";
+    }
 ?>

@@ -17,7 +17,7 @@
     </head>
     <body>
         <div class="w-100 d-flex justify-content-center">
-            <div class="wd-500 p-4">
+            <div class="wd-550 p-4">
                 <h5 class="text-secondary mb-3 d-flex"><div id="g_name_display"></div><span class="fa fa-cubes"></span> Consumables</h5>
                 <div class="w-100 btn-group">
                     <input type="text" name="" id="g_search" class="form-control" placeholder="Search code or description">
@@ -35,8 +35,8 @@
                 </div>
                 <hr>
 
-                <label for="" class="mb-2">Quantity</label>
-                <input type="number" name="" id="" class="form-control" min="0" value="0">
+                <label for="quantity_deduction" class="mb-2">Quantity</label>
+                <input type="number" name="" id="quantity_deduction" class="form-control" min="0" value="0">
                 <div class="row mt-2 mb-2">
                     <div class="col-6">
                         <label for="date_today" class="mb-2">Date</label>
@@ -47,26 +47,22 @@
                         <input type="time" name="" id="time_today" class="form-control">
                     </div>
                 </div>
-                <label for="" class="mb-2">Reason</label>
-                <textarea name="" id="" rows="5" class="form-control" placeholder="Aa"></textarea>
+                <label for="remarks" class="mb-2">Remarks</label>
+                <textarea name="" id="remarks" rows="5" class="form-control" placeholder="Aa"></textarea>
                 <div class="row mt-2">
                     <div class="col-6">
-                        <label for="" class="mb-2">User ID</label>
-                        <input type="text" name="" id="" class="form-control">
+                        <label for="user_id" class="mb-2">User ID</label>
+                        <input type="text" name="" id="user_id" class="form-control">
                     </div>
                     <div class="col-6">
-                        <label for="" class="mb-2">Passkey</label>
-                        <input type="text" name="" id="" class="form-control">
+                        <label for="passkey" class="mb-2">Passkey</label>
+                        <input type="number" name="" id="passkey" class="form-control passkey">
                     </div>
                 </div>
                 <div class="w-100 d-flex justify-content-end">
-                    <button class="btn btn-secondary mt-3"><span class="fa fa-remove"></span> CANCEL</button>
-                    <button class="btn btn-primary mt-3 ms-1"><span class="fa fa-save"></span> SUBMIT</button>    
+                    <button id="cancel_btn" class="btn btn-secondary mt-3"><span class="fa fa-remove"></span> CANCEL</button>
+                    <button id="submit_btn" class="btn btn-primary mt-3 ms-1"><span class="fa fa-save"></span> SUBMIT</button>    
                 </div>
-                <div class="mt-2 f-13 text-danger ">
-                    <span><i>Note: Kindly use a different browser to open this link if you are currently logged into the Inventory System.</i></span>
-                </div>
-                
             </div>
         </div>
         <h6 class="copyright f-10 text-secondary"></h6>

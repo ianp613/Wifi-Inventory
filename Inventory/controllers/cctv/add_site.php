@@ -10,6 +10,11 @@
             $file = $_FILES["file"];
             $fileName = basename($file["name"]);
             $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+
+            if(!is_dir("../../assets/img/maps/")){
+                mkdir("../../assets/img/maps/");
+            }
+
             $filePath = "../../assets/img/maps/" . uniqid() . "." . $extension;
             
             if(move_uploaded_file($file["tmp_name"], $filePath)) {

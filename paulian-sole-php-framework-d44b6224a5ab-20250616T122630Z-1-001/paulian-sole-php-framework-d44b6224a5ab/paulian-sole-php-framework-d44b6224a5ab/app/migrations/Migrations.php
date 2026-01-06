@@ -1,7 +1,8 @@
 <?php
     Migrate::$migration = [
-        "Authentication",
-        "UPV",
+        "Consumable_Log"
+        // "Authentication",
+        // "UPV",
         // "CaptiveUserMigration",
         // "ClientMigration",
         // "VoucherMigration",
@@ -21,6 +22,21 @@
         // "wifiMigration",
         // "ConsumablesMigration",
     ];
+
+    class Consumable_LogMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("consumable_logs");
+            Migrate::attrib_string(1000);
+            Migrate::string("gid");
+            Migrate::string("uid");
+            Migrate::string("cid");
+            Migrate::string("date");
+            Migrate::string("time");
+            Migrate::string("quantity_deduction");
+            Migrate::string("remarks");
+        }
+    }
 
     class CaptiveUserMigration
     {

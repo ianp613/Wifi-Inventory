@@ -15,6 +15,7 @@
         "mac_addressMigration",
         "wifiMigration",
         "ConsumablesMigration",
+        "Consumable_LogMigration"
     ];
 
     class UserMigration
@@ -246,6 +247,20 @@
             Migrate::string("unit");
             Migrate::string("stock");
             Migrate::string("restock_point");
+        }
+    }
+
+    class Consumable_LogMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("consumable_logs");
+            Migrate::attrib_string(1000);
+            Migrate::string("uid");
+            Migrate::string("cid");
+            Migrate::string("date");
+            Migrate::string("time");
+            Migrate::string("quantity_deduction");
+            Migrate::string("remarks");
         }
     }
 ?>
