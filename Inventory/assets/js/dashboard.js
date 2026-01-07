@@ -6,6 +6,18 @@ if(document.getElementById("dashboard")){
     var active_isp = document.getElementById("active_isp");
     var routers = document.getElementById("active_routers");
 
+    var consumables = [];
+    sole.get("../../controllers/dashboard/get_consumables.php")
+    .then(res => {
+        consumables = res.consumables
+    })
+
+    var consumables_log = [];
+    sole.get("../../controllers/dashboard/get_consumables_log.php")
+    .then(res => {
+        consumables_log = res.consumables_log
+    })
+
     sole.get("../../controllers/dashboard/get_entry.php")
     .then(res => load_unit_counts(res))
 
@@ -66,4 +78,175 @@ if(document.getElementById("dashboard")){
         count[2] != 0 ? count[2] == 1 ? forstatus.innerText = count[2] + " unit" : forstatus.innerText = count[2] + " units" : forstatus.innerText = "No record"
         count[3] != 0 ? count[3] == 1 ? pending.innerText = count[3] + " unit" : pending.innerText = count[3] + " units" : pending.innerText = "No record"
     }
+
+
+
+    // CHARTS ======================================================
+    // Stock Deduction Over Time
+
+    // Predefined pastel colors
+    const pastelColors = [
+    '#AEC6CF', // pastel blue
+    '#FFB347', // pastel orange
+    '#77DD77', // pastel green
+    '#F49AC2', // pastel pink
+    '#CFCFC4', // pastel gray
+    '#B39EB5', // pastel purple
+    '#FFD1DC', // baby pink
+    '#CB99C9', // pastel lavender
+    // '#FDFD96', // pastel yellow
+    '#B5EAD7', // mint pastel
+    '#C7CEEA'  // sky pastel
+    ];
+
+    // Track used colors
+    let usedColors = [];
+
+    // Function to get a unique pastel color
+    function getUniquePastelColor() {
+    // Find unused color
+    const available = pastelColors.filter(c => !usedColors.includes(c));
+
+    if (available.length > 0) {
+        const color = available[Math.floor(Math.random() * available.length)];
+        usedColors.push(color);
+        return color;
+    }
+
+    // If all colors are used, generate a random pastel
+    const r = Math.floor((Math.random() * 127) + 127); // 127–255 for light tones
+    const g = Math.floor((Math.random() * 127) + 127);
+    const b = Math.floor((Math.random() * 127) + 127);
+    const color = `rgb(${r}, ${g}, ${b})`;
+    usedColors.push(color);
+        return color;
+    }
+
+
+
+    const ctx = document.getElementById('sdot');
+
+    // Start with empty labels and datasets
+    const sdot = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],        // no labels yet
+            datasets: []       // no datasets yet
+        },
+        options: {
+            scales: {
+                y: {
+                beginAtZero: true
+                }
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeInOutQuad'
+            }
+        }
+    });
+
+    // Add a new dataset dynamically
+    function addDataset(itemName) {
+        const newDataset = {
+        label: itemName,
+        data: [], // start empty
+        borderColor: getUniquePastelColor(),
+        borderWidth: 2,
+        tension: 0.4
+        };
+        sdot.data.datasets.push(newDataset);
+        sdot.update();
+    }
+
+    // Add a new label and values for each dataset
+    function addRecord(dateLabel, values) {
+        sdot.data.labels.push(dateLabel);
+
+        sdot.data.datasets.forEach((dataset, i) => {
+        dataset.data.push(values[i]); // values is an array matching datasets
+        });
+
+        sdot.update();
+    }
+
+    // ADD DATASET AND TOP LABELS
+    setTimeout(() => {
+        consumables.forEach(cons => {
+            addDataset(cons.description)
+        });
+        insertDaily(2026,1)
+    }, 1000);
+
+    function insertDaily(year, month){
+        clearAllData(sdot)
+        var daily = getDates(year, month);
+        var data = [];
+
+        // loop first the date and add all date to data
+        daily.forEach(dail => {
+            data.push([dail,[]]);
+        })
+
+        for (let daily_id = 0; daily_id < daily.length; daily_id++) {
+            // loop all consumables
+            consumables.forEach(cons => {
+                // get all consumable_log with the same id and if date exist
+                var total_value = 0;
+                
+                consumables_log.forEach(cons_log => {
+                    if(cons_log.date == daily[daily_id] && cons_log.cid == cons.id){
+                        total_value = parseInt(cons_log.quantity_deduction) + total_value
+                    }
+                })
+
+                const entry = data.find(([date]) => date === daily[daily_id]);
+
+                if (entry) {
+                    entry[1].push(total_value);
+                }
+            })
+        }
+        
+        data.forEach(dat => {
+            addRecord(dat[0],dat[1])
+        })
+
+
+        // const entry = data.find(([date]) => date === '2025-01-14');
+
+        // if (entry) {
+        //     entry[1].push("sample");
+        // }
+
+
+        // loop all consumable_log and match all the date if exixt in data
+        // console.log(data)
+        // console.log(daily)
+        // consumables_log.forEach(cons_log => {
+        //     if(daily.includes(cons_log.date)){
+        //         console.log("okok")
+        //     }
+        // });
+    }
+
+
+    
+
+
+
+
+
+
+
+
+    function clearAllData(chart_) {
+        chart_.data.labels = [];
+        chart_.data.datasets.forEach(dataset => {
+            dataset.data = [];
+        });
+        chart_.update();
+    }
+
+    insertDaily()
 }

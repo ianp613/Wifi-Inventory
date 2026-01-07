@@ -1,5 +1,46 @@
 <div id="dashboard">
-    <h6 style="margin-bottom: -2px;">Equipments</h6>
+    <div class="d-flex w-100">
+        <div class="row w-100">
+            <div class="col-6">
+                <div class="d-flex justify-content-between w-100">
+                    <h6>Stock Deductions Over Time</h6>
+                    <div class="input-group input-group-sm mb-3 wd-120" style="margin-top: -3px;">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Show</span>
+                        <select name="" id="" class="form-control wd-100">
+                            <option value="Daily">Daily</option>
+                            <option value="Monthly">Monthly</option>
+                            <option value="Yearly">Yearly</option>
+                        </select>
+                    </div>
+                    <div class="input-group input-group-sm mb-3 wd-240" style="margin-top: -3px;">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Select Date</span>
+                        <select class="months form-control" name="" id=""></select>
+                        <select class="years form-control" name="" id=""></select>
+                    </div>
+                </div>
+                
+
+                <canvas id="sdot"></canvas>
+            </div>
+            <div class="col-6">
+                <h6>Top Users By Stock Deductions</h6>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h6 hidden style="margin-bottom: -2px;">Equipments</h6>
     <div class="row" hidden>
         <div class="col-md-3 p-2">
             <div class="border border-secondary border-1 rounded">

@@ -139,7 +139,7 @@
                 <h6 class="f-15">Click the link to open the Add Log page. You can also copy and share the link with others so they can add a log.</h6>
                 <h6 class="f-15"><i><a href="#" id="add_log_link">Click Generate Link</a></i></h6>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" id="generate_link_controls">
                 <button hidden id="regenerate_link_btn" class="btn btn-sm alert-success btn-success"><span class="fa fa-link"></span> Regenerate Link</button>
                 <button hidden id="delete_link_btn" class="btn btn-sm alert-danger btn-danger"><span class="fa fa-trash"></span> Delete Link</button>
                 <button id="generate_link_btn" class="btn btn-sm alert-success btn-success"><span class="fa fa-link"></span> Generate Link</button>

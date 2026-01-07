@@ -477,6 +477,10 @@ input:checked + .slider:before {
     width: 180px;
 }
 
+.wd-240 {
+    width: 240px;
+}
+
 .wd-500 {
     width: 500px;
 }

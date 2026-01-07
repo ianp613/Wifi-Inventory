@@ -2,6 +2,10 @@
     header('Content-Type: application/json');
     session_start();
     include("../includes.php");
+
+    if(!array_key_exists("operate_as_group",$_SESSION)){
+        $_SESSION["operate_as_group"] = null;
+    }
     
     $response = [
         "status" => false,

@@ -142,6 +142,7 @@ if(document.getElementById("consumables")){
     var consumable_badge_danger = document.getElementById("consumable_badge_danger")
     var consumable_badge_success = document.getElementById("consumable_badge_success")
 
+    var generate_link_controls = document.getElementById("generate_link_controls")
     var generate_link_btn = document.getElementById("generate_link_btn")
     var regenerate_link_btn = document.getElementById("regenerate_link_btn")
     var delete_link_btn = document.getElementById("delete_link_btn")
@@ -390,6 +391,10 @@ if(document.getElementById("consumables")){
             bs5.toast("info","Please operate as group member.")
         }
     })
+
+    if(localStorage.getItem("privileges") == "User"){
+        generate_link_controls.hidden = true
+    }
 
     regenerate_link_btn.addEventListener("click",function(){
         if(JSON.parse(localStorage.getItem("g_member"))){
