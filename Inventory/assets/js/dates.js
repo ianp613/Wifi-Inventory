@@ -31,23 +31,32 @@ function formatDateToMonthDay(dateStr) {
   });
 }
 
-function getAllMonths() {
-  const months = [];
-  for (let month = 0; month < 12; month++) {
-    const date = new Date(2000, month, 1); // year doesn't matter
-    const monthName = date.toLocaleString('default', { month: 'long' });
-    months.push(monthName);
-  }
-  return months;
+function getAllMonths(type = "text", type_ = "long") {
+    const months = [];
+
+    for (let month = 0; month < 12; month++) {
+        if (type === "number") {
+            // January = 1 ... December = 12
+            months.push(month + 1);
+        } else if (type === "text") {
+            const date = new Date(2000, month, 1);
+            const monthName = date.toLocaleString('default', { month: type_ });
+            months.push(monthName);
+        }
+    }
+
+    return months;
 }
 
-function getLastTenYears() {
+function getLastYears(num,reverse_year = false) {
   const currentYear = new Date().getFullYear();
   const years = [];
 
-  for (let i = currentYear - 20; i <= currentYear; i++) {
+  for (let i = currentYear - num; i <= currentYear; i++) {
     years.push(i);
   }
+
+  reverse_year ? years.reverse() : null
 
   return years;
 }
@@ -56,7 +65,7 @@ function getLastTenYears() {
 
 var selection_months_text = document.getElementsByClassName("months_text") ? document.getElementsByClassName("months_text") : [];
 for (let index = 0; index < selection_months_text.length; index++) {
-    getAllMonths().forEach(month => {
+    getAllMonths("text").forEach(month => {
         var opt = document.createElement("option")
         opt.innerText = month
         opt.value = month
@@ -86,7 +95,7 @@ for (let index = 0; index < selection_months_number.length; index++) {
 
 var selection_years = document.getElementsByClassName("years");
 for (let index = 0; index < selection_years.length; index++) {
-    getLastTenYears().forEach(year => {
+    getLastYears(20, true).forEach(year => {
         var opt = document.createElement("option")
         opt.innerText = year
         opt.value = year
@@ -95,4 +104,32 @@ for (let index = 0; index < selection_years.length; index++) {
         }
         selection_years[index].appendChild(opt)
     })
+}
+
+function getYear() {
+    const now = new Date();
+    return now.getFullYear();
+}
+
+function getMonth() {
+    const now = new Date();
+    return now.getMonth() + 1;
+}
+
+function isSameMonthYear(dateString, monthYearText) {
+    const date = new Date(dateString);
+
+    // Parse "December, 2026"
+    const [monthName, year] = monthYearText.split(", ");
+    const textDate = new Date(`${monthName} 1, ${year}`);
+
+    return (
+        date.getFullYear() === textDate.getFullYear() &&
+        date.getMonth() === textDate.getMonth()
+    );
+}
+
+function isSameYear(dateString, year) {
+  const dateYear = new Date(dateString).getFullYear();
+  return dateYear === Number(year);
 }

@@ -1,29 +1,43 @@
 <div id="dashboard">
     <div class="d-flex w-100">
         <div class="row w-100">
-            <div class="col-6">
+            <div class="col-9">
                 <div class="d-flex justify-content-between w-100">
                     <h6>Stock Deductions Over Time</h6>
                     <div class="input-group input-group-sm mb-3 wd-120" style="margin-top: -3px;">
                         <span class="input-group-text" id="inputGroup-sizing-sm">Show</span>
-                        <select name="" id="" class="form-control wd-100">
+                        <select name="" id="show_sdot" class="form-control wd-100">
                             <option value="Daily">Daily</option>
                             <option value="Monthly">Monthly</option>
                             <option value="Yearly">Yearly</option>
                         </select>
                     </div>
-                    <div class="input-group input-group-sm mb-3 wd-240" style="margin-top: -3px;">
+                    <div id="select_date_sdot" class="input-group input-group-sm mb-3 wd-240" style="margin-top: -3px;">
                         <span class="input-group-text" id="inputGroup-sizing-sm">Select Date</span>
                         <select class="months_number form-control" name="" id="months_sdot"></select>
                         <select class="years form-control" name="" id="years_sdot"></select>
+                        <span hidden class="ms-2 me-2 mb-0" style="margin-top: 4px;" id="to_dash"> to </span>
+                        <select hidden class="years form-control" name="" id="to_years_sdot"></select>
                     </div>
                 </div>
-                
-
                 <canvas id="sdot"></canvas>
             </div>
-            <div class="col-6">
+            <div class="col-3">
                 <h6>Top Users By Stock Deductions</h6>
+                <div class="input-group input-group-sm mb-3 wd-120" style="margin-top: -3px;">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Show</span>
+                        <select name="" id="show_tusd" class="form-control wd-100">
+                            <option value="Monthly">Monthly</option>
+                            <option value="Yearly">Yearly</option>
+                        </select>
+                    </div>
+                    <div id="select_date_tusd" class="input-group input-group-sm mb-3 wd-240" style="margin-top: -3px;">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Select Date</span>
+                        <select class="months_number form-control" name="" id="months_tusd"></select>
+                        <select class="years form-control" name="" id="years_sdot"></select>
+                        <span hidden class="ms-2 me-2 mb-0" style="margin-top: 4px;" id="to_dash"> to </span>
+                        <select hidden class="years form-control" name="" id="to_years_tusd"></select>
+                    </div>
             </div>
         </div>
     </div>

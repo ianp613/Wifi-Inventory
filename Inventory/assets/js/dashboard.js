@@ -6,8 +6,14 @@ if(document.getElementById("dashboard")){
     var active_isp = document.getElementById("active_isp");
     var routers = document.getElementById("active_routers");
 
+    var show_sdot = document.getElementById("show_sdot")
+
     var months_sdot = document.getElementById("months_sdot")
     var years_sdot = document.getElementById("years_sdot")
+    var to_years_sdot = document.getElementById("to_years_sdot")
+    var to_dash = document.getElementById("to_dash")
+
+    var select_date_sdot = document.getElementById("select_date_sdot")
 
     var consumables = [];
     var consumables_log = [];
@@ -177,65 +183,248 @@ if(document.getElementById("dashboard")){
         sdot.update();
     }
 
-    // ADD DATASET AND TOP LABELS
-    setTimeout(() => {
-        consumables.forEach(cons => {
-            addDataset(cons.description)
-        });
-        insertDaily(2026,1)
-    }, 1000);
+    // INSERT DAILY START ====================================================================
+    if(show_sdot.value == "Daily"){
+        setTimeout(() => {
+            consumables.forEach(cons => {
+                addDataset(cons.description)
+            });
+            insertDaily(getYear(),getMonth())
+        }, 1000);
+    }
 
     function insertDaily(year, month){
         clearAllData(sdot)
-        var daily = getDates(year, month);
-        var data = [];
-
-        // loop first the date and add all date to data
-        daily.forEach(dail => {
-            data.push([dail,[]]);
-        })
-
-        for (let daily_id = 0; daily_id < daily.length; daily_id++) {
-            // loop all consumables
+        setConsumables()
+        setTimeout(() => {
             consumables.forEach(cons => {
-                // get all consumable_log with the same id and if date exist
-                var total_value = 0;
-                
-                consumables_log.forEach(cons_log => {
-                    if(cons_log.date == daily[daily_id] && cons_log.cid == cons.id){
-                        total_value = parseInt(cons_log.quantity_deduction) + total_value
+                addDataset(cons.description)
+            });    
+        }, 100);
+        
+        setTimeout(() => {
+            var daily = getDates(year, month);
+            var data = [];
+
+            // loop first the date and add all date to data
+            daily.forEach(dail => {
+                data.push([dail,[]]);
+            })
+
+            for (let daily_id = 0; daily_id < daily.length; daily_id++) {
+                // loop all consumables
+                consumables.forEach(cons => {
+                    // get all consumable_log with the same id and if date exist
+                    var total_value = 0;
+                    
+                    consumables_log.forEach(cons_log => {
+                        if(cons_log.date == daily[daily_id] && cons_log.cid == cons.id){
+                            total_value = parseInt(cons_log.quantity_deduction) + total_value
+                        }
+                    })
+
+                    const entry = data.find(([date]) => date === daily[daily_id]);
+
+                    if (entry) {
+                        entry[1].push(total_value);
                     }
                 })
-
-                const entry = data.find(([date]) => date === daily[daily_id]);
-
-                if (entry) {
-                    entry[1].push(total_value);
-                }
-            })
-        }
-        data.forEach(dat => {
-            addRecord(formatDateToMonthDay(dat[0]),dat[1])
-        })
+            }
+            data.forEach(dat => {
+                addRecord(formatDateToMonthDay(dat[0]),dat[1])
+            })    
+        }, 200);
+        
     }
 
     months_sdot.addEventListener("change",e => {
-        insertDaily(years_sdot.value,months_sdot.value)
+        if(show_sdot.value == "Daily"){
+            insertDaily(years_sdot.value,months_sdot.value)    
+        }
     })
     years_sdot.addEventListener("change",e => {
-        insertDaily(years_sdot.value,months_sdot.value)
+        if(show_sdot.value == "Daily"){
+            insertDaily(years_sdot.value,months_sdot.value)    
+        }else if(show_sdot.value == "Monthly"){
+            insertMonthly(years_sdot.value)
+        }else if(show_sdot.value == "Yearly"){
+            insertYearly(years_sdot.value,to_years_sdot.value)
+        }
     })
+
+    to_years_sdot.addEventListener("change",e => {
+        if(show_sdot.value == "Daily"){
+            insertDaily(years_sdot.value,months_sdot.value)    
+        }else if(show_sdot.value == "Monthly"){
+            insertMonthly(years_sdot.value)
+        }else if(show_sdot.value == "Yearly"){
+            insertYearly(years_sdot.value,to_years_sdot.value)
+        }
+    })
+
+    // INSERT DAILY END ====================================================================
+
+
+    // INSERT MONTHLY START ====================================================================
+    if(show_sdot.value == "Monthly"){
+        setTimeout(() => {
+            consumables.forEach(cons => {
+                addDataset(cons.description)
+            });
+            insertMonthly(getYear())
+        }, 1000);
+    }
+
+    function insertMonthly(year){
+        clearAllData(sdot)
+        setConsumables()
+
+        setTimeout(() => {
+            consumables.forEach(cons => {
+                addDataset(cons.description)
+            });    
+        }, 100);
+
+        setTimeout(() => {
+            var monthly = getAllMonths("text","short");
+            var data = [];
+
+            // loop first the months and add all month to data
+            monthly.forEach(month => {
+                data.push([month,[]]);
+            })
+
+            for (let monthly_id = 0; monthly_id < monthly.length; monthly_id++) {
+                // loop all consumables
+                consumables.forEach(cons => {
+                    // get all consumable_log with the same id and if date exist
+                    var total_value = 0;
+                    
+                    consumables_log.forEach(cons_log => {
+                        var mYtext = monthly[monthly_id] + ", " + years_sdot.value
+                        if(isSameMonthYear(cons_log.date,mYtext) && cons_log.cid == cons.id){
+                            total_value = parseInt(cons_log.quantity_deduction) + total_value
+                        }
+                    })
+
+                    const entry = data.find(([date]) => date === monthly[monthly_id]);
+
+                    if (entry) {
+                        entry[1].push(total_value);
+                    }
+                })
+            } 
+            data.forEach(dat => {
+                addRecord(dat[0],dat[1])
+            }) 
+        }, 200);
+    }
+    // INSERT MONTHLY END ====================================================================
+
+    // INSERT YEARLY START ====================================================================
+    if(show_sdot.value == "Yearly"){
+        setTimeout(() => {
+            consumables.forEach(cons => {
+                addDataset(cons.description)
+            });
+            insertYearly(getYear())
+        }, 1000);
+    }
+
+    function insertYearly(year,to_year){
+        if(year > to_year){
+            bs5.toast("warning","The starting year should be greater than the ending year.")
+            return
+        }
+        year--
+        to_year++
+        
+        clearAllData(sdot)
+        setConsumables()
+
+        setTimeout(() => {
+            consumables.forEach(cons => {
+                addDataset(cons.description)
+            });    
+        }, 100);
+
+        setTimeout(() => {
+            var data = [];
+
+            // loop first the months and add all month to data
+            for (let index = year; index <= to_year; index++) {
+                data.push([index,[]]);
+            }
+
+            for (let index = year; index <= to_year; index++) {
+                // loop all consumables
+                consumables.forEach(cons => {
+                    // get all consumable_log with the same id and if date exist
+                    var total_value = 0;
+                    
+                    consumables_log.forEach(cons_log => {
+                        if(isSameYear(cons_log.date,index) && cons_log.cid == cons.id){
+                            total_value = parseInt(cons_log.quantity_deduction) + total_value
+                        }
+                    })
+
+                    const entry = data.find(([date]) => date === index);
+
+                    if (entry) {
+                        entry[1].push(total_value);
+                    }
+                })
+            } 
+            data.forEach(dat => {
+                addRecord(dat[0],dat[1])
+            }) 
+        }, 200);
+    }
+
+
+
+
+
+
+
+
 
     
 
-
-
+    show_sdot.addEventListener("change", e => {
+        if(show_sdot.value == "Daily"){
+            !select_date_sdot.classList.contains("wd-240") ? select_date_sdot.classList.add("wd-240") : null
+            select_date_sdot.classList.contains("wd-160") ? select_date_sdot.classList.remove("wd-160") : null
+            months_sdot.hidden = false
+            to_dash.hidden = true
+            to_years_sdot.hidden = true
+            insertDaily(years_sdot.value,months_sdot.value)
+        }else if(show_sdot.value == "Monthly"){
+            !select_date_sdot.classList.contains("wd-160") ? select_date_sdot.classList.add("wd-160") : null
+            select_date_sdot.classList.contains("wd-240") ? select_date_sdot.classList.remove("wd-240") : null
+            months_sdot.hidden = true
+            to_dash.hidden = true
+            to_years_sdot.hidden = true
+            insertMonthly(years_sdot.value)
+        }else if(show_sdot.value == "Yearly"){
+            // select_date_sdot.hidden = true
+            !select_date_sdot.classList.contains("wd-240") ? select_date_sdot.classList.add("wd-240") : null
+            select_date_sdot.classList.contains("wd-160") ? select_date_sdot.classList.remove("wd-160") : null
+            months_sdot.hidden = true
+            to_dash.hidden = false
+            to_years_sdot.hidden = false
+            insertYearly(years_sdot.value,to_years_sdot.value)
+        }else{
+            bs5.toast("warning","Invalid Selection.")
+        }
+    })
 
 
 
 
 
     function clearAllData(chart_) {
+        chart_.data.datasets = [];
         chart_.data.labels = [];
         chart_.data.datasets.forEach(dataset => {
             dataset.data = [];
