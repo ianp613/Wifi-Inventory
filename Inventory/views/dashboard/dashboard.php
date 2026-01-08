@@ -14,8 +14,8 @@
                     </div>
                     <div class="input-group input-group-sm mb-3 wd-240" style="margin-top: -3px;">
                         <span class="input-group-text" id="inputGroup-sizing-sm">Select Date</span>
-                        <select class="months form-control" name="" id=""></select>
-                        <select class="years form-control" name="" id=""></select>
+                        <select class="months_number form-control" name="" id="months_sdot"></select>
+                        <select class="years form-control" name="" id="years_sdot"></select>
                     </div>
                 </div>
                 

@@ -54,8 +54,8 @@ function getLastTenYears() {
 
 
 
-var selection_months = document.getElementsByClassName("months");
-for (let index = 0; index < selection_months.length; index++) {
+var selection_months_text = document.getElementsByClassName("months_text") ? document.getElementsByClassName("months_text") : [];
+for (let index = 0; index < selection_months_text.length; index++) {
     getAllMonths().forEach(month => {
         var opt = document.createElement("option")
         opt.innerText = month
@@ -63,9 +63,26 @@ for (let index = 0; index < selection_months.length; index++) {
         if(new Date().toLocaleString('en-US', { month: 'long' }) == month){
             opt.selected = true
         }
-        selection_months[index].appendChild(opt)
+        selection_months_text[index].appendChild(opt)
     })
 }
+
+var selection_months_number = document.getElementsByClassName("months_number") ? document.getElementsByClassName("months_number") : [];
+
+for (let index = 0; index < selection_months_number.length; index++) {
+    getAllMonths().forEach((month, monthIndex) => {
+        var opt = document.createElement("option");
+        opt.innerText = month;
+        opt.value = monthIndex + 1; // January = 1, February = 2, etc.
+
+        if (new Date().toLocaleString('en-US', { month: 'long' }) === month) {
+            opt.selected = true;
+        }
+
+        selection_months_number[index].appendChild(opt);
+    });
+}
+
 
 var selection_years = document.getElementsByClassName("years");
 for (let index = 0; index < selection_years.length; index++) {

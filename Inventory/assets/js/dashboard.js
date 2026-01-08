@@ -6,17 +6,24 @@ if(document.getElementById("dashboard")){
     var active_isp = document.getElementById("active_isp");
     var routers = document.getElementById("active_routers");
 
-    var consumables = [];
-    sole.get("../../controllers/dashboard/get_consumables.php")
-    .then(res => {
-        consumables = res.consumables
-    })
+    var months_sdot = document.getElementById("months_sdot")
+    var years_sdot = document.getElementById("years_sdot")
 
+    var consumables = [];
     var consumables_log = [];
-    sole.get("../../controllers/dashboard/get_consumables_log.php")
-    .then(res => {
-        consumables_log = res.consumables_log
-    })
+
+    setConsumables()
+    function setConsumables(){
+        sole.get("../../controllers/dashboard/get_consumables_log.php")
+        .then(res => {
+            consumables_log = res.consumables_log
+        })
+        sole.get("../../controllers/dashboard/get_consumables.php")
+        .then(res => {
+            consumables = res.consumables
+        })    
+    }
+    
 
     sole.get("../../controllers/dashboard/get_entry.php")
     .then(res => load_unit_counts(res))
@@ -207,29 +214,17 @@ if(document.getElementById("dashboard")){
                 }
             })
         }
-        
         data.forEach(dat => {
-            addRecord(dat[0],dat[1])
+            addRecord(formatDateToMonthDay(dat[0]),dat[1])
         })
-
-
-        // const entry = data.find(([date]) => date === '2025-01-14');
-
-        // if (entry) {
-        //     entry[1].push("sample");
-        // }
-
-
-        // loop all consumable_log and match all the date if exixt in data
-        // console.log(data)
-        // console.log(daily)
-        // consumables_log.forEach(cons_log => {
-        //     if(daily.includes(cons_log.date)){
-        //         console.log("okok")
-        //     }
-        // });
     }
 
+    months_sdot.addEventListener("change",e => {
+        insertDaily(years_sdot.value,months_sdot.value)
+    })
+    years_sdot.addEventListener("change",e => {
+        insertDaily(years_sdot.value,months_sdot.value)
+    })
 
     
 
@@ -248,5 +243,4 @@ if(document.getElementById("dashboard")){
         chart_.update();
     }
 
-    insertDaily()
 }
