@@ -149,45 +149,57 @@ if(document.getElementById("dashboard")){
         options: {
             scales: {
                 y: {
-                beginAtZero: true
+                    beginAtZero: true
                 }
             },
             animation: {
                 duration: 1000,
                 easing: 'easeInOutQuad'
+            },
+            plugins: {
+                legend: {
+                    title: {
+                        display: true,
+                        text: 'Consumables',
+                    }
+                }
             }
         }
     });
 
+    sdot.options.plugins.legend.align = 'start';
+    sdot.options.plugins.legend.title.position = 'start';
+    sdot.update();
+
     // Add a new dataset dynamically
-    function addDataset(itemName) {
+    function addDataset(itemName,chart_) {
         const newDataset = {
-        label: itemName,
-        data: [], // start empty
-        borderColor: getUniquePastelColor(),
-        borderWidth: 2,
-        tension: 0.4
+            label: itemName,
+            data: [], // start empty
+            borderColor: getUniquePastelColor(),
+            borderWidth: 2,
+            tension: 0.4
         };
-        sdot.data.datasets.push(newDataset);
-        sdot.update();
+        chart_.data.datasets.push(newDataset);
+        chart_.update();
     }
 
     // Add a new label and values for each dataset
-    function addRecord(dateLabel, values) {
-        sdot.data.labels.push(dateLabel);
+    function addRecord(dateLabel, values, chart_) {
+        chart_.data.labels.push(dateLabel);
 
-        sdot.data.datasets.forEach((dataset, i) => {
+        chart_.data.datasets.forEach((dataset, i) => {
         dataset.data.push(values[i]); // values is an array matching datasets
         });
 
-        sdot.update();
+        chart_.update();
     }
 
     // INSERT DAILY START ====================================================================
     if(show_sdot.value == "Daily"){
         setTimeout(() => {
             consumables.forEach(cons => {
-                addDataset(cons.description)
+                addDataset(cons.description,sdot)
             });
             insertDaily(getYear(),getMonth())
         }, 1000);
@@ -198,7 +210,7 @@ if(document.getElementById("dashboard")){
         setConsumables()
         setTimeout(() => {
             consumables.forEach(cons => {
-                addDataset(cons.description)
+                addDataset(cons.description,sdot)
             });    
         }, 100);
         
@@ -219,7 +231,7 @@ if(document.getElementById("dashboard")){
                     
                     consumables_log.forEach(cons_log => {
                         if(cons_log.date == daily[daily_id] && cons_log.cid == cons.id){
-                            total_value = parseInt(cons_log.quantity_deduction) + total_value
+                            total_value = parseFloat(cons_log.quantity_deduction) + total_value
                         }
                     })
 
@@ -231,7 +243,7 @@ if(document.getElementById("dashboard")){
                 })
             }
             data.forEach(dat => {
-                addRecord(formatDateToMonthDay(dat[0]),dat[1])
+                addRecord(formatDateToMonthDay(dat[0]),dat[1],sdot)
             })    
         }, 200);
         
@@ -269,7 +281,7 @@ if(document.getElementById("dashboard")){
     if(show_sdot.value == "Monthly"){
         setTimeout(() => {
             consumables.forEach(cons => {
-                addDataset(cons.description)
+                addDataset(cons.description,sdot)
             });
             insertMonthly(getYear())
         }, 1000);
@@ -281,7 +293,7 @@ if(document.getElementById("dashboard")){
 
         setTimeout(() => {
             consumables.forEach(cons => {
-                addDataset(cons.description)
+                addDataset(cons.description,sdot)
             });    
         }, 100);
 
@@ -303,7 +315,7 @@ if(document.getElementById("dashboard")){
                     consumables_log.forEach(cons_log => {
                         var mYtext = monthly[monthly_id] + ", " + years_sdot.value
                         if(isSameMonthYear(cons_log.date,mYtext) && cons_log.cid == cons.id){
-                            total_value = parseInt(cons_log.quantity_deduction) + total_value
+                            total_value = parseFloat(cons_log.quantity_deduction) + total_value
                         }
                     })
 
@@ -315,7 +327,7 @@ if(document.getElementById("dashboard")){
                 })
             } 
             data.forEach(dat => {
-                addRecord(dat[0],dat[1])
+                addRecord(dat[0],dat[1],sdot)
             }) 
         }, 200);
     }
@@ -325,7 +337,7 @@ if(document.getElementById("dashboard")){
     if(show_sdot.value == "Yearly"){
         setTimeout(() => {
             consumables.forEach(cons => {
-                addDataset(cons.description)
+                addDataset(cons.description,sdot)
             });
             insertYearly(getYear())
         }, 1000);
@@ -344,7 +356,7 @@ if(document.getElementById("dashboard")){
 
         setTimeout(() => {
             consumables.forEach(cons => {
-                addDataset(cons.description)
+                addDataset(cons.description,sdot)
             });    
         }, 100);
 
@@ -364,7 +376,7 @@ if(document.getElementById("dashboard")){
                     
                     consumables_log.forEach(cons_log => {
                         if(isSameYear(cons_log.date,index) && cons_log.cid == cons.id){
-                            total_value = parseInt(cons_log.quantity_deduction) + total_value
+                            total_value = parseFloat(cons_log.quantity_deduction) + total_value
                         }
                     })
 
@@ -376,10 +388,145 @@ if(document.getElementById("dashboard")){
                 })
             } 
             data.forEach(dat => {
-                addRecord(dat[0],dat[1])
+                addRecord(dat[0],dat[1],sdot)
             }) 
         }, 200);
     }
+    // INSERT YEARLY END =======================================================================
+
+
+
+
+
+
+
+
+    var consumable_tusd = document.getElementById("consumable_tusd")
+    
+    var years_tusd = document.getElementById("years_tusd")
+    var months_tusd = document.getElementById("months_tusd")
+    var consumable_tusd = document.getElementById("consumable_tusd")
+
+    var users = [];
+
+    sole.get("../../controllers/dashboard/get_users.php")
+    .then(res => {
+        users = res
+    })
+
+    
+
+
+
+
+
+    const ctx_tusd = document.getElementById('tusd');
+    const tusd = new Chart(ctx_tusd, {
+    type: 'bar',
+    data: {
+        labels: [],
+        datasets: []
+    },
+    options: {
+            indexAxis: 'y',
+            plugins: {
+                legend: {
+                        position: 'right', // 👈 legend on the right
+                        align: 'center',   // optional: start | center | end
+                        labels: {
+                        padding: 16      // optional: spacing
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    display: false
+                },
+                x: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    setTimeout(() => {
+        reloadtusd()
+    }, 500);
+
+    setTimeout(() => {
+        consumables.forEach(cons => {
+            var opt = document.createElement("option")
+            opt.value = cons.id
+            opt.innerText = cons.description
+            consumable_tusd.appendChild(opt)
+        })
+    }, 100);
+
+    consumable_tusd.addEventListener("change",e => {
+        reloadtusd()
+    })
+
+    function reloadtusd(){
+        clearAllData(tusd)
+        sole.post("../../controllers/dashboard/get_logs.php",{
+            id: consumable_tusd.value
+        }).then(res => {
+            consumables_log = res
+            console.log(res)
+        })
+        setTimeout(() => {
+            // get all consumable log base on month and year
+            var cons_log = [];
+            consumables_log.forEach(clog => {
+                var mYtext = months_tusd.value + ", " + years_sdot.value
+                if(isSameMonthYear(clog.date,mYtext)){
+                    cons_log.push(clog)
+                }
+            });
+            consumables_log = cons_log
+
+            // get all users with consumable logs
+            var user_temp = [];
+            var datas = []; 
+            users.forEach(user => {
+                var insert = false;
+                var total = 0;
+                consumables_log.forEach(clog => {
+                    if(clog.uid == user.id){
+                        insert = true
+                        total = parseFloat(clog.quantity_deduction) + total
+                    }
+                });
+                if(insert){
+                    datas.push([user.name,total])
+                }
+                insert ? user_temp.push(user) : null
+            })
+            users = user_temp
+            
+            tusd.data.labels.push(months_tusd.value);
+            tusd.update();
+
+            const top = datas.reduce((acc, item) => {
+                acc.push(item);
+                acc.sort((a, b) => b[1] - a[1]);
+                if (acc.length > 9) acc.pop();
+                return acc;
+            }, []);
+
+            usedColors = []
+            top.forEach(data => {
+                tusd.data.datasets.push({
+                    label: data[0],
+                    data: [data[1]],
+                    backgroundColor: getUniquePastelColor(), // 👈 bar color
+                });
+                tusd.update();
+            })
+        }, 1000);    
+    }
+
+    
 
 
 

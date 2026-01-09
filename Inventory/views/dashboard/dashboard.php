@@ -1,7 +1,7 @@
 <div id="dashboard">
     <div class="d-flex w-100">
         <div class="row w-100">
-            <div class="col-9">
+            <div class="col-7">
                 <div class="d-flex justify-content-between w-100">
                     <h6>Stock Deductions Over Time</h6>
                     <div class="input-group input-group-sm mb-3 wd-120" style="margin-top: -3px;">
@@ -22,22 +22,18 @@
                 </div>
                 <canvas id="sdot"></canvas>
             </div>
-            <div class="col-3">
-                <h6>Top Users By Stock Deductions</h6>
-                <div class="input-group input-group-sm mb-3 wd-120" style="margin-top: -3px;">
-                        <span class="input-group-text" id="inputGroup-sizing-sm">Show</span>
-                        <select name="" id="show_tusd" class="form-control wd-100">
-                            <option value="Monthly">Monthly</option>
-                            <option value="Yearly">Yearly</option>
-                        </select>
-                    </div>
-                    <div id="select_date_tusd" class="input-group input-group-sm mb-3 wd-240" style="margin-top: -3px;">
-                        <span class="input-group-text" id="inputGroup-sizing-sm">Select Date</span>
-                        <select class="months_number form-control" name="" id="months_tusd"></select>
-                        <select class="years form-control" name="" id="years_sdot"></select>
-                        <span hidden class="ms-2 me-2 mb-0" style="margin-top: 4px;" id="to_dash"> to </span>
-                        <select hidden class="years form-control" name="" id="to_years_tusd"></select>
-                    </div>
+            <div class="col-5">
+                <h6 class="mt-1">Top Users By Stock Deductions</h6>
+                <div id="select_date_tusd" class="input-group input-group-sm mb-1 mt-4" style="margin-top: -3px; width: 350px;">
+                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 110px;">Select Date</span>
+                    <select class="months_text form-control" name="" id="months_tusd"></select>
+                    <select class="years form-control" name="" id="years_tusd"></select>
+                </div>
+                <div id="select_date_tusd" class="input-group input-group-sm mb-3" style="width: 350px;">
+                    <span class="input-group-text" id="inputGroup-sizing-sm" style="width: 110px;">Consumables</span>
+                    <select class="form-control" name="" id="consumable_tusd"></select>
+                </div>
+                <canvas style="height: 800px !important;" id="tusd"></canvas>
             </div>
         </div>
     </div>
