@@ -415,40 +415,71 @@ if(document.getElementById("equipments")){
         stopScanner();
     })
 
-    function startBarcodeScanner() {
-            Quagga.init({
-                inputStream: {
-                    name: "Live",
-                    type: "LiveStream",
-                    target: document.querySelector('#scanner'),
-                    constraints: {
-                        facingMode: "environment" // Use rear camera
-                    }
-                },
-                decoder: {
-                    readers: ["code_128_reader", "ean_reader", "ean_8_reader"]
-                }
-            }, function(err) {
-                if (err) {
-                    console.error("Quagga init error:", err);
-                    return;
-                }
-                Quagga.start();
-            });
+    let scannerRunning = false;
 
-            Quagga.onDetected(onDetectedHandler);
-        }
-        function stopScanner() {
-            Quagga.stop();
-            Quagga.offDetected(onDetectedHandler);
-        }
+    async function startBarcodeScanner() {
+    if (scannerRunning) return;
 
-        function onDetectedHandler(result) {
-            const code = result.codeResult.code;
-            console.log(code)
-            add_entry_barcode_input.value = code
-            edit_entry_barcode_input.value = code
-            stopScanner(); // Stop after successful scan
-            barcode_camera_modal.hide();
+    // 🔐 Check camera support
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        console("Camera API not available. Use HTTPS or localhost.");
+        return;
+    }
+
+    // 🔓 Force permission prompt (Brave fix)
+    try {
+        await navigator.mediaDevices.getUserMedia({ video: true });
+    } catch (err) {
+        console.error("Camera permission denied:", err);
+        alert("Camera permission is required.");
+        return;
+    }
+
+    Quagga.init({
+        inputStream: {
+        name: "Live",
+        type: "LiveStream",
+        target: document.querySelector('#scanner'),
+        constraints: {
+            facingMode: { ideal: "environment" }, // rear camera
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
         }
+        },
+        decoder: {
+            readers: [
+                "code_128_reader",
+                "ean_reader",
+                "ean_8_reader"
+            ]
+        },
+        locate: true
+    }, function(err) {
+        if (err) {
+            console.error("Quagga init error:", err);
+            return;
+        }
+        Quagga.start();
+        scannerRunning = true;
+    });
+
+    Quagga.onDetected(onDetectedHandler);
+    }
+
+    function stopScanner() {
+    if (!scannerRunning) return;
+
+    Quagga.stop();
+    Quagga.offDetected(onDetectedHandler);
+    scannerRunning = false;
+    }
+
+    function onDetectedHandler(result) {
+    const code = result.codeResult.code;
+    console.log("Scanned:", code);
+
+    document.getElementById('barcodeInput').value = code;
+
+    stopScanner(); // stop after success
+    }
 }

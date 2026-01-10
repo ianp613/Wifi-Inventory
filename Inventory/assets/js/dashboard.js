@@ -34,6 +34,27 @@ if(document.getElementById("dashboard")){
     sole.get("../../controllers/dashboard/get_entry.php")
     .then(res => load_unit_counts(res))
 
+    sole.get("https://ipinfo.io/json")
+    .then(res => {
+        // var asn_isp = res.
+        const [asn, ...ispParts] = res.org.split(" ");
+        const isp = ispParts.join(" ");
+
+        var wmi_ip = document.getElementById("wmi_ip")
+        var wmi_isp = document.getElementById("wmi_isp")
+        var wmi_asn = document.getElementById("wmi_asn")
+        var wmi_city = document.getElementById("wmi_city")
+        var wmi_region = document.getElementById("wmi_region")
+        var wmi_country = document.getElementById("wmi_country")
+        
+        wmi_ip.innerHTML = wmi_ip.innerHTML + " " + res.ip
+        wmi_isp.innerHTML = wmi_isp.innerHTML + " " + isp
+        wmi_asn.innerHTML = wmi_asn.innerHTML + " " + asn
+        wmi_city.innerHTML = wmi_city.innerHTML + " " + res.city
+        wmi_region.innerHTML = wmi_region.innerHTML + " " + res.region
+        wmi_country.innerHTML = wmi_country.innerHTML + " " + res.country
+    })
+
 
     sole.get("../../controllers/dashboard/current_configurations.php")
     .then(res => {
@@ -55,21 +76,6 @@ if(document.getElementById("dashboard")){
     })
 
     function load_unit_counts(res){
-        var wmi_ip = document.getElementById("wmi_ip")
-        var wmi_isp = document.getElementById("wmi_isp")
-        var wmi_asn = document.getElementById("wmi_asn")
-        var wmi_city = document.getElementById("wmi_city")
-        var wmi_region = document.getElementById("wmi_region")
-        var wmi_country = document.getElementById("wmi_country")
-        
-        wmi_ip.innerHTML = wmi_ip.innerHTML + " " + res.ip
-        wmi_isp.innerHTML = wmi_isp.innerHTML + " " + res.isp
-        wmi_asn.innerHTML = wmi_asn.innerHTML + " " + res.asn
-        wmi_city.innerHTML = wmi_city.innerHTML + " " + res.city
-        wmi_region.innerHTML = wmi_region.innerHTML + " " + res.region
-        wmi_country.innerHTML = wmi_country.innerHTML + " " + res.country
-
-        console.log(res)
         var count = [0,0,0,0];
         for (let i = 0; i < res.entry.length; i++) {
             if(res.entry[i]["status"] == "Standby"){
@@ -460,25 +466,40 @@ if(document.getElementById("dashboard")){
             opt.innerText = cons.description
             consumable_tusd.appendChild(opt)
         })
-    }, 100);
+    }, 200);
 
     consumable_tusd.addEventListener("change",e => {
         reloadtusd()
     })
 
+    months_tusd.addEventListener("change",e => {
+        reloadtusd()
+    })
+
+    years_tusd.addEventListener("change",e => {
+        reloadtusd()
+    })
+
     function reloadtusd(){
+        var consumables_log = [];
         clearAllData(tusd)
+        
         sole.post("../../controllers/dashboard/get_logs.php",{
             id: consumable_tusd.value
         }).then(res => {
             consumables_log = res
-            console.log(res)
         })
+
+        sole.get("../../controllers/dashboard/get_users.php")
+        .then(res => {
+            users = res
+        })
+
         setTimeout(() => {
             // get all consumable log base on month and year
             var cons_log = [];
             consumables_log.forEach(clog => {
-                var mYtext = months_tusd.value + ", " + years_sdot.value
+                var mYtext = months_tusd.value + ", " + years_tusd.value
                 if(isSameMonthYear(clog.date,mYtext)){
                     cons_log.push(clog)
                 }
@@ -503,6 +524,24 @@ if(document.getElementById("dashboard")){
                 insert ? user_temp.push(user) : null
             })
             users = user_temp
+
+            // get all userid
+            var ids = []
+            users.forEach(user => {
+                if(!ids.includes(user.id)){
+                    ids.push(user.id)
+                }
+            })
+
+            var total = 0;
+            consumables_log.forEach(clog => {
+                if(!ids.includes(parseInt(clog.uid))){
+                    total = parseInt(clog.quantity_deduction) + total
+                }
+            })
+
+            total ? datas.push(["Others",total]) : null
+
             
             tusd.data.labels.push(months_tusd.value);
             tusd.update();
@@ -526,17 +565,20 @@ if(document.getElementById("dashboard")){
         }, 1000);    
     }
 
-    
-
-
-
-
-
-
-
-
-
-    
+    var tusd_watch = setInterval(() => {
+        if(document.getElementById("consumable_tusd").children.length == 0){
+            consumables.forEach(cons => {
+                var opt = document.createElement("option")
+                opt.value = cons.id
+                opt.innerText = cons.description
+                consumable_tusd.appendChild(opt)
+            })
+            reloadtusd()
+            clearInterval(tusd_watch)
+        }else{
+            clearInterval(tusd_watch)
+        }
+    }, 1000);
 
     show_sdot.addEventListener("change", e => {
         if(show_sdot.value == "Daily"){

@@ -43,6 +43,32 @@ input[readonly] {
     z-index: 1;
     width: 200px;
     height: 200px;
+    background: linear-gradient(to right, rgba(28, 24, 60, 0.5), rgb(22, 136, 151));
+    margin-left: -160px;
+    margin-top: -50px;
+    position: absolute;
+    transform:  rotate(45deg);
+    border-radius: 20px;
+    border: rgb(243, 243, 243, 0.5) solid 1px;
+}
+
+.shape:nth-child(2){
+    z-index: 3;
+    width: 500px;
+    height: 500px;
+    background: linear-gradient(to right, rgba(22, 136, 151), rgba(24, 51, 205, 0.5));
+    margin-left: 300px;
+    margin-top: 100px;
+    position: absolute;
+    transform:  rotate(45deg);
+    border-radius: 20px;
+    border: rgb(243, 243, 243, 0.5) solid 1px;
+}
+
+/* .shape:nth-child(1){
+    z-index: 1;
+    width: 200px;
+    height: 200px;
     background: linear-gradient(to right, rgb(102, 2, 60, 0.5), rgb(205, 28, 24));
     margin-left: -160px;
     margin-top: -50px;
@@ -63,7 +89,8 @@ input[readonly] {
     transform:  rotate(45deg);
     border-radius: 20px;
     border: rgb(243, 243, 243, 0.5) solid 1px;
-}
+} */
+
 .shape:nth-child(3){
     z-index: 2;
     width: 500px;
@@ -83,7 +110,7 @@ input[readonly] {
 /* Sidebar styling */
 .sidebar {
     width: 200px;
-    background-color: #b61323;
+    background-color: rgb(22, 136, 151);
     min-height: 100vh;
     transition: width 0.3s; /* Transition for smooth resizing */
     word-break: break-word;
@@ -274,7 +301,7 @@ input:checked + .slider:before {
     color: rgb(80, 80, 80);
 }
 .red-1{
-    color: rgb(255, 157, 157);
+    color: rgb(161, 244, 255);
 }
 .nav-item:hover .red-1 {
     color: white;

@@ -3,7 +3,7 @@
     <div class="d-flex mb-3">
         <div class="col-md-6">
             <div class="d-flex">
-                <button data-bs-toggle="modal" data-bs-target="#add_account" class="btn btn-sm btn-primary"><span class="fa fa-plus"></span> Create Account</button> 
+                <button data-bs-toggle="modal" data-bs-target="#add_account" class="btn btn-sm btn-dark"><span class="fa fa-plus"></span> Create Account</button> 
             </div>
         </div>
         <div class="col-md-6 d-flex justify-content-end align-items-end">
@@ -13,7 +13,7 @@
                     <!-- DROP DOWN GROUP -->
                 </ul>
             </div>
-            <button data-bs-target="#add_group" data-bs-toggle="modal" class="btn btn-sm btn-primary" style="margin-bottom: -5px; margin-left: 10px;"><span class="fa fa-plus"></span> Add Group</button>
+            <button data-bs-target="#add_group" data-bs-toggle="modal" class="btn btn-sm btn-dark" style="margin-bottom: -5px; margin-left: 10px;"><span class="fa fa-plus"></span> Add Group</button>
         </div>
     </div>
     <?php } ?>

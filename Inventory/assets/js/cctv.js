@@ -19,7 +19,7 @@ if(document.getElementById("cctv")){
         autoWidth: false,
         language: {
            sLengthMenu: "Show _MENU_entries",
-           search: "<button id=\"add_camera_btn\" class=\"btn btn-sm btn-danger me-3\"><span class=\"fa fa-plus\"></span> Add Camera</button> Search: "
+           search: "<button id=\"add_camera_btn\" class=\"btn btn-sm btn-dark me-3\"><span class=\"fa fa-plus\"></span> Add Camera</button> Search: "
         }
     });
 

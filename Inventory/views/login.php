@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="../assets/css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
         <link rel="stylesheet" href="../assets/fontawesome/css/font-awesome.min.css">
-    <title>Wifi Team Inventory</title>
+    <title>Inventory System</title>
     <link rel="shortcut icon" href="../assets/img/logo-ico.png" type="image/x-icon">
 </head>
   <body class="login" id="login">
@@ -40,7 +40,7 @@
                     <input type="password" id="password" class="form-control" placeholder="Enter Password">
                     <span id="togglePassword" class="fa fa-eye-slash text-secondary"></span>
                 </div>
-                <button id="login_btn" type="submit" class="btn btn-danger w-100"><span class="fa fa-sign-in"></span> Login</button>
+                <button id="login_btn" type="submit" class="btn btn-dark w-100"><span class="fa fa-sign-in"></span> Login</button>
                 <div class="w-100 text-center mt-3"><a class="text-light" style="text-decoration: none;" href="forgot_password.php">Forgot password?</a></div>
             </div>
           </div>

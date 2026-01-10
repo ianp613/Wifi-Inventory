@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/css/bootstrap/bootstrap.min.css">
-    <title>Wifi Team Inventory</title>
+    <title>Inventory System</title>
     <link rel="shortcut icon" href="../assets/img/hero.png" type="image/x-icon">
 </head>
   <body id="login">

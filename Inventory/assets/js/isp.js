@@ -18,7 +18,7 @@ if(document.getElementById("isp")){
         autoWidth: false,
         language: {
            sLengthMenu: "Show _MENU_entries",
-           search: "<button data-bs-toggle=\"modal\" data-bs-target=\"#add_isp\" class=\"btn btn-sm btn-danger me-3\"><span class=\"fa fa-plus\"></span> Add ISP</button> Search: "
+           search: "<button data-bs-toggle=\"modal\" data-bs-target=\"#add_isp\" class=\"btn btn-sm btn-dark me-3\"><span class=\"fa fa-plus\"></span> Add ISP</button> Search: "
         }
     });
 

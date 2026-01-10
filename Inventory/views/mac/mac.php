@@ -12,7 +12,7 @@
                 <!-- DROP DOWN SSID -->
                 </ul>
             </div>
-            <button data-bs-target="#add_wifi" data-bs-toggle="modal" class="btn btn-sm btn-danger" style="margin-bottom: -5px; margin-left: 10px;"><span class="fa fa-plus"></span> Add Wifi</button>
+            <button data-bs-target="#add_wifi" data-bs-toggle="modal" class="btn btn-sm btn-dark" style="margin-bottom: -5px; margin-left: 10px;"><span class="fa fa-plus"></span> Add Wifi</button>
         </div>
     </div>
     <input hidden type="file" name="" id="ip_import_input"  accept=".xls, .xlsx">

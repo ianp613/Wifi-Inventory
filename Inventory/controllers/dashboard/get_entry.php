@@ -1,4 +1,5 @@
 <?php
+    session_start();
     header('Content-Type: application/json');
     include("../../includes.php");
 
@@ -10,7 +11,7 @@
     $isp = $orgParts[1];
 
     $entry = new Equipment_Entry;
-    $entry = DB::all($entry);
+    $entry = $_SESSION["g_id"] ? DB::where($entry,"gid","=",$_SESSION["g_id"]) : DB::all($entry);
     $response = [
         "status" => true,
         "entry" => $entry,

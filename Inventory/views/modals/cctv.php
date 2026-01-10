@@ -7,9 +7,9 @@
             </div>
             <div class="modal-body">
                 <h6>View Map</h6>
-                <p class="ps-2">*Click <button class="btn btn-sm btn-danger"><span class="fa fa-plus"></span> Add Map</button>, fill in the necessary info, and save it. After saving, click -- Select Map -- to display it on the screen.</p>
+                <p class="ps-2">*Click <button class="btn btn-sm btn-dark"><span class="fa fa-plus"></span> Add Map</button>, fill in the necessary info, and save it. After saving, click -- Select Map -- to display it on the screen.</p>
                 <h6>Manage Camera</h6>
-                <p class="ps-2">*Click <button class="btn btn-sm btn-danger"><span class="fa fa-edit"></span> Manage Camera</button> to show the list of all cameras on the selected map. You can also add, edit and remove cameras from the list.</p>
+                <p class="ps-2">*Click <button class="btn btn-sm btn-dark"><span class="fa fa-edit"></span> Manage Camera</button> to show the list of all cameras on the selected map. You can also add, edit and remove cameras from the list.</p>
                 <h6>Add Camera to Map</h6>
                 <p class="ps-2">*After adding cameras to the list, right-click the map (the displayed image) to show the list of cameras that can be added to the map.</p>
                 <p class="ps-2">*Click <button class="btn btn-sm btn-primary"><span class="fa fa-check"></span></button> to add it to the map, and click <button class="btn btn-sm btn-danger"><span class="fa fa-ban"></span></button> to remove it from the map.</p>

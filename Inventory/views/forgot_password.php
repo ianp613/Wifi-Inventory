@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../assets/css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
         <link rel="stylesheet" href="../assets/fontawesome/css/font-awesome.min.css">
-    <title>Wifi Team Inventory - Account Recovery</title>
+    <title>Inventory System - Account Recovery</title>
     <link rel="shortcut icon" href="../assets/img/logo-ico.png" type="image/x-icon">
 </head>
   <body class="login" id="forgot_password">
@@ -32,10 +32,10 @@
                     <input type="userid" class="form-control" id="userid">
                   </div>
                   <div id="ready_state">
-                    <button id="getcode_btn" type="submit" class="btn btn-danger w-100"><span class="fa fa-send"></span> Get Code</button>
+                    <button id="getcode_btn" type="submit" class="btn btn-dark w-100"><span class="fa fa-send"></span> Get Code</button>
                   </div>
                   <div id="sending_state" hidden>
-                      <button class="btn btn-danger w-100" type="button">
+                      <button class="btn btn-dark w-100" type="button">
                           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                           Sending Code ...
                       </button>    
@@ -58,7 +58,7 @@
                     <label for="confirm_password" class="form-label">Confirm Password</label>
                     <input class="form-control" id="confirm_password" type="password">
                   </div>
-                  <button id="login_btn" type="submit" class="btn btn-danger w-100"><span class="fa fa-send"></span> Submit</button>  
+                  <button id="login_btn" type="submit" class="btn btn-dark w-100"><span class="fa fa-send"></span> Submit</button>  
                 </div>  
                 
 

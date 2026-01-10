@@ -1,7 +1,7 @@
 <div id="equipments">
     <div class="d-flex mb-3">
         <div class="col-md-6">
-            <button id="add_entry_modal_btn" class="btn btn-sm btn-danger" style="margin-bottom: -5px;"><span class="fa fa-plus"></span> Add Entry</button>
+            <button id="add_entry_modal_btn" class="btn btn-sm btn-dark" style="margin-bottom: -5px;"><span class="fa fa-plus"></span> Add Entry</button>
         </div>
         <div class="col-md-6 d-flex justify-content-end align-items-end">
             <div class="dropdown">
@@ -10,7 +10,7 @@
                 <!-- DROP DOWN EQUIPMENTS -->
                 </ul>
             </div>
-            <button data-bs-target="#add_equipment" data-bs-toggle="modal" class="btn btn-sm btn-danger" style="margin-bottom: -5px; margin-left: 10px;"><span class="fa fa-plus"></span> Add Equipment</button>
+            <button data-bs-target="#add_equipment" data-bs-toggle="modal" class="btn btn-sm btn-dark" style="margin-bottom: -5px; margin-left: 10px;"><span class="fa fa-plus"></span> Add Equipment</button>
         </div>
     </div>
     <table id="equipment_table" class="table border table-hover">
