@@ -47,28 +47,42 @@
         $ip = new IP_Address;
         $ip = DB::where($ip,"nid","=",$data["id"]);
 
-        $row = 9;
+        $row = 12;
         $used = 0;
         $available = 0;
+
+        $up = 0;
+        $down = 0;
         foreach ($ip as $i) {
             $sheet->setCellValue('A'.$row,$i["ip"]);
             $sheet->setCellValue('B'.$row,$i["subnet"]);
             $sheet->setCellValue('C'.$row,$i["hostname"]);
             $sheet->setCellValue('D'.$row,$i["site"]);
             $sheet->setCellValue('E'.$row,$i["server"]);
-            $sheet->setCellValue('F'.$row,$i["status"]);
-            $sheet->getStyle('F'.$row)->getFont()->getColor()->setARGB($i["status"] == "UNASSIGNED" ? 'FF0000' : '224814');
-            $sheet->setCellValue('G'.$row,$i["webmgmtpt"]);
-            $sheet->setCellValue('H'.$row,$i["username"]);
-            $sheet->setCellValue('I'.$row,$i["password"]);
-            $sheet->setCellValue('J'.$row,$i["remarks"]);
+            $sheet->setCellValue('F'.$row,$i["state"]);
+            $sheet->setCellValue('G'.$row,$i["status"]);
+            $sheet->getStyle('F'.$row)->getFont()->getColor()->setARGB($i["state"] == "DOWN" ? 'FF0000' : '224814');
+            $sheet->getStyle('G'.$row)->getFont()->getColor()->setARGB($i["status"] == "UNASSIGNED" ? 'FF0000' : '224814');
+            $sheet->setCellValue('H'.$row,$i["webmgmtpt"]);
+            $sheet->setCellValue('I'.$row,$i["username"]);
+            $sheet->setCellValue('J'.$row,$i["password"]);
+            $sheet->setCellValue('K'.$row,$i["remarks"]);
+            $i["state"] == "DOWN" ? $down++ : $up++;
             $i["status"] == "UNASSIGNED" ? $available++ : $used++;
             $row++;
         }
 
         $sheet->setCellValue('B5',$used);
         $sheet->setCellValue('B6',$available);
+
+        $sheet->setCellValue('B8',$up);
+        $sheet->setCellValue('B9',$down);
+
         $uid = uniqid();
+
+        if(!is_dir("../../assets/temp/")){
+            mkdir("../../assets/temp/");
+        }
 
         // Save as another file
         $outputFile = '../../assets/temp/'.$uid.'.xlsx'; // Change this to your desired output file name

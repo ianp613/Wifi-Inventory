@@ -16,7 +16,7 @@
                     }
                 }
             }
-            if($bol){
+            // if($bol){
                 $equipment->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                 $equipment->uid = $data["uid"];
                 $equipment->name = $data["name"];
@@ -37,14 +37,14 @@
                     "size" => null,
                     "message" => "Equipment has been saved."
                 ]; 
-            }else{
-                $response = [
-                    "status" => false,
-                    "type" => "warning",
-                    "size" => null,
-                    "message" => "Equipment already exist."
-                ];    
-            }
+            // }else{
+            //     $response = [
+            //         "status" => false,
+            //         "type" => "warning",
+            //         "size" => null,
+            //         "message" => "Equipment already exist."
+            //     ];    
+            // }
         }else{
             $response = [
                 "status" => false,

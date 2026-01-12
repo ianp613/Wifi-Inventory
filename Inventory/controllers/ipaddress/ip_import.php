@@ -32,27 +32,28 @@
             // Check Network
             $network_name = $sheet->getCell('B3')->getValue();
             if($network_name){
-                $network_name = $network_name." - IMPORT: ".date('m-d-Y_Hi');
+                $network_name = $network_name." - IMPORT: ".date('m-d-Y_His');
                 $bol = true;
-                !$sheet->getCell('A8')->getValue() ? $bol = false : null;
-                !$sheet->getCell('B8')->getValue() ? $bol = false : null;
-                !$sheet->getCell('C8')->getValue() ? $bol = false : null;
-                !$sheet->getCell('D8')->getValue() ? $bol = false : null;
-                !$sheet->getCell('E8')->getValue() ? $bol = false : null;
-                !$sheet->getCell('F8')->getValue() ? $bol = false : null;
-                !$sheet->getCell('G8')->getValue() ? $bol = false : null;
-                !$sheet->getCell('H8')->getValue() ? $bol = false : null;
-                !$sheet->getCell('I8')->getValue() ? $bol = false : null;
-                !$sheet->getCell('J8')->getValue() ? $bol = false : null;
+                !$sheet->getCell('A11')->getValue() ? $bol = false : null;
+                !$sheet->getCell('B11')->getValue() ? $bol = false : null;
+                !$sheet->getCell('C11')->getValue() ? $bol = false : null;
+                !$sheet->getCell('D11')->getValue() ? $bol = false : null;
+                !$sheet->getCell('E11')->getValue() ? $bol = false : null;
+                !$sheet->getCell('F11')->getValue() ? $bol = false : null;
+                !$sheet->getCell('G11')->getValue() ? $bol = false : null;
+                !$sheet->getCell('H11')->getValue() ? $bol = false : null;
+                !$sheet->getCell('I11')->getValue() ? $bol = false : null;
+                !$sheet->getCell('J11')->getValue() ? $bol = false : null;
+                !$sheet->getCell('K11')->getValue() ? $bol = false : null;
                 
                 if($bol){
-                    $count = 9;
+                    $count = 12;
                     $ip_count = 0;
                     $ip_from = null;
                     $ip_to = null;
                     $ip_subnet = null;
                     while ($sheet->getCell('A'.$count)->getValue()) {
-                        $count == 9 ? $ip_from = $sheet->getCell('A'.$count)->getValue() : null;
+                        $count == 12 ? $ip_from = $sheet->getCell('A'.$count)->getValue() : null;
                         $ip_to = $sheet->getCell('A'.$count)->getValue();
                         $ip_subnet = $sheet->getCell('B'.$count)->getValue();
                         $count++;
@@ -71,7 +72,7 @@
                         DB::save($network);
 
                         $nid = DB::where($network,"name","=",$network_name)[0]["id"];
-                        $count = 9;
+                        $count = 12;
                         $ip = new IP_Address;
                         while ($sheet->getCell('A'.$count)->getValue()) {
                             $ip->nid = $nid;
@@ -80,11 +81,12 @@
                             $ip->hostname = $sheet->getCell('C'.$count)->getValue();
                             $ip->site = $sheet->getCell('D'.$count)->getValue();
                             $ip->server = $sheet->getCell('E'.$count)->getValue();
-                            $ip->status = $sheet->getCell('F'.$count)->getValue();
-                            $ip->webmgmtpt = $sheet->getCell('G'.$count)->getValue();
-                            $ip->username = $sheet->getCell('H'.$count)->getValue();
-                            $ip->password = $sheet->getCell('I'.$count)->getValue();
-                            $ip->remarks = $sheet->getCell('J'.$count)->getValue();
+                            $ip->state = $sheet->getCell('F'.$count)->getValue();
+                            $ip->status = $sheet->getCell('G'.$count)->getValue();
+                            $ip->webmgmtpt = $sheet->getCell('H'.$count)->getValue();
+                            $ip->username = $sheet->getCell('I'.$count)->getValue();
+                            $ip->password = $sheet->getCell('J'.$count)->getValue();
+                            $ip->remarks = $sheet->getCell('K'.$count)->getValue();
                             DB::save($ip);
                             $count++;
                         }

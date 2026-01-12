@@ -378,7 +378,7 @@ if(document.getElementById("ipaddress")){
     }
     
     function editForm(res){
-        res.ip[0].status == "ASSIGNED" ? edit_ip_btn.innerHTML = "<span class=\"fa fa-save\"></span> Update" : edit_ip_btn.innerHTML = "<span class=\"fa fa-save\"></span> Assign"
+        res.ip[0].status == "ASSIGNED" ? edit_ip_btn.innerHTML = "<span class=\"fa fa-save\"></span> Update" : edit_ip_btn.innerHTML = "<span class=\"fa fa-save\"></span> Save"
         res.ip[0].hostname != "-" ? hostname.value = res.ip[0].hostname : hostname.value = ""
         res.ip[0].site != "-" ? site.value = res.ip[0].site : site.value = ""
         res.ip[0].server != "-" ? server.value = res.ip[0].server : server.value = ""

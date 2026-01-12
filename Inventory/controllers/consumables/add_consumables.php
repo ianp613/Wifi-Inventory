@@ -11,7 +11,7 @@
 
             $bol = DB::validate($consumables,"description",$data["description"]) ? true : false;
 
-            if($bol){
+            // if($bol){
                 $consumables->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                 $consumables->uid = $data["uid"];
                 $consumables->code = $_SESSION["consumables_code"];
@@ -38,14 +38,14 @@
                     "size" => null,
                     "message" => "Entry has been saved.",
                 ];
-            }else{
-                $response = [
-                    "status" => false,
-                    "type" => "warning",
-                    "size" => null,
-                    "message" => "\"".$data["description"]."\" already exist.",
-                ];
-            }
+            // }else{
+            //     $response = [
+            //         "status" => false,
+            //         "type" => "warning",
+            //         "size" => null,
+            //         "message" => "\"".$data["description"]."\" already exist.",
+            //     ];
+            // }
             
         }else{
             $response = [

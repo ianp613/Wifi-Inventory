@@ -67,8 +67,8 @@
         
       </div>
       <div class="chatbot-doorknob">
-        <div id="chatbot_show" class="chatbot-show btn btn-sm btn-danger pe-3"><span class="fa fa-comments"></span></div>
-        <div hidden id="chatbot_hide" class="chatbot-hide btn btn-sm btn-danger pe-3"><span class="fa fa-arrow-circle-right"></span></div>
+        <div id="chatbot_show" class="chatbot-show btn btn-sm btn-dark pe-3"><span class="fa fa-comments"></span></div>
+        <div hidden id="chatbot_hide" class="chatbot-hide btn btn-sm btn-dark pe-3"><span class="fa fa-arrow-circle-right"></span></div>
       </div>
     </div>
   </body>

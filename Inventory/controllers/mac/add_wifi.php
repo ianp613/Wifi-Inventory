@@ -8,7 +8,7 @@
         if($data["wifi_name"]) {
             $wifi = new Wifi;
             $bol = DB::validate($wifi,"name",$data["wifi_name"]);
-            if($bol){
+            // if($bol){
                 $wifi->gid = $_SESSION["g_id"] ? $_SESSION["g_id"] : "_*";
                 $wifi->uid = $data["uid"];
                 $wifi->name = $data["wifi_name"];
@@ -31,14 +31,14 @@
                     "size" => null,
                     "message" => "Wifi has been saved."
                 ]; 
-            }else{
-                $response = [
-                    "status" => false,
-                    "type" => "warning",
-                    "size" => null,
-                    "message" => "Wifi already exist."
-                ];    
-            }
+            // }else{
+            //     $response = [
+            //         "status" => false,
+            //         "type" => "warning",
+            //         "size" => null,
+            //         "message" => "Wifi already exist."
+            //     ];    
+            // }
         }else{
             $response = [
                 "status" => false,

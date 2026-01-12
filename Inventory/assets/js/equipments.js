@@ -422,7 +422,7 @@ if(document.getElementById("equipments")){
 
     // 🔐 Check camera support
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        console("Camera API not available. Use HTTPS or localhost.");
+        console.log("Camera API not available. Use HTTPS or localhost.");
         return;
     }
 

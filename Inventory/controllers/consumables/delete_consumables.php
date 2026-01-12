@@ -18,6 +18,13 @@
                 DB::save($log);
             }
 
+            $consumable_log = new Consumable_Log;
+            $consumable_log_temp = DB::where($consumable_log,"cid","=",$data["id"]);
+
+            foreach ($consumable_log_temp as $clog) {
+                DB::delete($consumable_log,$clog["id"]);
+            }
+
             DB::delete($consumable,$data["id"]);
             $response = [
                 "status" => true,

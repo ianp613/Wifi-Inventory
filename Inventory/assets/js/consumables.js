@@ -27,6 +27,30 @@ if(document.getElementById("consumables")){
         }
     });
 
+    let consumables_logsTable = new DataTable('#consumables_logs_table',{
+        pageLength: 25,
+        order: [[5, 'desc']],
+        rowCallback: function(row) {
+            $(row).addClass("trow");
+        },
+        columnDefs: [
+            {
+                target: 0,
+                visible: false,
+                searchable: false
+            },
+            { 
+                className: 'dt-left', 
+                targets: '_all' 
+            }
+        ],
+        autoWidth: false,
+        language: {
+           sLengthMenu: "Show _MENU_entries",
+           search: "Search: "
+        }
+    });
+
     loadPage();
     // LOAD PAGE DATA
     function loadPage(){
@@ -147,6 +171,69 @@ if(document.getElementById("consumables")){
     var regenerate_link_btn = document.getElementById("regenerate_link_btn")
     var delete_link_btn = document.getElementById("delete_link_btn")
     var add_log_link = document.getElementById("add_log_link")
+    var show_logs = document.getElementById("show_logs")
+    var location_ = window.location.href
+    
+    var cons = document.getElementById("cons")
+    var cons_log = document.getElementById("cons_log")
+
+    show_logs.addEventListener("click", function() {
+        location_ = location_ + "&sub=consumable-logs"
+        window.location.href = location_
+    })
+
+    var params = new URLSearchParams(location_)
+    if(params.has('sub')){
+        if(params.get('sub') == "consumable-logs"){
+            cons.hidden = true
+            cons_log.hidden = false
+        }else{
+            cons.hidden = false
+            cons_log.hidden = true
+        }
+    }else{
+        cons.hidden = false
+    }
+
+    sole.get("../../controllers/consumables/get_consumables_logs.php")
+    .then(res => {
+        consumables_logsTable.clear().draw();
+        var datas = []
+        var ids = []
+        res.logs.forEach(log => {
+            res.users.forEach(user => {
+                if(log.uid == user.id){
+                    !ids.includes(user.id) ? ids.push(user.id) : null
+                    datas.push([log["id"],user["name"],log["cid"],log["remarks"],log["quantity_deduction"],log["date"] + " " + log["time"]])
+                }
+            })
+        });
+
+        res.logs.forEach(log => {
+            if(!ids.includes(parseInt(log.uid))){
+                datas.push([log["id"],"Others",log["cid"],log["remarks"],log["quantity_deduction"],log["date"] + " " + log["time"]])
+            }
+        })
+
+        res.consumables.forEach(cons => {
+            for (let i = 0; i < datas.length; i++) {
+                if(datas[i][2] == cons.id){
+                    datas[i][2] = cons.description
+                }
+            }
+        })
+
+        datas.forEach(data => {
+            consumables_logsTable.row.add([
+                data[0],
+                data[1],
+                data[2],
+                data[3] == "-" ? "" : data[3],
+                data[4],
+                data[5]
+            ]).draw(false)
+        })
+    })
 
     add_consumables.addEventListener('shown.bs.modal', function () {
         sole.get("../../controllers/consumables/get_code.php")

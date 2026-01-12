@@ -172,7 +172,7 @@
                         </div>
                     </div>
                 </div>
-                <label for="state" class="mb-2 mt-2">Status</label>
+                <label for="state" class="mb-2 mt-2">State</label>
                 <select name="state" id="state" class="form-control">
                     <option value="DOWN">DOWN</option>
                     <option value="UP">UP</option>
@@ -182,7 +182,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><span class="fa fa-remove"></span> Cancel</button>
-                <button id="edit_ip_btn" type="button" data-bs-dismiss="" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Assign</button>
+                <button id="edit_ip_btn" type="button" data-bs-dismiss="" class="btn btn-primary btn-sm"><span class="fa fa-save"></span> Save</button>
             </div>
         </div>
     </div>

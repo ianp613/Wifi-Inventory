@@ -32,6 +32,10 @@
     // GET IMAGE DATA AS BINARY AND ENCODE IT TO BASE64
     $qr_data = $qr->getDataUri();
 
+    if(!is_dir("../../assets/img/qr/")){
+        mkdir("../../assets/img/qr/");
+    }
+
     // SAVE AS FILE
     if($_POST["action"] == "download"){
         $qr_file = "../../assets/img/qr/". uniqid();

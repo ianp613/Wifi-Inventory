@@ -26,7 +26,7 @@
                 <td class="text-start">Site/Location</td>
                 <td class="text-start">Server</td>
                 <td class="text-start">Status</td>
-                <td class="text-start">Status</td>
+                <td class="text-start">State</td>
                 <td class="text-start">Web Mgmt. Port</td>
                 <td class="text-start">Credentials</td>
                 <td style="width: 100px !important;">Action</td>

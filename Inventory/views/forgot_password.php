@@ -60,10 +60,7 @@
                   </div>
                   <button id="login_btn" type="submit" class="btn btn-dark w-100"><span class="fa fa-send"></span> Submit</button>  
                 </div>  
-                
-
-
-                <div class="w-100 text-center mt-3">Already have an account? <a style="text-decoration: none;" href="login.php">Login Instead.</a></div>
+                <div class="w-100 text-center mt-3">Already have an account? <a class="text-dark" style="text-decoration: none;" href="login.php">Login Instead.</a></div>
             </div>
           </div>
         </div>

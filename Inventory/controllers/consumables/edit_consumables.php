@@ -16,7 +16,7 @@
                 }
             }
 
-            if($bol){
+            // if($bol){
                 $consumables = DB::prepare($consumables,$data["id"]);
                 $consumables_consumable_temp = $consumables->description;
                 $consumables->description = $data["description"];
@@ -48,14 +48,14 @@
                     "size" => null,
                     "message" => "Consumable has been updated.",
                 ];
-            }else{
-                $response = [
-                    "status" => false,
-                    "type" => "warning",
-                    "size" => null,
-                    "message" => "Consumable \"".$data["description"]."\" already exist.",
-                ];
-            }
+            // }else{
+            //     $response = [
+            //         "status" => false,
+            //         "type" => "warning",
+            //         "size" => null,
+            //         "message" => "Consumable \"".$data["description"]."\" already exist.",
+            //     ];
+            // }
             
         }else{
             $response = [
