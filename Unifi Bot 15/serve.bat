@@ -1,7 +1,7 @@
 @echo off
 
 :: RUN PHP
-start "Unifi Bot Network 10-15" /min php -S 192.168.15.221:1525
+start "Unifi Bot Network 15" /min php -S 192.168.15.221:1525
 
 :: RUN PYTHON
 start "" cmd /c "cd /d %~dp0bot && serve.bat"
