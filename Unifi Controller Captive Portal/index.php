@@ -44,12 +44,15 @@
                         <div class="col-md-2 ps-1 pe-1">
                             <input maxlength="1" type="number" name="" id="6" class="inp6 captive-inp form-control">
                         </div>
-                </div>
+                    </div>
                 </div>
                 <code id="captive_alert" hidden>You can now access the internet. <br> Please refresh the page if nothing happens.
                     <br> You can also view this page anytime at <a href="//192.168.15.221" target="_blank">192.168.15.221</a>
                 </code>
                 <h3 id="captive_timer" class="captive-timer"></h3>
+                <div hidden class="lockout" id="lockout">
+                    <h6>⚠️ You have reached the maximum number of login attempts. Please try again after <span id="lockout_time">30</span>.</h6>
+                </div>
                 <div id="captive_submit" class="captive-submit">Login</div>
                 <h6 style="margin-top: 95px" class="text-dark blink"><strong>Powered By: DDC Wifi Team</strong></h6>
             </div>
@@ -83,7 +86,6 @@
                 var authentication = document.getElementById("authentication")
                 var urlOrigin = window.location.origin
                 var voucher = false;
-                
                 
                 // GET CONF.JSON
 
@@ -153,6 +155,52 @@
                         getClient()
                     }    
                 }, 1000);
+
+                setTimeout(() => {
+                    checkLockout("check")
+                }, 500);
+
+                function checkLockout(type){
+                    sole.post(urlOrigin + "/controllers/captive_portal/check_lockout.php",{
+                        mac : mac,
+                        type : type
+                    }).then(res => {
+                        if(parseInt(res.client[0].attempt) == 3 && res.client[0].time != "-"){
+                            const lockout_ = document.getElementById('lockout');
+                            lockout_.hidden = false
+                            // Start time
+                            const startTime = new Date(res.client[0].time);
+
+                            // Add 30 minutes
+                            const endTime = new Date(startTime.getTime() + 30 * 60 * 1000);
+
+                            const timerEl = document.getElementById('lockout_time');
+
+                            function lockoutTimer() {
+                                const now = new Date();
+                                let diff = endTime - now;
+
+                                if (diff <= 0) {
+                                    clearInterval(interval_)
+                                    checkLockout("reset")
+                                    lockout_.hidden = true
+                                    timerEl.innerText = '0 min and 0 sec';
+                                    return;
+                                }
+
+                                const totalSeconds = Math.floor(diff / 1000);
+                                const minutes = Math.floor(totalSeconds / 60);
+                                const seconds = totalSeconds % 60;
+                                var min_ = minutes > 1 ? "mins" : "min"
+                                var sec_ = seconds > 1 ? "secs" : "sec"
+                                timerEl.innerText = minutes ? `${minutes} ${min_} and ${seconds} ${sec_}` : ` ${seconds} ${sec_}`;
+                            }
+
+                            lockoutTimer();               // initial run
+                            var interval_ = setInterval(lockoutTimer, 1000); // update every second
+                        }
+                    })
+                }
                 
                 function getClient() {
                     sole.post(urlOrigin + "/controllers/captive_portal/get_client.php",{
@@ -274,6 +322,7 @@
                                         date_time : date_time
                                     }).then(res => {
                                         alert("You can now access the internet!")
+                                        checkLockout("reset")
                                         
                                         captive_subtitle.setAttribute("hidden","true")
                                         authentication.setAttribute("hidden","true")
@@ -288,6 +337,7 @@
                                     })
                                     
                                 } else {
+                                    checkLockout("post")
                                     alert('Authorization failed.');
                                 }
                             } catch (e) {

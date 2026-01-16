@@ -42,4 +42,14 @@
             "count"
         ];
     }
+
+    class Lockout
+    {
+        public $table = "lockout";
+        public $fillable = [
+            "mac",
+            "attempt",
+            "time"
+        ];
+    }
 ?>
