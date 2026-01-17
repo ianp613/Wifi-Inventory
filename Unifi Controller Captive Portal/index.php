@@ -182,7 +182,9 @@
 
                                 if (diff <= 0) {
                                     clearInterval(interval_)
-                                    checkLockout("reset")
+                                    setTimeout(() => {
+                                        checkLockout("reset")
+                                    }, 500);
                                     lockout_.hidden = true
                                     timerEl.innerText = '0 min and 0 sec';
                                     return;
