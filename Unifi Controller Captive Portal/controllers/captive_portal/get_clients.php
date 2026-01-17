@@ -2,7 +2,8 @@
 header('Content-Type: application/json');
 
 // Configuration
-$controllerUrl = 'https://192.168.15.220:8443';
+$conf = json_decode(file_get_contents("../../conf.json"));
+$controllerUrl = 'https://'.$conf->Unifi->Server.':'.$conf->Unifi->Port.'';
 $conf = json_decode(file_get_contents("../../conf.json"));
 $siteId = $conf->Unifi->Site_ID;
 $username = $conf->Unifi->Username;
