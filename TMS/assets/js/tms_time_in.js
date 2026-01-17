@@ -5,6 +5,7 @@ var latitude = document.getElementById("latitude");
 var longitude = document.getElementById("longitude");
 var locations = [];
 var loc_disp = document.getElementById("loc_disp")
+var loc_ = false
 sole.get("../../controllers/get_tms_locations.php").then(res => {
   locations = res
 })
@@ -14,20 +15,30 @@ const watchId = navigator.geolocation.watchPosition(
   (position) => {
     latitude.innerText = "Latitude: " + position.coords.latitude;
     longitude.innerText = "Longitude: " + position.coords.longitude;
-    latitude.setAttribute("ll",position.coords.latitude)
-    longitude.setAttribute("ll",position.coords.longitude)
+
+    latitude.setAttribute("ll", position.coords.latitude);
+    longitude.setAttribute("ll", position.coords.longitude);
 
     locations.forEach(r => {
       if(withinRadius(r.latitude,r.longitude,parseFloat(latitude.getAttribute("ll")),parseFloat(longitude.getAttribute("ll")),r.radius)){
-        loc_disp.innerText = r.description
+        loc_disp.innerText = r.description;
+        loc_ = true
       }
     });
+    !loc_ ? loc_disp.innerText = "Unknown Location" : null
+
+    console.log("Accuracy:", position.coords.accuracy);
   },
   (error) => {
     console.error("Error occurred:", error);
+  },
+  {
+    enableHighAccuracy: true,   // 🔥 FORCE GPS chip
+    timeout: 10000,             // fail fast if no fix
+    maximumAge: 0               // NEVER use cached position
   }
-);  
-
+);
+  
 
 
 // To stop watching:
@@ -69,6 +80,7 @@ const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 const captureBtn = document.getElementById('capture');
 const retakeBtn = document.getElementById('retake');
+const saveTimeInBtn = document.getElementById('save_time_in')
 const output = document.getElementById('output');
 
 let videoStream;
@@ -100,27 +112,26 @@ function drawToCanvas() {
 
 // // Capture button click
 captureBtn.addEventListener('click', () => {
+  if(!loc_){
+    alert("You can't time in from an unknown location, please try again at the designated locations.")
+    return
+  }
+  retakeBtn.hidden = false
+  captureBtn.hidden = true
+  saveTimeInBtn.hidden = false
   // Stop updating canvas (pause at current frame)
   isPaused = true;
   cancelAnimationFrame(animationFrameId);
 
   // Convert current canvas frame to Base64
   const dataUrl = canvas.toDataURL('image/png');
-  output.value = dataUrl;
-  latitude.getAttribute("ll")
-
-  sole.get("../../controllers/get_tms_locations.php").then(res => {
-    res.forEach(r => {
-      if(withinRadius(r.latitude,r.longitude,parseFloat(latitude.getAttribute("ll")),parseFloat(longitude.getAttribute("ll")),r.radius)){
-        alert("Time In Location is valid for " + r.description)
-      }else{
-        alert("Time In Location is not valid for " + r.description)
-      }
-    });
-  })
+  output.value = dataUrl; 
 });
 
 retakeBtn.addEventListener("click", () => {
+  retakeBtn.hidden = true
+  captureBtn.hidden = false
+  saveTimeInBtn.hidden = true
     isPaused = false;
     drawToCanvas();
 })

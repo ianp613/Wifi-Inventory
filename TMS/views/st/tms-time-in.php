@@ -23,13 +23,18 @@
 
             </canvas>
             <h6 id="tms_datetime" class="text-primary mt-1 mb-0">Thursday Dec 18, 2025 | 8:29 AM</h6>
-            <h6 id="latitude" class="text-primary mb-0" ll="">Latitude: N/A</h6>
-            <h6 id="longitude" class="text-primary mb-0" ll="">Longitude: N/A</h6>
-            <h6 class="text-primary mb-0">Time in Location: <span id="loc_disp">Not Applicable</span></h6>
+            <h6 id="latitude" class="text-primary mb-0" ll="">Latitude: Loading ...</h6>
+            <h6 id="longitude" class="text-primary mb-0" ll="">Longitude: Loading ...</h6>
+            <h6 class="text-primary mb-0">Time in Location: <span id="loc_disp">Loading ...</span></h6>
+            <div hidden>
+                <h6>Warning: Your location is unknown please verify your location in this link <a href="">SAMPLE</a></h6>
+                <h6>To fix please enable your GPS and use a cellphone for more accurate location.</h6>
+            </div>
         </div>
         <div class="tms-capture w-100 text-center position-fixed bottom-0 pt-2 pe-2"  style="max-width: 400px; width: 100%; height: 60px; margin-bottom: 70px;">
             <button id="capture" class="btn text-white fw-bold" style="background-color: #E97132; width: 150px;">CAPTURE</button>
-            <button id="retake" class="btn text-white fw-bold" style="background-color: #E97132; width: 150px;">RETAKE</button>
+            <button hidden id="retake" class="btn text-white fw-bold" style="background-color: #E97132; width: 150px;">RETAKE</button>
+            <button hidden id="save_time_in" class="btn btn-primary text-white fw-bold" style="width: 150px;">SAVE</button>
         </div>
         <div id="tms_menu" class="tms-menu w-100 bg-primary position-fixed bottom-0 pt-2 pe-2"  style="max-width: 400px; width: 100%; height: 60px;">
             <div class="row text-center text-white">

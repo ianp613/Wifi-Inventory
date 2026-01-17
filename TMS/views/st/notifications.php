@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../assets/css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/css/tms.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
         <link rel="stylesheet" href="../../assets/fontawesome/css/font-awesome.min.css">
     <title>Task Management System</title>
     <link rel="shortcut icon" href="" type="image/x-icon">

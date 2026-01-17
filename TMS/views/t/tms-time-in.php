@@ -12,38 +12,29 @@
     <title>Task Management System</title>
     <link rel="shortcut icon" href="" type="image/x-icon">
 </head>
-  <body class="dashboard" id="dashboard">
+  <body class="tms-time-in" id="tms-time-in">
     <div class="container d-flex justify-content-center align-items-center">
         <div class="pt-3" style="max-width: 400px; width: 100%;">
-            <h4 class="text-left mb-4 fw-bold text-primary">DASHBOARD</h4>
-            <div class="row">
-                <div class="col">
-                    <div class="bg-primary text-white fw-bold pt-4 ps-3" style="width: 100%; height: 130px; border-radius: 15px;">
-                        <h3>50</h3>
-                        <h6 style="font-size: 13px;">TOTAL ASSIGNED TASKS</h6>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="bg-dark text-white fw-bold pt-4 ps-3" style="width: 100%; height: 130px; border-radius: 15px;">
-                        <h3>16</h3>
-                        <h6 style="font-size: 13px;">TOTAL ON-GOING TASKS</h6>
-                    </div>
-                </div>
+            <h4 class="text-left mb-4 fw-bold text-primary">TMS TIME IN</h4>
+            <video hidden id="video" style="width: 100%; height: 500px;" autoplay></video>
+            <textarea hidden name="" id="output" rows="10" cols="50"></textarea>
+
+            <canvas id="canvas" class="tms-canvas rounded-3" style="width: 100%; height: 500px;">
+
+            </canvas>
+            <h6 id="tms_datetime" class="text-primary mt-1 mb-0">Thursday Dec 18, 2025 | 8:29 AM</h6>
+            <h6 id="latitude" class="text-primary mb-0" ll="">Latitude: Loading ...</h6>
+            <h6 id="longitude" class="text-primary mb-0" ll="">Longitude: Loading ...</h6>
+            <h6 class="text-primary mb-0">Time in Location: <span id="loc_disp">Loading ...</span></h6>
+            <div hidden>
+                <h6>Warning: Your location is unknown please verify your location in this link <a href="">SAMPLE</a></h6>
+                <h6>To fix please enable your GPS and use a cellphone for more accurate location.</h6>
             </div>
-            <div class="row mt-4">
-                <div class="col">
-                    <div class="text-white fw-bold pt-4 ps-3" style="width: 100%; height: 130px; border-radius: 15px;background-color: #E97132;">
-                        <h3>20</h3>
-                        <h6 style="font-size: 13px;">TOTAL ACCOMPLISHED TASKS</h6>
-                    </div>
-                </div>
-                <div class="col">
-                    <button id="tms_time_in" class="btn btn-primary w-100 fw-bold">TMS TIME IN</button>
-                    <button class="btn btn-primary w-100 fw-bold mt-2">DAILY TASK</button>
-                    <button disabled class="btn btn-primary w-100 fw-bold mt-2">TMS TIME OUT</button>
-                </div>
-            </div>
-            <h5 class="text-primary mt-4">Daily User Information</h5>
+        </div>
+        <div class="tms-capture w-100 text-center position-fixed bottom-0 pt-2 pe-2"  style="max-width: 400px; width: 100%; height: 60px; margin-bottom: 70px;">
+            <button id="capture" class="btn text-white fw-bold" style="background-color: #E97132; width: 150px;">CAPTURE</button>
+            <button hidden id="retake" class="btn text-white fw-bold" style="background-color: #E97132; width: 150px;">RETAKE</button>
+            <button hidden id="save_time_in" class="btn btn-primary text-white fw-bold" style="width: 150px;">SAVE</button>
         </div>
         <div id="tms_menu" class="tms-menu w-100 bg-primary position-fixed bottom-0 pt-2 pe-2"  style="max-width: 400px; width: 100%; height: 60px;">
             <div class="row text-center text-white">
@@ -72,5 +63,6 @@
   <script src="../../assets/js/sole.js"></script>
   <script src="../../assets/js/modal_alert.js"></script>
   <script src="../../assets/js/tms.js"></script>
-  <script src="../../assets/js/tms_dashboard.js"></script>
+  <script src="../../assets/js/tms_time_in.js"></script>
+  
 </html>

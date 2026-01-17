@@ -1,2 +1,11 @@
 TURNOVER LOG - Kailangan ig turn over an task ha masunod or bisan kan kanay na technician, 
 kun hin o an nakapot han task amu la it capable mag update hit task,
+
+
+MAIN BUILDING
+    LAT : 11.178118504120517
+    LON : 125.00095206864282
+
+ANNEX BUILDING
+    LAT : 11.178555370945066
+    LON : 125.00021813862105

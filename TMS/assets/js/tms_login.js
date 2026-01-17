@@ -22,7 +22,12 @@ if(document.getElementById("login")){
                 password : password.value
             }).then(res => {
                 alert(res.message)
-                res.status ? window.location.replace("user/dashboard.php") : null
+
+                if(res.status){
+                    res.user[0]["privileges"] == "Technician" ? window.location.replace("t/dashboard.php") : null
+                    res.user[0]["privileges"] == "Senior Technician" ? window.location.replace("st/dashboard.php") : null
+                    res.user[0]["privileges"] == "Administrator" ? window.location.replace("a/dashboard.php") : null
+                }
             })
         }else{
             alert("Please input USER ID and PASSWORD.")

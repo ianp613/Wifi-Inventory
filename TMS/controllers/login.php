@@ -8,7 +8,8 @@
         $response = [
             "status" => false,
             "auth" => false,
-            "message" => "Login Failed."
+            "message" => "Login Failed.",
+            "user" => []
         ];
 
         $user = new User;
@@ -18,6 +19,7 @@
             $response["status"] = true;
             $response["auth"] = true;
             $response["message"] = "Login Success.";
+            $response["user"] = DB::where($user,"username","=",$data["userid"]);
         }
     }
     echo json_encode($response);
