@@ -33,6 +33,17 @@
             "uid",
             "description",
             "status",
+            "buddies",
+        ];
+    }
+
+    class Remark{
+        public $table = "remark";
+        public $fillable = [
+            "uid",
+            "tid",
+            "type",
+            "content",
         ];
     }
 

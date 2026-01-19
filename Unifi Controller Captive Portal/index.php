@@ -423,6 +423,61 @@
             } catch (error) {
                 alert(error)
             }
+
+
+            const MIN_SWIPE_DISTANCE = 50; // minimum pixels to count as swipe
+            const TARGET_SWIPES = 10;
+            const SWIPE_TIMEOUT = 2000; // reset counter if no swipe in 2 sec
+
+            let swipeCount = 0;
+            let startX = 0;
+            let swipeTimeout;
+
+            // const message = document.getElementById('message');
+
+            function resetSwipeCounter() {
+                swipeCount = 0;
+                console.log(`Swipe ${TARGET_SWIPES} times horizontally`)
+            }
+
+            function startSwipe(x) {
+                startX = x;
+            }
+
+            function endSwipe(x) {
+                const deltaX = x - startX;
+
+                if (Math.abs(deltaX) > MIN_SWIPE_DISTANCE) {
+                    const direction = deltaX > 0 ? "Right" : "Left";
+                    swipeCount++;
+                    // message.textContent = `Swipe ${direction} detected! Count: ${swipeCount}`;
+                    console.log(`Swipe ${direction} detected! Count: ${swipeCount}`)
+
+                    clearTimeout(swipeTimeout);
+                    swipeTimeout = setTimeout(resetSwipeCounter, SWIPE_TIMEOUT);
+
+                    if (swipeCount >= TARGET_SWIPES) {
+                    //   message.textContent = `✅ 3 ${direction} swipes completed!`;
+                        console.log(`✅ ${TARGET_SWIPES} ${direction} swipes completed!`)
+                        alert("Code SLR has been activated.")
+                        window.location.reload()
+                        checkLockout("reset")
+                        swipeCount = 0; // reset counter
+                    }
+                }
+            }
+
+            const element = document.body;
+
+            // Touch events
+            element.addEventListener('touchstart', (e) => startSwipe(e.touches[0].clientX));
+            element.addEventListener('touchend', (e) => endSwipe(e.changedTouches[0].clientX));
+
+            // Mouse events
+            element.addEventListener('mousedown', (e) => startSwipe(e.clientX));
+            element.addEventListener('mouseup', (e) => endSwipe(e.clientX));
+
+
             function splash(message, seconds) {
             // Create splash element
             const splashScreen = document.createElement("div");

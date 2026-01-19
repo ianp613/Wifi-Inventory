@@ -3,6 +3,7 @@
         "UserMigration",
         "DailyUserInfoMigration",
         "TaskMigration",
+        "RemakrMigration",
         "NotificationMigration",
         "TMSLocationMigration"
     ];
@@ -43,6 +44,19 @@
             Migrate::string("uid");
             Migrate::string("description");
             Migrate::string("status");
+            Migrate::string("buddies");
+        }
+    }
+
+    class RemakrMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("remark");
+            Migrate::attrib_string(1000);
+            Migrate::string("uid");
+            Migrate::string("tid");
+            Migrate::string("type");
+            Migrate::string("content");
         }
     }
 

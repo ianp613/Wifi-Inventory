@@ -9,11 +9,13 @@
     <link rel="stylesheet" href="../../assets/css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/css/tms.css">
     <link rel="stylesheet" href="../../assets/css/style.css">
-        <link rel="stylesheet" href="../../assets/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../assets/css/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" href="../../assets/fontawesome/css/font-awesome.min.css">
+
     <title>Task Management System</title>
     <link rel="shortcut icon" href="" type="image/x-icon">
 </head>
-  <body class="notifications" id="notifications">
+  <body class="notifications" id="tasks_st">
     <div class="container d-flex justify-content-center align-items-center">
         <div class="pt-3" style="max-width: 400px; width: 100%;" id="notification_field">
             <div class="mb-3 d-flex justify-content-between" style="height: 40px;">
@@ -22,10 +24,10 @@
             <div class="d-flex w-100 justify-content-between">
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1">User : </span>
-                    <select class="form-control" name="" id="">
+                    <select class="form-control" name="" id="task_user_list">
                         <option selected disabled value="">-- Select User --</option>
                     </select>
-                    <button class="btn btn-primary">Add Task</button>
+                    <button id="add_task_btn" class="btn btn-primary">Add Task</button>
                 </div>
             </div>
             <div class="w-100 notification-pane">
@@ -107,10 +109,11 @@
     </div>
     <?php include("../modals/modals.php"); ?>
   </body>
-  
+  <script src="../../assets/js/flatpickr/flatpickr.min.js"></script>
   <script src="../../assets/js/bootstrap/bootstrap.min.js"></script>
   <script src="../../assets/js/sole.js"></script>
   <script src="../../assets/js/modal_alert.js"></script>
   <script src="../../assets/js/tms-notifications.js"></script>
+  <script src="../../assets/js/tms-tasks.js"></script>
   <script src="../../assets/js/tms.js"></script>
 </html>
