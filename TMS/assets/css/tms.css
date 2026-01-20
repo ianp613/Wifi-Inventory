@@ -17,7 +17,7 @@ body {
 
 .notification-pane{
     height: calc(100vh - 140px);
-    padding-bottom: 20px;
+    padding-bottom: 60px;
     /* Optional: Add a background color to visualize the area */
     overflow-y: auto;
     overflow-x: hidden;
@@ -39,9 +39,10 @@ body {
 }
 
 .tms-message { 
+    width: 100%;
     position: relative; 
     display: inline-block; 
-    max-width: calc(100% - 120px); /* adjust width as needed */ 
+    max-width: calc(100% - 100px); /* adjust width as needed */ 
     white-space: nowrap; overflow: hidden; 
     padding-left: 10px;
 } 

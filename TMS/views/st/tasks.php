@@ -30,58 +30,31 @@
                     <button id="add_task_btn" class="btn btn-primary">Add Task</button>
                 </div>
             </div>
-            <div class="w-100 notification-pane">
-                <div class="w-100 text-center mb-3"> ----------- Today 12/19/2025 ----------- </div>
-                <h6 style="padding-left: 10px;" class="mb-2">Messages <span class="fa fa-sort"></span></h6>
 
-
-
-                <div class="d-flex justify-content-between fw-bold tms-message-field tmf tmf-con">
-                    <p class="tms-message tmf tmf-message">Lorim epsum dolor sit amet .sdfj sdjfh sdfohis krwe oisdhf ewroijzf iojdf sdofisdf euoifhfbn</p>
-                    <p style="width: 90px; padding-right: 10px;" class="text-end tmf tmf-time">08:55 AM</p>
+            <div id="task_pane" class="w-100 notification-pane">
+                <div hidden id="task_empty" class="create-task-image w-100 text-center">
+                    <img class="" style="width: 80%" src="../../assets/img/tms/create_task.png" alt="" srcset="">
+                    <h6 class="text-primary">START CREATING TASK</h6>
                 </div>
-                <div class="d-flex justify-content-between fw-bold tms-message-field tmf tmf-con">
-                    <p class="tms-message tmf tmf-message">Lorim epsum dolor sit amet .sdfj sdjfh sdfohis krwe oisdhf ewroijzf iojdf sdofisdf euoifhfbn</p>
-                    <p style="width: 90px; padding-right: 10px;" class="text-end tmf tmf-time">08:55 AM</p>
+                <h6 hidden id="pending_task_title" style="padding-left: 10px;" class="mb-2">Pending Tasks <span class="fa fa-sort"></span></h6>
+                <div hidden id="pending_task" class="mb-3">
+                    <!-- PENDING TASK HERE -->
                 </div>
-                <div class="d-flex justify-content-between fw-bold tms-message-field tmf tmf-con">
-                    <p class="tms-message tmf tmf-message">Lorim epsum dolor sit amet .sdfj sdjfh sdfohis krwe oisdhf ewroijzf iojdf sdofisdf euoifhfbn</p>
-                    <p style="width: 90px; padding-right: 10px;" class="text-end tmf tmf-time">08:55 AM</p>
+                <h6 hidden id="ongoing_task_title" style="padding-left: 10px;" class="mb-2">Ongoing Tasks <span class="fa fa-sort"></span></h6>
+                <div hidden id="ongoing_task" class="mb-3">
+                    <!-- ONGOING TASK HERE -->
                 </div>
-                <div class="d-flex justify-content-between fw-bold tms-message-field tmf tmf-con">
-                    <p class="tms-message tmf tmf-message">Lorim epsum dolor sit amet .sdfj sdjfh sdfohis krwe oisdhf ewroijzf iojdf sdofisdf euoifhfbn</p>
-                    <p style="width: 90px; padding-right: 10px;" class="text-end tmf tmf-time">08:55 AM</p>
+                <div hidden id="view_accomplished_task" class="w-100 text-center mt-3 mb-3">
+                    <button  class="btn btn-sm btn-primary rounded-pill">View Accomplished Task</button>
                 </div>
-                <div class="d-flex justify-content-between fw-bold tms-message-field tmf tmf-con">
-                    <p class="tms-message tmf tmf-message">Lorim epsum dolor sit amet .sdfj sdjfh sdfohis krwe oisdhf ewroijzf iojdf sdofisdf euoifhfbn</p>
-                    <p style="width: 90px; padding-right: 10px;" class="text-end tmf tmf-time">08:55 AM</p>
+                <h6 hidden id="accomplished_task_title" style="padding-left: 10px;" class="mb-2">Accomplished Tasks <span class="fa fa-sort"></span></h6>
+                <div hidden id="accomplished_task">
+                    <!-- ACCOMPLISHED TASK HERE -->
+                    <!-- <div class="d-flex justify-content-between tms-message-field tmf tmf-con">
+                        <p class="tms-message tmf tmf-message">Hello Lorim epsum dolor sit amet .sdfj sdjfh sdfohis krwe oisdhf ewroijzf iojdf sdofisdf euoifhfbn</p>
+                        <p style="width: 90px; padding-right: 10px;" class="text-end tmf tmf-time">08:55 AM</p>
+                    </div> -->
                 </div>
-
-
-
-                <div class="w-100 text-center mb-3 mt-4"> ----------- Yesterday 12/18/2025 ----------- </div>
-                <h6 style="padding-left: 10px;" class="mb-2">Messages <span class="fa fa-sort"></span></h6>
-
-
-                <div class="d-flex justify-content-between fw-bold tms-message-field tmf tmf-con">
-                    <p class="tms-message tmf tmf-message">Lorim epsum dolor sit amet .sdfj sdjfh sdfohis krwe oisdhf ewroijzf iojdf sdofisdf euoifhfbn</p>
-                    <p style="width: 90px; padding-right: 10px;" class="text-end tmf tmf-time">08:36 AM</p>
-                </div>
-                <div class="d-flex justify-content-between fw-bold tms-message-field tmf tmf-con">
-                    <p class="tms-message tmf tmf-message">Lorim epsum dolor sit amet .sdfj sdjfh sdfohis krwe oisdhf ewroijzf iojdf sdofisdf euoifhfbn</p>
-                    <p style="width: 90px; padding-right: 10px;" class="text-end tmf tmf-time">08:14 AM</p>
-                </div>
-                <div class="d-flex justify-content-between fw-bold tms-message-field tmf tmf-con">
-                    <p class="tms-message tmf tmf-message">Lorim epsum dolor sit amet .sdfj sdjfh sdfohis krwe oisdhf ewroijzf iojdf sdofisdf euoifhfbn</p>
-                    <p style="width: 90px; padding-right: 10px;" class="text-end tmf tmf-time">08:68 AM</p>
-                </div>
-                <div class="d-flex justify-content-between fw-bold tms-message-field tmf tmf-con">
-                    <p class="tms-message tmf tmf-message">Lorim epsum dolor sit amet .sdfj sdjfh sdfohis krwe oisdhf ewroijzf iojdf sdofisdf euoifhfbn</p>
-                    <p style="width: 90px; padding-right: 10px;" class="text-end tmf tmf-time">08:44 AM</p>
-                </div>
-                <div class="d-flex justify-content-between fw-bold tms-message-field tmf tmf-con">
-                    <p class="tms-message tmf tmf-message">Lorim epsum dolor sit amet .sdfj sdjfh sdfohis krwe oisdhf ewroijzf iojdf sdofisdf euoifhfbn</p>
-                    <p style="width: 90px; padding-right: 10px;" class="text-end tmf tmf-time">08:25 AM</p>
                 
             </div>
             

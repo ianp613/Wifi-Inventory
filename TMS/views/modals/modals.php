@@ -26,7 +26,9 @@
             </div>
             <div class="modal-body">
                 <label for="task_description">Description</label>
-                <textarea name="" id="task_description" class="form-control mt-2 mb-2" rows="5" placeholder="Aa"></textarea>
+                <textarea name="" id="task_description" class="form-control mt-2 mb-2" rows="3" placeholder="Aa"></textarea>
+                <label for="task_note">Notes / Reminders</label>
+                <textarea name="" id="task_note" class="form-control mt-2 mb-2" rows="5" placeholder="Aa"></textarea>
                 <label for="task_deadline">Deadline <i class="f-13"> (Optional)</i></label>
                 <input type="text" name="" id="task_deadline" class="form-control mt-2 mb-2" placeholder="MM/DD/YYYY">
                 <label for="task_co_worker">Buddies / Associates</label>

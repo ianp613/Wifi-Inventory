@@ -43,7 +43,9 @@
             Migrate::attrib_string(1000);
             Migrate::string("uid");
             Migrate::string("description");
+            Migrate::string("note");
             Migrate::string("status");
+            Migrate::string("deadline");
             Migrate::string("buddies");
         }
     }

@@ -32,7 +32,9 @@
         public $fillable = [
             "uid",
             "description",
+            "note",
             "status",
+            "deadline",
             "buddies",
         ];
     }
