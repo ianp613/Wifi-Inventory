@@ -73,3 +73,16 @@ body {
   background-color: #145b5d !important;
   border-color: #145b5d !important;
 }
+
+.settings-selection{
+    margin-top: 205px;
+    transition: 0.5s ease-in-out;
+}
+
+.settings-selection.shown{
+    margin-top: 0px;
+}
+
+.settings-object:hover{
+    color: #145b5d;
+}

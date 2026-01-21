@@ -45,7 +45,7 @@
     </div>
  </div>
 
- <!-- BUDDY SELECTOR -->
+  <!-- BUDDY SELECTOR -->
 <div class="modal fade" id="buddy_selector" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
@@ -61,3 +61,49 @@
         </div>
     </div>
 </div>
+
+ <!-- EDIT TASK -->
+ <div class="modal fade" tabindex="-1" id="edit_task_modal">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6>Add Task: <span id="edit_task_name"></span></h6>
+            </div>
+            <div class="modal-body">
+                <label for="edit_task_description">Description</label>
+                <textarea name="" id="edit_task_description" class="form-control mt-2 mb-2" rows="3" placeholder="Aa"></textarea>
+                <label for="edit_task_note">Notes / Reminders</label>
+                <textarea name="" id="edit_task_note" class="form-control mt-2 mb-2" rows="5" placeholder="Aa"></textarea>
+                <label for="edit_task_deadline">Deadline <i class="f-13"> (Optional)</i></label>
+                <input type="text" name="" id="edit_task_deadline" class="form-control mt-2 mb-2" placeholder="MM/DD/YYYY">
+                <label for="edit_task_co_worker">Buddies / Associates</label>
+                <button class="btn btn-sm btn-primary rounded-pill ms-2" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#edit_buddy_selector">Select</button>
+                <div id="edit_buddy_selected" class="w-100 pe-3 ps-3 pt-2 d-block">
+                    <!-- BUDDIES HERE -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div data-bs-dismiss="modal" class="btn btn-sm btn-secondary rounded-pill"><span class="fa fa-remove"></span> Cancel</div>
+                <div id="edit_task_submit_btn" class="btn btn-sm btn-primary rounded-pill"><span class="fa fa-save"></span> Save</div>
+            </div>
+        </div>
+    </div>
+ </div>
+
+  <!-- EDIT BUDDY SELECTOR -->
+<div class="modal fade" id="edit_buddy_selector" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6>Select Buddies / Associates</h6>
+            </div>
+            <div class="modal-body" id="edit_buddy_list">
+                <!-- BUDDIES HERE -->
+            </div>
+            <div class="modal-footer">
+                <div class="btn btn-sm btn-primary rounded-pill wd-70" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#edit_task_modal"><span class="fa fa-check"></span> Done</div>
+            </div>
+        </div>
+    </div>
+</div>
+

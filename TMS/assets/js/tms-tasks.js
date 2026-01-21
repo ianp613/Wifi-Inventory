@@ -23,6 +23,8 @@ if(document.getElementById("tasks_st")){
 
     var buddies                 = []
 
+    var task_modal_focus = false;
+
     const add_task_modal        = new bootstrap.Modal(document.getElementById('add_task_modal'),unclose);
     const buddy_selector        = new bootstrap.Modal(document.getElementById('buddy_selector'),unclose);
     
@@ -82,6 +84,7 @@ if(document.getElementById("tasks_st")){
     })
 
     add_task_btn.addEventListener("click", e => {
+        task_modal_focus = true
         if (!task_user_list.value) return
 
         buddy_list.innerText        = ""
@@ -168,7 +171,11 @@ if(document.getElementById("tasks_st")){
     })
 
     document.getElementById("add_task_modal").addEventListener('shown.bs.modal', function () {
-        task_description.focus()
+        if(task_modal_focus){
+            task_description.focus()
+            task_modal_focus = false  
+        }
+        
     })
 
     flatpickr("#task_deadline", {

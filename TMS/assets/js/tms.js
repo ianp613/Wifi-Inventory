@@ -3,6 +3,7 @@ if(document.getElementById("tms_menu")){
     var tms_tasks           = document.getElementById("tms_tasks");
     var tms_notifications   = document.getElementById("tms_notifications");
     var tms_settings        = document.getElementById("tms_settings");
+    var setting_selection        = document.getElementById("setting_selection");
 
     tms_home.addEventListener("click",() => {
         window.location.href = "dashboard.php";
@@ -14,5 +15,24 @@ if(document.getElementById("tms_menu")){
 
     tms_notifications.addEventListener("click",() => {
         window.location.href = "notifications.php";
+    })
+
+    tms_settings.addEventListener("click", (e) => {
+        if(setting_selection.classList.contains("shown") && e.target.parentNode.classList.contains("tms_")){
+            setting_selection.classList.remove("shown")
+        }else{
+            setting_selection.classList.add("shown")
+        }
+    })
+
+    document.addEventListener("click", (e) => {
+        if(e.target.parentNode.classList){
+            if(setting_selection.classList.contains("shown") && !e.target.parentNode.classList.contains("tms_")){
+                setting_selection.classList.remove("shown")
+            }    
+        }else{
+            setting_selection.classList.remove("shown")
+        }
+        
     })
 }
