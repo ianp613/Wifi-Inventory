@@ -67,7 +67,7 @@
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h6>Add Task: <span id="edit_task_name"></span></h6>
+                <h6>Edit Task: <span id="edit_task_name"></span></h6>
             </div>
             <div class="modal-body">
                 <label for="edit_task_description">Description</label>
