@@ -17,6 +17,9 @@ if(document.getElementById("tasks_st")){
     var edit_task_deadline      = document.getElementById("edit_task_deadline")
     var edit_buddy_list         = document.getElementById("edit_buddy_list")
     var edit_buddy_selected     = document.getElementById("edit_buddy_selected")
+    var edit_task_status        = document.getElementById("edit_task_status")
+
+    var delete_task_btn         = document.getElementById("delete_task_btn")
 
     var pending_task_title      = document.getElementById("pending_task_title")
     var ongoing_task_title      = document.getElementById("ongoing_task_title")
@@ -31,6 +34,7 @@ if(document.getElementById("tasks_st")){
 
     var buddies                 = []
     var edit_buddies            = []
+    var status_                  = ["Pending","Ongoing","Accomplished"]
 
     var task_modal_focus        = false;
     var edit_task_modal_focus   = false;
@@ -71,6 +75,8 @@ if(document.getElementById("tasks_st")){
         ongoing_task.innerHTML          = ""
         accomplished_task.innerHTML     = ""
 
+        delete_task_btn.hidden          = true
+
         sole.post("../../controllers/st/tasks/get_tasks.php",{
             id : task_user_list.value
         }).then(res => {
@@ -87,6 +93,31 @@ if(document.getElementById("tasks_st")){
                         `<div tid="${pending["id"]}" class="d-flex justify-content-between tms-message-field tmf tmf-con">`+
                             `<p class="tms-message tmf tmf-message">${pending["description"]}</p>`+
                             `<p style="width: 90px; padding-right: 10px;" class="text-end tmf tmf-time">${new Intl.DateTimeFormat("en-US", { month: "2-digit", day: "2-digit", year: "2-digit" }).format(new Date(pending["created_at"]))}</p>`+
+                        `</div>`    
+                    )
+                })
+            }
+            if(res.ongoing.length){
+                ongoing_task_title.hidden   = false
+                ongoing_task.hidden         = false
+                res.ongoing.forEach(ongoing => {
+                    ongoing_task.insertAdjacentHTML("beforeend",
+                        `<div tid="${ongoing["id"]}" class="d-flex justify-content-between tms-message-field tmf tmf-con">`+
+                            `<p class="tms-message tmf tmf-message">${ongoing["description"]}</p>`+
+                            `<p style="width: 90px; padding-right: 10px;" class="text-end tmf tmf-time">${new Intl.DateTimeFormat("en-US", { month: "2-digit", day: "2-digit", year: "2-digit" }).format(new Date(ongoing["created_at"]))}</p>`+
+                        `</div>`    
+                    )
+                })
+            }
+            if(res.accomplished.length){
+                // view_accomplished_task.hidden = false
+                accomplished_task_title.hidden   = false
+                accomplished_task.hidden         = false
+                res.accomplished.forEach(accomplished => {
+                    accomplished_task.insertAdjacentHTML("beforeend",
+                        `<div tid="${accomplished["id"]}" class="d-flex justify-content-between tms-message-field tmf tmf-con">`+
+                            `<p class="tms-message tmf tmf-message">${accomplished["description"]}</p>`+
+                            `<p style="width: 90px; padding-right: 10px;" class="text-end tmf tmf-time">${new Intl.DateTimeFormat("en-US", { month: "2-digit", day: "2-digit", year: "2-digit" }).format(new Date(accomplished["created_at"]))}</p>`+
                         `</div>`    
                     )
                 })
@@ -155,6 +186,17 @@ if(document.getElementById("tasks_st")){
             sole.post("../../controllers/st/tasks/get_task.php",{
                 id : el.getAttribute("tid")
             }).then(res => {
+                delete_task_btn.hidden      = res[0].status != "Ongoing" ? false : true
+                edit_task_status.innerHTML  = ""
+                status_.forEach(stat => {
+                    var opt                 = document.createElement("option")
+                    opt.value               = stat
+                    opt.innerText           = stat
+                    if(stat == res[0].status){
+                        opt.selected        = true
+                    }
+                    edit_task_status.appendChild(opt)
+                })
                 users.forEach(user => {
                     if(user.id == parseInt(res[0].uid)){
                         task_assignment             = user.id
@@ -264,7 +306,8 @@ if(document.getElementById("tasks_st")){
             description     : edit_task_description.value,
             note            : edit_task_note.value ? edit_task_note.value : "-",
             deadline        : edit_task_deadline.value ? edit_task_deadline.value : "-",
-            buddies         : edit_buddies.length ? edit_buddies.join("|") : "-"
+            buddies         : edit_buddies.length ? edit_buddies.join("|") : "-",
+            status          : edit_task_status.value
         }).then(res => {
             console.log(res)
             loadTask()
@@ -291,6 +334,12 @@ if(document.getElementById("tasks_st")){
     })
 
     flatpickr("#task_deadline", {
+        dateFormat:     "m/d/Y",
+        allowInput:     true,
+        disableMobile:  true,
+        position:       "above"
+    });
+    flatpickr("#edit_task_deadline", {
         dateFormat:     "m/d/Y",
         allowInput:     true,
         disableMobile:  true,

@@ -11,6 +11,7 @@
         $task->note = $data["note"];
         $task->deadline = $data["deadline"];
         $task->buddies = $data["buddies"];
+        $task->status = $data["status"];
         DB::update($task);
 
         $response = [

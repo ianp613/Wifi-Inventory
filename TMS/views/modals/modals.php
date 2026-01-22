@@ -68,8 +68,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h6>Edit Task: <span id="edit_task_name"></span></h6>
+                <button id="delete_task_btn" class="btn btn-sm btn-danger rounded-pill"><span class="fa fa-trash"></span> Delete</button>
             </div>
             <div class="modal-body">
+                <label for="edit_task_status">Status</label>
+                <select name="" id="edit_task_status" class="form-control mt-2 mb-2"></select>
                 <label for="edit_task_description">Description</label>
                 <textarea name="" id="edit_task_description" class="form-control mt-2 mb-2" rows="3" placeholder="Aa"></textarea>
                 <label for="edit_task_note">Notes / Reminders</label>
