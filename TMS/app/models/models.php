@@ -30,7 +30,9 @@
     {
         public $table = "task";
         public $fillable = [
-            "uid",
+            "cid",
+            "aid",
+            "location",
             "description",
             "note",
             "status",

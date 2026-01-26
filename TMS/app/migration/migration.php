@@ -41,7 +41,9 @@
         public static function index(){
             Migrate::attrib_table("task");
             Migrate::attrib_string(1000);
-            Migrate::string("uid");
+            Migrate::string("cid");
+            Migrate::string("aid");
+            Migrate::string("location");
             Migrate::string("description");
             Migrate::string("note");
             Migrate::string("status");

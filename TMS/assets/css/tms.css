@@ -86,3 +86,37 @@ body {
 .settings-object:hover{
     color: #145b5d;
 }
+
+.dropdown {
+    display: inline-block;     /* important */
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    background: #fff;
+}
+
+.dropdown-label {
+    white-space: nowrap;       /* prevent wrapping */
+}
+
+.dropdown-list {
+    border-radius: 5px;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    border: 1px solid #aaa;
+    background: #fff;
+    display: none;
+    z-index: 999;
+    min-width: 100%;           /* list matches label width */
+    width: max-content;
+}
+
+.dropdown-item {
+    padding: 10px;
+    white-space: nowrap;
+}
+
+.dropdown-item:hover {
+    background: #f0f0f0;
+}

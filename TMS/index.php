@@ -1,6 +1,8 @@
 <?php
     include("includes.php");
     session_start();
+    
+    $_SESSION["user_id"] = null;
 
     // $user = new User;
     // $user->name = "Administrator";

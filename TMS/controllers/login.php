@@ -16,10 +16,12 @@
         $res = DB::auth($user,$data["userid"],$data["password"]);
 
         if($res){
+            $user = DB::where($user,"username","=",$data["userid"]);
             $response["status"] = true;
             $response["auth"] = true;
             $response["message"] = "Login Success.";
-            $response["user"] = DB::where($user,"username","=",$data["userid"]);
+            $response["user"] = $user;
+            $_SESSION["user_id"] = $user[0]["id"];
         }
     }
     echo json_encode($response);

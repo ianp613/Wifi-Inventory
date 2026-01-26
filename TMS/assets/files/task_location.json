@@ -1,0 +1,14 @@
+{
+    "default": [
+        "Main Building 1st Floor",
+        "Main Building 2nd Floor",
+        "Annex Building 1st Floor",
+        "Annex Building 2nd Floor",
+        "Leyte Academic Center Building",
+        "Leyte Convention Complex (Gym)",
+        "Palo Office",
+        "Real Office",
+        "DDC Dormitory"
+    ],
+    "user_defined": []
+}

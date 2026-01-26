@@ -5,13 +5,24 @@
     $data = json_decode(file_get_contents('php://input'), true);
     
     $task = new Task;
-    $task = $data["id"] ? DB::where($task,"uid","=",$data["id"]) : DB::all($task);
+    if($data["location"] && $data["id"]){
+        $task = DB::where2($task,"aid","=",$data["id"],"location","=",$data["location"]); 
+    }elseif($data["id"] && !$data["location"]){
+        $task = DB::where($task,"aid","=",$data["id"]);
+    }elseif(!$data["id"] && $data["location"]){
+        $task = DB::where($task,"location","=",$data["location"]);
+    }else{
+        $task = DB::all($task);    
+    }
+    
+    $locations = json_decode(file_get_contents("../../../assets/files/task_location.json"));
 
     $response = [
         "pending" => [],
         "ongoing" => [],
         "accomplished" => [],
-        "count" => count($task)
+        "count" => count($task),
+        "locations" => array_merge($locations->default,$locations->user_defined),
     ];
 
     foreach ($task as $t) {

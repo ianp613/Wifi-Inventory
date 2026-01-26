@@ -25,6 +25,10 @@
                 <h6>Add Task: <span id="task_name"></span></h6>
             </div>
             <div class="modal-body">
+                <label for="task_location">Location</label>
+                <select class="form-control mt-2 mb-2" name="" id="task_location"></select>
+                <label for="task_location_others">Others <i class="f-13">(specify other location, if not present above.)</i></label>
+                <input id="task_location_others" type="text" class="form-control mt-2 mb-2">
                 <label for="task_description">Description</label>
                 <textarea name="" id="task_description" class="form-control mt-2 mb-2" rows="3" placeholder="Aa"></textarea>
                 <label for="task_note">Notes / Reminders</label>
@@ -68,11 +72,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h6>Edit Task: <span id="edit_task_name"></span></h6>
-                <button id="delete_task_btn" class="btn btn-sm btn-danger rounded-pill"><span class="fa fa-trash"></span> Delete</button>
+                <button data-bs-toggle="modal" data-bs-target="#delete_task_confirmation" data-bs-dismiss="modal" id="delete_task_btn" class="btn btn-sm btn-danger rounded-pill"><span class="fa fa-trash"></span> Delete</button>
             </div>
             <div class="modal-body">
                 <label for="edit_task_status">Status</label>
                 <select name="" id="edit_task_status" class="form-control mt-2 mb-2"></select>
+                <label for="edit_task_location">Location</label>
+                <select name="" id="edit_task_location" class="form-control mt-2 mt-2"></select>
+                <label for="edit_task_location_others">Others <i class="f-13">(specify other location, if not present above.)</i></label>
+                <input id="edit_task_location_others" type="text" class="form-control mt-2 mb-2">
                 <label for="edit_task_description">Description</label>
                 <textarea name="" id="edit_task_description" class="form-control mt-2 mb-2" rows="3" placeholder="Aa"></textarea>
                 <label for="edit_task_note">Notes / Reminders</label>
@@ -93,7 +101,7 @@
     </div>
  </div>
 
-  <!-- EDIT BUDDY SELECTOR -->
+<!-- EDIT BUDDY SELECTOR -->
 <div class="modal fade" id="edit_buddy_selector" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
@@ -109,4 +117,28 @@
         </div>
     </div>
 </div>
+
+<!-- DELETE TASK CONFIRMATION -->
+<div class="modal fade" id="delete_task_confirmation" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <div class="w-100">
+                    <span class="fa fa-exclamation-triangle text-danger h2"></span>
+                    <h5 id="delete_network_title" class="modal-title fw-bolder">Delete Task</h5>    
+                </div>
+            </div>
+            <div class="modal-body text-center">
+                <div class="w-100">
+                    <div>You're going to delete this task. This action cannot be undone. Do you wish to proceed?</div>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm rounded-pill" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#edit_task_modal"><span class="fa fa-remove"></span> No</button>
+                <button id="delete_task_btn_confirm" type="button" class="btn btn-danger btn-sm rounded-pill"><span class="fa fa-trash"></span> Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 

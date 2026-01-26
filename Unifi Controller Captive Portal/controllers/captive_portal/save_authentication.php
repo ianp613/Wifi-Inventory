@@ -11,7 +11,7 @@
     // find voucher ID
     $voucher = new Voucher;
     $voucher = DB::where($voucher,"code","=",$data["code"]);
-    $vid = count($voucher) ? $client[0]["id"] : null;
+    $vid = count($voucher) ? $voucher[0]["id"] : null;
     
     $authentication = new Authentication;
     $authentication->cid = $cid;

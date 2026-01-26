@@ -37,7 +37,7 @@
             <button hidden id="save_time_in" class="btn btn-primary text-white fw-bold" style="width: 150px;">SAVE</button>
         </div>
         <div class="settings-pane position-fixed bottom-0 d-flex justify-content-end tms_" style="max-width: 400px; width: 100%; height: 205px;">
-            <div id="setting_selection" class="settings-selection wd-160 p-3 bg-light border border-primary rounded-3 tms_">
+            <div id="setting_selection" class="settings-selection wd-160 p-3 border border-secondary rounded-3 tms_">
                 <div class="d-flex settings-object tms_">
                     <span class="fa fa-user me-2 wd-15" style="margin-top: 2px;"></span>
                     <h6> Account</h6>

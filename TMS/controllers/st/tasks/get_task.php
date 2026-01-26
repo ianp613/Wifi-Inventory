@@ -6,6 +6,13 @@
     
     $task = new Task;
     $task = DB::find($task,$data["id"]);
+
     
-    echo json_encode($task);
+
+    $response = [
+        "task" => $task,
+        "remarker" => []
+    ];
+    
+    echo json_encode($response);
 ?>

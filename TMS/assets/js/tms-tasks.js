@@ -1,51 +1,85 @@
 if(document.getElementById("tasks_st")){
-    var task_pane               = document.getElementById("task_pane")
-    var task_user_list          = document.getElementById("task_user_list")
-    var add_task_btn            = document.getElementById("add_task_btn")
-    var task_submit_btn         = document.getElementById("task_submit_btn")
-    var task_name               = document.getElementById("task_name")
-    var task_description        = document.getElementById("task_description")
-    var task_note               = document.getElementById("task_note")
-    var task_deadline           = document.getElementById("task_deadline")
-    var buddy_list              = document.getElementById("buddy_list")
-    var buddy_selected          = document.getElementById("buddy_selected")
+    var task_pane                       = document.getElementById("task_pane")
+    var task_user_list                  = document.getElementById("task_user_list")
+    var add_task_btn                    = document.getElementById("add_task_btn")
+    var task_submit_btn                 = document.getElementById("task_submit_btn")
+    var task_name                       = document.getElementById("task_name")
+    var task_description                = document.getElementById("task_description")
+    var task_note                       = document.getElementById("task_note")
+    var task_deadline                   = document.getElementById("task_deadline")
+    var buddy_list                      = document.getElementById("buddy_list")
+    var buddy_selected                  = document.getElementById("buddy_selected")
 
-    var edit_task_submit_btn    = document.getElementById("edit_task_submit_btn")
-    var edit_task_name          = document.getElementById("edit_task_name")
-    var edit_task_description   = document.getElementById("edit_task_description")
-    var edit_task_note          = document.getElementById("edit_task_note")
-    var edit_task_deadline      = document.getElementById("edit_task_deadline")
-    var edit_buddy_list         = document.getElementById("edit_buddy_list")
-    var edit_buddy_selected     = document.getElementById("edit_buddy_selected")
-    var edit_task_status        = document.getElementById("edit_task_status")
+    var task_location                   = document.getElementById("task_location")
+    var task_location_others            = document.getElementById("task_location_others")
 
-    var delete_task_btn         = document.getElementById("delete_task_btn")
+    var edit_task_submit_btn            = document.getElementById("edit_task_submit_btn")
+    var edit_task_name                  = document.getElementById("edit_task_name")
+    var edit_task_description           = document.getElementById("edit_task_description")
+    var edit_task_note                  = document.getElementById("edit_task_note")
+    var edit_task_deadline              = document.getElementById("edit_task_deadline")
+    var edit_buddy_list                 = document.getElementById("edit_buddy_list")
+    var edit_buddy_selected             = document.getElementById("edit_buddy_selected")
+    var edit_task_status                = document.getElementById("edit_task_status")
 
-    var pending_task_title      = document.getElementById("pending_task_title")
-    var ongoing_task_title      = document.getElementById("ongoing_task_title")
-    var accomplished_task_title = document.getElementById("accomplished_task_title")
+    var edit_task_location              = document.getElementById("edit_task_location")
+    var edit_task_location_others       = document.getElementById("edit_task_location_others")
 
-    var pending_task            = document.getElementById("pending_task")
-    var ongoing_task            = document.getElementById("ongoing_task")
-    var accomplished_task       = document.getElementById("accomplished_task")
+    var delete_task_btn                 = document.getElementById("delete_task_btn")
+    var delete_task_btn_confirm         = document.getElementById("delete_task_btn_confirm")
 
-    var view_accomplished_task  = document.getElementById("view_accomplished_task")
-    var task_empty              = document.getElementById("task_empty")
+    var pending_task_title              = document.getElementById("pending_task_title")
+    var ongoing_task_title              = document.getElementById("ongoing_task_title")
+    var accomplished_task_title         = document.getElementById("accomplished_task_title")
 
-    var buddies                 = []
-    var edit_buddies            = []
-    var status_                  = ["Pending","Ongoing","Accomplished"]
+    var pending_task                    = document.getElementById("pending_task")
+    var ongoing_task                    = document.getElementById("ongoing_task")
+    var accomplished_task               = document.getElementById("accomplished_task")
 
-    var task_modal_focus        = false;
-    var edit_task_modal_focus   = false;
+    var view_accomplished_task          = document.getElementById("view_accomplished_task")
+    var task_empty                      = document.getElementById("task_empty")
+
+    var buddies                         = []
+    var edit_buddies                    = []
+    var status_                         = ["Pending","Ongoing","Accomplished"]
+
+    var task_modal_focus                = false;
+    var edit_task_modal_focus           = false;
     
-    var users = []
+    var users                           = []
+    var locations                       = []
 
-    const add_task_modal        = new bootstrap.Modal(document.getElementById('add_task_modal'),unclose);
-    const edit_task_modal       = new bootstrap.Modal(document.getElementById('edit_task_modal'),unclose);
-    const buddy_selector        = new bootstrap.Modal(document.getElementById('buddy_selector'),unclose);
-    const edit_buddy_selector   = new bootstrap.Modal(document.getElementById('edit_buddy_selector'),unclose);
-    
+    const add_task_modal                = new bootstrap.Modal(document.getElementById('add_task_modal'),unclose);
+    const edit_task_modal               = new bootstrap.Modal(document.getElementById('edit_task_modal'),unclose);
+    const buddy_selector                = new bootstrap.Modal(document.getElementById('buddy_selector'),unclose);
+    const edit_buddy_selector           = new bootstrap.Modal(document.getElementById('edit_buddy_selector'),unclose);
+    const delete_task_confirmation      = new bootstrap.Modal(document.getElementById('delete_task_confirmation'),unclose);
+
+
+
+
+
+
+    // DROP DOWN START ===================================================================================================
+    const dropdown = document.getElementById("tms_dropdown");
+    const label = dropdown.querySelector(".dropdown-label");
+
+    // create dropdown list
+    const list = document.createElement("div");
+    list.className = "dropdown-list";
+    // toggle dropdown
+    dropdown.onclick = (e) => {
+        e.stopPropagation();
+        list.style.display = list.style.display === "block" ? "none" : "block";
+    };
+
+    dropdown.appendChild(list);
+
+    // close on outside click
+    document.addEventListener("click", () => {
+        list.style.display = "none";
+    });
+    // DROP DOWN END   ===================================================================================================    
 
     sole.get("../../controllers/st/tasks/get_users.php")
     .then(res => {
@@ -78,8 +112,40 @@ if(document.getElementById("tasks_st")){
         delete_task_btn.hidden          = true
 
         sole.post("../../controllers/st/tasks/get_tasks.php",{
-            id : task_user_list.value
+            id          : task_user_list.value,
+            location    : label.textContent == "-- Select Location --" ? "" : label.textContent
         }).then(res => {
+            locations                       = res.locations
+            task_location.innerHTML         = ""
+            edit_task_location.innerHTML    = ""
+            list.innerHTML                  = ""
+            res.locations.forEach(location => {
+                var opt         = document.createElement("option")
+                opt.value       = location
+                opt.innerText   = location
+                task_location.appendChild(opt)
+
+                var opt         = document.createElement("option")
+                opt.value       = location
+                opt.innerText   = location
+                task_location.appendChild(opt)
+                edit_task_location.appendChild(opt)
+
+
+                const item = document.createElement("div");
+                item.className = "dropdown-item";
+                item.textContent = location;
+
+                item.onclick = (e) => {
+                    e.stopPropagation();
+                    label.textContent = location;
+                    list.style.display = "none";
+                    loadTask()
+                };
+
+                list.appendChild(item);
+
+            })
             if(!res.count){
                 task_empty.hidden = false
             }else{
@@ -175,7 +241,7 @@ if(document.getElementById("tasks_st")){
             });
         })
 
-        task_submit_btn.setAttribute("uid",task_user_list.value)
+        task_submit_btn.setAttribute("aid",task_user_list.value)
         add_task_modal.show()
     })
 
@@ -186,31 +252,33 @@ if(document.getElementById("tasks_st")){
             sole.post("../../controllers/st/tasks/get_task.php",{
                 id : el.getAttribute("tid")
             }).then(res => {
-                delete_task_btn.hidden      = res[0].status != "Ongoing" ? false : true
+                console.log(res)
+                delete_task_btn.hidden      = res["task"][0].status != "Ongoing" ? false : true
                 edit_task_status.innerHTML  = ""
                 status_.forEach(stat => {
                     var opt                 = document.createElement("option")
                     opt.value               = stat
                     opt.innerText           = stat
-                    if(stat == res[0].status){
+                    if(stat == res["task"][0].status){
                         opt.selected        = true
                     }
                     edit_task_status.appendChild(opt)
                 })
                 users.forEach(user => {
-                    if(user.id == parseInt(res[0].uid)){
+                    if(user.id == parseInt(res["task"][0].aid)){
                         task_assignment             = user.id
                         edit_task_name.innerText    = user.name
                     }
                 })
                 edit_task_modal_focus               = true
+                edit_task_location.value            = locations.includes(res["task"][0].location) ? res["task"][0].location : ""
+                edit_task_location_others.value     = locations.includes(res["task"][0].location) ? "" : res["task"][0].location
+                edit_task_description.value         = res["task"][0].description
+                edit_task_note.value                = res["task"][0].note != "-" ? res["task"][0].note : ""
+                edit_task_deadline.value            = res["task"][0].deadline != "-" ? res["task"][0].deadline : ""
 
-                edit_task_description.value         = res[0].description
-                edit_task_note.value                = res[0].note != "-" ? res[0].note : ""
-                edit_task_deadline.value            = res[0].deadline != "-" ? res[0].deadline : ""
-
-                if(res[0].buddies != "-"){
-                    edit_buddies = res[0].buddies.split("|") 
+                if(res["task"][0].buddies != "-"){
+                    edit_buddies = res["task"][0].buddies.split("|") 
                 }else{
                     edit_buddies = []
                 }
@@ -262,10 +330,21 @@ if(document.getElementById("tasks_st")){
                         }
                     });
                 })
-                edit_task_submit_btn.setAttribute("tid",res[0].id)
+                delete_task_btn.setAttribute("tid",res["task"][0].id)
+                edit_task_submit_btn.setAttribute("tid",res["task"][0].id)
                 edit_task_modal.show()
             })
         }
+    })
+
+    delete_task_btn_confirm.addEventListener("click", e => {
+        sole.post("../../controllers/st/tasks/delete_task.php",{
+            id : delete_task_btn.getAttribute("tid")
+        }).then(res => {
+            bs5.toast(res.type,res.message)
+            delete_task_confirmation.hide()
+            loadTask()
+        })
     })
 
     task_user_list.addEventListener("change", e =>{
@@ -280,16 +359,23 @@ if(document.getElementById("tasks_st")){
         }
 
         sole.post("../../controllers/st/tasks/add_task.php",{
-            id              : task_submit_btn.getAttribute("uid"),
+            id              : task_submit_btn.getAttribute("aid"),
+            location        : task_location_others.value ? task_location_others.value : task_location.value,
             description     : task_description.value,
             note            : task_note.value ? task_note.value : "-",
             deadline        : task_deadline.value ? task_deadline.value : "-",
             buddies         : buddies.length ? buddies.join("|") : "-"
         }).then(res => {
+            if(!res.status){
+                bs5.toast(res.type,res.message)
+                return
+            }
             loadTask()
-            task_description.value  = ""
-            task_note.value  = ""
-            task_deadline.value     = ""
+            task_location_others.value  = ""
+            task_location.value         = ""
+            task_description.value      = ""
+            task_note.value             = ""
+            task_deadline.value         = ""
             bs5.toast(res.type,res.message)
         })
     })
@@ -299,21 +385,24 @@ if(document.getElementById("tasks_st")){
             bs5.toast("warning","Please input description.")
             return
         }
-        console.log(edit_buddies.join("|"))
-
         sole.post("../../controllers/st/tasks/edit_task.php",{
             id              : edit_task_submit_btn.getAttribute("tid"),
+            location        : edit_task_location_others.value ? edit_task_location_others.value : edit_task_location.value,
             description     : edit_task_description.value,
             note            : edit_task_note.value ? edit_task_note.value : "-",
             deadline        : edit_task_deadline.value ? edit_task_deadline.value : "-",
             buddies         : edit_buddies.length ? edit_buddies.join("|") : "-",
             status          : edit_task_status.value
         }).then(res => {
-            console.log(res)
+            if(!res.status){
+                bs5.toast(res.type,res.message)
+                return
+            }
             loadTask()
-            edit_task_description.value  = ""
-            edit_task_note.value  = ""
-            edit_task_deadline.value     = ""
+            edit_task_location_others.value = ""
+            edit_task_description.value     = ""
+            edit_task_note.value            = ""
+            edit_task_deadline.value        = ""
             bs5.toast(res.type,res.message)
         })
     })
