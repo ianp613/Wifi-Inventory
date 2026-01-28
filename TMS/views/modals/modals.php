@@ -26,15 +26,24 @@
             </div>
             <div class="modal-body">
                 <label for="task_location">Location</label>
-                <select class="form-control mt-2 mb-2" name="" id="task_location"></select>
+                <select class="form-control mt-1 mb-2" name="" id="task_location"></select>
                 <label for="task_location_others">Others <i class="f-13">(specify other location, if not present above.)</i></label>
-                <input id="task_location_others" type="text" class="form-control mt-2 mb-2">
+                <input id="task_location_others" type="text" class="form-control mt-1 mb-2">
                 <label for="task_description">Description</label>
-                <textarea name="" id="task_description" class="form-control mt-2 mb-2" rows="3" placeholder="Aa"></textarea>
+                <textarea name="" id="task_description" class="form-control mt-1 mb-2" rows="3" placeholder="Aa"></textarea>
                 <label for="task_note">Notes / Reminders</label>
-                <textarea name="" id="task_note" class="form-control mt-2 mb-2" rows="5" placeholder="Aa"></textarea>
+                <textarea name="" id="task_note" class="form-control mt-1 mb-2" rows="5" placeholder="Aa"></textarea>
                 <label for="task_deadline">Deadline <i class="f-13"> (Optional)</i></label>
-                <input type="text" name="" id="task_deadline" class="form-control mt-2 mb-2" placeholder="MM/DD/YYYY">
+                <input type="text" name="" id="task_deadline" class="form-control mt-1 mb-2" placeholder="MM/DD/YYYY">
+                <label for="task_file">Attach Files</label>
+                <div class="d-flex">
+                    <input class="mt-1 mb-2 w-100" id="task_file" type="file">
+                    <button id="task_file_upload" style="width: 100px;" class="btn btn-sm"><span class="fa fa-upload"></span> Upload</button> 
+                </div>
+                
+                <div id="task_file_container" class="task_files_container pe-3 ps-3 pt-2 pb-3">
+                    <!-- Files Here -->
+                </div>
                 <label for="task_co_worker">Buddies / Associates</label>
                 <button class="btn btn-sm btn-primary rounded-pill ms-2" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#buddy_selector">Select</button>
                 <div id="buddy_selected" class="w-100 pe-3 ps-3 pt-2 d-block">
@@ -72,27 +81,30 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h6>Edit Task: <span id="edit_task_name"></span></h6>
-                <button data-bs-toggle="modal" data-bs-target="#delete_task_confirmation" data-bs-dismiss="modal" id="delete_task_btn" class="btn btn-sm btn-danger rounded-pill"><span class="fa fa-trash"></span> Delete</button>
+                <div>
+                    <button data-bs-toggle="modal" data-bs-target="#delete_task_confirmation" data-bs-dismiss="modal" id="delete_task_btn" class="btn btn-sm btn-danger rounded-pill"><span class="fa fa-trash"></span> Delete</button>
+                </div>
             </div>
-            <div class="modal-body">
-                <label for="edit_task_status">Status</label>
-                <select name="" id="edit_task_status" class="form-control mt-2 mb-2"></select>
+            <div id="edit_task_modal_body" class="modal-body">
+                <label id="edit_task_status_label" for="edit_task_status">Status</label>
+                <select name="" id="edit_task_status" class="form-control mt-1 mb-2"></select>
                 <label for="edit_task_location">Location</label>
-                <select name="" id="edit_task_location" class="form-control mt-2 mt-2"></select>
+                <select name="" id="edit_task_location" class="form-control mt-1 mb-2"></select>
                 <label for="edit_task_location_others">Others <i class="f-13">(specify other location, if not present above.)</i></label>
-                <input id="edit_task_location_others" type="text" class="form-control mt-2 mb-2">
+                <input id="edit_task_location_others" type="text" class="form-control mt-1 mb-2">
                 <label for="edit_task_description">Description</label>
-                <textarea name="" id="edit_task_description" class="form-control mt-2 mb-2" rows="3" placeholder="Aa"></textarea>
+                <textarea name="" id="edit_task_description" class="form-control mt-1 mb-2" rows="3" placeholder="Aa"></textarea>
                 <label for="edit_task_note">Notes / Reminders</label>
-                <textarea name="" id="edit_task_note" class="form-control mt-2 mb-2" rows="5" placeholder="Aa"></textarea>
+                <textarea name="" id="edit_task_note" class="form-control mt-1 mb-2" rows="5" placeholder="Aa"></textarea>
                 <label for="edit_task_deadline">Deadline <i class="f-13"> (Optional)</i></label>
-                <input type="text" name="" id="edit_task_deadline" class="form-control mt-2 mb-2" placeholder="MM/DD/YYYY">
+                <input type="text" name="" id="edit_task_deadline" class="form-control mt-1 mb-2" placeholder="MM/DD/YYYY">
                 <label for="edit_task_co_worker">Buddies / Associates</label>
                 <button class="btn btn-sm btn-primary rounded-pill ms-2" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#edit_buddy_selector">Select</button>
                 <div id="edit_buddy_selected" class="w-100 pe-3 ps-3 pt-2 d-block">
                     <!-- BUDDIES HERE -->
                 </div>
             </div>
+            <button class="btn bg-light me-3 ms-3 mb-2 fw-bold"><span class="fa fa-comments-o"></span> Remarks</button>
             <div class="modal-footer">
                 <div data-bs-dismiss="modal" class="btn btn-sm btn-secondary rounded-pill"><span class="fa fa-remove"></span> Cancel</div>
                 <div id="edit_task_submit_btn" class="btn btn-sm btn-primary rounded-pill"><span class="fa fa-save"></span> Save</div>

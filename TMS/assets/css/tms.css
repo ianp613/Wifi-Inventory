@@ -120,3 +120,12 @@ body {
 .dropdown-item:hover {
     background: #f0f0f0;
 }
+
+textarea:read-only, select:read-only{
+    background-color: white !important;
+}
+
+.task_files_container a{
+    display: block !important;
+    text-decoration: none;
+}

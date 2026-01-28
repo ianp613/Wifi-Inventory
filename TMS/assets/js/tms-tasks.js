@@ -10,6 +10,11 @@ if(document.getElementById("tasks_st")){
     var buddy_list                      = document.getElementById("buddy_list")
     var buddy_selected                  = document.getElementById("buddy_selected")
 
+    var task_file                       = document.getElementById("task_file")
+    var task_file_upload                = document.getElementById("task_file_upload")
+    var task_file_container             = document.getElementById("task_file_container")
+    var task_file_temp                  = []
+
     var task_location                   = document.getElementById("task_location")
     var task_location_others            = document.getElementById("task_location_others")
 
@@ -21,6 +26,8 @@ if(document.getElementById("tasks_st")){
     var edit_buddy_list                 = document.getElementById("edit_buddy_list")
     var edit_buddy_selected             = document.getElementById("edit_buddy_selected")
     var edit_task_status                = document.getElementById("edit_task_status")
+    var edit_task_status_label          = document.getElementById("edit_task_status_label")
+    var edit_task_modal_body            = document.getElementById("edit_task_modal_body")
 
     var edit_task_location              = document.getElementById("edit_task_location")
     var edit_task_location_others       = document.getElementById("edit_task_location_others")
@@ -252,9 +259,11 @@ if(document.getElementById("tasks_st")){
             sole.post("../../controllers/st/tasks/get_task.php",{
                 id : el.getAttribute("tid")
             }).then(res => {
+
                 console.log(res)
-                delete_task_btn.hidden      = res["task"][0].status != "Ongoing" ? false : true
+                delete_task_btn.hidden      = res["task"][0].status == "Pending" ? false : true
                 edit_task_status.innerHTML  = ""
+
                 status_.forEach(stat => {
                     var opt                 = document.createElement("option")
                     opt.value               = stat
@@ -264,6 +273,19 @@ if(document.getElementById("tasks_st")){
                     }
                     edit_task_status.appendChild(opt)
                 })
+
+                if(res["task"][0].status == "Accomplished"){
+                    edit_task_status.hidden         = true
+                    edit_task_status_label.hidden   = true
+                    edit_task_modal_body.setAttribute("style","pointer-events: none;")
+                    edit_task_submit_btn.setAttribute("style","pointer-events: none;")
+                }else{
+                    edit_task_status.hidden         = false
+                    edit_task_status_label.hidden   = false
+                    edit_task_modal_body.removeAttribute("style")
+                    edit_task_submit_btn.removeAttribute("style")
+                }
+                
                 users.forEach(user => {
                     if(user.id == parseInt(res["task"][0].aid)){
                         task_assignment             = user.id
@@ -415,7 +437,7 @@ if(document.getElementById("tasks_st")){
     })
 
     document.getElementById("edit_task_modal").addEventListener('shown.bs.modal', function () {
-        if(edit_task_modal_focus){
+        if(edit_task_modal_focus && edit_task_status.value != "Accomplished"){
             edit_task_description.focus()
             edit_task_modal_focus = false  
         }
@@ -434,5 +456,77 @@ if(document.getElementById("tasks_st")){
         disableMobile:  true,
         position:       "above"
     });
+
+    // localStorage.removeItem("task_files")
+    if(localStorage.getItem("task_files") !== null){
+        var file_temp = localStorage.getItem("task_files").split("+++")
+        if(!file_temp.length){
+            exit
+        }
+        if(file_temp[0] == "null"){
+            file_temp.shift()
+        }
+        console.log(file_temp)
+        file_temp.forEach(file => {
+            if(file != 'null'){
+                task_file_container.insertAdjacentHTML("beforeend",
+                    '<div class="d-flex justify-content-between ">'+
+                        '<a target="blank_" href="../../assets/uploads/task_file_attachments/'+file.split("==")[1]+'"><span class="fa fa-download"></span> <i>'+file.split("==")[0]+'</i></a>'+
+                        '<span fname="'+file.split("==")[1]+'" class="task_file_remove fa fa-remove text-danger mt-1 ms-2"></span>'+
+                    '</div>'
+                )
+            }
+        })
+    }
+
+
+    const MAX_SIZE = 6 * 1024 * 1024; // 5MB
+
+    task_file_upload.addEventListener("click", () => {
+        const file = task_file.files[0];
+
+        if (!file) {
+            alert("Please select a file");
+            return;
+        }
+
+        if (file.size > MAX_SIZE) {
+            alert("File exceeds 5MB limit");
+            task_file.value = "";
+            return;
+        }
+
+        const formData = new FormData();
+
+        
+        formData.append("file", file);
+
+        sole.file("../../controllers/st/tasks/upload_file.php",formData).then(res => {
+            if(res.status){
+                localStorage.setItem("task_files",localStorage.getItem("task_files") + "+++" + res.name + "==" + res.storage_name)
+                task_file_container.insertAdjacentHTML("beforeend",
+                    '<div class="d-flex justify-content-between ">'+
+                        '<a target="blank_" href="../../assets/uploads/task_file_attachments/'+res.storage_name+'"><span class="fa fa-download"></span> <i>'+res.name+'</i></a>'+
+                        '<span fname="'+res.storage_name+'" class="task_file_remove fa fa-remove text-danger mt-1 ms-2"></span>'+
+                    '</div>'
+                )
+                task_file.value = ""
+            }else{
+                alert(res.message)
+            }
+        })
+
+        // fetch("upload.php", {
+        //     method: "POST",
+        //     body: formData
+        // })
+        // .then(res => res.text())
+        // .then(data => msg(data))
+        // .catch(() => msg("Upload failed"));
+    });
+
+    function msg(text) {
+        alert(text)
+    }
 
 }

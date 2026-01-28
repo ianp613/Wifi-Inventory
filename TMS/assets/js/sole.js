@@ -6,7 +6,7 @@ class Sole{
             method: "POST",
             body: value
         })
-        return request.then(response => response.json())
+        return request.then(response => response.json().catch(() => alert("Upload failed")))
     }
     get(url) {
         var request = fetch(url)
