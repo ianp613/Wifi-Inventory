@@ -14,6 +14,7 @@
         $task->note = $data["note"];
         $task->status = "Pending";
         $task->deadline = $data["deadline"];
+        $task->attachment = $data["attachment"];
         $task->buddies = $data["buddies"];
         DB::save($task);
 

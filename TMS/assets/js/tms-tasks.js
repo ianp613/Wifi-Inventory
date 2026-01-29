@@ -13,7 +13,6 @@ if(document.getElementById("tasks_st")){
     var task_file                       = document.getElementById("task_file")
     var task_file_upload                = document.getElementById("task_file_upload")
     var task_file_container             = document.getElementById("task_file_container")
-    var task_file_temp                  = []
 
     var task_location                   = document.getElementById("task_location")
     var task_location_others            = document.getElementById("task_location_others")
@@ -28,6 +27,11 @@ if(document.getElementById("tasks_st")){
     var edit_task_status                = document.getElementById("edit_task_status")
     var edit_task_status_label          = document.getElementById("edit_task_status_label")
     var edit_task_modal_body            = document.getElementById("edit_task_modal_body")
+
+    var edit_task_file                  = document.getElementById("edit_task_file")
+    var edit_task_file_upload           = document.getElementById("edit_task_file_upload")
+    var edit_task_file_container        = document.getElementById("edit_task_file_container")
+    var files_to_remove                 = []
 
     var edit_task_location              = document.getElementById("edit_task_location")
     var edit_task_location_others       = document.getElementById("edit_task_location_others")
@@ -61,6 +65,10 @@ if(document.getElementById("tasks_st")){
     const buddy_selector                = new bootstrap.Modal(document.getElementById('buddy_selector'),unclose);
     const edit_buddy_selector           = new bootstrap.Modal(document.getElementById('edit_buddy_selector'),unclose);
     const delete_task_confirmation      = new bootstrap.Modal(document.getElementById('delete_task_confirmation'),unclose);
+
+    localStorage.getItem("task_files") === null ? localStorage.setItem("task_files","") : null
+    localStorage.getItem("edit_task_files") === null ? localStorage.setItem("edit_task_files","") : null
+    localStorage.getItem("edit_task_files_temp") === null ? localStorage.setItem("edit_task_files_temp","") : null
 
 
 
@@ -298,6 +306,26 @@ if(document.getElementById("tasks_st")){
                 edit_task_description.value         = res["task"][0].description
                 edit_task_note.value                = res["task"][0].note != "-" ? res["task"][0].note : ""
                 edit_task_deadline.value            = res["task"][0].deadline != "-" ? res["task"][0].deadline : ""
+                localStorage.setItem("edit_task_files",res["task"][0].attachment != "-" ? res["task"][0].attachment : "")
+
+                edit_task_file_container.innerHTML  = ""
+                var file_temp = localStorage.getItem("edit_task_files").split("+++")
+                if(!file_temp.length){
+                    exit
+                }
+                if(file_temp[0] == "null" || !file_temp[0]){
+                    file_temp.shift()
+                }
+                file_temp.forEach(file => {
+                    if(file != 'null'){
+                        edit_task_file_container.insertAdjacentHTML("beforeend",
+                            '<div class="d-flex justify-content-between ">'+
+                                '<a target="blank_" href="../../assets/uploads/task_file_attachments/'+file.split("==")[1]+'"><span class="fa fa-download"></span> <i>'+file.split("==")[0]+'</i></a>'+
+                                '<span dname="'+file.split("==")[0]+'" fname="'+file.split("==")[1]+'" class="task_file_remove fa fa-remove text-danger mt-1 ms-2"></span>'+
+                            '</div>'
+                        )
+                    }
+                })
 
                 if(res["task"][0].buddies != "-"){
                     edit_buddies = res["task"][0].buddies.split("|") 
@@ -379,13 +407,19 @@ if(document.getElementById("tasks_st")){
             bs5.toast("warning","Please input description.")
             return
         }
-
+        var attachment = "";
+        if(localStorage.getItem("task_files") === null || !localStorage.getItem("task_files") || localStorage.getItem("task_files") == "null"){
+            attachment = "-"
+        }else{
+            attachment = localStorage.getItem("task_files")
+        }
         sole.post("../../controllers/st/tasks/add_task.php",{
             id              : task_submit_btn.getAttribute("aid"),
             location        : task_location_others.value ? task_location_others.value : task_location.value,
             description     : task_description.value,
             note            : task_note.value ? task_note.value : "-",
             deadline        : task_deadline.value ? task_deadline.value : "-",
+            attachment      : attachment,
             buddies         : buddies.length ? buddies.join("|") : "-"
         }).then(res => {
             if(!res.status){
@@ -398,6 +432,7 @@ if(document.getElementById("tasks_st")){
             task_description.value      = ""
             task_note.value             = ""
             task_deadline.value         = ""
+            localStorage.removeItem("task_files")
             bs5.toast(res.type,res.message)
         })
     })
@@ -407,12 +442,20 @@ if(document.getElementById("tasks_st")){
             bs5.toast("warning","Please input description.")
             return
         }
+        var attachment = "";
+        if(localStorage.getItem("edit_task_files") === null || !localStorage.getItem("edit_task_files") || localStorage.getItem("edit_task_files") == "null"){
+            attachment = "-"
+        }else{
+            attachment = localStorage.getItem("edit_task_files")
+        }
         sole.post("../../controllers/st/tasks/edit_task.php",{
             id              : edit_task_submit_btn.getAttribute("tid"),
             location        : edit_task_location_others.value ? edit_task_location_others.value : edit_task_location.value,
             description     : edit_task_description.value,
             note            : edit_task_note.value ? edit_task_note.value : "-",
             deadline        : edit_task_deadline.value ? edit_task_deadline.value : "-",
+            attachment      : attachment,
+            files_to_remove : files_to_remove.join("+++"),
             buddies         : edit_buddies.length ? edit_buddies.join("|") : "-",
             status          : edit_task_status.value
         }).then(res => {
@@ -425,6 +468,9 @@ if(document.getElementById("tasks_st")){
             edit_task_description.value     = ""
             edit_task_note.value            = ""
             edit_task_deadline.value        = ""
+            edit_task_file.value            = ""
+            localStorage.setItem("edit_task_files", "")
+            localStorage.setItem("edit_task_files_temp", "")
             bs5.toast(res.type,res.message)
         })
     })
@@ -457,57 +503,83 @@ if(document.getElementById("tasks_st")){
         position:       "above"
     });
 
-    // localStorage.removeItem("task_files")
+
     if(localStorage.getItem("task_files") !== null){
-        var file_temp = localStorage.getItem("task_files").split("+++")
-        if(!file_temp.length){
-            exit
-        }
-        if(file_temp[0] == "null"){
-            file_temp.shift()
-        }
-        console.log(file_temp)
-        file_temp.forEach(file => {
-            if(file != 'null'){
-                task_file_container.insertAdjacentHTML("beforeend",
-                    '<div class="d-flex justify-content-between ">'+
-                        '<a target="blank_" href="../../assets/uploads/task_file_attachments/'+file.split("==")[1]+'"><span class="fa fa-download"></span> <i>'+file.split("==")[0]+'</i></a>'+
-                        '<span fname="'+file.split("==")[1]+'" class="task_file_remove fa fa-remove text-danger mt-1 ms-2"></span>'+
-                    '</div>'
-                )
-            }
+        sole.post("../../controllers/st/tasks/delete_files_temp.php",{
+            files : localStorage.getItem("task_files")
+        }).then(res => {
+            console.log(res)
         })
+        localStorage.setItem("task_files","");
     }
+
+    if(localStorage.getItem("edit_task_files_temp") !== null){
+        sole.post("../../controllers/st/tasks/delete_files_temp.php",{
+            files : localStorage.getItem("edit_task_files_temp")
+        }).then(res => {
+            console.log(res)
+        })
+        localStorage.setItem("task_files","");
+    }
+
+    task_file_container.addEventListener("click",e => {
+        var file_to_remove = e.target.getAttribute("dname")+"=="+e.target.getAttribute("fname")
+        var file_temp = localStorage.getItem("task_files").split("+++")
+        file_temp = file_temp.filter(item => item !== file_to_remove);
+        localStorage.setItem("task_files",file_temp.join("+++"))
+
+        sole.post("../../controllers/st/tasks/delete_file_temp.php",{
+            file : e.target.getAttribute("fname")
+        }).then(res => {
+            console.log(res)
+        })
+
+        if(e.target.classList.contains("task_file_remove")){
+            e.target.parentNode.remove()
+        }
+    })
+
+    edit_task_file_container.addEventListener("click",e => {
+        var file_to_remove = e.target.getAttribute("dname")+"=="+e.target.getAttribute("fname")
+        var file_temp = localStorage.getItem("edit_task_files").split("+++")
+        file_temp = file_temp.filter(item => item !== file_to_remove);
+        localStorage.setItem("edit_task_files",file_temp.join("+++"))
+        files_to_remove.push(e.target.getAttribute("fname"))
+
+        // sole.post("../../controllers/st/tasks/delete_file_temp.php",{
+        //     file : e.target.getAttribute("fname")
+        // }).then(res => {
+        //     console.log(res)
+        // })
+
+        if(e.target.classList.contains("task_file_remove")){
+            e.target.parentNode.remove()
+        }
+    })
 
 
     const MAX_SIZE = 6 * 1024 * 1024; // 5MB
 
     task_file_upload.addEventListener("click", () => {
         const file = task_file.files[0];
-
         if (!file) {
             alert("Please select a file");
             return;
         }
-
         if (file.size > MAX_SIZE) {
             alert("File exceeds 5MB limit");
             task_file.value = "";
             return;
         }
-
         const formData = new FormData();
-
-        
         formData.append("file", file);
-
         sole.file("../../controllers/st/tasks/upload_file.php",formData).then(res => {
             if(res.status){
                 localStorage.setItem("task_files",localStorage.getItem("task_files") + "+++" + res.name + "==" + res.storage_name)
                 task_file_container.insertAdjacentHTML("beforeend",
                     '<div class="d-flex justify-content-between ">'+
                         '<a target="blank_" href="../../assets/uploads/task_file_attachments/'+res.storage_name+'"><span class="fa fa-download"></span> <i>'+res.name+'</i></a>'+
-                        '<span fname="'+res.storage_name+'" class="task_file_remove fa fa-remove text-danger mt-1 ms-2"></span>'+
+                        '<span dname="'+res.name+'" fname="'+res.storage_name+'" class="task_file_remove fa fa-remove text-danger mt-1 ms-2"></span>'+
                     '</div>'
                 )
                 task_file.value = ""
@@ -515,18 +587,37 @@ if(document.getElementById("tasks_st")){
                 alert(res.message)
             }
         })
-
-        // fetch("upload.php", {
-        //     method: "POST",
-        //     body: formData
-        // })
-        // .then(res => res.text())
-        // .then(data => msg(data))
-        // .catch(() => msg("Upload failed"));
     });
 
-    function msg(text) {
-        alert(text)
-    }
+    edit_task_file_upload.addEventListener("click", () => {
+        const file = edit_task_file.files[0];
+        if (!file) {
+            alert("Please select a file");
+            return;
+        }
+        if (file.size > MAX_SIZE) {
+            alert("File exceeds 5MB limit");
+            edit_task_file.value = "";
+            return;
+        }
+        const formData = new FormData();
+        formData.append("file", file);
+        sole.file("../../controllers/st/tasks/upload_file.php",formData).then(res => {
+            if(res.status){
+                localStorage.setItem("edit_task_files",localStorage.getItem("edit_task_files") + "+++" + res.name + "==" + res.storage_name)
+                localStorage.setItem("edit_task_files_temp",localStorage.getItem("edit_task_files_temp") + "+++" + res.name + "==" + res.storage_name)
+                edit_task_file_container.insertAdjacentHTML("beforeend",
+                    '<div class="d-flex justify-content-between ">'+
+                        '<a target="blank_" href="../../assets/uploads/task_file_attachments/'+res.storage_name+'"><span class="fa fa-download"></span> <i>'+res.name+'</i></a>'+
+                        '<span dname="'+res.name+'" fname="'+res.storage_name+'" class="task_file_remove fa fa-remove text-danger mt-1 ms-2"></span>'+
+                    '</div>'
+                )
+                edit_task_file.value = ""
+            }else{
+                alert(res.message)
+            }
+        })
+    });
+
 
 }

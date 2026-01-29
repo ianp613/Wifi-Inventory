@@ -13,6 +13,21 @@
         }
 
         $task = new Task;
+
+        $task_ = DB::find($task,$data["id"]);
+
+        $files = explode("+++",$task_[0]["attachment"] != "-" ? $task_[0]["attachment"] : "");
+        array_shift($files);
+
+        $dir = "../../../assets/uploads/task_file_attachments/";
+
+        foreach ($files as $file) {
+            $file_ = explode("==",$file);
+            if(file_exists($dir.$file_[1])){
+                unlink($dir.$file_[1]);
+            }
+        }
+
         DB::delete($task,$data["id"]);
 
         $response = [

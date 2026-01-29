@@ -48,6 +48,7 @@
             Migrate::string("note");
             Migrate::string("status");
             Migrate::string("deadline");
+            Migrate::string("attachment");
             Migrate::string("buddies");
         }
     }

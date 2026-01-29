@@ -125,7 +125,7 @@ textarea:read-only, select:read-only{
     background-color: white !important;
 }
 
-.task_files_container a{
+.task_files_container a, .edit_task_files_container a{
     display: block !important;
     text-decoration: none;
 }

@@ -37,6 +37,7 @@
             "note",
             "status",
             "deadline",
+            "attachment",
             "buddies",
         ];
     }

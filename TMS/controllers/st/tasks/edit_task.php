@@ -4,6 +4,7 @@
     include("../../../includes.php");
     $data = json_decode(file_get_contents('php://input'), true);
     $locations = json_decode(file_get_contents("../../../assets/files/task_location.json"));
+    $dir = "../../../assets/uploads/task_file_attachments/";
 
     if($data["location"]) {
         $task = new Task;
@@ -13,8 +14,16 @@
         $task->note = $data["note"];
         $task->deadline = $data["deadline"];
         $task->buddies = $data["buddies"];
+        $task->attachment = $data["attachment"];
         $task->status = $data["status"];
         DB::update($task);
+
+        $files_to_remove = explode("+++",$data["files_to_remove"]);
+        foreach ($files_to_remove as $file) {
+            if($file){
+                file_exists($dir.$file) ? unlink($dir.$file) : null;    
+            }
+        }
 
         if(!in_array($data["location"],$locations->default) && !in_array($data["location"],$locations->user_defined)){
             array_push($locations->user_defined,$data["location"]);
