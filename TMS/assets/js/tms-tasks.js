@@ -268,6 +268,25 @@ if(document.getElementById("tasks_st")){
                 id : el.getAttribute("tid")
             }).then(res => {
 
+                edit_task_file_container.innerHTML  = ""
+                var file_temp = localStorage.getItem("edit_task_files").split("+++")
+                if(!file_temp.length){
+                    exit
+                }
+                if(file_temp[0] == "null" || !file_temp[0]){
+                    file_temp.shift()
+                }
+                file_temp.forEach(file => {
+                    if(file != 'null' && file){
+                        edit_task_file_container.insertAdjacentHTML("beforeend",
+                            '<div class="d-flex justify-content-between ">'+
+                                '<a target="blank_" href="../../assets/uploads/task_file_attachments/'+file.split("==")[1]+'"><span class="fa fa-download"></span> <i>'+file.split("==")[0]+'</i></a>'+
+                                '<span dname="'+file.split("==")[0]+'" fname="'+file.split("==")[1]+'" class="disabler task_file_remove fa fa-remove text-danger mt-1 ms-2"></span>'+
+                            '</div>'
+                        )
+                    }
+                })
+
                 console.log(res)
                 delete_task_btn.hidden      = res["task"][0].status == "Pending" ? false : true
                 edit_task_status.innerHTML  = ""
@@ -285,15 +304,20 @@ if(document.getElementById("tasks_st")){
                 if(res["task"][0].status == "Accomplished"){
                     edit_task_status.hidden         = true
                     edit_task_status_label.hidden   = true
-                    edit_task_modal_body.setAttribute("style","pointer-events: none;")
-                    edit_task_submit_btn.setAttribute("style","pointer-events: none;")
+
+                    var el_ = document.getElementsByClassName("disabler")
+                    for (let i = 0; i < el_.length; i++) {
+                        el_[i].setAttribute("style","pointer-events: none;")
+                    }
                 }else{
                     edit_task_status.hidden         = false
                     edit_task_status_label.hidden   = false
-                    edit_task_modal_body.removeAttribute("style")
-                    edit_task_submit_btn.removeAttribute("style")
+                    var el_ = document.getElementsByClassName("disabler")
+                    for (let i = 0; i < el_.length; i++) {
+                        el_[i].removeAttribute("style","pointer-events: none;")
+                    }
                 }
-                
+
                 users.forEach(user => {
                     if(user.id == parseInt(res["task"][0].aid)){
                         task_assignment             = user.id
@@ -307,25 +331,6 @@ if(document.getElementById("tasks_st")){
                 edit_task_note.value                = res["task"][0].note != "-" ? res["task"][0].note : ""
                 edit_task_deadline.value            = res["task"][0].deadline != "-" ? res["task"][0].deadline : ""
                 localStorage.setItem("edit_task_files",res["task"][0].attachment != "-" ? res["task"][0].attachment : "")
-
-                edit_task_file_container.innerHTML  = ""
-                var file_temp = localStorage.getItem("edit_task_files").split("+++")
-                if(!file_temp.length){
-                    exit
-                }
-                if(file_temp[0] == "null" || !file_temp[0]){
-                    file_temp.shift()
-                }
-                file_temp.forEach(file => {
-                    if(file != 'null'){
-                        edit_task_file_container.insertAdjacentHTML("beforeend",
-                            '<div class="d-flex justify-content-between ">'+
-                                '<a target="blank_" href="../../assets/uploads/task_file_attachments/'+file.split("==")[1]+'"><span class="fa fa-download"></span> <i>'+file.split("==")[0]+'</i></a>'+
-                                '<span dname="'+file.split("==")[0]+'" fname="'+file.split("==")[1]+'" class="task_file_remove fa fa-remove text-danger mt-1 ms-2"></span>'+
-                            '</div>'
-                        )
-                    }
-                })
 
                 if(res["task"][0].buddies != "-"){
                     edit_buddies = res["task"][0].buddies.split("|") 
@@ -508,7 +513,7 @@ if(document.getElementById("tasks_st")){
         sole.post("../../controllers/st/tasks/delete_files_temp.php",{
             files : localStorage.getItem("task_files")
         }).then(res => {
-            console.log(res)
+            // console.log(res)
         })
         localStorage.setItem("task_files","");
     }
@@ -517,7 +522,7 @@ if(document.getElementById("tasks_st")){
         sole.post("../../controllers/st/tasks/delete_files_temp.php",{
             files : localStorage.getItem("edit_task_files_temp")
         }).then(res => {
-            console.log(res)
+            // console.log(res)
         })
         localStorage.setItem("task_files","");
     }

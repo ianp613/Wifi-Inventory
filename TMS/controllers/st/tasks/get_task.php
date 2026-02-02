@@ -19,8 +19,10 @@
     array_push($response["remarker_id"],$task[0]["aid"]);
     $buddies = explode("|",$task[0]["buddies"]);
     foreach ($buddies as $buddy) {
-        array_push($response["remarker_id"],$buddy);
-        $response["remarker_id"] = array_unique($response["remarker_id"]);
+        if($buddy != "-"){
+            array_push($response["remarker_id"],$buddy);
+            $response["remarker_id"] = array_unique($response["remarker_id"]);    
+        }
     }
 
     $user = new User;
