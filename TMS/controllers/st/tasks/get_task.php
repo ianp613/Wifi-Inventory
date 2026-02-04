@@ -12,7 +12,8 @@
         "task" => $task,
         "remarker_id" => [],
         "remarker" => [],
-        "remarks" => []
+        "remarks" => [],
+        "your_id" => $_SESSION["user_id"]
     ];
 
     array_push($response["remarker_id"],$task[0]["cid"]);

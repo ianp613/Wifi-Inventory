@@ -35,4 +35,9 @@ if(document.getElementById("tms_menu")){
         }
         
     })
+
+    sole.get("../../controllers/get_user.php").then(res => {
+        localStorage.setItem("user_id",res[0]["id"])
+        localStorage.setItem("privileges",res[0]["privileges"])
+    })
 }

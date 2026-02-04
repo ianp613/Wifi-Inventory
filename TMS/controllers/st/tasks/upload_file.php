@@ -30,7 +30,7 @@
     // Size check (never trust JS)
     if ($file['size'] > $MAX_SIZE) {
         $response["status"] = false;
-        $response["message"] = "File exceeds 1MB limit";
+        $response["message"] = "File exceeds 5MB limit";
         echo json_encode($response);
         exit;
     }

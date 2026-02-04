@@ -79,9 +79,10 @@
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h6>Edit Task: <span id="edit_task_name"></span></h6>
+                <h6><span class="hidder">Edit Task: </span><span hidden class="shower">Task: </span><span id="edit_task_name"></span></h6>
                 <div>
                     <button data-bs-toggle="modal" data-bs-target="#delete_task_confirmation" data-bs-dismiss="modal" id="delete_task_btn" class="btn btn-sm btn-danger rounded-pill"><span class="fa fa-trash"></span> Delete</button>
+                    <span hidden data-bs-dismiss="modal" class="shower fa fa-remove text-secondary"></span>
                 </div>
             </div>
             <div id="edit_task_modal_body" class="modal-body">
@@ -90,17 +91,17 @@
                     <select name="" id="edit_task_status" class="form-control mt-1 mb-2"></select>
                     <label for="edit_task_location">Location</label>
                     <select name="" id="edit_task_location" class="form-control mt-1 mb-2"></select>
-                    <label for="edit_task_location_others">Others <i class="f-13">(specify other location, if not present above.)</i></label>
+                    <label for="edit_task_location_others">Others <i class="f-13 hidder">(specify other location, if not present above.)</i></label>
                     <input id="edit_task_location_others" type="text" class="form-control mt-1 mb-2">
                     <label for="edit_task_description">Description</label>
                     <textarea name="" id="edit_task_description" class="form-control mt-1 mb-2" rows="3" placeholder="Aa"></textarea>
                     <label for="edit_task_note">Notes / Reminders</label>
                     <textarea name="" id="edit_task_note" class="form-control mt-1 mb-2" rows="5" placeholder="Aa"></textarea>
-                    <label for="edit_task_deadline">Deadline <i class="f-13"> (Optional)</i></label>
+                    <label for="edit_task_deadline">Deadline <i class="f-13 hidder"> (Optional)</i></label>
                     <input type="text" name="" id="edit_task_deadline" class="form-control mt-1 mb-2" placeholder="MM/DD/YYYY">
                     <div class="d-flex">
-                        <input class="mt-1 mb-2 w-100" id="edit_task_file" type="file">
-                        <button id="edit_task_file_upload" style="width: 100px;" class="btn btn-sm"><span class="fa fa-upload"></span> Upload</button> 
+                        <input class="hidder mt-1 mb-2 w-100" id="edit_task_file" type="file">
+                        <button id="edit_task_file_upload" style="width: 100px;" class="hidder btn btn-sm"><span class="fa fa-upload"></span> Upload</button> 
                     </div>    
                 </div>
                 
@@ -110,16 +111,16 @@
 
                 <div class="disabler">
                     <label for="edit_task_co_worker">Buddies / Associates</label>
-                    <button class="btn btn-sm btn-primary rounded-pill ms-2" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#edit_buddy_selector">Select</button>
+                    <button class="hidder btn btn-sm btn-primary rounded-pill ms-2" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#edit_buddy_selector">Select</button>
                     <div id="edit_buddy_selected" class="w-100 pe-3 ps-3 pt-2 d-block">
                         <!-- BUDDIES HERE -->
                     </div>    
                 </div>
             </div>
-            <button class="btn bg-light me-3 ms-3 mb-2 fw-bold"><span class="fa fa-comments-o"></span> Remarks</button>
+            <button data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#remarks" id="show_remarks_btn" class="btn bg-light me-3 ms-3 mb-2 fw-bold"><span class="fa fa-comments-o"></span> Remarks</button>
             <div class="modal-footer">
-                <div data-bs-dismiss="modal" class="btn btn-sm btn-secondary rounded-pill"><span class="fa fa-remove"></span> Cancel</div>
-                <div id="edit_task_submit_btn" class="disabler btn btn-sm btn-primary rounded-pill"><span class="fa fa-save"></span> Save</div>
+                <div data-bs-dismiss="modal" class="hidder btn btn-sm btn-secondary rounded-pill"><span class="fa fa-remove"></span> Cancel</div>
+                <div id="edit_task_submit_btn" class="hidder disabler btn btn-sm btn-primary rounded-pill"><span class="fa fa-save"></span> Save</div>
             </div>
         </div>
     </div>
@@ -160,6 +161,39 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm rounded-pill" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#edit_task_modal"><span class="fa fa-remove"></span> No</button>
                 <button id="delete_task_btn_confirm" type="button" class="btn btn-danger btn-sm rounded-pill"><span class="fa fa-trash"></span> Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- REMARKS -->
+<div class="modal fade" id="remarks" tabindex="-1">
+    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="mt-1">Remarks</h6>
+                <button data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#edit_task_modal" class="btn btn-sm btn-secondary rounded-pill"><span class="fa fa-remove"></span> Close</button>
+            </div>
+            <div id="remark_container" class="remark-container modal-body">
+                <!-- REMARKS HERE -->
+            </div>
+            <div id="remarks_control" hidden class="modal-footer disabler">
+                <div class="w-100">
+                    <div id="remark_attachment" hidden class="remark_attachment p-3 pb-0 mb-1 rounded-3 border">
+                        <span class="fa fa-file m-2 me-2"></span>
+                        <div class="w-100">
+                            <h6 id="remark_attachment_name" class="p-0 m-0">...</h6>
+                            <p class="f-12"><i id="remark_attachment_size">...</i></p>
+                        </div>
+                        <span id="remark_attachment_remove" class="fa fa-remove m-2 ms-3"></span>
+                    </div>
+                    <div class="input-group">
+                        <button id="remark_attachment_btn" class="btn btn-primary"><span class="fa fa-paperclip"></span></button>
+                        <textarea name="" rows="1" id="remark_message" class="form-control" placeholder="Aa"></textarea>
+                        <button id="remark_send" class="btn btn-primary"><span class="fa fa-send"></span></button>
+                    </div>
+                    <input hidden id="remark_attachment_file" type="file" class="form-control">
+                </div>
             </div>
         </div>
     </div>

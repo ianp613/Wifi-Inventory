@@ -7,13 +7,19 @@
     if($data) {
         $remark = new Remark;
         $remarks = DB::where($remark,"tid","=",$data["id"]);
+        $UPLOAD_DIR = "../../../assets/uploads/remark_file_attachments/";
         
         foreach ($remarks as $rem) {
+            if($rem["type"] == "file_only" || $rem["type"] == "file_with_remark"){
+                $rem_ = explode("+++",$rem["content"]);
+                if(is_file($UPLOAD_DIR.$rem_[1])){
+                    unlink($UPLOAD_DIR.$rem_[1]);
+                }
+            }
             DB::delete($remark,$rem["id"]);
         }
 
         $task = new Task;
-
         $task_ = DB::find($task,$data["id"]);
 
         $files = explode("+++",$task_[0]["attachment"] != "-" ? $task_[0]["attachment"] : "");
@@ -27,7 +33,6 @@
                 unlink($dir.$file_[1]);
             }
         }
-
         DB::delete($task,$data["id"]);
 
         $response = [

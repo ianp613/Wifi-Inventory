@@ -22,6 +22,7 @@
             $response["message"] = "Login Success.";
             $response["user"] = $user;
             $_SESSION["user_id"] = $user[0]["id"];
+            $_SESSION["auth"] = true;
         }
     }
     echo json_encode($response);

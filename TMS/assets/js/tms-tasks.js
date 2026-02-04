@@ -1,6 +1,7 @@
-if(document.getElementById("tasks_st")){
+if(document.getElementById("tasks")){
     var task_pane                       = document.getElementById("task_pane")
     var task_user_list                  = document.getElementById("task_user_list")
+    var tms_user_list                   = document.getElementById("tms_user_list")
     var add_task_btn                    = document.getElementById("add_task_btn")
     var task_submit_btn                 = document.getElementById("task_submit_btn")
     var task_name                       = document.getElementById("task_name")
@@ -27,6 +28,7 @@ if(document.getElementById("tasks_st")){
     var edit_task_status                = document.getElementById("edit_task_status")
     var edit_task_status_label          = document.getElementById("edit_task_status_label")
     var edit_task_modal_body            = document.getElementById("edit_task_modal_body")
+    var show_remarks_btn                = document.getElementById("show_remarks_btn")
 
     var edit_task_file                  = document.getElementById("edit_task_file")
     var edit_task_file_upload           = document.getElementById("edit_task_file_upload")
@@ -35,6 +37,19 @@ if(document.getElementById("tasks_st")){
 
     var edit_task_location              = document.getElementById("edit_task_location")
     var edit_task_location_others       = document.getElementById("edit_task_location_others")
+
+    var remark_container                = document.getElementById("remark_container")
+
+    var remarks_control                 = document.getElementById("remarks_control")
+    var remark_attachment_btn           = document.getElementById("remark_attachment_btn")
+    var remark_attachment_file          = document.getElementById("remark_attachment_file")
+    var remark_message                  = document.getElementById("remark_message")
+    var remark_send                     = document.getElementById("remark_send")
+
+    var remark_attachment               = document.getElementById("remark_attachment")
+    var remark_attachment_name          = document.getElementById("remark_attachment_name")
+    var remark_attachment_size          = document.getElementById("remark_attachment_size")
+    var remark_attachment_remove        = document.getElementById("remark_attachment_remove")
 
     var delete_task_btn                 = document.getElementById("delete_task_btn")
     var delete_task_btn_confirm         = document.getElementById("delete_task_btn_confirm")
@@ -59,21 +74,18 @@ if(document.getElementById("tasks_st")){
     
     var users                           = []
     var locations                       = []
+    var remarkers                       = []
 
     const add_task_modal                = new bootstrap.Modal(document.getElementById('add_task_modal'),unclose);
     const edit_task_modal               = new bootstrap.Modal(document.getElementById('edit_task_modal'),unclose);
     const buddy_selector                = new bootstrap.Modal(document.getElementById('buddy_selector'),unclose);
     const edit_buddy_selector           = new bootstrap.Modal(document.getElementById('edit_buddy_selector'),unclose);
     const delete_task_confirmation      = new bootstrap.Modal(document.getElementById('delete_task_confirmation'),unclose);
+    const remarks_modal                 = new bootstrap.Modal(document.getElementById('remarks'),unclose);
 
     localStorage.getItem("task_files") === null ? localStorage.setItem("task_files","") : null
     localStorage.getItem("edit_task_files") === null ? localStorage.setItem("edit_task_files","") : null
     localStorage.getItem("edit_task_files_temp") === null ? localStorage.setItem("edit_task_files_temp","") : null
-
-
-
-
-
 
     // DROP DOWN START ===================================================================================================
     const dropdown = document.getElementById("tms_dropdown");
@@ -108,6 +120,11 @@ if(document.getElementById("tasks_st")){
     })
 
     loadTask()
+
+    if(localStorage.getItem("privileges") != "Technician"){
+        tms_user_list.removeAttribute("hidden")
+        tms_user_list.classList.add("d-flex")
+    }
 
     function loadTask(){
         pending_task_title.hidden       = true
@@ -211,6 +228,9 @@ if(document.getElementById("tasks_st")){
     })
 
     add_task_btn.addEventListener("click", e => {
+        if(label.textContent != "-- Select Location --"){
+            task_location.value = label.textContent
+        }
         task_modal_focus = true
         if (!task_user_list.value) return
 
@@ -267,7 +287,7 @@ if(document.getElementById("tasks_st")){
             sole.post("../../controllers/st/tasks/get_task.php",{
                 id : el.getAttribute("tid")
             }).then(res => {
-
+                remarkers = res.remarker
                 edit_task_file_container.innerHTML  = ""
                 var file_temp = localStorage.getItem("edit_task_files").split("+++")
                 if(!file_temp.length){
@@ -287,8 +307,7 @@ if(document.getElementById("tasks_st")){
                     }
                 })
 
-                console.log(res)
-                delete_task_btn.hidden      = res["task"][0].status == "Pending" ? false : true
+                delete_task_btn.hidden      = res["task"][0].status == "Pending" && localStorage.getItem("privileges") != "Technician" ? false : true
                 edit_task_status.innerHTML  = ""
 
                 status_.forEach(stat => {
@@ -301,7 +320,7 @@ if(document.getElementById("tasks_st")){
                     edit_task_status.appendChild(opt)
                 })
 
-                if(res["task"][0].status == "Accomplished"){
+                if(res["task"][0].status == "Accomplished" || localStorage.getItem("privileges") == "Technician"){
                     edit_task_status.hidden         = true
                     edit_task_status_label.hidden   = true
 
@@ -315,6 +334,26 @@ if(document.getElementById("tasks_st")){
                     var el_ = document.getElementsByClassName("disabler")
                     for (let i = 0; i < el_.length; i++) {
                         el_[i].removeAttribute("style","pointer-events: none;")
+                    }
+                }
+
+                if(localStorage.getItem("privileges") == "Technician"){
+                    var el_ = document.getElementsByClassName("hidder")
+                    for (let i = 0; i < el_.length; i++) {
+                        el_[i].setAttribute("hidden","")
+                    }
+                    var el_ = document.getElementsByClassName("shower")
+                    for (let i = 0; i < el_.length; i++) {
+                        el_[i].removeAttribute("hidden")
+                    }
+                }else{
+                    var el_ = document.getElementsByClassName("hidder")
+                    for (let i = 0; i < el_.length; i++) {
+                        el_[i].removeAttribute("hidden")
+                    }
+                    var el_ = document.getElementsByClassName("shower")
+                    for (let i = 0; i < el_.length; i++) {
+                        el_[i].setAttribute("hidden","")
                     }
                 }
 
@@ -387,8 +426,110 @@ if(document.getElementById("tasks_st")){
                 })
                 delete_task_btn.setAttribute("tid",res["task"][0].id)
                 edit_task_submit_btn.setAttribute("tid",res["task"][0].id)
+                show_remarks_btn.setAttribute("tid",res["task"][0].id)
+                remark_send.setAttribute("tid",res["task"][0].id)
                 edit_task_modal.show()
+
+                res.remarker_id.includes(res.your_id.toString()) ? remarks_control.removeAttribute("hidden") : remarks_control.setAttribute("hidden","")
             })
+        }
+    })
+
+    remark_attachment_btn.addEventListener("click", e => {
+        remark_attachment_file.click()
+    })
+
+    remark_attachment_file.addEventListener("change", e => {
+        const file = remark_attachment_file.files[0];
+        const MAX_SIZE = 6 * 1024 * 1024; // 5MB
+
+        if (!file) return;
+        if (file.size > MAX_SIZE) {
+            alert("File exceeds 5MB limit");
+            remark_attachment_file.value = "";
+            return;
+        }
+
+        const fileName = file.name;
+        let fileSize;
+
+        if (file.size >= 1024 * 1024) {
+            fileSize = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+        } else {
+            fileSize = (file.size / 1024).toFixed(2) + ' KB';
+        }
+
+        remark_attachment_name.innerText = fileName
+        remark_attachment_size.innerText = fileSize
+
+        remark_attachment.removeAttribute("hidden")
+        remark_attachment.classList.add("d-flex")
+    })
+    
+    remark_attachment_remove.addEventListener("click", e => {
+        remark_attachment_file.value = ""
+        remark_attachment.setAttribute("hidden","")
+        remark_attachment.classList.remove("d-flex")
+    })
+
+    remark_send.addEventListener("click", e => {
+        if(remark_attachment_file.value){
+            if(remark_message.value){
+                const file = remark_attachment_file.files[0];
+                const formData = new FormData();
+                formData.append("type", "file_with_remark");
+                formData.append("tid", remark_send.getAttribute("tid"));
+                formData.append("size",remark_attachment_size.innerText);
+                formData.append("file", file);
+                formData.append("remark", remark_message.value);
+                sole.file("../../controllers/st/tasks/save_remark.php",formData).then(res => {
+                    if(res.status){
+                        remark_attachment.setAttribute("hidden","")
+                        remark_attachment.classList.remove("d-flex")
+                        remark_attachment_file.value = ""
+                        remark_message.value = ""
+                        loadRemarks(show_remarks_btn.getAttribute("tid"))
+                    }else{
+                        alert(res.message)
+                    }
+                })
+            }else{
+                const file = remark_attachment_file.files[0];
+                const formData = new FormData();
+                formData.append("type", "file_only");
+                formData.append("tid", remark_send.getAttribute("tid"));
+                formData.append("size",remark_attachment_size.innerText);
+                formData.append("file", file);
+                sole.file("../../controllers/st/tasks/save_remark.php",formData).then(res => {
+                    if(res.status){
+                        remark_attachment.setAttribute("hidden","")
+                        remark_attachment.classList.remove("d-flex")
+                        remark_attachment_file.value = ""
+                        remark_message.value = ""
+                        loadRemarks(show_remarks_btn.getAttribute("tid"))
+                    }else{
+                        alert(res.message)
+                    }
+                })
+            }
+        }else{
+            if(remark_message.value){
+                const formData = new FormData();
+                formData.append("type", "remark_only");
+                formData.append("tid", remark_send.getAttribute("tid"));
+                formData.append("remark", remark_message.value);
+                sole.file("../../controllers/st/tasks/save_remark.php",formData).then(res => {
+                    if(res.status){
+                        remark_attachment.setAttribute("hidden","")
+                        remark_attachment.classList.remove("d-flex")
+                        remark_attachment_file.value = ""
+                        remark_message.value = ""
+                        loadRemarks(show_remarks_btn.getAttribute("tid"))
+                    }else{
+                        alert(res.message)
+                    }
+                })
+            }
         }
     })
 
@@ -488,12 +629,158 @@ if(document.getElementById("tasks_st")){
     })
 
     document.getElementById("edit_task_modal").addEventListener('shown.bs.modal', function () {
-        if(edit_task_modal_focus && edit_task_status.value != "Accomplished"){
+        if(edit_task_modal_focus && edit_task_status.value != "Accomplished" && localStorage.getItem("privileges") != "Technician"){
             edit_task_description.focus()
             edit_task_modal_focus = false  
         }
-        
     })
+
+    document.getElementById("remarks").addEventListener('shown.bs.modal', function () {
+        scrollToBottom()
+    })
+
+    show_remarks_btn.addEventListener("click", e => {
+        loadRemarks(show_remarks_btn.getAttribute("tid"))
+    })
+
+    // remarks_modal.show()
+
+    function loadRemarks(tid){
+        sole.post("../../controllers/st/tasks/get_remarks.php",{
+            tid : tid
+        }).then(res => {
+            if(res.length){
+                remark_container.innerHTML = ""
+                res.forEach(rem => {
+                    var name = "Other User"
+                    var position = "start";
+                    var rem_content = [];
+                    remarkers.forEach(rems => {
+                        if(rem.uid == rems.id){
+                            name = rems.name
+                        }
+                    })
+
+                    if(rem.uid == localStorage.getItem("user_id")){
+                        position = "end"
+                    }
+
+                    if(rem.type == "remark_only"){
+                        rem_content = rem.content.split("\n");
+                        
+                        remark_container.insertAdjacentHTML("beforeend",
+                            `<div class="w-100 mb-2 text-`+position+`">`+
+                                `<p class="m-0 remark-user text-primary">`+name+`</p>`+
+                                `<p class="m-0 mb-1 text-primary remark-date">`+formatDateTime(rem.created_at)+`</p>`+
+                                `<div class="w-100 d-flex justify-content-`+position+`">`+
+                                    `<div class="f-14 remark-content bg-light rounded-3 p-2">`+rem_content.join("\n")+`</div>`+
+                                ` </div>`+
+                            `</div>`
+                        )
+                    }
+
+                    if(rem.type == "file_with_remark"){
+                        var store_name;
+                        var disp_name;
+                        var size;
+                        var temp;
+                        temp        = rem.content.split("***")
+                        store_name  = temp[0].split("+++")[1]
+                        disp_name   = temp[0].split("+++")[0]
+                        size        = temp[0].split("+++")[2]
+
+                        rem_content = temp[1].split("\n");
+                        remark_container.insertAdjacentHTML("beforeend",
+                            `<div class="w-100 mb-2 text-`+position+`">`+
+                                `<p class="m-0 remark-user text-primary">`+name+`</p>`+
+                                `<p class="m-0 mb-1 text-primary remark-date">`+formatDateTime(rem.created_at)+`</p>`+
+                                `<div class="d-flex justify-content-`+position+` w-100">`+
+                                    `<div sname="`+store_name+`" class="open_file text-start d-flex p-3 pb-0 mb-1 rounded-3 border remark-file">`+
+                                        `<span class="fa fa-file m-2 me-2"></span>`+
+                                        `<div sname="`+store_name+`" class="open_file w-100">`+
+                                            `<h6 class="p-0 m-0 f-14">`+disp_name+`</h6>`+
+                                            `<p sname="`+store_name+`" class="open_file f-12"><i>`+size+`</i></p>`+
+                                        `</div>`+
+                                    `</div>`+
+                                `</div>`+
+                                `<div class="w-100 d-flex justify-content-`+position+`">`+
+                                    `<div class="f-14 remark-content bg-light rounded-3 p-2">`+rem_content.join("\n")+`</div>`+
+                                ` </div>`+
+                            `</div>`
+                        )
+                    }
+
+                    if(rem.type == "file_only"){
+                        var store_name;
+                        var disp_name;
+                        var size;
+                        var temp;
+                        temp        = rem.content.split("***")
+                        store_name  = temp[0].split("+++")[1]
+                        disp_name   = temp[0].split("+++")[0]
+                        size        = temp[0].split("+++")[2]
+
+                        remark_container.insertAdjacentHTML("beforeend",
+                            `<div class="w-100 mb-2 text-`+position+`">`+
+                                `<p class="m-0 remark-user text-primary">`+name+`</p>`+
+                                `<p class="m-0 mb-1 text-primary remark-date">`+formatDateTime(rem.created_at)+`</p>`+
+                                `<div class="d-flex justify-content-`+position+` w-100">`+
+                                    `<div sname="`+store_name+`" class="open_file text-start d-flex p-3 pb-0 mb-1 rounded-3 border remark-file">`+
+                                        `<span class="fa fa-file m-2 me-2"></span>`+
+                                        `<div sname="`+store_name+`" class="open_file w-100">`+
+                                            `<h6 class="p-0 m-0 f-14">`+disp_name+`</h6>`+
+                                            `<p sname="`+store_name+`" class="open_file f-12"><i>`+size+`</i></p>`+
+                                        `</div>`+
+                                    `</div>`+
+                                `</div>`+
+                            `</div>`
+                        )
+                    }
+                })
+            }else{
+                remark_container.innerHTML = "<p><i>Nothing to show.</i></p>"
+            }
+        })
+    }
+
+    remark_container.addEventListener("click", e => {
+        if(e.target.parentNode.classList.contains("open_file")){
+            const url = "../../assets/uploads/remark_file_attachments/" + e.target.parentNode.getAttribute("sname"); // or wherever your link is
+            window.open(url, "_blank");
+        }
+    })
+
+    // Function to scroll to bottom
+    function scrollToBottom(smooth = false) {
+        remark_container.scrollTo({
+            top: remark_container.scrollHeight,
+            behavior: smooth ? "smooth" : "auto"
+        });
+    }
+
+    // MutationObserver to auto scroll on content change
+    const observer = new MutationObserver(() => {
+        scrollToBottom(true); // smooth scroll on update
+    });
+
+    observer.observe(remark_container, {
+        childList: true,
+        subtree: true,
+        characterData: true
+    });
+
+    function formatDateTime(dateStr) {
+        return new Date(dateStr.replace(" ", "T"))
+            .toLocaleString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true
+            })
+            .replace(",", "");
+    }
 
     flatpickr("#task_deadline", {
         dateFormat:     "m/d/Y",
@@ -623,6 +910,4 @@ if(document.getElementById("tasks_st")){
             }
         })
     });
-
-
 }

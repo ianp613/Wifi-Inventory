@@ -3,6 +3,7 @@
     session_start();
     
     $_SESSION["user_id"] = null;
+    $_SESSION["auth"] = null;
 
     // $user = new User;
     // $user->name = "Administrator";

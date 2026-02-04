@@ -129,3 +129,21 @@ textarea:read-only, select:read-only{
     display: block !important;
     text-decoration: none;
 }
+.remark-user{
+    font-weight: 500;
+    font-size: 13px;
+}
+.remark-date{
+    font-style: italic;
+    font-size: 13px;
+}
+.remark-content{
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    width: auto;
+    max-width: 80%;
+}
+.remark-file{
+    width: auto;
+    max-width: 80%;
+}
