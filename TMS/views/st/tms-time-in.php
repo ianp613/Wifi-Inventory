@@ -31,7 +31,7 @@
                 <h6>To fix please enable your GPS and use a cellphone for more accurate location.</h6>
             </div>
         </div>
-        <div class="tms-capture w-100 text-center position-fixed bottom-0 pt-2 pe-2"  style="max-width: 400px; width: 100%; height: 60px; margin-bottom: 70px;">
+        <div class="tms-capture w-100 text-center position-fixed bottom-0 pt-2 pe-2"  style="z-index: 1000; max-width: 400px; width: 100%; height: 60px; margin-bottom: 70px;">
             <button id="capture" class="btn text-white fw-bold" style="background-color: #E97132; width: 150px;">CAPTURE</button>
             <button hidden id="retake" class="btn text-white fw-bold" style="background-color: #E97132; width: 150px;">RETAKE</button>
             <button hidden id="save_time_in" class="btn btn-primary text-white fw-bold" style="width: 150px;">SAVE</button>

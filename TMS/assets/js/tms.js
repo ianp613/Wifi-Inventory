@@ -40,4 +40,6 @@ if(document.getElementById("tms_menu")){
         localStorage.setItem("user_id",res[0]["id"])
         localStorage.setItem("privileges",res[0]["privileges"])
     })
+
+    localStorage.setItem("restricted","Technician")
 }

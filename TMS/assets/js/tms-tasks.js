@@ -65,6 +65,10 @@ if(document.getElementById("tasks")){
     var view_accomplished_task          = document.getElementById("view_accomplished_task")
     var task_empty                      = document.getElementById("task_empty")
 
+    var tech_task_status                = document.getElementById("tech_task_status")
+    var tech_task_turnover              = document.getElementById("tech_task_turnover")
+    var tech_update_btn                 = document.getElementById("tech_update_btn")
+
     var buddies                         = []
     var edit_buddies                    = []
     var status_                         = ["Pending","Ongoing","Accomplished"]
@@ -82,6 +86,7 @@ if(document.getElementById("tasks")){
     const edit_buddy_selector           = new bootstrap.Modal(document.getElementById('edit_buddy_selector'),unclose);
     const delete_task_confirmation      = new bootstrap.Modal(document.getElementById('delete_task_confirmation'),unclose);
     const remarks_modal                 = new bootstrap.Modal(document.getElementById('remarks'),unclose);
+    const tech_update_task              = new bootstrap.Modal(document.getElementById('tech_update_task'),unclose);
 
     localStorage.getItem("task_files") === null ? localStorage.setItem("task_files","") : null
     localStorage.getItem("edit_task_files") === null ? localStorage.setItem("edit_task_files","") : null
@@ -121,7 +126,7 @@ if(document.getElementById("tasks")){
 
     loadTask()
 
-    if(localStorage.getItem("privileges") != "Technician"){
+    if(localStorage.getItem("privileges") != localStorage.getItem("restricted")){
         tms_user_list.removeAttribute("hidden")
         tms_user_list.classList.add("d-flex")
     }
@@ -307,9 +312,9 @@ if(document.getElementById("tasks")){
                     }
                 })
 
-                delete_task_btn.hidden      = res["task"][0].status == "Pending" && localStorage.getItem("privileges") != "Technician" ? false : true
+                delete_task_btn.hidden      = res["task"][0].status == "Pending" && localStorage.getItem("privileges") != localStorage.getItem("restricted") ? false : true
+                
                 edit_task_status.innerHTML  = ""
-
                 status_.forEach(stat => {
                     var opt                 = document.createElement("option")
                     opt.value               = stat
@@ -320,13 +325,42 @@ if(document.getElementById("tasks")){
                     edit_task_status.appendChild(opt)
                 })
 
-                if(res["task"][0].status == "Accomplished" || localStorage.getItem("privileges") == "Technician"){
+
+                tech_task_status.innerHTML  = ""
+                status_.forEach(stat => {
+                    var opt                 = document.createElement("option")
+                    opt.value               = stat
+                    opt.innerText           = stat
+                    if(stat == res["task"][0].status){
+                        opt.selected        = true
+                    }
+                    tech_task_status.appendChild(opt)
+
+                    if(res["task"][0].status == "Accomplished"){
+                        tech_task_turnover.setAttribute("style","pointer-events: none;")
+                        tech_task_status.setAttribute("style","pointer-events: none;")
+                        tech_update_btn.setAttribute("style","pointer-events: none;")
+                    }else{
+                        tech_task_turnover.removeAttribute("style")
+                        tech_task_status.removeAttribute("style")
+                        tech_update_btn.removeAttribute("style")
+                    }
+                })
+
+                if(res["task"][0].status == "Accomplished" || localStorage.getItem("privileges") == localStorage.getItem("restricted")){
                     edit_task_status.hidden         = true
                     edit_task_status_label.hidden   = true
 
                     var el_ = document.getElementsByClassName("disabler")
                     for (let i = 0; i < el_.length; i++) {
-                        el_[i].setAttribute("style","pointer-events: none;")
+                        if(el_[i].classList.contains("remarks-control")){
+                            if(res.task[0].status == "Accomplished"){
+                                el_[i].setAttribute("style","pointer-events: none;")
+                            }
+                        }else{
+                            el_[i].setAttribute("style","pointer-events: none;")    
+                        }
+                        
                     }
                 }else{
                     edit_task_status.hidden         = false
@@ -337,10 +371,18 @@ if(document.getElementById("tasks")){
                     }
                 }
 
-                if(localStorage.getItem("privileges") == "Technician"){
+                if(localStorage.getItem("privileges") == localStorage.getItem("restricted")){
                     var el_ = document.getElementsByClassName("hidder")
                     for (let i = 0; i < el_.length; i++) {
-                        el_[i].setAttribute("hidden","")
+                        if(el_[i].classList.contains("tech_update_task")){
+                            if(res.task[0].status == "Accomplished" || res.task[0].aid != localStorage.getItem("user_id")){
+                                el_[i].setAttribute("hidden","")
+                            }else{
+                                el_[i].removeAttribute("hidden","")
+                            }
+                        }else{
+                            el_[i].setAttribute("hidden","")    
+                        }
                     }
                     var el_ = document.getElementsByClassName("shower")
                     for (let i = 0; i < el_.length; i++) {
@@ -389,8 +431,8 @@ if(document.getElementById("tasks")){
                 var buddies_                        = []
                 sole.get("../../controllers/st/tasks/get_users.php")
                 .then(res => {
+                    buddies_ = res
                     res.forEach(user => {
-                        buddies_ = res
                         if(user.id != parseInt(task_user_list.value)){
                             var checked_ = edit_buddies.includes(user.id.toString()) ? "checked" : ""
                             if(task_assignment != user.id){
@@ -420,7 +462,13 @@ if(document.getElementById("tasks")){
                                     })
                                 }) 
                             }
-                            
+                        }
+                        
+                        if(user.id != localStorage.getItem("user_id")){
+                            var opt         = document.createElement("option")
+                            opt.value       = user.id
+                            opt.innerText   = user.name
+                            tech_task_turnover.appendChild(opt)
                         }
                     });
                 })
@@ -429,8 +477,11 @@ if(document.getElementById("tasks")){
                 show_remarks_btn.setAttribute("tid",res["task"][0].id)
                 remark_send.setAttribute("tid",res["task"][0].id)
                 edit_task_modal.show()
-
-                res.remarker_id.includes(res.your_id.toString()) ? remarks_control.removeAttribute("hidden") : remarks_control.setAttribute("hidden","")
+                if(res.task[0].status != "Accomplished" && res.remarker_id.includes(res.your_id.toString())){
+                    remarks_control.removeAttribute("hidden")
+                }else{
+                    remarks_control.setAttribute("hidden","")
+                }
             })
         }
     })
@@ -533,14 +584,20 @@ if(document.getElementById("tasks")){
         }
     })
 
+    console.log()
     delete_task_btn_confirm.addEventListener("click", e => {
+        if(localStorage.getItem("privileges") == localStorage.getItem("restricted")){
+            alert("You do not have enough privileges to continue this action.")
+            delete_task_confirmation.hide()
+            return
+        }
         sole.post("../../controllers/st/tasks/delete_task.php",{
             id : delete_task_btn.getAttribute("tid")
         }).then(res => {
             bs5.toast(res.type,res.message)
             delete_task_confirmation.hide()
             loadTask()
-        })
+        }) 
     })
 
     task_user_list.addEventListener("change", e =>{
@@ -549,6 +606,11 @@ if(document.getElementById("tasks")){
     })
 
     task_submit_btn.addEventListener("click", e => {
+        if(localStorage.getItem("privileges") == localStorage.getItem("restricted")){
+            alert("You do not have enough privileges to continue this action.")
+            window.location.reload()
+            return
+        }
         if(!task_description.value){
             bs5.toast("warning","Please input description.")
             return
@@ -584,6 +646,11 @@ if(document.getElementById("tasks")){
     })
 
     edit_task_submit_btn.addEventListener("click", e => {
+        if(localStorage.getItem("privileges") == localStorage.getItem("restricted")){
+            alert("You do not have enough privileges to continue this action.")
+            window.location.reload()
+            return
+        }
         if(!edit_task_description.value){
             bs5.toast("warning","Please input description.")
             return
@@ -621,6 +688,10 @@ if(document.getElementById("tasks")){
         })
     })
 
+    tech_update_btn.addEventListener("click", e => {
+
+    })
+
     document.getElementById("add_task_modal").addEventListener('shown.bs.modal', function () {
         if(task_modal_focus){
             task_description.focus()
@@ -629,13 +700,17 @@ if(document.getElementById("tasks")){
     })
 
     document.getElementById("edit_task_modal").addEventListener('shown.bs.modal', function () {
-        if(edit_task_modal_focus && edit_task_status.value != "Accomplished" && localStorage.getItem("privileges") != "Technician"){
+        if(edit_task_modal_focus && edit_task_status.value != "Accomplished" && localStorage.getItem("privileges") != localStorage.getItem("restricted")){
             edit_task_description.focus()
             edit_task_modal_focus = false  
         }
     })
 
-    document.getElementById("remarks").addEventListener('shown.bs.modal', function () {
+    document.getElementById("remarks").addEventListener('hidden.bs.modal', function () {
+        remark_attachment.setAttribute("hidden","")
+        remark_attachment.classList.remove("d-flex")
+        remark_attachment_file.value = ""
+        remark_message.value = ""
         scrollToBottom()
     })
 
@@ -652,17 +727,17 @@ if(document.getElementById("tasks")){
             if(res.length){
                 remark_container.innerHTML = ""
                 res.forEach(rem => {
-                    var name = "Other User"
-                    var position = "start";
+                    var name        = "Other User"
+                    var position    = "start";
                     var rem_content = [];
                     remarkers.forEach(rems => {
                         if(rem.uid == rems.id){
-                            name = rems.name
+                            name    = rems.name
                         }
                     })
 
                     if(rem.uid == localStorage.getItem("user_id")){
-                        position = "end"
+                        position    = "end"
                     }
 
                     if(rem.type == "remark_only"){
@@ -673,7 +748,7 @@ if(document.getElementById("tasks")){
                                 `<p class="m-0 remark-user text-primary">`+name+`</p>`+
                                 `<p class="m-0 mb-1 text-primary remark-date">`+formatDateTime(rem.created_at)+`</p>`+
                                 `<div class="w-100 d-flex justify-content-`+position+`">`+
-                                    `<div class="f-14 remark-content bg-light rounded-3 p-2">`+rem_content.join("\n")+`</div>`+
+                                    `<div class="f-14 remark-content bg-light rounded-3 p-2 text-start">`+rem_content.join("\n")+`</div>`+
                                 ` </div>`+
                             `</div>`
                         )
@@ -704,7 +779,7 @@ if(document.getElementById("tasks")){
                                     `</div>`+
                                 `</div>`+
                                 `<div class="w-100 d-flex justify-content-`+position+`">`+
-                                    `<div class="f-14 remark-content bg-light rounded-3 p-2">`+rem_content.join("\n")+`</div>`+
+                                    `<div class="f-14 remark-content bg-light rounded-3 p-2 text-start">`+rem_content.join("\n")+`</div>`+
                                 ` </div>`+
                             `</div>`
                         )

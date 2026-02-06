@@ -82,7 +82,10 @@
                 <h6><span class="hidder">Edit Task: </span><span hidden class="shower">Task: </span><span id="edit_task_name"></span></h6>
                 <div>
                     <button data-bs-toggle="modal" data-bs-target="#delete_task_confirmation" data-bs-dismiss="modal" id="delete_task_btn" class="btn btn-sm btn-danger rounded-pill"><span class="fa fa-trash"></span> Delete</button>
-                    <span hidden data-bs-dismiss="modal" class="shower fa fa-remove text-secondary"></span>
+                    <div class="shower">
+                        <span data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#tech_update_task" class="hidder tech_update_task">Update | </span>  
+                        <span data-bs-dismiss="modal" class="fa fa-remove text-secondary"></span>
+                    </div>
                 </div>
             </div>
             <div id="edit_task_modal_body" class="modal-body">
@@ -117,8 +120,8 @@
                     </div>    
                 </div>
             </div>
-            <button data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#remarks" id="show_remarks_btn" class="btn bg-light me-3 ms-3 mb-2 fw-bold"><span class="fa fa-comments-o"></span> Remarks</button>
-            <div class="modal-footer">
+            <button data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#remarks" id="show_remarks_btn" class="btn btn-light me-3 ms-3 mb-2 fw-bold"><span class="fa fa-comments-o"></span> Remarks</button>
+            <div class="hidder modal-footer">
                 <div data-bs-dismiss="modal" class="hidder btn btn-sm btn-secondary rounded-pill"><span class="fa fa-remove"></span> Cancel</div>
                 <div id="edit_task_submit_btn" class="hidder disabler btn btn-sm btn-primary rounded-pill"><span class="fa fa-save"></span> Save</div>
             </div>
@@ -177,7 +180,7 @@
             <div id="remark_container" class="remark-container modal-body">
                 <!-- REMARKS HERE -->
             </div>
-            <div id="remarks_control" hidden class="modal-footer disabler">
+            <div id="remarks_control" hidden class="remarks-control modal-footer disabler">
                 <div class="w-100">
                     <div id="remark_attachment" hidden class="remark_attachment p-3 pb-0 mb-1 rounded-3 border">
                         <span class="fa fa-file m-2 me-2"></span>
@@ -199,4 +202,26 @@
     </div>
 </div>
 
+<div class="modal fade" id="tech_update_task" tabindex="-1">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6>Update Task</h6>
+            </div>
+            <div class="modal-body">
+                <label for="tech_task_turnover">Turn Over Task</label>
+                <select name="" id="tech_task_turnover" class="form-control mt-2 mb-2">
+                    <option value="">-- Select User --</option>
+                </select>
+                <label for="tech_task_status">Task Status</label>
+                <select name="" id="tech_task_status" class="form-control mt-2 mb-2">
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#edit_task_modal" class="btn btn-sm btn-secondary rounded-pill"><span class="fa fa-remove"></span> Cancel</button>
+                <button id="tech_update_btn" class="btn btn-sm btn-primary rounded-pill"><span class="fa fa-save"></span> Update</button>
+            </div>
+        </div>
+    </div>
+</div>
 
