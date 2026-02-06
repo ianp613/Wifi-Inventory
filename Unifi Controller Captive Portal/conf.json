@@ -4,15 +4,14 @@
             "ITAdmin",
             "DDC Admin Wifi",
             "DDC Planning Wifi",
-            "Wifi Tester",
             "DDC Free WiFi"
         ],
         "Captive_SSID": [
             "DDC Free WiFi"
         ],
-        "Server": "192.168.15.220",
+        "Server": "192.168.15.222",
         "Port": "8443",
-        "Site_ID": "0gl2yah5",
+        "Site_ID": "default",
         "Username": "captive_user",
         "Password": "CmoS32828324",
         "Authentication": true,
