@@ -516,88 +516,88 @@
 
             /* ------------------------- VALENTINES START ------------------------------------------------------------------------- */
 
-            const canvas = document.getElementById('weatherCanvas');
-            const ctx = canvas.getContext('2d');
+            // const canvas = document.getElementById('weatherCanvas');
+            // const ctx = canvas.getContext('2d');
 
-            let W = window.innerWidth;
-            let H = window.innerHeight;
-            canvas.width = W;
-            canvas.height = H;
+            // let W = window.innerWidth;
+            // let H = window.innerHeight;
+            // canvas.width = W;
+            // canvas.height = H;
 
-            const hearts = [];
+            // const hearts = [];
 
-            // Colors
-            const heartColors = ['#ff4d6d', '#ff85a1', '#ff1e56', '#ff6f91'];
+            // // Colors
+            // const heartColors = ['#ff4d6d', '#ff85a1', '#ff1e56', '#ff6f91'];
 
-            // --- Heart Constructor ---
-            function Heart(x, y) {
-                this.x = x;
-                this.y = y;
-                this.size = Math.random() * 15 + 10;
-                this.color = heartColors[Math.floor(Math.random() * heartColors.length)];
-                this.alpha = 1;
-                this.speed = Math.random() * 1.5 + 0.5;
-                this.swing = Math.random() * Math.PI * 2;
-            }
+            // // --- Heart Constructor ---
+            // function Heart(x, y) {
+            //     this.x = x;
+            //     this.y = y;
+            //     this.size = Math.random() * 15 + 10;
+            //     this.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+            //     this.alpha = 1;
+            //     this.speed = Math.random() * 1.5 + 0.5;
+            //     this.swing = Math.random() * Math.PI * 2;
+            // }
 
-            // --- Draw Heart Shape ---
-            function drawHeart(x, y, size, color, alpha) {
-                ctx.save();
-                ctx.translate(x, y);
-                ctx.scale(size / 30, size / 30);
-                ctx.globalAlpha = alpha;
-                ctx.fillStyle = color;
+            // // --- Draw Heart Shape ---
+            // function drawHeart(x, y, size, color, alpha) {
+            //     ctx.save();
+            //     ctx.translate(x, y);
+            //     ctx.scale(size / 30, size / 30);
+            //     ctx.globalAlpha = alpha;
+            //     ctx.fillStyle = color;
 
-                ctx.beginPath();
-                ctx.moveTo(0, 10);
-                ctx.bezierCurveTo(0, 0, -15, 0, -15, 10);
-                ctx.bezierCurveTo(-15, 25, 0, 30, 0, 40);
-                ctx.bezierCurveTo(0, 30, 15, 25, 15, 10);
-                ctx.bezierCurveTo(15, 0, 0, 0, 0, 10);
-                ctx.closePath();
-                ctx.fill();
+            //     ctx.beginPath();
+            //     ctx.moveTo(0, 10);
+            //     ctx.bezierCurveTo(0, 0, -15, 0, -15, 10);
+            //     ctx.bezierCurveTo(-15, 25, 0, 30, 0, 40);
+            //     ctx.bezierCurveTo(0, 30, 15, 25, 15, 10);
+            //     ctx.bezierCurveTo(15, 0, 0, 0, 0, 10);
+            //     ctx.closePath();
+            //     ctx.fill();
 
-                ctx.restore();
-            }
+            //     ctx.restore();
+            // }
 
-            // --- Create Heart ---
-            function spawnHeart() {
-                hearts.push(new Heart(Math.random() * W, H + 20));
-            }
+            // // --- Create Heart ---
+            // function spawnHeart() {
+            //     hearts.push(new Heart(Math.random() * W, H + 20));
+            // }
 
-            // --- Animation Loop ---
-            function draw() {
-                // White background
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, W, H);
+            // // --- Animation Loop ---
+            // function draw() {
+            //     // White background
+            //     ctx.fillStyle = '#ffffff';
+            //     ctx.fillRect(0, 0, W, H);
 
-                for (let i = hearts.length - 1; i >= 0; i--) {
-                    const h = hearts[i];
+            //     for (let i = hearts.length - 1; i >= 0; i--) {
+            //         const h = hearts[i];
 
-                    drawHeart(h.x, h.y, h.size, h.color, h.alpha);
+            //         drawHeart(h.x, h.y, h.size, h.color, h.alpha);
 
-                    h.y -= h.speed;
-                    h.swing += 0.05;
-                    h.x += Math.sin(h.swing) * 0.5;
-                    h.alpha -= 0.003;
+            //         h.y -= h.speed;
+            //         h.swing += 0.05;
+            //         h.x += Math.sin(h.swing) * 0.5;
+            //         h.alpha -= 0.003;
 
-                    if (h.alpha <= 0 || h.y < -50) {
-                        hearts.splice(i, 1);
-                    }
-                }
-            }
+            //         if (h.alpha <= 0 || h.y < -50) {
+            //             hearts.splice(i, 1);
+            //         }
+            //     }
+            // }
 
-            // Resize handler
-            window.addEventListener('resize', () => {
-                W = window.innerWidth;
-                H = window.innerHeight;
-                canvas.width = W;
-                canvas.height = H;
-            });
+            // // Resize handler
+            // window.addEventListener('resize', () => {
+            //     W = window.innerWidth;
+            //     H = window.innerHeight;
+            //     canvas.width = W;
+            //     canvas.height = H;
+            // });
 
-            // Start
-            setInterval(spawnHeart, 300);
-            setInterval(draw, 30);
+            // // Start
+            // setInterval(spawnHeart, 300);
+            // setInterval(draw, 30);
             /* ------------------------- VALENTINES END ------------------------------------------------------------------------- */
 
 

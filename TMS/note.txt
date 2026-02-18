@@ -12,4 +12,55 @@ ANNEX BUILDING
 
 
 
+
+
+02072026
+
+
+    Logout - Need remarks before submittion
+             
+    Login  - Checkbox for half day
+             Checkbox Flexible time, manual input time in and time out, location not required
+             max OT  4 hours, if exceeded need to input time and reason and need for senior tech to approve
+
+             Name : UID
+                Schedule Type (Flexible or Not Flexible)
+                Date
+                Time in
+                Geo location
+                Img
+                Time Out (Manual input if flexible / extended)
+                Geolocation (Not required if flexible / extended)
+                Img
+                Remark (On time out only)
+                
+                Turn Over (True / False)
+                Turn remarks (Auto compose turn over remark base on what have been turned over task)
+
+
+
+            Senior Tech and Admin view
+             | NAME         Date         Time in         Time Out       Remark
+
+
+    Senior technician - Mandatory input of tech schedule monthly (every 1st week of the month)
+                        edit and delete tech schedule
+    
+    No login means absent.
+
+
+    
+
+
+
+
+
+    Data should always be available for atleast 1 year, and will be auto deleted after
+
+    Monthly 
+
+
+
+
+
 gear_icon_7689.png==3516421654.png+++

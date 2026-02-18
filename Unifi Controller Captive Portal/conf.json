@@ -4,10 +4,10 @@
             "ITAdmin",
             "DDC Admin Wifi",
             "DDC Planning Wifi",
-            "DDC Free WiFi"
+            "DDC Free Wifi"
         ],
         "Captive_SSID": [
-            "DDC Free WiFi"
+            "DDC Free Wifi"
         ],
         "Server": "192.168.15.222",
         "Port": "8443",
@@ -40,8 +40,8 @@
             "Status": "message",
             "Text": "You can now access the internet!"
         },
-        "Title": "Happy Valentines 💘",
-        "Welcome_Text": "Access Code: 454965",
+        "Title": "DDC Free Wifi \ud83d\udedc",
+        "Welcome_Text": "Access Code: 162417",
         "Button_Text": "Get Wifi Access",
         "TOS": false,
         "TOS_Text": ""
