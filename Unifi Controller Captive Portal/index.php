@@ -18,10 +18,11 @@
         <link rel="stylesheet" href="<?php echo $pathToRoot; ?>assets/css/style.css">
     </head>
     <body>
+        <div ptr="<?php echo $pathToRoot; ?>" id="path_to_root"></div>
         <div class="d-flex w-100 justify-content-center">
-            <div class="captive-card">
+            <div class="captive-card" id="captive_card">
                 <img class="captive-img" src="<?php echo $pathToRoot; ?>assets/img/ddc.png" alt="ddc-logo">
-                <h3 class="captive-title mt-3" id="captive_title">UniFi Guest Wifi</h3>
+                <h3 class="captive-title mt-2 pe-3 ps-3" id="captive_title">UniFi Guest Wifi</h3>
                 <h6 id="captive_subtitle" class="captive-subtitle mt-2">Welcome to UniFi Guest Wifi Hotspot</h6>
                 <div id="authentication" hidden>
                     <h6 class="mt-3 mb-3"><strong>Enter Access Code</strong></h6>
@@ -114,10 +115,51 @@
                     captive_submit.innerText = res.Landing_Page.Button_Text
                     captive_submit.style.backgroundColor = res.Landing_Page.Background.Button_Color
                     captive_submit.style.color = res.Landing_Page.Background.Button_Text_Color
-
-                    res.Unifi.Authentication ? authentication.hidden = false : authentication.hidden = true
                     res.Unifi.Authentication ? captiveCard.style.height = "500px" : ""
 
+                    res.Unifi.Authentication ? authentication.hidden = false : authentication.hidden = true
+
+                    const today_event = new Date();
+                    const month_event = String(today_event.getMonth() + 1).padStart(2, '0');
+                    const day_event = String(today_event.getDate()).padStart(2, '0');
+                    const year_event = today_event.getFullYear();
+                    const formatted_event = `${month_event}-${day_event}`;
+
+                    var events = Object.keys(res.Landing_Page.Events)
+                    events.forEach(e => {
+                        if(res.Landing_Page.Events[e].Date == formatted_event){
+                            if(res.Landing_Page.Events[e].Repeat){
+                                captive_title.innerText = res.Landing_Page.Events[e].Banner_Name
+                                if(res.Landing_Page.Events[e].Banner_Image){
+                                    var banner_img = document.createElement("img")
+                                    var ptr = document.getElementById("path_to_root").getAttribute("ptr")
+                                    var captive_card = document.getElementById("captive_card")
+                                    banner_img.setAttribute("class","w-100 position-absolute top-0 start-0")
+                                    banner_img.setAttribute("style","width: 115% !important; margin-left: -30px; margin-top: -50px;")
+                                    banner_img.src = ptr + "assets/img/events_banner/" + res.Landing_Page.Events[e].Banner_Image
+                                    captive_card.appendChild(banner_img)
+                                    res.Unifi.Authentication ? captiveCard.style.height = "550px" : "400px"
+                                    document.getElementById('lockout').style.marginTop = "10px";
+                                }
+                            }else{
+                                if(res.Landing_Page.Events[e].Year.toString() == year_event){
+                                    captive_title.innerText = res.Landing_Page.Events[e].Banner_Name
+                                    if(res.Landing_Page.Events[e].Banner_Image){
+                                        var banner_img = document.createElement("img")
+                                        var ptr = document.getElementById("path_to_root").getAttribute("ptr")
+                                        var captive_card = document.getElementById("captive_card")
+                                        banner_img.setAttribute("class","w-100 position-absolute top-0 start-0")
+                                        banner_img.setAttribute("style","width: 115% !important; margin-left: -30px; margin-top: -50px;")
+                                        banner_img.src = ptr + "assets/img/events_banner/" + res.Landing_Page.Events[e].Banner_Image
+                                        captive_card.appendChild(banner_img)
+                                        res.Unifi.Authentication ? captiveCard.style.height = "550px" : "450px"
+                                        document.getElementById('lockout').style.marginTop = "10px";
+                                    }
+                                }
+                            }
+                            
+                        }
+                    });
                     voucher = res.Unifi.Authentication
                 })
 

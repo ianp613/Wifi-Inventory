@@ -44,6 +44,185 @@
         "Welcome_Text": "Access Code: 162417",
         "Button_Text": "Get Wifi Access",
         "TOS": false,
-        "TOS_Text": ""
+        "TOS_Text": "",
+        "EVENT NOTE1" : "Important: If you set Event.Repaet to false, please set Event.Year to event year e.g. 2026",
+        "EVENT NOTE2" : "Important: To set Event.Banner_Image, please put the filename only e.g christmas_banner.png, and put the file to directory /assets/img/events_banner/. | Otherwise set Event.Banner_Image to false",
+        "Events" : {
+            "Candahug" : {
+                "Date" : "05-01",
+                "Banner_Name" : "Happy Fiesta Brgy. Candahug 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Canhidoc" : {
+                "Date" : "05-02",
+                "Banner_Name" : "Happy Fiesta Brgy. Canhidoc 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Cabarasan Guti" : {
+                "Date" : "05-05",
+                "Banner_Name" : "Happy Fiesta Brgy. Cabarasan Guti 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Baras" : {
+                "Date" : "05-06",
+                "Banner_Name" : "Happy Fiesta Brgy. Baras 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Cangumbang" : {
+                "Date" : "05-08",
+                "Banner_Name" : "Happy Fiesta Brgy. Cangumbang 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Kauswagan" : {
+                "Date" : "05-09",
+                "Banner_Name" : "Happy Fiesta Sitio Kauswagan, Brgy. Barayong 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : false,
+                "Year" : 2026
+            },
+            "Tacuranga" : {
+                "Date" : "05-10",
+                "Banner_Name" : "Happy Fiesta Brgy. Tacuranga 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Cabarasan Daku" : {
+                "Date" : "05-11",
+                "Banner_Name" : "Happy Fiesta Brgy. Cabarasan Daku 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Teraza" : {
+                "Date" : "05-12",
+                "Banner_Name" : "Happy Fiesta Brgy. Teraza 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Gacao" : {
+                "Date" : "05-13",
+                "Banner_Name" : "Happy Fiesta Brgy. Gacao 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Pawing" : {
+                "Date" : "05-15",
+                "Banner_Name" : "Happy Fiesta Brgy. Pawing 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Arado" : {
+                "Date" : "05-16",
+                "Banner_Name" : "Happy Fiesta Brgy. Arado 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "San Isidro" : {
+                "Date" : "05-19",
+                "Banner_Name" : "Happy Fiesta Brgy. San Isidro 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Campetic" : {
+                "Date" : "05-20",
+                "Banner_Name" : "Happy Fiesta Brgy. Campetic 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Anahaway" : {
+                "Date" : "05-21",
+                "Banner_Name" : "Happy Fiesta Brgy. Anahaway 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "San Agustin" : {
+                "Date" : "05-23",
+                "Banner_Name" : "Happy Fiesta Brgy. San Agustin 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "San Jose" : {
+                "Date" : "05-24",
+                "Banner_Name" : "Happy Fiesta Brgy. San Jose 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Castilla" : {
+                "Date" : "05-25",
+                "Banner_Name" : "Happy Fiesta Brgy. Castilla 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Cogon" : {
+                "Date" : "06-06",
+                "Banner_Name" : "Happy Fiesta Brgy. Cogon 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : false,
+                "Year" : 2026
+            },
+            "San Antonio" : {
+                "Date" : "06-13",
+                "Banner_Name" : "Happy Fiesta Brgy. San Antonio 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Libertad" : {
+                "Date" : "06-19",
+                "Banner_Name" : "Happy Fiesta Brgy. Libertad 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Caloogan" : {
+                "Date" : "06-21",
+                "Banner_Name" : "Happy Fiesta Sitio Caloogan, Brgy. San Jose 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : false,
+                "Year" : 2026
+            },
+            "San Joaquin" : {
+                "Date" : "07-26",
+                "Banner_Name" : "Happy Fiesta Brgy. San Joaquin 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Palo Leyte" : {
+                "Date" : "08-06",
+                "Banner_Name" : "Happy Fiesta Palo Leyte 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : true,
+                "Year" : true
+            },
+            "Salvacion" : {
+                "Date" : "09-12",
+                "Banner_Name" : "Happy Fiesta Brgy. Salvacion 🥳",
+                "Banner_Image" : "fiesta.png",
+                "Repeat" : false,
+                "Year" : 2026
+            }
+        }
     }
 }
