@@ -4,7 +4,8 @@
         "ClientMigration",
         "VoucherMigration",
         "Authentication",
-        "UPV"
+        "UPV",
+        "LockoutMigration"
     ];
 
     class UserMigration
@@ -65,6 +66,17 @@
             Migrate::string("cid");
             Migrate::string("vid");
             Migrate::string("count");
+        }
+    }
+
+    class LockoutMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("lockout");
+            Migrate::attrib_string(1000);
+            Migrate::string("mac");
+            Migrate::string("attempt");
+            Migrate::string("time");
         }
     }
 
