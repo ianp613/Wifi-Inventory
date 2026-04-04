@@ -142,13 +142,16 @@ function loadClients(){
 }
 
 function getButtons(conf,r){
+  var mac = r.mac ? r.mac : "-"
+  var hostname = r.hostname ? r.hostname : "Guest User"
+
   r.hostname = r.hostname ? r.hostname : "Guest User"
   var buttons = "<button hostname=\""+r.hostname+"\" mac=\""+r.mac+"\" class=\"btn btn-sm btn-secondary kick\"><span hostname=\""+r.hostname+"\" mac=\""+r.mac+"\" class=\"fa fa-refresh kick\"></span></button>"
   var disabled = ""
   
   if(conf.Unifi.Captive_SSID.includes(r.essid)){
     disabled = r.authorized ? "" : "disabled"
-    return buttons += "<button hostname=\""+r.hostname+"\" mac=\""+r.mac+"\" class=\"btn btn-sm btn-danger ms-1 unauthorize " + disabled + "\"><span hostname=\""+r.hostname+"\" mac=\""+r.mac+"\" class=\"fa fa-unlink unauthorize\"></span></button>"
+    return buttons + "<a title=\"View portal as "+hostname+"\" target=\"_blank\" href=\""+(window.location.origin+"/?id="+mac)+"\" class=\"btn btn-sm btn-success ms-1\"><span class=\"fa fa-external-link\"></span></a><button hostname=\""+r.hostname+"\" mac=\""+r.mac+"\" class=\"btn btn-sm btn-danger ms-1 unauthorize " + disabled + "\"><span hostname=\""+r.hostname+"\" mac=\""+r.mac+"\" class=\"fa fa-unlink unauthorize\"></span></button>"
   }else{
     return buttons
   }
