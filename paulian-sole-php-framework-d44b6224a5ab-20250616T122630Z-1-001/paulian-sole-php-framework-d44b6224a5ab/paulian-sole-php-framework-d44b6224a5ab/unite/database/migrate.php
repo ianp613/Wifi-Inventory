@@ -53,6 +53,7 @@
                 
                 echo("\e[1;32;40mMigrated\e[0m: \e[1;33;40m".$TABLE."\e[0m\n");
             }catch(PDOException $e){
+                echo $e->getMessage()."\n";
                 Migrate::$stat = true;
             }
         }

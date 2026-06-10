@@ -714,7 +714,7 @@ body{
     display: block;
     justify-content: center;
     text-align: center;
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
@@ -723,7 +723,9 @@ body{
     background-color: white;
     border-radius: 30px;
 }
-
+body{
+    overflow-y: scroll;
+}
 .captive-img{
     width: 50%;
 }

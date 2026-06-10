@@ -55,7 +55,11 @@
                     <h6>⚠️ You have reached the maximum number of login attempts. Please try again after <span id="lockout_time">30</span>.</h6>
                 </div>
                 <div id="captive_submit" class="captive-submit">Login</div>
-                <h6 style="margin-top: 95px" class="text-dark blink"><strong>Powered By: DDC Wifi Team</strong></h6>
+                <h6 style="margin-top: 95px; margin-bottom: 20px;" class="text-dark blink"><strong>Powered By: DDC Wifi Team</strong></h6>
+                <h5 class="fw-bolder m-0 text-danger">Scan. Shop. Smile. <br> DDCmart delivers convenience.</h5>
+                <a style="" href="http://idcsi-officesuites.com:8080/ddc-mart-leyte/public/login" target="blank" class="text-danger fw-bolder text-decoration-none">
+                    <img style="border-radius: 20px; height: 310px; margin-top: 10px;" src="assets/img/ddc_qr1.png" alt="" srcset="">
+                </a>
             </div>
         </div>
         <canvas id="weatherCanvas"></canvas>
@@ -115,7 +119,7 @@
                     captive_submit.innerText = res.Landing_Page.Button_Text
                     captive_submit.style.backgroundColor = res.Landing_Page.Background.Button_Color
                     captive_submit.style.color = res.Landing_Page.Background.Button_Text_Color
-                    res.Unifi.Authentication ? captiveCard.style.height = "500px" : ""
+                    res.Unifi.Authentication ? captiveCard.style.height = "850px" : ""
 
                     res.Unifi.Authentication ? authentication.hidden = false : authentication.hidden = true
 
@@ -138,7 +142,7 @@
                                     banner_img.setAttribute("style","width: 115% !important; margin-left: -30px; margin-top: -50px;")
                                     banner_img.src = ptr + "assets/img/events_banner/" + res.Landing_Page.Events[e].Banner_Image
                                     captive_card.appendChild(banner_img)
-                                    res.Unifi.Authentication ? captiveCard.style.height = "550px" : "400px"
+                                    res.Unifi.Authentication ? captiveCard.style.height = "900px" : "750px"
                                     document.getElementById('lockout').style.marginTop = "10px";
                                 }
                             }else{
@@ -152,7 +156,7 @@
                                         banner_img.setAttribute("style","width: 115% !important; margin-left: -30px; margin-top: -50px;")
                                         banner_img.src = ptr + "assets/img/events_banner/" + res.Landing_Page.Events[e].Banner_Image
                                         captive_card.appendChild(banner_img)
-                                        res.Unifi.Authentication ? captiveCard.style.height = "550px" : "450px"
+                                        res.Unifi.Authentication ? captiveCard.style.height = "900px" : "800px"
                                         document.getElementById('lockout').style.marginTop = "10px";
                                     }
                                 }
