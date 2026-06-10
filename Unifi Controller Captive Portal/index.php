@@ -58,7 +58,7 @@
                 <h6 style="margin-top: 95px; margin-bottom: 20px;" class="text-dark blink"><strong>Powered By: DDC Wifi Team</strong></h6>
                 <h5 class="fw-bolder m-0 text-danger">Scan. Shop. Smile. <br> DDCmart delivers convenience.</h5>
                 <a style="" href="http://idcsi-officesuites.com:8080/ddc-mart-leyte/public/login" target="blank" class="text-danger fw-bolder text-decoration-none">
-                    <img style="border-radius: 20px; height: 310px; margin-top: 10px;" src="assets/img/ddc_qr1.png" alt="" srcset="">
+                    <img style="border-radius: 20px; height: 310px; margin-top: 10px;" src="<?php echo $pathToRoot; ?>assets/img/ddc_qr1.png" alt="" srcset="">
                 </a>
             </div>
         </div>
@@ -142,7 +142,7 @@
                                     banner_img.setAttribute("style","width: 115% !important; margin-left: -30px; margin-top: -50px;")
                                     banner_img.src = ptr + "assets/img/events_banner/" + res.Landing_Page.Events[e].Banner_Image
                                     captive_card.appendChild(banner_img)
-                                    res.Unifi.Authentication ? captiveCard.style.height = "900px" : "750px"
+                                    res.Unifi.Authentication ? captiveCard.style.height = "915px" : "915px"
                                     document.getElementById('lockout').style.marginTop = "10px";
                                 }
                             }else{
@@ -156,7 +156,7 @@
                                         banner_img.setAttribute("style","width: 115% !important; margin-left: -30px; margin-top: -50px;")
                                         banner_img.src = ptr + "assets/img/events_banner/" + res.Landing_Page.Events[e].Banner_Image
                                         captive_card.appendChild(banner_img)
-                                        res.Unifi.Authentication ? captiveCard.style.height = "900px" : "800px"
+                                        res.Unifi.Authentication ? captiveCard.style.height = "915px" : "915px"
                                         document.getElementById('lockout').style.marginTop = "10px";
                                     }
                                 }
@@ -292,6 +292,8 @@
                             function updateTimer() {
                                 const now = new Date();
                                 const diffMs = targetTime - now;
+                                document.getElementsByClassName("captive-card")[0].style.height = "775px"
+
 
                                 if (diffMs <= 0) {
                                     captive_timer.textContent = "Your time is up, please sign in again.";
@@ -302,8 +304,9 @@
 
                                     // cooldownInterval = setInterval(cooldownCounter, 1000);
                                     // cooldown = true;
-
+                                    document.getElementsByClassName("captive-card")[0].style.height = "810px"
                                     setTimeout(() => {
+                                        document.getElementsByClassName("captive-card")[0].style.height = "850px"
                                         captive_timer.setAttribute("hidden", "true");
                                         captive_submit.removeAttribute("hidden");
                                         captive_subtitle.removeAttribute("hidden");

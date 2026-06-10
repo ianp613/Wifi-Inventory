@@ -799,7 +799,7 @@ canvas {
     z-index: 3000;
     /* pointer-events: none; */
     position: absolute;
-    top: 50%;
+    top: 29%;
     background-color: rgb(29, 29, 29);
     transform: translateY(-12%);
     width: 100%;
