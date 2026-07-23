@@ -1,0 +1,5 @@
++---------------------------------------------------+
+| DDC PULSE 2026                                    |
+| Project Updates, Logging & Scheduling Engine      |
+| Copyright © PAUL IAN DUMDUM                       |
++---------------------------------------------------+
