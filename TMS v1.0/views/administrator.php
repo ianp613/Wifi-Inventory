@@ -55,8 +55,8 @@
     <div class="sidebar-foot">
       <div class="avatar">MR</div>
       <div class="who">
-        <div class="name">Morgan Reyes</div>
-        <div class="email">morgan@workbench.io</div>
+        <div class="name">Paul Ian Dumdum</div>
+        <div class="email">Paul Ian@workbench.io</div>
       </div>
     </div>
   </aside>
@@ -67,7 +67,7 @@
       <div class="topbar-left">
         <button class="hamburger-btn" id="hamburgerBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
         <div class="greeting">
-          <h1>Hello, Morgan.</h1>
+          <h1>Hello, Paul Ian.</h1>
           <p>You manage <strong id="greetDeptCount">4 departments</strong> and <strong id="greetUserCount">7 users</strong> across <strong id="greetProjectCount">3 projects</strong>. <span class="date-stub">— Tue, Jul 21</span></p>
         </div>
       </div>

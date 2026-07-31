@@ -743,7 +743,7 @@ function renderDeptManageList(){
     return;
   }
   list.innerHTML = DEPARTMENTS.map(d=>{
-    const count = USERS.filter(u=>u.department===d.name).length;
+    const count = USERS.filter(u=>u.dept_id===d.id).length;
     if(dmDeleteConfirmId === d.id){
       return `
       <div class="project-row">
