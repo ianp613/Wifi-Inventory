@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DDC PULSE — Supervisor</title>
-<link rel="stylesheet" href="../../assets/css/splash.css">
-<link rel="stylesheet" href="../../assets/css/supervisor/css2.css">
-<link rel="stylesheet" href="../../assets/css/supervisor/style.css">
+<link rel="stylesheet" href="../assets/css/splash.css">
+<link rel="stylesheet" href="../assets/css/supervisor/css2.css">
+<link rel="stylesheet" href="../assets/css/supervisor/style.css">
+<link rel="stylesheet" href="../assets/css/main.css">
 </head>
 <body>
 
@@ -28,6 +29,7 @@
       <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h6"/></svg>Kanban Board</a>
       <!-- <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Team</a> -->
       <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-4"/></svg>Reports</a>
+      <a id="cocNavItem" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8.5-8 9c-4.5-.5-8-4-8-9V7l8-4z"/><path d="M9 12l2 2l4-4"/></svg>Code of Conduct</a>
     </nav>
 
     <nav class="nav-group">
@@ -55,7 +57,7 @@
       <div class="topbar-left">
         <button class="hamburger-btn" id="hamburgerBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
         <div class="greeting">
-          <h1>Morning, Paul Ian.</h1>
+          <h1>Hello, Paul Ian.</h1>
           <p>Your team has <strong>2 tasks overdue</strong> and <strong>3 due this week</strong>. <span class="date-stub">— Tue, Jul 21</span></p>
         </div>
       </div>
@@ -312,7 +314,9 @@
     <button>Send</button>
   </div>
 </aside>
-<script src="../../assets/js/splash.js"></script>
-<script src="../../assets/js/supervisor/script.js"></script>
+<?php require __DIR__ . "/modals/coc_modal.php";?>
+<script src="../assets/js/splash.js"></script>
+<script src="../assets/js/supervisor/script.js"></script>
+<script src="../assets/js/main.js"></script>
 </body>
 </html>

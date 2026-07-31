@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DDC PULSE — Technician</title>
-<link href="../../assets/css/splash.css" rel="stylesheet">
-<link href="../../assets/css/user/css2.css" rel="stylesheet">
-<link href="../../assets/css/user/style.css" rel="stylesheet">
+<link href="../assets/css/splash.css" rel="stylesheet">
+<link href="../assets/css/user/css2.css" rel="stylesheet">
+<link href="../assets/css/user/style.css" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/main.css">
 </head>
 <body>
 
@@ -26,6 +27,7 @@
       <a class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Dashboard</a>
       <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>My Tasks<span class="nav-count">12</span></a>
       <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h6"/></svg>Kanban Board</a>
+      <a id="cocNavItem" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8.5-8 9c-4.5-.5-8-4-8-9V7l8-4z"/><path d="M9 12l2 2l4-4"/></svg>Code of Conduct</a>
     </nav>
 
     <nav class="nav-group">
@@ -50,7 +52,7 @@
       <div class="topbar-left">
         <button class="hamburger-btn" id="hamburgerBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
         <div class="greeting">
-          <h1>Morning, Paul Ian.</h1>
+          <h1>Hello, Paul Ian.</h1>
           <p>You have <strong>4 tasks</strong> due this week and <strong>1 overdue</strong>. <span class="date-stub">— Tue, Jul 21</span></p>
         </div>
       </div>
@@ -201,7 +203,9 @@
     <button>Send</button>
   </div>
 </aside>
-<script src="../../assets/js/user/script.js"></script>
-<script src="../../assets/js/splash.js"></script>
+<?php require __DIR__ . "/modals/coc_modal.php";?>
+<script src="../assets/js/splash.js"></script>
+<script src="../assets/js/user/script.js"></script>
+<script src="../assets/js/main.js"></script>
 </body>
 </html>

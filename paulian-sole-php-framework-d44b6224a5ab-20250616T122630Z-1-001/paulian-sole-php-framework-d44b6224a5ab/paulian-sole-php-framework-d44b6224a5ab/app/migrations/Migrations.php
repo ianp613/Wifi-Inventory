@@ -20,9 +20,106 @@
         // "Consumable_LogMigration",
         // "Consumable_RequestMigration",
         // "TerminalsMigrations",
-        "YK_RoomMigration",
-        "YK_ReservedMigration"
+        // "YK_RoomMigration",
+        // "YK_ReservedMigration",
+        "UserMigration_",
+        "DepartmentMigration",
+        "ProjectMigration",
+        "TaskMigration",
+        "ChecklistItemMigration",
+        "AttachmentMigration",
+        "CommentMigration"
     ];
+
+
+    class UserMigration_
+    {
+        public static function index(){
+            Migrate::attrib_table("pl_user");
+            Migrate::attrib_string(1000);
+            Migrate::string("fname");
+            Migrate::string("lname");
+            Migrate::string("privileges");
+            Migrate::string("status");
+            Migrate::string("dept_id");
+            Migrate::string("username");
+            Migrate::string("password");
+        }
+    }
+
+    class DepartmentMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("pl_department");
+            Migrate::attrib_string(1000);
+            Migrate::string("dept_name");
+        }
+    }
+
+    class ProjectMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("pl_project");
+            Migrate::attrib_string(1000);
+            Migrate::string("project_name");
+            Migrate::string("color");
+            Migrate::string("dept_id");
+        }
+    }
+
+    class TaskMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("pl_task");
+            Migrate::attrib_string(1000);
+            Migrate::string("title");
+            Migrate::string("description");
+            Migrate::string("priority");
+            Migrate::string("status");
+            Migrate::string("start_date");
+            Migrate::string("due_date");
+            Migrate::string("completed_at");
+            Migrate::string("project_id");
+            Migrate::string("user_id"); //Team Member
+        }
+    }
+
+    class ChecklistItemMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("pl_checklist_item");
+            Migrate::attrib_string(1000);
+            Migrate::string("task_id");
+            Migrate::string("text");
+            Migrate::string("is_done");
+            Migrate::string("position");
+        }
+    }
+
+    class AttachmentMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("pl_attachment");
+            Migrate::attrib_string(1000);
+            Migrate::string("task_id");
+            Migrate::string("file_name");
+            Migrate::string("file_path");
+            Migrate::string("file_size");
+            Migrate::string("mime_type");
+            Migrate::string("uploaded_by");
+        }
+    }
+
+    class CommentMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("pl_comment");
+            Migrate::attrib_string(1000);
+            Migrate::string("task_id");
+            Migrate::string("user_id");
+            Migrate::string("comment_text");
+        }
+    }
 
     class YK_RoomMigration
     {
