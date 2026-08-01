@@ -25,13 +25,14 @@
             $user = DB::where($user,"username","=",$userid);
             $_SESSION["auth"] = true;
             $_SESSION["userid"] = $user[0]["id"];
-            $_SESSION["name"] = $user[0]["name"];
+            $_SESSION["fname"] = $user[0]["fname"];
+            $_SESSION["lname"] = $user[0]["lname"];
             $_SESSION["privileges"] = $user[0]["privileges"];
             
             $response = [
                 "status" => true,
                 "type" => "success",
-                "message" => "Welcome ".$user[0]["name"],
+                "message" => "Welcome ".$user[0]["fname"],
                 "privileges" => $user[0]["privileges"]
             ];
         }else{

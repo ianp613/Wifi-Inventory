@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DDC PULSE — Technician</title>
 <link href="../assets/css/splash.css" rel="stylesheet">
-<link href="../assets/css/user/css2.css" rel="stylesheet">
-<link href="../assets/css/user/style.css" rel="stylesheet">
+<link href="../assets/css/technician/css2.css" rel="stylesheet">
+<link href="../assets/css/technician/style.css" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/main.css">
 </head>
 <body>
@@ -205,7 +205,7 @@
 </aside>
 <?php require __DIR__ . "/modals/coc_modal.php";?>
 <script src="../assets/js/splash.js"></script>
-<script src="../assets/js/user/script.js"></script>
+<script src="../assets/js/technician/script.js"></script>
 <script src="../assets/js/main.js"></script>
 </body>
 </html>

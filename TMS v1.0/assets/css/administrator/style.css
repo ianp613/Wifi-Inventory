@@ -560,3 +560,17 @@
     .d-meta-grid{grid-template-columns:1fr;}
     .kcol{min-width:85vw;}
   }
+  .comment-deleted .comment-name{
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+  .comment-deleted .avatar{
+    background: var(--surface-alt) !important;
+    color: var(--ink-faint);
+    border: 1.5px dashed var(--line-strong);
+  }
+
+  .meta-item.needs-assignment{
+    color: var(--amber);
+    font-weight: 700;
+  }

@@ -9,13 +9,25 @@ function deptByName(name){ return DEPARTMENTS.find(d=>d.name===name); }
 let nextUserId = 8;
 const USERS = [];
 function memberInfo(name){
-  const u = USERS.find(x=>x.name===name);
+  const u = USERS.find(x => fullName(x) === name);
   if(u) return u;
-  return {name, initials:name.split(' ').map(w=>w[0]).join(''), color:"var(--ink-soft)"};
+  return {fname:'', lname:'', name, initials:name.split(' ').map(w=>w[0]).join(''), color:"var(--ink-soft)"};
 }
 // Users who can actually be assigned tasks: active, non-administrator accounts
 function assignableUsers(){
   return USERS.filter(u=>u.role!=='Administrator' && u.status==='active');
+}
+
+function resolveAssignee(userId){
+  const u = USERS.find(x => x.id === userId);
+  if(u) return { name: fullName(u), initials: u.initials, color: u.color, needsAssignment: false };
+  return { name: 'Unassigned', initials: '—', color: 'var(--ink-faint)', needsAssignment: true };
+}
+
+function resolveCommentAuthor(userId){
+  const u = USERS.find(x => x.id === userId);
+  if(u) return { name: fullName(u), initials: u.initials, color: u.color, deleted: false };
+  return { name: 'Deleted Account', initials: '–', color: 'var(--ink-faint)', deleted: true };
 }
 
 let nextProjectId = 4;
@@ -25,28 +37,74 @@ const PROJECTS = [
   {id:3, name:"Q3 Marketing", color:"#2F6F5E"},
 ];
 function projectByName(name){ return PROJECTS.find(p=>p.name===name); }
+function projectById(id){ return PROJECTS.find(p=>p.id==id); }
+
+
+function fetchProjects(){
+    return sole.get("../../controllers/administrator/get_projects.php")
+    .then(res => {
+      PROJECTS.length = 0;
+      res.forEach(p => {
+        PROJECTS.push({
+          id: p.id,
+          name: p.project_name,
+          color: p.color
+        });
+      });
+      renderList();
+      renderKanban();
+      renderWorkload();
+    });
+}
+
+
+function fetchTasks(){
+  return sole.get("../../controllers/administrator/get_tasks.php")
+    .then(res => {
+      TASKS.length = 0;
+      res.forEach(t => {
+        TASKS.push({
+          id: t.id,
+          title: t.title,
+          desc: t.description || 'No description provided.',
+          project : projectById(t.project_id).name,
+          project_id: t.project_id ? parseInt(t.project_id) : null,
+          user_id: t.user_id ? parseInt(t.user_id) : null,
+          priority: t.priority,
+          status: t.status,
+          start_date: t.start_date,
+          due_date: t.due_date,
+          due: formatTaskDate(t.due_date),
+          overdue: isOverdue(t.due_date, t.status),
+          dueSoon: isDueSoon(t.due_date),
+          checklist: [parseInt(t.checklist[0]) || 0,parseInt(t.checklist[1]) || 0],
+          comments: parseInt(t.comments),
+          files: parseInt(t.files)
+        });
+      });
+      renderList();
+      renderKanban();
+      renderWorkload();
+    });
+}
+
+function formatTaskDate(dateStr){
+  if(!dateStr) return 'Not set';
+  return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', {month:'long', day:'numeric'});
+}
+function isOverdue(dateStr, status){
+  if(!dateStr || status === 'done') return false;
+  return new Date(dateStr + 'T00:00:00') < new Date(new Date().toDateString());
+}
+function isDueSoon(dateStr){
+  if(!dateStr) return false;
+  const due = new Date(dateStr + 'T00:00:00');
+  const days = (due - new Date(new Date().toDateString())) / 86400000;
+  return days >= 0 && days <= 3;
+}
 
 let nextId = 7;
-const TASKS = [
-  {id:1, title:"Redesign the pricing page layout", desc:"Rework the pricing section to reflect the new three-tier structure with the annual/monthly toggle.", project:"Website Revamp", priority:"high", status:"progress", due:"Jul 24", overdue:false, dueSoon:true, checklist:[2,4], comments:2, files:1, assignee:"Jamie Diaz",
-    checklistItems:[{text:"Review Figma redlines", done:true},{text:"Confirm copy with marketing", done:true},{text:"Build responsive breakpoints", done:false},{text:"QA on staging", done:false}],
-    attachments:[{name:"pricing-page-v3.fig", size:"4.2 MB"}]},
-  {id:2, title:"Fix broken checkout link on mobile", desc:"Checkout CTA is unresponsive on iOS Safari below 390px width.", project:"Website Revamp", priority:"critical", status:"todo", due:"Jul 22", overdue:true, dueSoon:false, checklist:[0,2], comments:0, files:1, assignee:"Jamie Diaz",
-    checklistItems:[{text:"Reproduce on device", done:false},{text:"Patch and deploy fix", done:false}],
-    attachments:[{name:"checkout-bug-screenshot.png", size:"850 KB"}]},
-  {id:3, title:"Write onboarding welcome email", desc:"Draft the first email in the new-client welcome sequence.", project:"Client Onboarding", priority:"medium", status:"todo", due:"Jul 25", overdue:false, dueSoon:true, checklist:[0,3], comments:1, files:0, assignee:"Marcus Lin",
-    checklistItems:[{text:"Draft subject lines", done:false},{text:"Write body copy", done:false},{text:"Get legal sign-off", done:false}],
-    attachments:[]},
-  {id:4, title:"Prepare Q3 social content calendar", desc:"Map out August–September posts across channels.", project:"Q3 Marketing", priority:"medium", status:"hold", due:"Jul 30", overdue:false, dueSoon:false, checklist:[1,6], comments:3, files:1, assignee:"Elena Cruz",
-    checklistItems:[{text:"Pull Q2 performance data", done:true},{text:"Draft Instagram posts", done:false},{text:"Draft LinkedIn posts", done:false},{text:"Draft X posts", done:false},{text:"Schedule in Buffer", done:false},{text:"Get manager sign-off", done:false}],
-    attachments:[{name:"q2-performance-report.pdf", size:"1.1 MB"}]},
-  {id:5, title:"Tag and organize client asset library", desc:"Standardize folder naming across shared drive.", project:"Client Onboarding", priority:"low", status:"done", due:"Jul 15", overdue:false, dueSoon:false, checklist:[4,4], comments:0, files:0, assignee:"Marcus Lin",
-    checklistItems:[{text:"Audit existing folders", done:true},{text:"Define naming convention", done:true},{text:"Rename and re-file assets", done:true},{text:"Share guide with team", done:true}],
-    attachments:[]},
-  {id:6, title:"User-test new nav on 5 participants", desc:"Run moderated sessions and log findings in Notion.", project:"Website Revamp", priority:"high", status:"progress", due:"Jul 27", overdue:true, dueSoon:false, checklist:[1,5], comments:1, files:0, assignee:"Noah Bennett",
-    checklistItems:[{text:"Recruit 5 participants", done:true},{text:"Write test script", done:false},{text:"Run sessions", done:false},{text:"Log findings in Notion", done:false},{text:"Share summary with team", done:false}],
-    attachments:[]},
-];
+const TASKS = [];
 
 const STATUS_LABEL = {todo:"To Do", progress:"In Progress", hold:"On Hold", done:"Completed"};
 const STATUS_CLASS = {todo:"status-todo", progress:"status-progress", hold:"status-hold", done:"status-done"};
@@ -63,17 +121,17 @@ function iconClip(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="curren
 function renderWorkload(){
   const strip = document.getElementById('workloadStrip');
   strip.innerHTML = assignableUsers().map(m=>{
-    const mine = TASKS.filter(t=>t.assignee===m.name);
-    const active = mine.filter(t=>t.status!=='done').length;
+    const mine = TASKS.filter(t=>t.user_id===m.id);
+    const active = mine.filter(t=>t.status=='progress').length;
     const overdue = mine.filter(t=>t.overdue).length;
     const done = mine.filter(t=>t.status==='done').length;
     const total = mine.length || 1;
     const pct = Math.round((done/total)*100);
     return `
-    <div class="workload-card ${activeAssignee===m.name?'filtered':''}" onclick="toggleAssigneeFilter('${m.name}')">
+    <div class="workload-card ${String(activeAssignee)===String(m.id)?'filtered':''}" onclick="toggleAssigneeFilter(${m.id})">
       <div class="workload-top">
         <div class="avatar" style="background:${m.color}">${m.initials}</div>
-        <div><div class="name">${m.name}</div><div class="role">${m.role}</div></div>
+        <div><div class="name">${fullName(m)}</div><div class="role">${m.role}</div></div>
       </div>
       <div class="workload-nums"><span>${active} active</span><strong>${pct}% done</strong></div>
       <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
@@ -81,17 +139,24 @@ function renderWorkload(){
     </div>`;
   }).join('');
 }
-function toggleAssigneeFilter(name){
-  activeAssignee = (activeAssignee===name) ? 'all' : name;
+function toggleAssigneeFilter(userId){
+  activeAssignee = (activeAssignee===userId) ? 'all' : userId;
   document.getElementById('assigneeFilter').value = activeAssignee;
   renderWorkload();
   renderList();
+}
+function populateAssigneeFilterOptions(){
+  const sel = document.getElementById('assigneeFilter');
+  const current = sel.value;
+  sel.innerHTML = '<option value="all">All technicians</option>' +
+    assignableUsers().map(m=>`<option value="${m.id}">${fullName(m)}</option>`).join('');
+  sel.value = current || 'all';
 }
 
 // ---------------- List view ----------------
 function renderTicket(t){
   const pct = Math.round((t.checklist[0]/t.checklist[1])*100) || 0;
-  const info = memberInfo(t.assignee);
+  const info = resolveAssignee(t.user_id);   // was: memberInfo(t.assignee)
   return `
   <div class="ticket" onclick="openDrawer(${t.id})">
     <div class="ticket-stub"><div class="avatar" style="background:${info.color}">${info.initials}</div></div>
@@ -105,7 +170,7 @@ function renderTicket(t){
       </div>
       <p class="ticket-desc">${t.desc}</p>
       <div class="ticket-meta">
-        <span class="meta-item assignee">${t.assignee}</span>
+        <span class="meta-item assignee ${info.needsAssignment ? 'needs-assignment' : ''}">${info.name}</span>
         <span class="status-tag ${STATUS_CLASS[t.status]}">${STATUS_LABEL[t.status]}</span>
         <span class="meta-item ${t.overdue?'overdue':(t.dueSoon?'due-soon':'')}">${iconClock()} Due ${t.due}</span>
         <span class="meta-item checklist-progress">${iconCheck()} ${t.checklist[0]}/${t.checklist[1]}
@@ -121,15 +186,16 @@ function renderTicket(t){
 function renderList(){
   const list = document.getElementById('ticketList');
   const q = document.getElementById('searchInput').value.toLowerCase();
-  const filtered = TASKS.filter(t =>
-    (activeFilter==='all' || t.status===activeFilter) &&
-    (activeAssignee==='all' || t.assignee===activeAssignee) &&
-    (t.title.toLowerCase().includes(q) || t.project.toLowerCase().includes(q) || t.assignee.toLowerCase().includes(q))
-  );
+  const filtered = TASKS.filter(t => {
+    const info = resolveAssignee(t.user_id);
+    return (activeFilter==='all' || t.status===activeFilter) &&
+      (activeAssignee==='all' || String(t.user_id)===String(activeAssignee)) &&
+      (t.title.toLowerCase().includes(q) || t.project.toLowerCase().includes(q) || info.name.toLowerCase().includes(q));
+  });
   list.innerHTML = filtered.length ? filtered.map(renderTicket).join('') :
     `<div style="text-align:center;padding:50px 0;color:var(--ink-faint);font-size:13px;">No tasks match this filter.</div>`;
 
-  document.getElementById('statTotal').textContent = TASKS.filter(t=>t.status!=='done').length;
+  document.getElementById('statTotal').textContent = TASKS.filter(t=>t.status=='progress').length;
   document.getElementById('statOverdue').textContent = TASKS.filter(t=>t.overdue).length;
 }
 
@@ -191,14 +257,14 @@ function renderKanban(){
       <div class="kcol-head"><span class="kcol-title">${col.label}</span><span class="kcol-count">${items.length}</span></div>
       ${items.map(t=>{
         const idx = KCOLS.findIndex(c=>c.key===t.status);
-        const info = memberInfo(t.assignee);
+        const info = resolveAssignee(t.user_id);
         return `
         <div class="kcard" draggable="true" data-id="${t.id}">
           <div onclick="openDrawer(${t.id})">
             <div class="kcard-top"><span class="stamp ${t.priority}">${t.priority}</span></div>
             <div class="kcard-proj">${t.project}</div>
             <div class="kcard-title">${t.title}</div>
-            <div class="kcard-assignee"><div class="avatar" style="background:${info.color}">${info.initials}</div><span>${t.assignee}</span></div>
+            <div class="kcard-assignee"><div class="avatar" style="background:${info.color}">${info.initials}</div><span>${info.name}</span></div>
             <div class="kcard-foot">
               <span class="kcard-due">${t.overdue?'⚠ ':''}Due ${t.due}</span>
               <span style="font-size:10.5px;color:var(--ink-faint);">${t.checklist[0]}/${t.checklist[1]}</span>
@@ -279,13 +345,36 @@ function renderDrawerAttachments(t){
     <div class="attachment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg><span class="fname">${a.name}</span><span class="fsize">${a.size}</span></div>`).join('');
 }
 
+function renderDrawerComments(t){
+  const box = document.getElementById('commentsBox');
+  if(!t.comments || !t.commentList || !t.commentList.length){
+    box.innerHTML = `<div class="nt-empty-hint">No comments yet.</div>`;
+    return;
+  }
+  box.innerHTML = t.commentList.map(c => {
+    const author = resolveCommentAuthor(c.user_id);
+    return `
+    <div class="comment ${author.deleted ? 'comment-deleted' : ''}">
+      <div class="avatar" style="background:${author.color}">${author.initials}</div>
+      <div class="comment-body">
+        <div class="comment-head">
+          <span class="comment-name">${author.name}</span>
+          <span class="comment-time">${c.created_at || ''}</span>
+        </div>
+        <div class="comment-text">${c.comment_text}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
 function openDrawer(id){
   currentDrawerTaskId = id;
   const t = TASKS.find(x=>x.id===id) || TASKS[0];
   document.getElementById('dProj').textContent = t.project;
   document.getElementById('dTitle').textContent = t.title;
   document.getElementById('dDesc').textContent = t.desc;
-  document.getElementById('dDue').textContent = 'Due ' + t.due + ', 2026';
+  document.getElementById('dStart').textContent = formatTaskDateFull(t.start_date);
+  document.getElementById('dDue').textContent = formatTaskDateFull(t.due_date);
   const pEl = document.getElementById('dPriority');
   pEl.textContent = t.priority;
   pEl.className = 'stamp ' + t.priority;
@@ -298,22 +387,29 @@ function openDrawer(id){
   renderDrawerChecklist(t);
   renderDrawerAttachments(t);
 
-  document.getElementById('dAssignedTo').textContent = t.assignee;
-  const info = memberInfo(t.assignee);
-  const avatarEl = document.getElementById('dAssigneeAvatar');
-  avatarEl.textContent = info.initials;
-  avatarEl.style.background = info.color;
-  document.getElementById('dAssigneeName').textContent = t.assignee;
+  const info = resolveAssignee(t.user_id);
+  document.getElementById('dAssignedTo').textContent = info.name;
+  document.getElementById('dAssigneeAvatar').textContent = info.initials;
+  document.getElementById('dAssigneeAvatar').style.background = info.color;
+  document.getElementById('dAssigneeName').textContent = info.name;
+
+  const assignedUser = USERS.find(u => u.id === t.user_id);
+  const dept = assignedUser ? DEPARTMENTS.find(d => d.id === assignedUser.dept_id) : null;
+  document.getElementById('dDept').textContent = dept ? dept.name : 'Unassigned';
 
   const select = document.getElementById('reassignSelect');
-  select.innerHTML = '<option value="">Choose a team member…</option>' +
-    assignableUsers().filter(m=>m.name!==t.assignee).map(m=>`<option value="${m.name}">${m.name}</option>`).join('');
+  select.innerHTML = '<option value="">Choose a technician…</option>' +
+    assignableUsers().filter(m=>m.id!==t.user_id).map(m=>`<option value="${m.id}">${fullName(m)}</option>`).join('');
   document.getElementById('reassignNote').value = '';
   document.getElementById('reassignError').classList.remove('show');
   document.getElementById('reassignConfirm').classList.remove('show');
 
   document.getElementById('overlay').classList.add('open');
   document.getElementById('drawer').classList.add('open');
+}
+function formatTaskDateFull(dateStr){
+  if(!dateStr) return 'Not set';
+  return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
 }
 function closeDrawer(){
   document.getElementById('overlay').classList.remove('open');
@@ -362,41 +458,70 @@ function reassignTask(){
   const select = document.getElementById('reassignSelect');
   const noteEl = document.getElementById('reassignNote');
   const errorEl = document.getElementById('reassignError');
-  const newAssignee = select.value;
+  const newUserId = select.value;
 
-  if(!newAssignee){
+  if(!newUserId){
     errorEl.classList.add('show');
     return;
   }
   errorEl.classList.remove('show');
 
-  const previousAssignee = t.assignee;
-  t.assignee = newAssignee;
-  t.reassignHistory = t.reassignHistory || [];
-  t.reassignHistory.push({from:previousAssignee, to:newAssignee, note:noteEl.value.trim(), by:CURRENT_USER, when:'Just now'});
-  t.comments = (t.comments || 0) + 1;
+  const reassignBtn = document.getElementById('reassignBtn');
+  reassignBtn.disabled = true;
 
-  document.getElementById('dAssignedTo').textContent = t.assignee;
-  const info = memberInfo(t.assignee);
-  const avatarEl = document.getElementById('dAssigneeAvatar');
-  avatarEl.textContent = info.initials;
-  avatarEl.style.background = info.color;
-  document.getElementById('dAssigneeName').textContent = t.assignee;
+  sole.post("../../controllers/administrator/reassign_task.php", {
+    id: t.id,
+    user_id: newUserId,
+    note: noteEl.value.trim()
+  }).then(res => {
+    reassignBtn.disabled = false;
 
-  select.innerHTML = '<option value="">Choose a team member…</option>' +
-    assignableUsers().filter(m=>m.name!==t.assignee).map(m=>`<option value="${m.name}">${m.name}</option>`).join('');
-  noteEl.value = '';
+    if(!res.status){
+      errorEl.textContent = res.message || 'Something went wrong reassigning the task.';
+      errorEl.classList.add('show');
+      return;
+    }
 
-  const confirmEl = document.getElementById('reassignConfirm');
-  document.getElementById('reassignConfirmText').textContent = `Reassigned to ${newAssignee}.`;
-  confirmEl.classList.add('show');
+    t.user_id = parseInt(newUserId);
+    const info = resolveAssignee(t.user_id);
 
-  renderList();
-  renderKanban();
-  renderWorkload();
+    document.getElementById('dAssignedTo').textContent = info.name;
+    const avatarEl = document.getElementById('dAssigneeAvatar');
+    avatarEl.textContent = info.initials;
+    avatarEl.style.background = info.color;
+    document.getElementById('dAssigneeName').textContent = info.name;
+
+    const assignedUser = USERS.find(u => u.id === t.user_id);
+    const dept = assignedUser ? DEPARTMENTS.find(d => d.id === assignedUser.dept_id) : null;
+    document.getElementById('dDept').textContent = dept ? dept.name : 'Unassigned';
+
+    select.innerHTML = '<option value="">Choose a technician…</option>' +
+      assignableUsers().filter(m=>m.id!==t.user_id).map(m=>`<option value="${m.id}">${fullName(m)}</option>`).join('');
+    noteEl.value = '';
+
+    ss.toast(null, res.type, res.message, null, "#1B2A22");
+    const confirmEl = document.getElementById('reassignConfirm');
+    document.getElementById('reassignConfirmText').textContent = `Reassigned to ${info.name}.`;
+    confirmEl.classList.add('show');
+
+    renderList();
+    renderKanban();
+    renderWorkload();
+  }).catch(err => {
+    reassignBtn.disabled = false;
+    errorEl.textContent = 'Could not reach the server. Please try again.';
+    errorEl.classList.add('show');
+    console.error(err);
+  });
 }
 document.getElementById('reassignBtn').addEventListener('click', reassignTask);
 document.getElementById('reassignSelect').addEventListener('change', ()=>document.getElementById('reassignError').classList.remove('show'));
+
+function deptForAssignee(userId){
+  const u = USERS.find(x => x.id === userId);
+  const d = u ? DEPARTMENTS.find(dep => dep.id === u.dept_id) : null;
+  return d ? d.name : 'Unassigned';
+}
 
 // ---------------- New task modal ----------------
 const modalOverlay = document.getElementById('modalOverlay');
@@ -480,7 +605,7 @@ function openModal(){
   document.querySelectorAll('.priority-opt').forEach(o=>o.classList.toggle('sel', o.dataset.p==='medium'));
 
   const assigneeSelect = document.getElementById('ntAssignee');
-  assigneeSelect.innerHTML = assignableUsers().map(m=>`<option value="${m.name}">${m.name}</option>`).join('');
+  assigneeSelect.innerHTML = '<option value="-">-- Select User --</option>'+assignableUsers().map(m=>`<option value="${m.id}">${m.fname + " " + m.lname}</option>`).join('');
 
   ntChecklistItems = [];
   ntAttachments = [];
@@ -520,7 +645,7 @@ document.getElementById('modalCreate').addEventListener('click', ()=>{
   const project = document.getElementById('ntProject').value;
   const priority = document.querySelector('.priority-opt.sel').dataset.p;
   const dueRaw = document.getElementById('ntDue').value;
-  const dueLabel = dueRaw ? new Date(dueRaw+'T00:00:00').toLocaleDateString('en-US',{month:'short', day:'numeric'}) : 'Not set';
+  const dueLabel = dueRaw ? new Date(dueRaw+'T00:00:00').toLocaleDateString('en-US',{month:'long', day:'numeric'}) : 'Not set';
 
   const checklistItems = ntChecklistItems.map(text=>({text, done:false}));
   const attachments = ntAttachments.slice();
@@ -837,27 +962,35 @@ document.getElementById('dmSave').addEventListener('click', ()=>{
   }
   errorEl.classList.remove('show');
 
-  if(dmEditingId){
-    // still local-only until an update_department.php endpoint exists
-    const d = DEPARTMENTS.find(x=>x.id===dmEditingId);
-    const oldName = d.name;
-    d.name = name;
-    d.color = dmSelectedColor;
-    USERS.forEach(u=>{ if(u.department===oldName) u.department = name; });
-    resetDeptForm();
-    renderDeptManageList();
-    refreshDeptDependents();
-    return;
-  }
-
   const saveBtn = document.getElementById('dmSave');
   saveBtn.disabled = true;
+
+  if(dmEditingId){
+    sole.post("../../controllers/administrator/update_department.php", {
+      id: dmEditingId,
+      dept_name: name,
+      dept_color: dmSelectedColor
+    }).then(res => {
+      saveBtn.disabled = false;
+
+      if(!res.status){
+        errorEl.textContent = res.message || 'Something went wrong updating the department.';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      ss.toast(null, res.type, res.message, null, "#1B2A22");
+
+      resetDeptForm();
+      fetchDepartments();
+    });
+    return;
+  }
 
   sole.post("../../controllers/administrator/create_department.php", {
     dept_name: name,
     dept_color: dmSelectedColor
   }).then(res => {
-    console.log(res)
     saveBtn.disabled = false;
 
     if(!res.status){
@@ -866,8 +999,10 @@ document.getElementById('dmSave').addEventListener('click', ()=>{
       return;
     }
 
+    ss.toast(null, res.type, res.message, null, "#1B2A22");
+    
     resetDeptForm();
-    fetchDepartments(); // pulls the real row (with its real id) back from the server
+    fetchDepartments();
   })
 });
 
@@ -896,22 +1031,28 @@ function fetchDepartments(){   // <-- paste the new function here
 function fetchUsers(){
   return sole.get("../../controllers/administrator/get_users.php")
     .then(res => {
+      USERS.length = 0;
       res.forEach(u => {
-        const name = `${u.fname} ${u.lname}`.trim();
         USERS.push({
           id: u.id,
-          name,
+          fname: u.fname,
+          lname: u.lname,
           role: u.privileges,
-          dept_id: parseInt(u.dept_id),
+          dept_id: u.dept_id != "-" ? parseInt(u.dept_id) : u.dept_id,
           status: u.status,
-          initials: name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2),
+          initials: (u.fname[0] + u.lname[0]).toUpperCase(),
           color: memberColorFor(u.id)
         });
       });
       renderUserList();
       renderWorkload();
       updateAdminStats();
+      populateAssigneeFilterOptions();
     })
+}
+
+function fullName(u){
+  return u.fname + " " + u.lname;
 }
 
 function memberColorFor(id){
@@ -944,8 +1085,9 @@ function populateDeptFilterOptions(){
 function populateUmDeptOptions(){
   const sel = document.getElementById('umDept');
   const current = sel.value;
-  sel.innerHTML = DEPARTMENTS.map(d=>`<option value="${d.name}">${d.name}</option>`).join('');
-  if(DEPARTMENTS.some(d=>d.name===current)) sel.value = current;
+  sel.innerHTML = '<option value="-">-- Select Department --</option>' +
+    DEPARTMENTS.map(d=>`<option value="${d.id}">${d.name}</option>`).join('');
+  if(DEPARTMENTS.some(d=>d.id===current)) sel.value = current;
 }
 
 // ---------------- Users (create / edit / delete / assign department) ----------------
@@ -961,15 +1103,15 @@ function roleBadgeClass(role){
   if(role==='Supervisor') return 'role-supervisor';
   return 'role-member';
 }
-
 function renderUserList(){
   const list = document.getElementById('userList');
   const q = document.getElementById('searchInput').value.toLowerCase();
-  const filtered = USERS.filter(u=>
-    (activeRoleFilter==='all' || u.role===activeRoleFilter) &&
-    (activeDeptFilter==='all' || u.dept_id===activeDeptFilter) &&
-    (u.name.toLowerCase().includes(q) || (u.deptName||'').toLowerCase().includes(q))
-  );
+  const filtered = USERS.filter(u=>{
+    const dept = DEPARTMENTS.find(d=>d.id===u.dept_id);
+    return (activeRoleFilter==='all' || u.role===activeRoleFilter) &&
+      (activeDeptFilter==='all' || u.dept_id===activeDeptFilter) &&
+      (fullName(u).toLowerCase().includes(q) || (dept ? dept.name.toLowerCase().includes(q) : false));
+  });
 
   if(!filtered.length){
     list.innerHTML = `<div style="text-align:center;padding:50px 0;color:var(--ink-faint);font-size:13px;">No users match this filter.</div>`;
@@ -977,14 +1119,15 @@ function renderUserList(){
   }
 
   list.innerHTML = filtered.map(u=>{
+    const name = fullName(u);
     const dept = DEPARTMENTS.find(d=>d.id===u.dept_id);
     if(userDeleteConfirmId === u.id){
-      const taskCount = TASKS.filter(t=>t.assignee===u.name).length;
+      const taskCount = TASKS.filter(t=>t.assignee===name).length;
       return `
       <div class="user-row">
         <div class="user-delete-wrap">
           <div class="project-delete-row">
-            Delete "${u.name}"? ${taskCount ? `${taskCount} task${taskCount===1?'':'s'} will move to "Unassigned."` : 'This account will be permanently removed.'}
+            Delete "${name}"? ${taskCount ? `${taskCount} task${taskCount===1?'':'s'} will move to "Unassigned."` : 'This account will be permanently removed.'}
             <button type="button" class="project-delete-confirm-btn" data-confirm-delete-user="${u.id}">Delete</button>
             <button type="button" class="project-delete-cancel-btn" data-cancel-delete-user="${u.id}">Cancel</button>
           </div>
@@ -996,7 +1139,7 @@ function renderUserList(){
       <div class="avatar" style="background:${u.color}">${u.initials}</div>
       <div class="user-info">
         <div class="user-name-row">
-          <span class="user-name">${u.name}</span>
+          <span class="user-name">${name}</span>
           <span class="role-badge ${roleBadgeClass(u.role)}">${u.role}</span>
         </div>
         <div class="user-meta-row">
@@ -1042,18 +1185,28 @@ document.getElementById('userList').addEventListener('click', e=>{
   }
   if(confirmBtn){
     const id = parseInt(confirmBtn.dataset.confirmDeleteUser);
-    const u = USERS.find(x=>x.id===id);
-    if(u){
-      TASKS.forEach(t=>{ if(t.assignee===u.name) t.assignee = 'Unassigned'; });
-      const idx = USERS.findIndex(x=>x.id===id);
-      USERS.splice(idx,1);
-    }
-    userDeleteConfirmId = null;
-    renderUserList();
-    renderWorkload();
-    renderList();
-    renderKanban();
-    updateAdminStats();
+    confirmBtn.disabled = true;
+
+    sole.post("../../controllers/administrator/delete_user.php", { id : id })
+      .then(res => {
+        confirmBtn.disabled = false;
+
+        if(!res.status){
+          ss.toast(null, res.type, res.message, null, "#1B2A22");
+          return;
+        }
+
+        ss.toast(null, res.type, res.message, null, "#1B2A22");
+        userDeleteConfirmId = null;
+        fetchUsers(); // re-renders userList, workload, and stats internally
+        renderList();
+        renderKanban();
+      })
+      .catch(err => {
+        confirmBtn.disabled = false;
+        ss.toast(null, "error", "Could not reach the server. Please try again.", null, "#1B2A22");
+        console.error(err);
+      });
   }
 });
 
@@ -1069,7 +1222,6 @@ function openUserModal(editId){
   umEditingId = editId || null;
   populateUmDeptOptions();
   document.getElementById('umError').classList.remove('show');
-  document.getElementById('umPassword').value = '';
   document.getElementById('umUsername').value = '';
 
   if(umEditingId){
@@ -1077,24 +1229,24 @@ function openUserModal(editId){
     document.getElementById('umModalTitle').textContent = 'Edit user';
     document.getElementById('umSave').textContent = 'Save changes';
     document.getElementById('umInviteHint').style.display = 'none';
-    document.getElementById('umName').value = u.name;
+    document.getElementById('umFname').value = u.fname;
+    document.getElementById('umLname').value = u.lname;
     document.getElementById('umRole').value = u.role;
     document.getElementById('umDept').value = u.dept_id;
-    document.getElementById('umUsername').placeholder = 'Leave blank to keep current username';
-    document.getElementById('umPasswordLabel').textContent = 'Password';
-    document.getElementById('umPassword').placeholder = 'Leave blank to keep current password';
-    document.getElementById('umPasswordHint').textContent = "Leave blank to keep this user's current username/password.";
+    document.getElementById('umCredentialField').hidden = true;
+    document.getElementById('umCredentialField').classList.remove('field-row2');
+    document.getElementById('umPasswordHint').textContent = '';
     umSelectedStatus = u.status;
   } else {
     document.getElementById('umModalTitle').textContent = 'Create user';
     document.getElementById('umSave').textContent = 'Create user';
     document.getElementById('umInviteHint').style.display = 'block';
-    document.getElementById('umName').value = '';
-    document.getElementById('umRole').value = 'Team Member';
-    document.getElementById('umUsername').placeholder = 'e.g. sam.okafor';
-    document.getElementById('umPasswordLabel').textContent = 'Password';
-    document.getElementById('umPassword').placeholder = 'Minimum 8 characters';
-    document.getElementById('umPasswordHint').textContent = 'The user can change this after their first sign-in.';
+    document.getElementById('umFname').value = '';
+    document.getElementById('umLname').value = '';
+    document.getElementById('umRole').value = 'Technician';
+    document.getElementById('umCredentialField').hidden = false;
+    document.getElementById('umCredentialField').classList.add('field-row2');
+    document.getElementById('umPasswordHint').textContent = 'The user must change their password after their first sign-in.';
     umSelectedStatus = 'active';
   }
   document.querySelectorAll('#umStatus .priority-opt').forEach(o=>o.classList.toggle('sel', o.dataset.status===umSelectedStatus));
@@ -1105,51 +1257,84 @@ function closeUserModal(){ userModalOverlay.classList.remove('open'); }
 document.getElementById('userModalClose').addEventListener('click', closeUserModal);
 document.getElementById('userModalCancel').addEventListener('click', closeUserModal);
 userModalOverlay.addEventListener('click', e=>{ if(e.target===userModalOverlay) closeUserModal(); });
-
 document.getElementById('umSave').addEventListener('click', ()=>{
-  const name = document.getElementById('umName').value.trim();
-  const email = document.getElementById('umEmail').value.trim();
+  const fname = document.getElementById('umFname').value.trim();
+  const lname = document.getElementById('umLname').value.trim();
+  const username = document.getElementById('umUsername').value.trim();
+  const password = document.getElementById('umPassword').value;
   const role = document.getElementById('umRole').value;
   const department = document.getElementById('umDept').value;
   const errorEl = document.getElementById('umError');
-  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  if(!name || !emailValid || !department){
-    errorEl.textContent = !name ? 'Add a name before saving.' : (!emailValid ? 'Enter a valid email address.' : 'Choose a department.');
-    errorEl.classList.add('show');
-    return;
-  }
-  const dupEmail = USERS.find(u=>u.email.toLowerCase()===email.toLowerCase() && u.id!==umEditingId);
-  if(dupEmail){
-    errorEl.textContent = 'A user with that email already exists.';
+  const usernameValid = /^[a-zA-Z0-9._-]{3,}$/.test(username);
+
+  if(!fname || !lname || (!umEditingId && !usernameValid)){
+    errorEl.textContent = (!fname || !lname) ? 'Add a complete name before saving.'
+      : 'Username must be at least 3 characters (letters, numbers, . _ -).';
     errorEl.classList.add('show');
     return;
   }
   errorEl.classList.remove('show');
 
+  const saveBtn = document.getElementById('umSave');
+  saveBtn.disabled = true;
+
   if(umEditingId){
-    const u = USERS.find(x=>x.id===umEditingId);
-    const oldName = u.name;
-    u.name = name; u.email = email; u.role = role; u.department = department; u.status = umSelectedStatus;
-    u.initials = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-    if(oldName !== name){
-      TASKS.forEach(t=>{ if(t.assignee===oldName) t.assignee = name; });
-    }
-  } else {
-    const palette = ["linear-gradient(155deg,#3B6FA0,#274F72)","linear-gradient(155deg,#C98A2E,#B75B39)","linear-gradient(155deg,#2F6F5E,#1F5647)","linear-gradient(155deg,#8A6FB0,#6A4F90)","linear-gradient(155deg,#A23B3B,#7E2E2E)","linear-gradient(155deg,#3A8FA0,#2A6B78)"];
-    USERS.push({
-      id: nextUserId++, name, email, role, department, status: umSelectedStatus,
-      initials: name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2),
-      color: palette[USERS.length % palette.length]
+    sole.post("../../controllers/administrator/update_user.php", {
+      id: umEditingId,
+      fname,
+      lname,
+      privileges: role,
+      dept_id: department,
+      status: umSelectedStatus
+    }).then(res => {
+      saveBtn.disabled = false;
+
+      if(!res.status){
+        errorEl.textContent = res.message;
+        errorEl.classList.add('show');
+        return;
+      }
+
+      ss.toast(null, res.type, res.message, null, "#1B2A22");
+      closeUserModal();
+      fetchUsers();
+    }).catch(err => {
+      saveBtn.disabled = false;
+      errorEl.textContent = 'Could not reach the server. Please try again.';
+      errorEl.classList.add('show');
+      console.error(err);
     });
+    return;
   }
 
-  closeUserModal();
-  renderUserList();
-  renderWorkload();
-  renderList();
-  renderKanban();
-  updateAdminStats();
+  sole.post("../../controllers/administrator/create_user.php", {
+    fname,
+    lname,
+    username,
+    password,
+    privileges: role,
+    dept_id: department,
+    status: umSelectedStatus
+  }).then(res => {
+    saveBtn.disabled = false;
+
+    if(!res.status){
+      errorEl.textContent = res.message;
+      errorEl.classList.add('show');
+      return;
+    }
+
+    ss.toast(null,res.type,res.message,null,"#1B2A22")
+    closeUserModal();
+    fetchUsers();
+    
+  }).catch(err => {
+    saveBtn.disabled = false;
+    errorEl.textContent = 'Could not reach the server. Please try again.';
+    errorEl.classList.add('show');
+    console.error(err);
+  });
 });
 
 function updateAdminStats(){
@@ -1161,18 +1346,11 @@ function updateAdminStats(){
   document.getElementById('greetProjectCount').textContent = `${PROJECTS.length} project${PROJECTS.length===1?'':'s'}`;
 }
 
-// ---------------- Init ----------------
-(function initAssigneeFilterOptions(){
-  const sel = document.getElementById('assigneeFilter');
-  assignableUsers().forEach(m=>{
-    const opt = document.createElement('option');
-    opt.value = m.name; opt.textContent = m.name;
-    sel.appendChild(opt);
-  });
-})();
 renderProjectNav();
 fetchDepartments();   // replaces renderDeptNav() + populateDeptFilterOptions()
 fetchUsers();
+fetchProjects();
+fetchTasks();
 renderUserList();
 renderWorkload();
 renderList();

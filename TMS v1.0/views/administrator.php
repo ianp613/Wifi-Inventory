@@ -85,10 +85,10 @@
     </div>
 
     <div class="stat-strip">
-      <div class="stat-card total"><div class="accent-bar"></div><div class="num" id="statTotal">6</div><div class="lbl">Active tasks</div></div>
-      <div class="stat-card overdue"><div class="accent-bar"></div><div class="num" id="statOverdue">2</div><div class="lbl">Overdue</div></div>
-      <div class="stat-card done"><div class="accent-bar"></div><div class="num">14</div><div class="lbl">Completed this month</div></div>
-      <div class="stat-card team"><div class="accent-bar"></div><div class="num" id="statUsers">7</div><div class="lbl">Total users</div></div>
+      <div class="stat-card total"><div class="accent-bar"></div><div class="num" id="statTotal">0</div><div class="lbl">Active tasks</div></div>
+      <div class="stat-card overdue"><div class="accent-bar"></div><div class="num" id="statOverdue">0</div><div class="lbl">Overdue</div></div>
+      <div class="stat-card done"><div class="accent-bar"></div><div class="num">0</div><div class="lbl">Completed this month</div></div>
+      <div class="stat-card team"><div class="accent-bar"></div><div class="num" id="statUsers">0</div><div class="lbl">Total users</div></div>
     </div>
 
     <div class="section-title">Team workload</div>
@@ -109,7 +109,7 @@
         <div class="chip" data-filter="hold">On Hold</div>
         <div class="chip" data-filter="done">Completed</div>
         <select class="select-filter" id="assigneeFilter">
-          <option value="all">All team members</option>
+          <option value="all">All technicians</option>
         </select>
         <div class="filter-spacer"></div>
         <select class="sort-select">
@@ -132,7 +132,7 @@
         <div class="chip active" data-role-filter="all">All roles</div>
         <div class="chip" data-role-filter="Administrator">Administrator</div>
         <div class="chip" data-role-filter="Supervisor">Supervisor</div>
-        <div class="chip" data-role-filter="Team Member">Team Member</div>
+        <div class="chip" data-role-filter="Technician">Technician</div>
         <select class="select-filter" id="deptFilter">
           <option value="all">All departments</option>
         </select>
@@ -258,19 +258,36 @@
       <button class="modal-close" id="userModalClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     </div>
     <div class="modal-body">
-      <div class="field-group">
-        <label class="field-label" for="umName">Full name</label>
-        <input type="text" id="umName" placeholder="e.g. Sam Okafor">
+      <div class="field-row2">
+        <div class="field-group">
+          <label class="field-label" for="umFname">First Name</label>
+          <input type="text" id="umFname" autocomplete="off">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="umLname">Last Name</label>
+          <div class="builder-add-row">
+            <input type="text" id="umLname" placeholder="">
+          </div>
+        </div>
       </div>
-      <div class="field-group">
-        <label class="field-label" for="umEmail">Email address</label>
-        <input type="text" id="umEmail" placeholder="e.g. sam@workbench.io">
+      <div class="field-row2" id="umCredentialField">
+        <div class="field-group">
+          <label class="field-label" for="umUsername">Username</label>
+          <input type="text" id="umUsername" placeholder="ID No." autocomplete="off">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="umPassword">Password</label>
+          <div class="builder-add-row">
+            <input type="text" id="umPassword" placeholder="" autocomplete="new-password" readonly value="12345">
+          </div>
+        </div>
       </div>
+      <div style="font-size:11px;color:var(--ink-faint);margin:-8px 0 14px;" id="umPasswordHint">The user must change their password after their first sign-in.</div>
       <div class="field-row2">
         <div class="field-group">
           <label class="field-label" for="umRole">Role</label>
           <select id="umRole">
-            <option value="Team Member">Team Member</option>
+            <option value="Technician">Technician</option>
             <option value="Supervisor">Supervisor</option>
             <option value="Administrator">Administrator</option>
           </select>
@@ -287,8 +304,8 @@
           <div class="priority-opt medium" data-status="inactive">Inactive</div>
         </div>
       </div>
-      <div class="reassign-error" id="umError">Add a name, valid email, and department before saving.</div>
-      <div style="font-size:11.5px;color:var(--ink-faint);margin-top:2px;" id="umInviteHint">An invite email would be sent to this address once created.</div>
+      <div class="reassign-error" id="umError">Add a name, username, and department before saving.</div>
+      <div style="font-size:11.5px;color:var(--ink-faint);margin-top:2px;" id="umInviteHint">This account will be ready to sign in with the username and password above.</div>
     </div>
     <div class="modal-foot">
       <button class="btn-secondary" id="userModalCancel">Cancel</button>
@@ -307,7 +324,7 @@
     <div class="modal-body">
       <div class="field-group">
         <label class="field-label" for="dmName" id="dmFormLabel">New department</label>
-        <input type="text" id="dmName" placeholder="e.g. Customer Success">
+        <input type="text" id="dmName" placeholder="e.g. IT Department">
       </div>
       <div class="field-group">
         <label class="field-label">Color</label>
@@ -358,11 +375,11 @@
       <div class="assignee-row">Currently with <div class="avatar" id="dAssigneeAvatar">JD</div> <strong id="dAssigneeName">Jamie Diaz</strong></div>
       <label class="field-label" for="reassignSelect">Reassign to</label>
       <select class="reassign-select" id="reassignSelect">
-        <option value="">Choose a team member…</option>
+        <option value="">Choose a technician…</option>
       </select>
       <label class="field-label" for="reassignNote">Note (optional)</label>
       <textarea class="reassign-textarea" id="reassignNote" placeholder="e.g. Moving this to Elena since she owns the checkout flow."></textarea>
-      <div class="reassign-error" id="reassignError">Pick a team member before reassigning this task.</div>
+      <div class="reassign-error" id="reassignError">Pick a technician before reassigning this task.</div>
       <button class="reassign-btn" id="reassignBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
         Reassign task
@@ -381,10 +398,11 @@
     <div class="d-section">
       <div class="d-section-title">Details</div>
       <div class="d-meta-grid">
-        <div class="d-meta-item"><div class="k">Created by</div><div class="v" id="dCreatedBy">You</div></div>
-        <div class="d-meta-item"><div class="k">Assigned to</div><div class="v" id="dAssignedTo">Jamie Diaz</div></div>
+        <div class="d-meta-item"><div class="k">Start Date</div><div class="v" id="dStart">Jul 24, 2026</div></div>
         <div class="d-meta-item"><div class="k">Due date</div><div class="v" id="dDue">Jul 24, 2026</div></div>
-        <div class="d-meta-item"><div class="k">Category</div><div class="v">Design</div></div>
+        <div class="d-meta-item"><div class="k">Technician Department</div><div class="v" id="dDept">Admin</div></div>
+        <div class="d-meta-item"><div class="k">Assigned to</div><div class="v" id="dAssignedTo">Jamie Diaz</div></div>
+
       </div>
     </div>
 
