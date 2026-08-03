@@ -1,6 +1,9 @@
-// ---------------- Mock data (would come from PHP/MySQL via fetch()) ----------------
 const CURRENT_USER = "Morgan Reyes";
-const COLOR_PALETTE = ["#3B6FA0","#C98A2E","#2F6F5E","#B75B39","#A23B3B","#8A6FB0","#5B6B60","#3A8FA0"];
+const COLOR_PALETTE = ["#3B6FA0","#C98A2E","#2F6F5E","#B75B39","#A23B3B","#8A6FB0","#5B6B60","#3A8FA0","#6E8B3D","#B08968","#4F6D7A","#9A6B9E","#7A8450","#C4692F","#5C7C99"];
+
+function randomPaletteColor(){
+  return COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE.length)];
+}
 
 let nextDeptId = 5;
 const DEPARTMENTS = [];
@@ -31,11 +34,7 @@ function resolveCommentAuthor(userId){
 }
 
 let nextProjectId = 4;
-const PROJECTS = [
-  {id:1, name:"Website Revamp", color:"#3B6FA0"},
-  {id:2, name:"Client Onboarding", color:"#C98A2E"},
-  {id:3, name:"Q3 Marketing", color:"#2F6F5E"},
-];
+const PROJECTS = [];
 function projectByName(name){ return PROJECTS.find(p=>p.name===name); }
 function projectById(id){ return PROJECTS.find(p=>p.id==id); }
 
@@ -48,11 +47,11 @@ function fetchProjects(){
         PROJECTS.push({
           id: p.id,
           name: p.project_name,
-          color: p.color
+          color: p.color,
+          dept_id: p.dept_id != "-" ? parseInt(p.dept_id) : ""
         });
       });
-      renderList();
-      renderKanban();
+      refreshProjectDependents();
       renderWorkload();
     });
 }
@@ -679,6 +678,8 @@ function renderProjectNav(){
 
 function refreshProjectDependents(){
   renderProjectNav();
+  renderProjectManageList();
+  populateNtProjectOptions();
   renderList();
   renderKanban();
 }
@@ -704,11 +705,13 @@ function renderProjectManageList(){
   }
   list.innerHTML = PROJECTS.map(p=>{
     const count = TASKS.filter(t=>t.project===p.name).length;
+    const dept = (p.dept_id && p.dept_id !== '-') ? DEPARTMENTS.find(d=>d.id===p.dept_id) : null;
+    const deptLabel = dept ? dept.name : 'Unassigned';
     if(pmDeleteConfirmId === p.id){
       return `
       <div class="project-row">
         <div class="project-delete-row">
-          Delete "${p.name}"? ${count ? `${count} task${count===1?'':'s'} will move to "No Project."` : ''}
+          Delete "${p.name}"? ${count ? `This will permanently delete ${count} task${count===1?'':'s'}, along with all their checklist, attachments and comments. This cannot be undone.` : 'This cannot be undone.'}
           <button type="button" class="project-delete-confirm-btn" data-confirm-delete="${p.id}">Delete</button>
           <button type="button" class="project-delete-cancel-btn" data-cancel-delete="${p.id}">Cancel</button>
         </div>
@@ -717,7 +720,7 @@ function renderProjectManageList(){
     return `
     <div class="project-row">
       <span class="project-dot" style="background:${p.color};"></span>
-      <span class="project-row-name">${p.name}</span>
+      <div class="project-row-name"><div>${p.name}</div><div class="project-row-dept">${deptLabel}</div></div>
       <span class="project-row-count">${count} task${count===1?'':'s'}</span>
       <div class="project-row-actions">
         <button type="button" class="project-icon-btn" data-edit="${p.id}" aria-label="Edit project"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
@@ -739,6 +742,7 @@ document.getElementById('projectManageList').addEventListener('click', e=>{
     pmEditingId = p.id;
     pmSelectedColor = p.color;
     document.getElementById('pmName').value = p.name;
+    document.getElementById('pmDept').value = p.dept_id || '-';
     document.getElementById('pmFormLabel').textContent = 'Edit project';
     document.getElementById('pmSave').textContent = 'Save changes';
     document.getElementById('pmCancelEdit').style.display = 'inline-flex';
@@ -756,23 +760,37 @@ document.getElementById('projectManageList').addEventListener('click', e=>{
   }
   if(confirmBtn){
     const id = parseInt(confirmBtn.dataset.confirmDelete);
-    const p = PROJECTS.find(x=>x.id===id);
-    if(p){
-      TASKS.forEach(t=>{ if(t.project===p.name) t.project = 'No Project'; });
-      const idx = PROJECTS.findIndex(x=>x.id===id);
-      PROJECTS.splice(idx,1);
-    }
-    pmDeleteConfirmId = null;
-    if(pmEditingId===id) resetProjectForm();
-    renderProjectManageList();
-    refreshProjectDependents();
+    confirmBtn.disabled = true;
+
+    sole.post("../../controllers/administrator/delete_project.php", { id: id })
+      .then(res => {
+        confirmBtn.disabled = false;
+
+        if(!res.status){
+          ss.toast(null, res.type, res.message, null, "#1B2A22");
+          return;
+        }
+
+        ss.toast(null, res.type, res.message, null, "#1B2A22");
+        pmDeleteConfirmId = null;
+        if(pmEditingId===id) resetProjectForm();
+
+        fetchProjects();
+        fetchTasks();
+      })
+      .catch(err => {
+        confirmBtn.disabled = false;
+        ss.toast(null, "error", "Could not reach the server. Please try again.", null, "#1B2A22");
+        console.error(err);
+      });
   }
 });
 
 function resetProjectForm(){
   pmEditingId = null;
-  pmSelectedColor = COLOR_PALETTE[0];
+  pmSelectedColor = randomPaletteColor();
   document.getElementById('pmName').value = '';
+  document.getElementById('pmDept').value = '-';
   document.getElementById('pmFormLabel').textContent = 'New project';
   document.getElementById('pmSave').textContent = 'Add project';
   document.getElementById('pmCancelEdit').style.display = 'none';
@@ -783,6 +801,7 @@ document.getElementById('pmCancelEdit').addEventListener('click', resetProjectFo
 
 document.getElementById('pmSave').addEventListener('click', ()=>{
   const name = document.getElementById('pmName').value.trim();
+  const deptId = document.getElementById('pmDept').value;
   const errorEl = document.getElementById('pmError');
   if(!name){
     errorEl.textContent = 'Give the project a name before saving.';
@@ -797,22 +816,66 @@ document.getElementById('pmSave').addEventListener('click', ()=>{
   }
   errorEl.classList.remove('show');
 
+  const saveBtn = document.getElementById('pmSave');
+
   if(pmEditingId){
-    const p = PROJECTS.find(x=>x.id===pmEditingId);
-    const oldName = p.name;
-    p.name = name;
-    p.color = pmSelectedColor;
-    TASKS.forEach(t=>{ if(t.project===oldName) t.project = name; });
-  } else {
-    PROJECTS.push({id: nextProjectId++, name, color: pmSelectedColor});
+    saveBtn.disabled = true;
+
+    sole.post("../../controllers/administrator/update_project.php", {
+      id: pmEditingId,
+      project_name: name,
+      color: pmSelectedColor,
+      dept_id: deptId
+    }).then(res => {
+      saveBtn.disabled = false;
+
+      if(!res.status){
+        errorEl.textContent = res.message || 'Something went wrong updating the project.';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      ss.toast(null, res.type, res.message, null, "#1B2A22");
+      resetProjectForm();
+      fetchProjects();
+    }).catch(err => {
+      saveBtn.disabled = false;
+      errorEl.textContent = 'Could not reach the server. Please try again.';
+      errorEl.classList.add('show');
+      console.error(err);
+    });
+    return;
   }
-  resetProjectForm();
-  renderProjectManageList();
-  refreshProjectDependents();
+
+  saveBtn.disabled = true;
+
+  sole.post("../../controllers/administrator/create_project.php", {
+    project_name: name,
+    color: pmSelectedColor,
+    dept_id: deptId
+  }).then(res => {
+    saveBtn.disabled = false;
+
+    if(!res.status){
+      errorEl.textContent = res.message || 'Something went wrong saving the project.';
+      errorEl.classList.add('show');
+      return;
+    }
+
+    ss.toast(null, res.type, res.message, null, "#1B2A22");
+    resetProjectForm();
+    fetchProjects();
+  }).catch(err => {
+    saveBtn.disabled = false;
+    errorEl.textContent = 'Could not reach the server. Please try again.';
+    errorEl.classList.add('show');
+    console.error(err);
+  });
 });
 
 function openProjectModal(){
   pmDeleteConfirmId = null;
+  populatePmDeptOptions();
   resetProjectForm();
   renderProjectManageList();
   projectModalOverlay.classList.add('open');
@@ -869,11 +932,16 @@ function renderDeptManageList(){
   }
   list.innerHTML = DEPARTMENTS.map(d=>{
     const count = USERS.filter(u=>u.dept_id===d.id).length;
+    const count_projects = PROJECTS.filter(p=>p.dept_id===d.id).length;
     if(dmDeleteConfirmId === d.id){
+      const parts = [];
+      if(count) parts.push(`${count} user${count===1?'':'s'}`);
+      if(count_projects) parts.push(`${count_projects} project${count_projects===1?'':'s'}`);
+      const warning = parts.length ? `${parts.join(' and ')} will move to "Unassigned."` : '';
       return `
       <div class="project-row">
         <div class="project-delete-row">
-          Delete "${d.name}"? ${count ? `${count} user${count===1?'':'s'} will move to "Unassigned."` : ''}
+          Delete "${d.name}"? ${warning}
           <button type="button" class="project-delete-confirm-btn" data-confirm-delete-dept="${d.id}">Delete</button>
           <button type="button" class="project-delete-cancel-btn" data-cancel-delete-dept="${d.id}">Cancel</button>
         </div>
@@ -884,6 +952,7 @@ function renderDeptManageList(){
       <span class="project-dot" style="background:${d.color};"></span>
       <span class="project-row-name">${d.name}</span>
       <span class="project-row-count">${count} user${count===1?'':'s'}</span>
+      <span class="project-row-count">${count_projects} project${count_projects===1?'':'s'}</span>
       <div class="project-row-actions">
         <button type="button" class="project-icon-btn" data-edit-dept="${d.id}" aria-label="Edit department"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
         <button type="button" class="project-icon-btn danger" data-delete-dept="${d.id}" aria-label="Delete department"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>
@@ -921,22 +990,30 @@ document.getElementById('deptManageList').addEventListener('click', e=>{
   }
   if(confirmBtn){
     const id = parseInt(confirmBtn.dataset.confirmDeleteDept);
-    const d = DEPARTMENTS.find(x=>x.id===id);
-    if(d){
-      USERS.forEach(u=>{ if(u.department===d.name) u.department = 'Unassigned'; });
-      const idx = DEPARTMENTS.findIndex(x=>x.id===id);
-      DEPARTMENTS.splice(idx,1);
-    }
-    dmDeleteConfirmId = null;
-    if(dmEditingId===id) resetDeptForm();
-    renderDeptManageList();
-    refreshDeptDependents();
+    confirmBtn.disabled = true;
+
+    sole.post("../../controllers/administrator/delete_department.php", { id : id })
+      .then(res => {
+        console.log(res)
+        confirmBtn.disabled = false;
+
+        if(!res.status){
+          ss.toast(null, res.type, res.message, null, "#1B2A22");
+          return;
+        }
+
+        ss.toast(null, res.type, res.message, null, "#1B2A22");
+        dmDeleteConfirmId = null;
+        if(dmEditingId===id) resetDeptForm();
+        fetchDepartments();
+        fetchUsers();
+      })
   }
 });
 
 function resetDeptForm(){
   dmEditingId = null;
-  dmSelectedColor = COLOR_PALETTE[0];
+  dmSelectedColor = randomPaletteColor();
   document.getElementById('dmName').value = '';
   document.getElementById('dmFormLabel').textContent = 'New department';
   document.getElementById('dmSave').textContent = 'Add department';
@@ -1010,6 +1087,7 @@ function refreshDeptDependents(){
   renderDeptNav();
   populateDeptFilterOptions();
   populateUmDeptOptions();
+  populatePmDeptOptions();
   renderUserList();
   renderDeptManageList();
   updateAdminStats();
@@ -1082,12 +1160,22 @@ function populateDeptFilterOptions(){
     DEPARTMENTS.map(d=>`<option value="${d.name}">${d.name}</option>`).join('');
   if(current && (current==='all' || DEPARTMENTS.some(d=>d.name===current))) sel.value = current;
 }
-function populateUmDeptOptions(){
-  const sel = document.getElementById('umDept');
+function populatePmDeptOptions(){
+  const sel = document.getElementById('pmDept');
+  if(!sel) return;
   const current = sel.value;
   sel.innerHTML = '<option value="-">-- Select Department --</option>' +
     DEPARTMENTS.map(d=>`<option value="${d.id}">${d.name}</option>`).join('');
-  if(DEPARTMENTS.some(d=>d.id===current)) sel.value = current;
+  if(DEPARTMENTS.some(d=>String(d.id)===String(current))) sel.value = current;
+}
+
+function populateUmDeptOptions(){
+  const sel = document.getElementById('umDept');
+  if(!sel) return;
+  const current = sel.value;
+  sel.innerHTML = '<option value="-">-- Select Department --</option>' +
+    DEPARTMENTS.map(d=>`<option value="${d.id}">${d.name}</option>`).join('');
+  if(DEPARTMENTS.some(d=>String(d.id)===String(current))) sel.value = current;
 }
 
 // ---------------- Users (create / edit / delete / assign department) ----------------
@@ -1347,9 +1435,9 @@ function updateAdminStats(){
 }
 
 renderProjectNav();
+fetchProjects();
 fetchDepartments();   // replaces renderDeptNav() + populateDeptFilterOptions()
 fetchUsers();
-fetchProjects();
 fetchTasks();
 renderUserList();
 renderWorkload();

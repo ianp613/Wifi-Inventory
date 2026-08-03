@@ -357,6 +357,7 @@
     width:26px;height:26px;border-radius:7px;border:1px solid var(--line);background:var(--surface);
     display:flex;align-items:center;justify-content:center;color:var(--ink-soft);flex-shrink:0;
   }
+  .project-row-dept{font-size:10px;color:var(--ink-faint);font-family:'IBM Plex Mono',monospace;flex-shrink:0;font-weight: 200;}
   .project-icon-btn svg{width:13px;height:13px;}
   .project-icon-btn.danger:hover{color:var(--red);border-color:var(--red);background:var(--red-soft);}
   .project-delete-row{

@@ -4,15 +4,17 @@
     include("../../includes.php");
     $data = json_decode(file_get_contents('php://input'), true);
 
-    $task = new Task;
-    $t = DB::prepare($task,$data["id"]);
-    $t->user_id = $data["user_id"];
-    DB::update($t);
+    $project = new Project;
+    $project->project_name = $data["project_name"];
+    $project->color = $data["color"];
+    $project->dept_id = $data["dept_id"];
+    DB::save($project);
 
     $response = [
         "status" => true,
         "type" => "success",
-        "message" => "Task has been reassigned."
+        "message" => "Project has been created."
     ];
 
+    error_log("hello");
     echo json_encode($response);

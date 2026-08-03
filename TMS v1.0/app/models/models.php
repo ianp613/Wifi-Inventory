@@ -38,7 +38,8 @@
         public $table = "pl_project";
         public $fillable = [
             "project_name",
-            "color"
+            "color",
+            "dept_id"
         ];
 
         public string $project_name;
