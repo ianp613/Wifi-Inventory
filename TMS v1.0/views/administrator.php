@@ -26,28 +26,25 @@
 
             <nav class="nav-group">
                 <span class="nav-label">Workspace</span>
-                <a class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="7" height="7" rx="1.5" />
-                        <rect x="14" y="3" width="7" height="7" rx="1.5" />
-                        <rect x="3" y="14" width="7" height="7" rx="1.5" />
-                        <rect x="14" y="14" width="7" height="7" rx="1.5" />
-                    </svg>Dashboard</a>
-                <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <a class="nav-item" data-view="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
                         <path d="M9 11l3 3L22 4" />
                         <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
-                    </svg>All Tasks<span class="nav-count">6</span></a>
-                <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    </svg>All Tasks<span class="nav-count" id="allTasksNavCount">0</span></a>
+                <a class="nav-item" data-view="kanban"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
                         <path d="M4 6h16M4 12h10M4 18h6" />
                     </svg>Kanban Board</a>
-                <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <a class="nav-item" data-view="users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
                         <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
                         <circle cx="9" cy="7" r="4" />
                         <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-                    </svg>Users<span class="nav-count" id="usersNavCount">7</span></a>
-                <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    </svg>Users<span class="nav-count" id="usersNavCount">0</span></a>
+                <!-- <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M3 3v18h18" />
                         <path d="M18 17V9M13 17V5M8 17v-4" />
-                    </svg>Reports</a>
+                    </svg>Reports</a> -->
                 <a id="cocNavItem" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="2">
                         <path d="M12 3l8 4v5c0 5-3.5 8.5-8 9c-4.5-.5-8-4-8-9V7l8-4z" />
@@ -82,7 +79,7 @@
             </nav>
 
             <div class="sidebar-foot">
-                <div class="avatar">MR</div>
+                <div class="avatar">PI</div>
                 <div class="who">
                     <div class="name">Paul Ian Dumdum</div>
                     <div class="email">Paul Ian@workbench.io</div>
@@ -100,9 +97,9 @@
                         </svg></button>
                     <div class="greeting">
                         <h1>Hello, Paul Ian.</h1>
-                        <p>You manage <strong id="greetDeptCount">4 departments</strong> and <strong
-                                id="greetUserCount">7 users</strong> across <strong id="greetProjectCount">3
-                                projects</strong>. <span class="date-stub">— Tue, Jul 21</span></p>
+                        <p>You manage <strong id="greetProjectCount">0 projects</strong> and <strong
+                                id="greetUserCount">0 users</strong> across <strong id="greetDeptCount">0
+                                departments</strong>. <span class="date-stub" id="greetDate"></span></p>
                     </div>
                 </div>
                 <div class="top-actions">
@@ -126,6 +123,7 @@
                     </button>
                 </div>
             </div>
+            <div class="section-title">Status</div>
 
             <div class="stat-strip">
                 <div class="stat-card total">
@@ -283,6 +281,63 @@
         </div>
     </div>
 
+    <!-- ================= UPDATE TASK MODAL ================= -->
+    <div class="modal-overlay" id="updateTaskModalOverlay">
+        <div class="modal">
+            <div class="modal-head">
+                <h2>Update task</h2>
+                <button class="modal-close" id="utModalClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg></button>
+            </div>
+            <div class="modal-body">
+                <div class="field-group">
+                    <label class="field-label" for="utTitle">Task title</label>
+                    <input type="text" id="utTitle">
+                </div>
+                <div class="field-group">
+                    <label class="field-label" for="utDesc">Description</label>
+                    <textarea id="utDesc"></textarea>
+                </div>
+                <div class="field-row2">
+                    <div class="field-group">
+                        <label class="field-label" for="utProject">Project</label>
+                        <select id="utProject"></select>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label" for="utAssignee">Assign to</label>
+                        <select id="utAssignee"></select>
+                    </div>
+                </div>
+                <div class="field-row2">
+                    <div class="field-group">
+                        <label class="field-label" for="utStart">Start date</label>
+                        <input type="date" id="utStart">
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label" for="utDue">Due date</label>
+                        <input type="date" id="utDue">
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Priority</label>
+                    <div class="priority-picker" id="utPriority">
+                        <div class="priority-opt low" data-p="low">Low</div>
+                        <div class="priority-opt medium" data-p="medium">Medium</div>
+                        <div class="priority-opt high" data-p="high">High</div>
+                        <div class="priority-opt critical" data-p="critical">Critical</div>
+                    </div>
+                </div>
+                <div class="reassign-error" id="utError">Please add a title and pick an assignee before saving.</div>
+            </div>
+            <div class="modal-foot">
+                <button class="btn-secondary" id="utModalCancel">Cancel</button>
+                <button class="btn-primary-modal" id="utSave">Save changes</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ================= MANAGE PROJECTS MODAL ================= -->
     <div class="modal-overlay" id="projectModalOverlay">
         <div class="modal">
@@ -433,23 +488,40 @@
     <div class="overlay" id="overlay"></div>
     <aside class="drawer" id="drawer">
         <div class="drawer-head">
-            <button class="drawer-close" id="drawerClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2">
-                    <path d="M18 6L6 18M6 6l12 12" />
-                </svg></button>
-            <div class="drawer-proj" id="dProj">Website Revamp</div>
-            <div class="drawer-title" id="dTitle">Redesign the pricing page layout</div>
+            <div class="drawer-head-actions">
+                <button class="project-icon-btn" id="drawerEditBtn" aria-label="Edit task"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z" />
+                    </svg></button>
+                <button class="project-icon-btn danger" id="drawerDeleteBtn" aria-label="Delete task"><svg
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z" />
+                    </svg></button>
+                <button class="drawer-close" id="drawerClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg></button>
+            </div>
+            <div class="drawer-proj" id="dProj"></div>
+            <div class="drawer-title" id="dTitle"></div>
             <div class="drawer-tags">
-                <span class="stamp high" id="dPriority">High</span>
-                <span class="status-tag status-progress" id="dStatusTag">In Progress</span>
+                <span class="stamp" id="dPriority"></span>
+                <span class="status-tag" id="dStatusTag"></span>
             </div>
         </div>
         <div class="drawer-body">
+            <div class="d-section" id="taskDeleteConfirmSection" style="display:none;">
+                <div class="project-delete-row">
+                    Delete this task permanently, including its checklist, attachments, and comments?
+                    <button type="button" class="project-delete-confirm-btn" id="taskDeleteConfirmBtn">Delete</button>
+                    <button type="button" class="project-delete-cancel-btn" id="taskDeleteCancelBtn">Cancel</button>
+                </div>
+            </div>
             <div class="d-section">
                 <div class="d-section-title">Update status</div>
                 <div class="status-select-row" id="statusRow">
                     <div class="status-opt" data-status="todo">To Do</div>
-                    <div class="status-opt sel" data-status="progress">In Progress</div>
+                    <div class="status-opt" data-status="progress">In Progress</div>
                     <div class="status-opt" data-status="hold">On Hold</div>
                     <div class="status-opt" data-status="done">Done</div>
                 </div>
@@ -457,8 +529,8 @@
 
             <div class="d-section">
                 <div class="d-section-title">Reassign task</div>
-                <div class="assignee-row">Currently with <div class="avatar" id="dAssigneeAvatar">JD</div> <strong
-                        id="dAssigneeName">Jamie Diaz</strong></div>
+                <div class="assignee-row">Currently with <div class="avatar" id="dAssigneeAvatar"></div> <strong
+                        id="dAssigneeName"></strong></div>
                 <label class="field-label" for="reassignSelect">Reassign to</label>
                 <select class="reassign-select" id="reassignSelect">
                     <option value="">Choose a technician…</option>
@@ -487,8 +559,7 @@
 
             <div class="d-section">
                 <div class="d-section-title">Description</div>
-                <p class="d-desc" id="dDesc">Rework the pricing section to reflect the new three-tier structure. Should
-                    match the new type system and include the annual/monthly toggle from the Figma file.</p>
+                <p class="d-desc" id="dDesc"></p>
             </div>
 
             <div class="d-section">
@@ -496,57 +567,36 @@
                 <div class="d-meta-grid">
                     <div class="d-meta-item">
                         <div class="k">Start Date</div>
-                        <div class="v" id="dStart">Jul 24, 2026</div>
+                        <div class="v" id="dStart"></div>
                     </div>
                     <div class="d-meta-item">
                         <div class="k">Due date</div>
-                        <div class="v" id="dDue">Jul 24, 2026</div>
+                        <div class="v" id="dDue"></div>
                     </div>
                     <div class="d-meta-item">
                         <div class="k">Technician Department</div>
-                        <div class="v" id="dDept">Admin</div>
+                        <div class="v" id="dDept"></div>
                     </div>
                     <div class="d-meta-item">
                         <div class="k">Assigned to</div>
-                        <div class="v" id="dAssignedTo">Jamie Diaz</div>
+                        <div class="v" id="dAssignedTo"></div>
                     </div>
-
                 </div>
             </div>
 
             <div class="d-section">
-                <div class="d-section-title" id="checklistTitle">Checklist — 2 of 4</div>
-                <div id="checklistBox">
-                    <label class="checklist-item checked"><input type="checkbox" checked><span>Review Figma
-                            redlines</span></label>
-                    <label class="checklist-item checked"><input type="checkbox" checked><span>Confirm copy with
-                            marketing</span></label>
-                    <label class="checklist-item"><input type="checkbox"><span>Build responsive
-                            breakpoints</span></label>
-                    <label class="checklist-item"><input type="checkbox"><span>QA on staging</span></label>
-                </div>
+                <div class="d-section-title" id="checklistTitle">Checklist</div>
+                <div id="checklistBox"></div>
             </div>
 
             <div class="d-section">
                 <div class="d-section-title">Attachments</div>
-                <div id="attachmentsBox">
-                    <div class="attachment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-                            <path d="M14 2v6h6" />
-                        </svg><span class="fname">pricing-page-v3.fig</span><span class="fsize">4.2 MB</span></div>
-                </div>
+                <div id="attachmentsBox"></div>
             </div>
 
             <div class="d-section">
                 <div class="d-section-title">Comments</div>
-                <div class="comment">
-                    <div class="avatar" style="background:linear-gradient(155deg,#3B6FA0,#274F72);">PS</div>
-                    <div class="comment-body">
-                        <div class="comment-head"><span class="comment-name">Priya Shah</span><span
-                                class="comment-time">2 days ago</span></div>
-                        <div class="comment-text">Let's use the annual price as the default toggle state.</div>
-                    </div>
-                </div>
+                <div id="commentsBox"></div>
             </div>
         </div>
         <div class="comment-input">

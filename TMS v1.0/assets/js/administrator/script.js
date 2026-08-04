@@ -36,8 +36,7 @@ function resolveCommentAuthor(userId){
 let nextProjectId = 4;
 const PROJECTS = [];
 function projectByName(name){ return PROJECTS.find(p=>p.name===name); }
-function projectById(id){ return PROJECTS.find(p=>p.id==id); }
-
+function projectById(id){ return PROJECTS.find(p=>p.id==id) ? PROJECTS.find(p=>p.id==id) : {name : "No project"}; }
 
 function fetchProjects(){
     return sole.get("../../controllers/administrator/get_projects.php")
@@ -196,6 +195,10 @@ function renderList(){
 
   document.getElementById('statTotal').textContent = TASKS.filter(t=>t.status=='progress').length;
   document.getElementById('statOverdue').textContent = TASKS.filter(t=>t.overdue).length;
+  const countTask = TASKS.length;
+  console.log(countTask)
+  document.getElementById('allTasksNavCount').hidden = countTask ? false : true
+  document.getElementById('allTasksNavCount').textContent = countTask;
 }
 
 document.querySelectorAll('.chip[data-filter]').forEach(c=>{
@@ -216,14 +219,30 @@ document.getElementById('assigneeFilter').addEventListener('change', e=>{
   renderList();
 });
 
+const VIEW_STORAGE_KEY = 'activeView';
+
+function activateView(view){
+  const targets = document.querySelectorAll(`[data-view="${view}"]`);
+  if(!targets.length) return; // unknown/stale value, bail out
+
+  document.querySelectorAll('.view-tab, .nav-item[data-view]').forEach(el=>el.classList.remove('active'));
+  targets.forEach(el=>el.classList.add('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+view).classList.add('active');
+  updatePrimaryButtonContext(view);
+}
+
 // ---------------- View switching ----------------
 document.querySelectorAll('.view-tab').forEach(tab=>{
   tab.addEventListener('click', ()=>{
-    document.querySelectorAll('.view-tab').forEach(t=>t.classList.remove('active'));
-    tab.classList.add('active');
-    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-    document.getElementById('panel-'+tab.dataset.view).classList.add('active');
-    updatePrimaryButtonContext(tab.dataset.view);
+    activateView(tab.dataset.view);
+    localStorage.setItem(VIEW_STORAGE_KEY, tab.dataset.view);
+  });
+});
+document.querySelectorAll('.nav-item[data-view]').forEach(item=>{
+  item.addEventListener('click', ()=>{
+    activateView(item.dataset.view);
+    localStorage.setItem(VIEW_STORAGE_KEY, item.dataset.view);
   });
 });
 function updatePrimaryButtonContext(view){
@@ -366,6 +385,144 @@ function renderDrawerComments(t){
   }).join('');
 }
 
+// ---------------- Edit task ----------------
+const updateTaskModalOverlay = document.getElementById('updateTaskModalOverlay');
+
+function openUpdateTaskModal(){
+  const t = TASKS.find(x=>x.id===currentDrawerTaskId);
+  if(!t) return;
+
+  document.getElementById('utTitle').value = t.title;
+  document.getElementById('utDesc').value = t.desc === 'No description provided.' ? '' : t.desc;
+  document.getElementById('utStart').value = t.start_date || '';
+  document.getElementById('utDue').value = t.due_date || '';
+  document.getElementById('utError').classList.remove('show');
+
+  const projSel = document.getElementById('utProject');
+  projSel.innerHTML = '<option value="-">-- Select Project --</option>' +
+    PROJECTS.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+  projSel.value = t.project_id || '-';
+
+  const assigneeSel = document.getElementById('utAssignee');
+  assigneeSel.innerHTML = '<option value="-">-- Select Technician --</option>' + assignableUsers().map(m=>`<option value="${m.id}">${fullName(m)}</option>`).join('');
+  assigneeSel.value = t.user_id || "-";
+
+  document.querySelectorAll('#utPriority .priority-opt').forEach(o=>o.classList.toggle('sel', o.dataset.p===t.priority));
+
+  updateTaskModalOverlay.classList.add('open');
+}
+function closeUpdateTaskModal(){ updateTaskModalOverlay.classList.remove('open'); }
+
+document.getElementById('drawerEditBtn').addEventListener('click', openUpdateTaskModal);
+document.getElementById('utModalClose').addEventListener('click', closeUpdateTaskModal);
+document.getElementById('utModalCancel').addEventListener('click', closeUpdateTaskModal);
+updateTaskModalOverlay.addEventListener('click', e=>{ if(e.target===updateTaskModalOverlay) closeUpdateTaskModal(); });
+
+// Scoped to #utPriority specifically — the global .priority-opt selector elsewhere
+// in this file also matches #ntPriority and #umStatus, which strip each other's
+// 'sel' state on click since they share the same class. Not fixing that here,
+// just not adding this new modal to the same problem.
+document.querySelectorAll('#utPriority .priority-opt').forEach(opt=>{
+  opt.addEventListener('click', ()=>{
+    document.querySelectorAll('#utPriority .priority-opt').forEach(o=>o.classList.remove('sel'));
+    opt.classList.add('sel');
+  });
+});
+
+document.getElementById('utSave').addEventListener('click', ()=>{
+  const title = document.getElementById('utTitle').value.trim();
+  const assignee = document.getElementById('utAssignee').value;
+  const errorEl = document.getElementById('utError');
+  const projectId = document.getElementById('utProject').value;
+  const priorityOpt = document.querySelector('#utPriority .priority-opt.sel');
+  const saveBtn = document.getElementById('utSave');
+  const startRaw_ = document.getElementById('utStart').value
+  const dueRaw_ = document.getElementById('utDue').value
+
+  console.log(document.getElementById('utDesc').value)
+
+  if(!title){
+    errorEl.textContent = 'Please add a title before saving.';
+    errorEl.classList.add('show');
+    return;
+  }
+
+  if(!startRaw_){
+    errorEl.textContent = 'Please select a start date before saving.';
+    errorEl.classList.add('show');
+    return;
+  }
+
+    if(!dueRaw_){
+    errorEl.textContent = 'Please select a due date before saving.';
+    errorEl.classList.add('show');
+    return;
+  }
+
+  errorEl.classList.remove('show');
+  saveBtn.disabled = true;
+
+  sole.post("../../controllers/administrator/update_task.php", {
+    id: currentDrawerTaskId,
+    title : title,
+    description: document.getElementById('utDesc').value.trim() || 'No description provided.',
+    project_id: projectId,
+    user_id: assignee,
+    priority: priorityOpt ? priorityOpt.dataset.p : 'medium',
+    start_date: startRaw_,
+    due_date: dueRaw_
+  }).then(res => {
+    saveBtn.disabled = false;
+
+    if(!res.status){
+      errorEl.textContent = res.message || 'Something went wrong updating the task.';
+      errorEl.classList.add('show');
+      return;
+    }
+
+    ss.toast(null, res.type, res.message, null, "#1B2A22");
+    closeUpdateTaskModal();
+    fetchTasks().then(() => openDrawer(currentDrawerTaskId)); // wait for fresh data before re-rendering the drawer
+  }).catch(err => {
+    saveBtn.disabled = false;
+    errorEl.textContent = 'Could not reach the server. Please try again.';
+    errorEl.classList.add('show');
+    console.error(err);
+  });
+});
+
+// ---------------- Delete task ----------------
+document.getElementById('drawerDeleteBtn').addEventListener('click', ()=>{
+  document.getElementById('taskDeleteConfirmSection').style.display = 'block';
+});
+document.getElementById('taskDeleteCancelBtn').addEventListener('click', ()=>{
+  document.getElementById('taskDeleteConfirmSection').style.display = 'none';
+});
+document.getElementById('taskDeleteConfirmBtn').addEventListener('click', ()=>{
+  const confirmBtn = document.getElementById('taskDeleteConfirmBtn');
+  confirmBtn.disabled = true;
+
+  sole.post("../../controllers/administrator/delete_task.php", { id: currentDrawerTaskId })
+    .then(res => {
+      confirmBtn.disabled = false;
+
+      if(!res.status){
+        ss.toast(null, res.type, res.message, null, "#1B2A22");
+        return;
+      }
+
+      ss.toast(null, res.type, res.message, null, "#1B2A22");
+      document.getElementById('taskDeleteConfirmSection').style.display = 'none';
+      closeDrawer();
+      fetchTasks();
+    })
+    .catch(err => {
+      confirmBtn.disabled = false;
+      ss.toast(null, "error", "Could not reach the server. Please try again.", null, "#1B2A22");
+      console.error(err);
+    });
+});
+
 function openDrawer(id){
   currentDrawerTaskId = id;
   const t = TASKS.find(x=>x.id===id) || TASKS[0];
@@ -385,6 +542,7 @@ function openDrawer(id){
   });
   renderDrawerChecklist(t);
   renderDrawerAttachments(t);
+  document.getElementById('taskDeleteConfirmSection').style.display = 'none';
 
   const info = resolveAssignee(t.user_id);
   document.getElementById('dAssignedTo').textContent = info.name;
@@ -582,7 +740,7 @@ document.getElementById('ntChecklistList').addEventListener('click', e=>{
 
 document.getElementById('ntFileInput').addEventListener('change', e=>{
   Array.from(e.target.files).forEach(f=>{
-    ntAttachments.push({name:f.name, size:formatFileSize(f.size)});
+    ntAttachments.push({name:f.name, size:formatFileSize(f.size), file:f});
   });
   e.target.value = ''; // allow re-selecting the same file later
   renderNtAttachments();
@@ -604,7 +762,7 @@ function openModal(){
   document.querySelectorAll('.priority-opt').forEach(o=>o.classList.toggle('sel', o.dataset.p==='medium'));
 
   const assigneeSelect = document.getElementById('ntAssignee');
-  assigneeSelect.innerHTML = '<option value="-">-- Select User --</option>'+assignableUsers().map(m=>`<option value="${m.id}">${m.fname + " " + m.lname}</option>`).join('');
+  assigneeSelect.innerHTML = '<option value="-">-- Select Technician --</option>'+assignableUsers().map(m=>`<option value="${m.id}">${m.fname + " " + m.lname}</option>`).join('');
 
   ntChecklistItems = [];
   ntAttachments = [];
@@ -634,33 +792,68 @@ document.getElementById('modalCreate').addEventListener('click', ()=>{
   const title = document.getElementById('ntTitle').value.trim();
   const assignee = document.getElementById('ntAssignee').value;
   const errorEl = document.getElementById('ntError');
-  if(!title || !assignee){
+
+  const desc = document.getElementById('ntDesc').value.trim() || 'No description provided.';
+  const projectId = document.getElementById('ntProject').value;
+  const priority = document.querySelector('.priority-opt.sel').dataset.p;
+  const startRaw = document.getElementById('ntStart').value;
+  const dueRaw = document.getElementById('ntDue').value;
+
+  if(!title){
+    errorEl.textContent = 'Please add a title before creating the task.';
     errorEl.classList.add('show');
     return;
   }
+
+  if(!startRaw){
+    errorEl.textContent = 'Please select a start date before creating the task.';
+    errorEl.classList.add('show');
+    return;
+  }
+
+  if(!dueRaw){
+    errorEl.textContent = 'Please select a due date before creating the task.';
+    errorEl.classList.add('show');
+    return;
+  }
+
   errorEl.classList.remove('show');
 
-  const desc = document.getElementById('ntDesc').value.trim() || 'No description provided.';
-  const project = document.getElementById('ntProject').value;
-  const priority = document.querySelector('.priority-opt.sel').dataset.p;
-  const dueRaw = document.getElementById('ntDue').value;
-  const dueLabel = dueRaw ? new Date(dueRaw+'T00:00:00').toLocaleDateString('en-US',{month:'long', day:'numeric'}) : 'Not set';
-
-  const checklistItems = ntChecklistItems.map(text=>({text, done:false}));
-  const attachments = ntAttachments.slice();
-
-  TASKS.unshift({
-    id: nextId++, title, desc, project, priority, status:'todo',
-    due: dueLabel, overdue:false, dueSoon:false,
-    checklist:[0, checklistItems.length], checklistItems,
-    comments:0, files:attachments.length, attachments,
-    assignee
+  const formData = new FormData();
+  formData.append('title', title);
+  formData.append('description', desc ? desc : "-");
+  formData.append('project_id', projectId);
+  formData.append('user_id', assignee);
+  formData.append('priority', priority);
+  formData.append('status', 'todo');
+  formData.append('start_date', startRaw);
+  formData.append('due_date', dueRaw);
+  formData.append('checklist', JSON.stringify(ntChecklistItems));
+  ntAttachments.forEach(a=>{
+    if(a.file) formData.append('attachments[]', a.file, a.name);
   });
 
-  closeModal();
-  renderList();
-  renderKanban();
-  renderWorkload();
+  const createBtn = document.getElementById('modalCreate');
+  createBtn.disabled = true;
+
+  sole.file("../../controllers/administrator/create_task.php", formData).then(res => {
+    createBtn.disabled = false;
+    console.log(res)
+    if(!res.status){
+      errorEl.textContent = res.message || 'Something went wrong creating the task.';
+      errorEl.classList.add('show');
+      return;
+    }
+
+    ss.toast(null, res.type, res.message, null, "#1B2A22");
+    closeModal();
+    fetchTasks();
+  }).catch(err => {
+    createBtn.disabled = false;
+    errorEl.textContent = 'Could not reach the server. Please try again.';
+    errorEl.classList.add('show');
+    console.error(err);
+  });
 });
 
 // ---------------- Projects (create / edit / delete) ----------------
@@ -894,8 +1087,9 @@ function populateNtProjectOptions(){
   const sel = document.getElementById('ntProject');
   if(!sel) return;
   const current = sel.value;
-  sel.innerHTML = PROJECTS.map(p=>`<option value="${p.name}">${p.name}</option>`).join('');
-  if(PROJECTS.some(p=>p.name===current)) sel.value = current;
+  sel.innerHTML = '<option value="-">-- Select Project --</option>' +
+    PROJECTS.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+  if(PROJECTS.some(p=>String(p.id)===String(current))) sel.value = current;
 }
 
 // ---------------- Departments (create / edit / delete) ----------------
@@ -1433,10 +1627,18 @@ function updateAdminStats(){
   document.getElementById('greetDeptCount').textContent = `${DEPARTMENTS.length} department${DEPARTMENTS.length===1?'':'s'}`;
   document.getElementById('greetProjectCount').textContent = `${PROJECTS.length} project${PROJECTS.length===1?'':'s'}`;
 }
+function updateGreetingDate(){
+  const today = new Date();
+  const formatted = today.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+  document.getElementById('greetDate').textContent = '— ' + formatted;
+}
+
+const savedView = localStorage.getItem(VIEW_STORAGE_KEY);
+if(savedView) activateView(savedView);
 
 renderProjectNav();
 fetchProjects();
-fetchDepartments();   // replaces renderDeptNav() + populateDeptFilterOptions()
+fetchDepartments();
 fetchUsers();
 fetchTasks();
 renderUserList();
@@ -1444,5 +1646,6 @@ renderWorkload();
 renderList();
 renderKanban();
 updateAdminStats();
+updateGreetingDate();
 
 

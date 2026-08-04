@@ -57,7 +57,6 @@
             "status",
             "start_date",
             "due_date",
-            "completed_at",
             "project_id",
             "user_id"
         ];
@@ -68,7 +67,6 @@
         public string $status;
         public string $start_date;
         public string $due_date;
-        public string $completed_at;
         public string $project_id;
         public string $user_id;
     }
@@ -98,7 +96,6 @@
             "file_path",
             "file_size",
             "mime_type",
-            "uploaded_by"
         ];
 
         public string $task_id;
@@ -106,7 +103,6 @@
         public string $file_path;
         public string $file_size;
         public string $mime_type;
-        public string $uploaded_by;
     }
 
     class Comment

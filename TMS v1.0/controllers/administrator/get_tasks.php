@@ -22,7 +22,7 @@
         $total = 0;
         foreach($checklist as $cl){
             if($t["id"] == $cl["task_id"]){
-                if($cl["is_done"] = "true") $done++;
+                if($cl["is_done"] == "true") $done++;
                 $total++;
             }
         }
