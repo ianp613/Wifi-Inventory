@@ -79,10 +79,10 @@
             </nav>
 
             <div class="sidebar-foot">
-                <div class="avatar">PI</div>
+                <div class="avatar" id="sbfavatar">PI</div>
                 <div class="who">
-                    <div class="name">Paul Ian Dumdum</div>
-                    <div class="email">Paul Ian@workbench.io</div>
+                    <div id="sbfname" class="name">Paul Ian Dumdum</div>
+                    <div class="email">DDC PULSE 2026 © Paul Ian</div>
                 </div>
             </div>
         </aside>
@@ -96,7 +96,7 @@
                             <path d="M3 6h18M3 12h18M3 18h18" />
                         </svg></button>
                     <div class="greeting">
-                        <h1>Hello, Paul Ian.</h1>
+                        <h1 id="greetings"></h1>
                         <p>You manage <strong id="greetProjectCount">0 projects</strong> and <strong
                                 id="greetUserCount">0 users</strong> across <strong id="greetDeptCount">0
                                 departments</strong>. <span class="date-stub" id="greetDate"></span></p>

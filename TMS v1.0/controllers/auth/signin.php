@@ -28,12 +28,25 @@
             $_SESSION["fname"] = $user[0]["fname"];
             $_SESSION["lname"] = $user[0]["lname"];
             $_SESSION["privileges"] = $user[0]["privileges"];
+
+            if($user[0]["status"] == "inactive"){
+                $response = [
+                    "status" => false,
+                    "type" => "warning",
+                    "message" => "This user profile is inactive. Please contact support to turn it back on."
+                ];
+                echo json_encode($response);
+                exit;
+            }
             
             $response = [
                 "status" => true,
                 "type" => "success",
                 "message" => "Welcome ".$user[0]["fname"],
-                "privileges" => $user[0]["privileges"]
+                "privileges" => $user[0]["privileges"],
+                "fname" => $user[0]["fname"],
+                "lname" => $user[0]["lname"],
+                "avatar" => $user[0]["fname"][0].$user[0]["lname"][0]
             ];
         }else{
             $response = [

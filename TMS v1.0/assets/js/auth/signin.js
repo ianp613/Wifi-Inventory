@@ -41,7 +41,9 @@ document.getElementById('signinForm').addEventListener('submit', e => {
             localStorage.setItem("greet","enabled")
             localStorage.setItem("fname",res.fname)
             localStorage.setItem("lname",res.lname)
-            localStorage.setItem("avatar",res.fname[0]+res.lname[0])
+            localStorage.setItem("avatar",res.avatar)
+            localStorage.setItem("privileges",res.privileges)
+            localStorage.removeItem("activeView")
             window.location.replace("../"+res.privileges.toLowerCase())
         }
         ss.toast(null,res.type,res.message,null,"#1B2A22")

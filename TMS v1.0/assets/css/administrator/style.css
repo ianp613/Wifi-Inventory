@@ -93,9 +93,9 @@
     background:linear-gradient(155deg,#3B6FA0,#274F72);
     display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:12.5px;
   }
-  .sidebar-foot .who{line-height:1.25;}
+  .sidebar-foot .who{line-height:1.40;}
   .sidebar-foot .name{font-size:13px;font-weight:600;color:#fff;}
-  .sidebar-foot .email{font-size:11px;color:#93A093;}
+  .sidebar-foot .email{font-size:10px;color:#93A093;font-style: italic;}
 
   /* ---------- Main ---------- */
   /* .main{padding:26px 34px 60px;max-width:1320px;} */

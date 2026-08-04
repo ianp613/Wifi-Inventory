@@ -1633,6 +1633,15 @@ function updateGreetingDate(){
   document.getElementById('greetDate').textContent = '— ' + formatted;
 }
 
+if(localStorage.getItem("greet") !== null){
+  ss.toast(`Welcome  ${localStorage.getItem("fname")} ${localStorage.getItem("lname")}`, "success", null, null, "#1B2A22");
+  localStorage.removeItem("greet")
+}
+
+document.getElementById("greetings").innerText = `Hello, ${localStorage.getItem("fname")} ${localStorage.getItem("lname")}.`
+document.getElementById("sbfavatar").innerText = localStorage.getItem("avatar")
+document.getElementById("sbfname").innerText = `${localStorage.getItem("fname")} ${localStorage.getItem("lname")}`
+
 const savedView = localStorage.getItem(VIEW_STORAGE_KEY);
 if(savedView) activateView(savedView);
 
@@ -1647,5 +1656,6 @@ renderList();
 renderKanban();
 updateAdminStats();
 updateGreetingDate();
+
 
 
