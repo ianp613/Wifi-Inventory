@@ -10,22 +10,17 @@
         href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="../../assets/css/auth/signin.css">
+    <link rel="stylesheet" href="../../assets/css/splash.css">
 </head>
 
 <body>
-
+    <div id="preloader"></div>
     <div class="auth-card">
-        <div class="brand-row">
-            <div class="brand-mark">P</div>
-            <div>
-                <div class="brand-word">DDC PULSE</div>
-                <div class="brand-tagline">Project Updates, Logging &amp; Scheduling</div>
-            </div>
-        </div>
 
         <div class="form-head">
-            <h2>Welcome</h2>
-            <p>Sign in to your DDC PULSE workspace.</p>
+            <img src="../../../assets/img/LEYTE-PULSE.png" alt="" srcset="">
+  
+            <p>Sign in to your LEYTE PULSE workspace.</p>
         </div>
 
         <div class="form-error" id="formError">
@@ -85,6 +80,7 @@
     <script src="../../assets/js/sole.js"></script>
     <script src="../../assets/js/sole.swal.js"></script>
     <script src="../../assets/js/auth/signin.js"></script>
+    <script src="../../assets/js/splash.js"></script>
 </body>
 
 </html>

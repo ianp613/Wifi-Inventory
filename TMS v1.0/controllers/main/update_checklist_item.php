@@ -4,17 +4,15 @@
     include("../../includes.php");
     $data = json_decode(file_get_contents('php://input'), true);
 
-    $project = new Project;
-    $p = DB::prepare($project,$data["id"]);
-    $p->project_name = $data["project_name"];
-    $p->color = $data["color"];
-    $p->dept_id = $data["dept_id"];
-    DB::update($p);
+    $checklist = new ChecklistItem;
+    $checklist = DB::prepare($checklist,$data["id"]);
+    $checklist->is_done = $data["is_done"];
+    DB::update($checklist);
 
     $response = [
         "status" => true,
         "type" => "success",
-        "message" => "Project has been updated."
+        "message" => "Checklist has been updated."
     ];
 
     echo json_encode($response);

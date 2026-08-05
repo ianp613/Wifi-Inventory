@@ -31,3 +31,70 @@
         transform:rotate(360deg);
     }
 }
+
+
+/* Copyright Preloader PRISM @ Joshua */
+#preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #fff;
+}
+
+/* Loader */
+#preloader::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 110px;
+    aspect-ratio: 1;
+    display: grid;
+
+    border: 5px solid transparent;
+    border-radius: 50%;
+    border-color: #11304e transparent;
+
+    animation: l16 1s linear infinite;
+}
+
+/* Second rotating ring */
+#preloader::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    width: 94px;
+    height: 94px;
+
+    transform: translate(-50%, -50%);
+
+    border: 5px solid transparent;
+    border-radius: 50%;
+    border-color: #2F6F5E transparent;
+
+    animation: l16 .6s linear infinite reverse;
+}
+
+/* Logo */
+#preloader .logo {
+    display: none;
+}
+
+/* Logo using extra background layer */
+#preloader {
+    background:
+        url("../../../assets/img/LEYTE-PULSE.png") center center/70px no-repeat,
+        #fff;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+@keyframes l16 {
+    100% {
+        transform: translate(-50%, -50%) rotate(1turn);
+    }
+}

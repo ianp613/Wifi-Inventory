@@ -39,7 +39,7 @@ function projectByName(name){ return PROJECTS.find(p=>p.name===name); }
 function projectById(id){ return PROJECTS.find(p=>p.id==id) ? PROJECTS.find(p=>p.id==id) : {name : "No project"}; }
 
 function fetchProjects(){
-    return sole.get("../../controllers/administrator/get_projects.php")
+    return sole.get("../../controllers/main/get_projects.php")
     .then(res => {
       PROJECTS.length = 0;
       res.forEach(p => {
@@ -57,7 +57,7 @@ function fetchProjects(){
 
 
 function fetchTasks(){
-  return sole.get("../../controllers/administrator/get_tasks.php")
+  return sole.get("../../controllers/main/get_tasks.php")
     .then(res => {
       TASKS.length = 0;
       res.forEach(t => {
@@ -75,9 +75,24 @@ function fetchTasks(){
           due: formatTaskDate(t.due_date),
           overdue: isOverdue(t.due_date, t.status),
           dueSoon: isDueSoon(t.due_date),
-          checklist: [parseInt(t.checklist[0]) || 0,parseInt(t.checklist[1]) || 0],
+          checklist: [parseInt(t.checklist[0]) || 0, parseInt(t.checklist[1]) || 0],
+          checklistItems: (t.checklist_list || []).map(ci => ({
+            id: ci.id,
+            text: ci.text,
+            done: ci.is_done == "1" || ci.is_done === 1
+          })),
           comments: parseInt(t.comments),
-          files: parseInt(t.files)
+          commentList: (t.comments_list || []).map(c => ({
+            user_id: c.user_id ? parseInt(c.user_id) : null,
+            comment_text: c.comment_text,
+            created_at: c.created_at
+          })),
+          files: parseInt(t.files),
+          attachments: (t.attachment_list || []).map(a => ({
+            name: a.file_name,
+            size: formatFileSize(parseInt(a.file_size) || 0),
+            path: a.file_path
+          }))
         });
       });
       renderList();
@@ -196,7 +211,6 @@ function renderList(){
   document.getElementById('statTotal').textContent = TASKS.filter(t=>t.status=='progress').length;
   document.getElementById('statOverdue').textContent = TASKS.filter(t=>t.overdue).length;
   const countTask = TASKS.length;
-  console.log(countTask)
   document.getElementById('allTasksNavCount').hidden = countTask ? false : true
   document.getElementById('allTasksNavCount').textContent = countTask;
 }
@@ -314,7 +328,26 @@ function attachDragEvents(){
       col.classList.remove('drop-hover');
       const id = parseInt(e.dataTransfer.getData('text/plain'));
       const task = TASKS.find(t=>t.id===id);
-      if(task){ task.status = col.dataset.col; renderKanban(); renderList(); }
+      if(!task) return;
+      const newStatus = col.dataset.col;
+      if(newStatus === task.status) return;
+
+      task.status = newStatus;
+      task.overdue = isOverdue(task.due_date, task.status);
+      renderKanban();
+      renderList();
+      renderWorkload();
+
+      updateTaskStatusOnServer(id, newStatus).then(res=>{
+        if(!res.status){
+          ss.toast(null, res.type, res.message || 'Could not update status.', null, "#1B2A22");
+          return;
+        }
+        ss.toast(null, res.type, res.message, null, "#1B2A22");
+      }).catch(err=>{
+        ss.toast(null, "error", "Could not reach the server. Please try again.", null, "#1B2A22");
+        console.error(err);
+      });
     });
   });
 }
@@ -324,9 +357,24 @@ function moveCard(id, dir){
   const idx = KCOLS.findIndex(c=>c.key===task.status);
   const next = idx + dir;
   if(next < 0 || next >= KCOLS.length) return;
-  task.status = KCOLS[next].key;
+  const newStatus = KCOLS[next].key;
+
+  task.status = newStatus;
+  task.overdue = isOverdue(task.due_date, task.status);
   renderKanban();
   renderList();
+  renderWorkload();
+
+  updateTaskStatusOnServer(id, newStatus).then(res=>{
+    if(!res.status){
+      ss.toast(null, res.type, res.message || 'Could not update status.', null, "#1B2A22");
+      return;
+    }
+    ss.toast(null, res.type, res.message, null, "#1B2A22");
+  }).catch(err=>{
+    ss.toast(null, "error", "Could not reach the server. Please try again.", null, "#1B2A22");
+    console.error(err);
+  });
 }
 
 // ---------------- Mobile off-canvas sidebar ----------------
@@ -360,12 +408,12 @@ function renderDrawerAttachments(t){
     return;
   }
   box.innerHTML = t.attachments.map(a=>`
-    <div class="attachment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg><span class="fname">${a.name}</span><span class="fsize">${a.size}</span></div>`).join('');
+    <a class="attachment" href="${a.path}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg><span class="fname">${a.name}</span><span class="fsize">${a.size}</span></a>`).join('');
 }
 
 function renderDrawerComments(t){
   const box = document.getElementById('commentsBox');
-  if(!t.comments || !t.commentList || !t.commentList.length){
+  if(!t.commentList || !t.commentList.length){
     box.innerHTML = `<div class="nt-empty-hint">No comments yet.</div>`;
     return;
   }
@@ -383,6 +431,7 @@ function renderDrawerComments(t){
       </div>
     </div>`;
   }).join('');
+  box.scrollTop = box.scrollHeight;
 }
 
 // ---------------- Edit task ----------------
@@ -404,7 +453,7 @@ function openUpdateTaskModal(){
   projSel.value = t.project_id || '-';
 
   const assigneeSel = document.getElementById('utAssignee');
-  assigneeSel.innerHTML = '<option value="-">-- Select Technician --</option>' + assignableUsers().map(m=>`<option value="${m.id}">${fullName(m)}</option>`).join('');
+  assigneeSel.innerHTML = '<option value="-">-- Select Technician --</option>' + assignableUsers().map(m=>`<option value="${m.id}">${localStorage.getItem("userid") == m.id ? "Yourself" : fullName(m)}</option>`).join('');
   assigneeSel.value = t.user_id || "-";
 
   document.querySelectorAll('#utPriority .priority-opt').forEach(o=>o.classList.toggle('sel', o.dataset.p===t.priority));
@@ -439,8 +488,6 @@ document.getElementById('utSave').addEventListener('click', ()=>{
   const startRaw_ = document.getElementById('utStart').value
   const dueRaw_ = document.getElementById('utDue').value
 
-  console.log(document.getElementById('utDesc').value)
-
   if(!title){
     errorEl.textContent = 'Please add a title before saving.';
     errorEl.classList.add('show');
@@ -462,7 +509,7 @@ document.getElementById('utSave').addEventListener('click', ()=>{
   errorEl.classList.remove('show');
   saveBtn.disabled = true;
 
-  sole.post("../../controllers/administrator/update_task.php", {
+  sole.post("../../controllers/main/update_task.php", {
     id: currentDrawerTaskId,
     title : title,
     description: document.getElementById('utDesc').value.trim() || 'No description provided.',
@@ -502,7 +549,7 @@ document.getElementById('taskDeleteConfirmBtn').addEventListener('click', ()=>{
   const confirmBtn = document.getElementById('taskDeleteConfirmBtn');
   confirmBtn.disabled = true;
 
-  sole.post("../../controllers/administrator/delete_task.php", { id: currentDrawerTaskId })
+  sole.post("../../controllers/main/delete_task.php", { id: currentDrawerTaskId })
     .then(res => {
       confirmBtn.disabled = false;
 
@@ -542,6 +589,7 @@ function openDrawer(id){
   });
   renderDrawerChecklist(t);
   renderDrawerAttachments(t);
+  renderDrawerComments(t);
   document.getElementById('taskDeleteConfirmSection').style.display = 'none';
 
   const info = resolveAssignee(t.user_id);
@@ -556,7 +604,7 @@ function openDrawer(id){
 
   const select = document.getElementById('reassignSelect');
   select.innerHTML = '<option value="">Choose a technician…</option>' +
-    assignableUsers().filter(m=>m.id!==t.user_id).map(m=>`<option value="${m.id}">${fullName(m)}</option>`).join('');
+    assignableUsers().filter(m=>m.id!==t.user_id).map(m=>`<option value="${m.id}">${localStorage.getItem("userid") == m.id ? "Yourself" :fullName(m)}</option>`).join('');
   document.getElementById('reassignNote').value = '';
   document.getElementById('reassignError').classList.remove('show');
   document.getElementById('reassignConfirm').classList.remove('show');
@@ -575,37 +623,122 @@ function closeDrawer(){
 document.getElementById('drawerClose').addEventListener('click', closeDrawer);
 document.getElementById('overlay').addEventListener('click', closeDrawer);
 
+function postComment(){
+  const t = TASKS.find(x=>x.id===currentDrawerTaskId);
+  if(!t) return;
+
+  const input = document.getElementById('commentInput');
+  const text = input.value.trim();
+  if(!text) return;
+
+  const sendBtn = document.getElementById('commentSendBtn');
+  sendBtn.disabled = true;
+
+  sole.post("../../controllers/main/create_comment.php", {
+    task_id: t.id,
+    comment_text: text
+  }).then(res => {
+    sendBtn.disabled = false;
+
+    if(!res.status){
+      ss.toast(null, res.type, res.message || 'Could not post comment.', null, "#1B2A22");
+      return;
+    }
+
+    input.value = '';
+    fetchTasks().then(() => openDrawer(currentDrawerTaskId)); // re-render drawer with the new comment included
+  }).catch(err => {
+    sendBtn.disabled = false;
+    ss.toast(null, "error", "Could not reach the server. Please try again.", null, "#1B2A22");
+    console.error(err);
+  });
+}
+document.getElementById('commentSendBtn').addEventListener('click', postComment);
+document.getElementById('commentInput').addEventListener('keydown', e=>{
+  if(e.key === 'Enter'){ e.preventDefault(); postComment(); }
+});
+
+function updateTaskStatusOnServer(taskId, newStatus){
+  return sole.post("../../controllers/main/update_status.php", {
+    id: taskId,
+    status: newStatus
+  });
+}
+
 document.querySelectorAll('.status-opt').forEach(opt=>{
   opt.addEventListener('click', ()=>{
-    document.querySelectorAll('.status-opt').forEach(o=>o.classList.remove('sel'));
-    opt.classList.add('sel');
     const t = TASKS.find(x=>x.id===currentDrawerTaskId);
-    if(t){
-      t.status = opt.dataset.status;
-      t.overdue = false;
-    }
-    const sEl = document.getElementById('dStatusTag');
-    sEl.textContent = opt.textContent;
-    sEl.className = 'status-tag ' + STATUS_CLASS[opt.dataset.status];
-    renderList();
-    renderKanban();
-    renderWorkload();
+    if(!t) return;
+    const newStatus = opt.dataset.status;
+    if(newStatus === t.status) return; // no-op, nothing changed
+
+    document.querySelectorAll('.status-opt').forEach(o=>o.disabled = true);
+
+    sole.post("../../controllers/main/update_status.php", {
+      id: t.id,
+      status: newStatus
+    }).then(res => {
+      document.querySelectorAll('.status-opt').forEach(o=>o.disabled = false);
+
+      if(!res.status){
+        ss.toast(null, res.type, res.message || 'Could not update status.', null, "#1B2A22");
+        return;
+      }
+
+      ss.toast(null, res.type, res.message, null, "#1B2A22");
+      fetchTasks().then(() => openDrawer(currentDrawerTaskId)); // wait for fresh data before re-rendering the drawer
+    }).catch(err => {
+      document.querySelectorAll('.status-opt').forEach(o=>o.disabled = false);
+      ss.toast(null, "error", "Could not reach the server. Please try again.", null, "#1B2A22");
+      console.error(err);
+    });
   });
 });
 
-// Checklist checkboxes are re-rendered per task, so use delegation rather than binding once
+if(localStorage.getItem("privileges") === null){
+  window.location.replace("../../")
+}else{
+  if(localStorage.getItem("privileges").toLocaleLowerCase() != window.location.href.split("/").pop() || localStorage.getItem("auth") === null){
+    window.location.replace("../../")
+  }  
+}
+
+
 document.getElementById('checklistBox').addEventListener('change', e=>{
   const cb = e.target.closest('input[type=checkbox]');
   if(!cb) return;
   const t = TASKS.find(x=>x.id===currentDrawerTaskId);
   if(!t || !t.checklistItems) return;
   const idx = parseInt(cb.dataset.idx);
-  t.checklistItems[idx].done = cb.checked;
+  const item = t.checklistItems[idx];
+  if(!item) return;
+
+  const newDone = cb.checked;
+
+  // Reflect immediately, no rollback
+  item.done = newDone;
   t.checklist = [t.checklistItems.filter(i=>i.done).length, t.checklistItems.length];
-  cb.closest('.checklist-item').classList.toggle('checked', cb.checked);
+  cb.closest('.checklist-item').classList.toggle('checked', newDone);
   document.getElementById('checklistTitle').textContent = `Checklist — ${t.checklist[0]} of ${t.checklist[1]}`;
   renderList();
   renderKanban();
+
+  cb.disabled = true;
+  sole.post("../../controllers/main/update_checklist_item.php", {
+    id: item.id,
+    is_done: newDone ? "1" : "0"
+  }).then(res => {
+    cb.disabled = false;
+
+    if(!res.status){
+      ss.toast(null, res.type, res.message || 'Could not update checklist item.', null, "#1B2A22");
+      return;
+    }
+  }).catch(err => {
+    cb.disabled = false;
+    ss.toast(null, "error", "Could not reach the server. Please try again.", null, "#1B2A22");
+    console.error(err);
+  });
 });
 
 // ---------------- Reassign task (supervisor) ----------------
@@ -626,7 +759,7 @@ function reassignTask(){
   const reassignBtn = document.getElementById('reassignBtn');
   reassignBtn.disabled = true;
 
-  sole.post("../../controllers/administrator/reassign_task.php", {
+  sole.post("../../controllers/main/reassign_task.php", {
     id: t.id,
     user_id: newUserId,
     note: noteEl.value.trim()
@@ -762,7 +895,7 @@ function openModal(){
   document.querySelectorAll('.priority-opt').forEach(o=>o.classList.toggle('sel', o.dataset.p==='medium'));
 
   const assigneeSelect = document.getElementById('ntAssignee');
-  assigneeSelect.innerHTML = '<option value="-">-- Select Technician --</option>'+assignableUsers().map(m=>`<option value="${m.id}">${m.fname + " " + m.lname}</option>`).join('');
+  assigneeSelect.innerHTML = '<option value="-">-- Select Technician --</option>'+assignableUsers().map(m=>`<option value="${m.id}">${localStorage.getItem("userid") == m.id ? "Yourself" : m.fname + " " + m.lname}</option>`).join('');
 
   ntChecklistItems = [];
   ntAttachments = [];
@@ -836,9 +969,8 @@ document.getElementById('modalCreate').addEventListener('click', ()=>{
   const createBtn = document.getElementById('modalCreate');
   createBtn.disabled = true;
 
-  sole.file("../../controllers/administrator/create_task.php", formData).then(res => {
+  sole.file("../../controllers/main/create_task.php", formData).then(res => {
     createBtn.disabled = false;
-    console.log(res)
     if(!res.status){
       errorEl.textContent = res.message || 'Something went wrong creating the task.';
       errorEl.classList.add('show');
@@ -955,7 +1087,7 @@ document.getElementById('projectManageList').addEventListener('click', e=>{
     const id = parseInt(confirmBtn.dataset.confirmDelete);
     confirmBtn.disabled = true;
 
-    sole.post("../../controllers/administrator/delete_project.php", { id: id })
+    sole.post("../../controllers/main/delete_project.php", { id: id })
       .then(res => {
         confirmBtn.disabled = false;
 
@@ -1014,7 +1146,7 @@ document.getElementById('pmSave').addEventListener('click', ()=>{
   if(pmEditingId){
     saveBtn.disabled = true;
 
-    sole.post("../../controllers/administrator/update_project.php", {
+    sole.post("../../controllers/main/update_project.php", {
       id: pmEditingId,
       project_name: name,
       color: pmSelectedColor,
@@ -1042,7 +1174,7 @@ document.getElementById('pmSave').addEventListener('click', ()=>{
 
   saveBtn.disabled = true;
 
-  sole.post("../../controllers/administrator/create_project.php", {
+  sole.post("../../controllers/main/create_project.php", {
     project_name: name,
     color: pmSelectedColor,
     dept_id: deptId
@@ -1186,9 +1318,8 @@ document.getElementById('deptManageList').addEventListener('click', e=>{
     const id = parseInt(confirmBtn.dataset.confirmDeleteDept);
     confirmBtn.disabled = true;
 
-    sole.post("../../controllers/administrator/delete_department.php", { id : id })
+    sole.post("../../controllers/main/delete_department.php", { id : id })
       .then(res => {
-        console.log(res)
         confirmBtn.disabled = false;
 
         if(!res.status){
@@ -1237,7 +1368,7 @@ document.getElementById('dmSave').addEventListener('click', ()=>{
   saveBtn.disabled = true;
 
   if(dmEditingId){
-    sole.post("../../controllers/administrator/update_department.php", {
+    sole.post("../../controllers/main/update_department.php", {
       id: dmEditingId,
       dept_name: name,
       dept_color: dmSelectedColor
@@ -1258,7 +1389,7 @@ document.getElementById('dmSave').addEventListener('click', ()=>{
     return;
   }
 
-  sole.post("../../controllers/administrator/create_department.php", {
+  sole.post("../../controllers/main/create_department.php", {
     dept_name: name,
     dept_color: dmSelectedColor
   }).then(res => {
@@ -1288,7 +1419,7 @@ function refreshDeptDependents(){
 }
 
 function fetchDepartments(){   // <-- paste the new function here
-  return sole.post("../../controllers/administrator/get_departments.php", {
+  return sole.post("../../controllers/main/get_departments.php", {
     user_id : 0 //temp
   })
     .then(res => {
@@ -1301,7 +1432,7 @@ function fetchDepartments(){   // <-- paste the new function here
 }
 
 function fetchUsers(){
-  return sole.get("../../controllers/administrator/get_users.php")
+  return sole.get("../../controllers/main/get_users.php")
     .then(res => {
       USERS.length = 0;
       res.forEach(u => {
@@ -1469,7 +1600,7 @@ document.getElementById('userList').addEventListener('click', e=>{
     const id = parseInt(confirmBtn.dataset.confirmDeleteUser);
     confirmBtn.disabled = true;
 
-    sole.post("../../controllers/administrator/delete_user.php", { id : id })
+    sole.post("../../controllers/main/delete_user.php", { id : id })
       .then(res => {
         confirmBtn.disabled = false;
 
@@ -1562,7 +1693,7 @@ document.getElementById('umSave').addEventListener('click', ()=>{
   saveBtn.disabled = true;
 
   if(umEditingId){
-    sole.post("../../controllers/administrator/update_user.php", {
+    sole.post("../../controllers/main/update_user.php", {
       id: umEditingId,
       fname,
       lname,
@@ -1590,7 +1721,7 @@ document.getElementById('umSave').addEventListener('click', ()=>{
     return;
   }
 
-  sole.post("../../controllers/administrator/create_user.php", {
+  sole.post("../../controllers/main/create_user.php", {
     fname,
     lname,
     username,
@@ -1658,4 +1789,49 @@ updateAdminStats();
 updateGreetingDate();
 
 
+const show_tech = document.getElementsByClassName("show_tech");
+const show_sup = document.getElementsByClassName("show_sup");
 
+if(localStorage.getItem("privileges").toLocaleLowerCase() == "administrator"){
+  for (let i = 0; i < show_tech.length; i++) {
+    show_tech[i].removeAttribute("style")
+  }
+  for (let i = 0; i < show_sup.length; i++) {
+    show_sup[i].removeAttribute("style")
+  }
+}
+
+if(localStorage.getItem("privileges").toLocaleLowerCase() == "supervisor"){
+  for (let i = 0; i < show_sup.length; i++) {
+    show_sup[i].removeAttribute("style")
+  }
+}
+
+const sidebarFootEl = document.getElementById('sidebarFoot');
+const sidebarFootMenuEl = document.getElementById('sidebarFootMenu');
+
+sidebarFootEl.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  sidebarFootEl.classList.toggle('open');
+});
+document.addEventListener('click', (e)=>{
+  if(!sidebarFootEl.contains(e.target)){
+    sidebarFootEl.classList.remove('open');
+  }
+});
+
+document.getElementById('sidebarSignOutBtn').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  window.location.replace('../../');
+});
+
+document.getElementById('sidebarSettingsBtn').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  sidebarFootEl.classList.remove('open');
+  ss.toast(null, 'info', 'Settings page is not available yet.', null, '#1B2A22');
+});
+document.getElementById('sidebarLogsBtn').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  sidebarFootEl.classList.remove('open');
+  ss.toast(null, 'info', 'Activity logs are not available yet.', null, '#1B2A22');
+});

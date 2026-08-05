@@ -1,3 +1,4 @@
+localStorage.clear()
 document.querySelectorAll('.pw-toggle').forEach(btn => {
     btn.addEventListener('click', () => {
         const input = document.getElementById(btn.dataset.toggleFor);
@@ -12,10 +13,7 @@ document.querySelectorAll('.pw-toggle').forEach(btn => {
 
 document.getElementById('forgotLink').addEventListener('click', e => {
     e.preventDefault();
-    document.getElementById('formErrorText').textContent =
-        "Password reset isn't wired up in this prototype — it would send a reset link via /api/auth/forgot-password.php.";
-    document.getElementById('formSuccess').classList.remove('show');
-    document.getElementById('formError').classList.add('show');
+    ss.toast('Please contact your Administrator to reset your password.', 'warning', null, null, '#1B2A22');
 });
 
 document.getElementById('signinForm').addEventListener('submit', e => {
@@ -39,10 +37,12 @@ document.getElementById('signinForm').addEventListener('submit', e => {
     }).then(res => {
         if(res.status){
             localStorage.setItem("greet","enabled")
+            localStorage.setItem("userid",res.userid)
             localStorage.setItem("fname",res.fname)
             localStorage.setItem("lname",res.lname)
             localStorage.setItem("avatar",res.avatar)
             localStorage.setItem("privileges",res.privileges)
+            localStorage.setItem("auth",true)
             localStorage.removeItem("activeView")
             window.location.replace("../"+res.privileges.toLowerCase())
         }

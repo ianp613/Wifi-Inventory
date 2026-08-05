@@ -1,10 +1,10 @@
   :root{
     --bg:#F4F6F3;
-    --surface:#FFFFFF;
+    --surface:#ffffffc0;
     --surface-alt:#ECEFE9;
     --ink:#1B2A22;
-    --ink-soft:#5B6B60;
-    --ink-faint:#8A968C;
+    --ink-soft:#1c201e;
+    --ink-faint:#3d473f;
     --line:#DBE1D5;
     --line-strong:#C3CCBB;
     --accent:#2F6F5E;
@@ -21,9 +21,15 @@
   html,body{margin:0;padding:0;}
   body{
     background:
-      radial-gradient(circle at 15% 10%, rgba(47,111,94,.07) 0%, rgba(47,111,94,0) 45%),
-      radial-gradient(circle at 90% 85%, rgba(138,111,176,.06) 0%, rgba(138,111,176,0) 45%),
-      var(--bg);
+      linear-gradient(
+          rgba(0, 0, 0, 0.3),
+          rgba(0, 0, 0, 0.3)
+      ),
+      url("../../../assets/img/ddpo-building.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color:var(--ink);
     font-family:'Inter',sans-serif;
     font-size:14px;
@@ -42,20 +48,12 @@
     border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:36px 34px 32px;
   }
 
-  .brand-row{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:26px;}
-  .brand-mark{
-    width:32px;height:32px;border-radius:8px;flex-shrink:0;
-    background:linear-gradient(155deg,#2F6F5E 0%, #1F5647 100%);
-    display:flex;align-items:center;justify-content:center;
-    font-family:'Fraunces',serif;font-weight:700;font-size:15px;color:#fff;
-  }
-  .brand-word{font-family:'Fraunces',serif;font-size:17px;font-weight:600;letter-spacing:.3px;}
-  .brand-tagline{
-    font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
-    color:var(--ink-faint);margin-top:2px;
-  }
-
   .form-head{text-align:center;margin-bottom:26px;}
+  .form-head img{
+    width: 80%;
+    margin-top: -10px;
+    margin-bottom: 10px;
+  }
   .form-head h2{font-family:'Fraunces',serif;font-size:23px;font-weight:600;margin:0 0 6px;}
   .form-head p{font-size:13px;color:var(--ink-soft);margin:0;}
 

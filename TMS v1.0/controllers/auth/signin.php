@@ -44,6 +44,7 @@
                 "type" => "success",
                 "message" => "Welcome ".$user[0]["fname"],
                 "privileges" => $user[0]["privileges"],
+                "userid" => $user[0]["id"],
                 "fname" => $user[0]["fname"],
                 "lname" => $user[0]["lname"],
                 "avatar" => $user[0]["fname"][0].$user[0]["lname"][0]

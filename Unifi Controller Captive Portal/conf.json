@@ -45,7 +45,7 @@
         "Button_Text": "Get Wifi Access",
         "TOS": false,
         "TOS_Text": "",
-        "EVENT NOTE1": "Important: If you set Event.Repaet to false, please set Event.Year to event year e.g. 2026",
+        "EVENT NOTE1": "Important: If you set Event.Repeat to false, please set Event.Year to event year e.g. 2026",
         "EVENT NOTE2": "Important: To set Event.Banner_Image, please put the filename only e.g christmas_banner.png, and put the file to directory \/assets\/img\/events_banner\/. | Otherwise set Event.Banner_Image to false",
         "Events": {
             "Candahug": {
