@@ -10,6 +10,7 @@
     $user_id     = $_POST['user_id'];
     $priority    = $_POST['priority'];
     $status      = $_POST['status'];
+    $rectify     = "0";
     $start_date  = $_POST['start_date'];
     $due_date    = $_POST['due_date'];
     $checklist   = json_decode($_POST['checklist'] ?? '[]', true);

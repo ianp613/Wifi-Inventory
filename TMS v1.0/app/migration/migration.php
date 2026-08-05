@@ -56,6 +56,7 @@
             Migrate::string("description");
             Migrate::string("priority");
             Migrate::string("status");
+            Migrate::string("rectify");
             Migrate::string("start_date");
             Migrate::string("due_date");
             Migrate::string("completed_at");

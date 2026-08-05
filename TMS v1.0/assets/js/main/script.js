@@ -70,6 +70,7 @@ function fetchTasks(){
           user_id: t.user_id ? parseInt(t.user_id) : null,
           priority: t.priority,
           status: t.status,
+          rectify: t.rectify,
           start_date: t.start_date,
           due_date: t.due_date,
           due: formatTaskDate(t.due_date),
@@ -170,6 +171,7 @@ function populateAssigneeFilterOptions(){
 function renderTicket(t){
   const pct = Math.round((t.checklist[0]/t.checklist[1])*100) || 0;
   const info = resolveAssignee(t.user_id);   // was: memberInfo(t.assignee)
+  console.log(t)
   return `
   <div class="ticket" onclick="openDrawer(${t.id})">
     <div class="ticket-stub"><div class="avatar" style="background:${info.color}">${info.initials}</div></div>
@@ -179,7 +181,10 @@ function renderTicket(t){
           <div class="ticket-proj">${t.project}</div>
           <h3 class="ticket-title">${t.title}</h3>
         </div>
-        <span class="stamp ${t.priority}">${t.priority}</span>
+        <div>
+          <span ${t.rectify == "1" && t.status != "done" ? "" : "hidden"} class="nt-empty-hint" style="color: var(--red);">⚠ This task has been set for correction.</span>
+          <span class="stamp ${t.priority}">${t.priority}</span>
+        </div>
       </div>
       <p class="ticket-desc">${t.desc}</p>
       <div class="ticket-meta">
@@ -294,6 +299,7 @@ function renderKanban(){
         <div class="kcard" draggable="true" data-id="${t.id}">
           <div onclick="openDrawer(${t.id})">
             <div class="kcard-top"><span class="stamp ${t.priority}">${t.priority}</span></div>
+            <span ${t.rectify == "1" && t.status != "done" ? "" : "hidden"} class="nt-empty-hint" style="color: var(--red);">⚠ This task has been set for correction.</span>
             <div class="kcard-proj">${t.project}</div>
             <div class="kcard-title">${t.title}</div>
             <div class="kcard-assignee"><div class="avatar" style="background:${info.color}">${info.initials}</div><span>${info.name}</span></div>
@@ -321,7 +327,11 @@ function attachDragEvents(){
     card.addEventListener('dragend', ()=>card.classList.remove('drag-ghost'));
   });
   document.querySelectorAll('.kcol').forEach(col=>{
-    col.addEventListener('dragover', e=>{ e.preventDefault(); col.classList.add('drop-hover'); });
+    col.addEventListener('dragover', e=>{
+      e.preventDefault();
+      if(col.dataset.col === 'todo') return; // no drop-hover highlight on a blocked target
+      col.classList.add('drop-hover');
+    });
     col.addEventListener('dragleave', ()=>col.classList.remove('drop-hover'));
     col.addEventListener('drop', e=>{
       e.preventDefault();
@@ -329,6 +339,12 @@ function attachDragEvents(){
       const id = parseInt(e.dataTransfer.getData('text/plain'));
       const task = TASKS.find(t=>t.id===id);
       if(!task) return;
+
+      if(col.dataset.col === 'todo'){
+        ss.toast(null, "error", "Tasks can't be moved back to To Do.", null, "#1B2A22");
+        return;
+      }
+
       const newStatus = col.dataset.col;
       if(newStatus === task.status) return;
 
@@ -351,13 +367,19 @@ function attachDragEvents(){
     });
   });
 }
+
 function moveCard(id, dir){
   const task = TASKS.find(t=>t.id===id);
   if(!task) return;
   const idx = KCOLS.findIndex(c=>c.key===task.status);
   const next = idx + dir;
   if(next < 0 || next >= KCOLS.length) return;
+
   const newStatus = KCOLS[next].key;
+  if(newStatus === 'todo'){
+    ss.toast(null, "error", "Tasks can't be moved back to To Do.", null, "#1B2A22");
+    return;
+  }
 
   task.status = newStatus;
   task.overdue = isOverdue(task.due_date, task.status);
@@ -573,6 +595,19 @@ document.getElementById('taskDeleteConfirmBtn').addEventListener('click', ()=>{
 function openDrawer(id){
   currentDrawerTaskId = id;
   const t = TASKS.find(x=>x.id===id) || TASKS[0];
+  if(t.status == "done"){
+    document.getElementById("utsRow").hidden = true
+    if(localStorage.getItem("privileges").toLocaleLowerCase() != "technician"){
+      document.getElementById("rectRow").hidden = false
+    }
+  }else{
+    if(t.rectify == "1"){
+      document.getElementById("rectNote").hidden = false
+    }
+    document.getElementById("utsRow").hidden = false
+    document.getElementById("rectRow").hidden = true
+  }
+
   document.getElementById('dProj').textContent = t.project;
   document.getElementById('dTitle').textContent = t.title;
   document.getElementById('dDesc').textContent = t.desc;
@@ -621,6 +656,7 @@ function closeDrawer(){
   document.getElementById('drawer').classList.remove('open');
 }
 document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+document.getElementById('closeDrawer').addEventListener('click', closeDrawer);
 document.getElementById('overlay').addEventListener('click', closeDrawer);
 
 function postComment(){
@@ -670,6 +706,7 @@ document.querySelectorAll('.status-opt').forEach(opt=>{
     const t = TASKS.find(x=>x.id===currentDrawerTaskId);
     if(!t) return;
     const newStatus = opt.dataset.status;
+    console.log(newStatus)
     if(newStatus === t.status) return; // no-op, nothing changed
 
     document.querySelectorAll('.status-opt').forEach(o=>o.disabled = true);
@@ -1163,6 +1200,7 @@ document.getElementById('pmSave').addEventListener('click', ()=>{
       ss.toast(null, res.type, res.message, null, "#1B2A22");
       resetProjectForm();
       fetchProjects();
+      fetchTasks();
     }).catch(err => {
       saveBtn.disabled = false;
       errorEl.textContent = 'Could not reach the server. Please try again.';
@@ -1562,7 +1600,7 @@ function renderUserList(){
       </div>
       <div class="user-actions">
         <button type="button" class="project-icon-btn" data-edit-user="${u.id}" aria-label="Edit user"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
-        <button type="button" class="project-icon-btn danger" data-delete-user="${u.id}" aria-label="Delete user"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>
+        ${localStorage.getItem("userid") == u.id ? "" : `<button type="button" class="project-icon-btn danger" data-delete-user="${u.id}" aria-label="Delete user"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>`}
       </div>
     </div>`;
   }).join('');

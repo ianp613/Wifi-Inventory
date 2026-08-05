@@ -55,6 +55,7 @@
             "description",
             "priority",
             "status",
+            "rectify",
             "start_date",
             "due_date",
             "project_id",
@@ -65,6 +66,7 @@
         public string $description;
         public string $priority;
         public string $status;
+        public string $rectify;
         public string $start_date;
         public string $due_date;
         public string $project_id;

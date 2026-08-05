@@ -68,7 +68,7 @@
 
             <nav class="nav-group">
                 <div class="nav-label-row">
-                    <span class="nav-label" style="margin:0;">Departments</span>
+                    <span class="nav-label" style="margin:0;">Sites</span>
                     <button class="nav-add-btn show_tech" style="display: none !important;" id="manageDeptsBtn"
                         title="Manage departments" aria-label="Manage departments">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -246,7 +246,7 @@
             <div class="modal-body">
                 <div class="field-group">
                     <label class="field-label" for="ntTitle">Task title</label>
-                    <input type="text" id="ntTitle" placeholder="e.g. Update client contract template">
+                    <input type="text" id="ntTitle" placeholder="e.g. Annual terminal cleaning">
                 </div>
                 <div class="field-group">
                     <label class="field-label" for="ntDesc">Description</label>
@@ -547,14 +547,23 @@
                     <button type="button" class="project-delete-cancel-btn" id="taskDeleteCancelBtn">Cancel</button>
                 </div>
             </div>
-            <div class="d-section">
+            <div class="d-section" id="utsRow">
                 <div class="d-section-title">Update status</div>
                 <div class="status-select-row" id="statusRow">
                     <div class="status-opt" data-status="todo">To Do</div>
                     <div class="status-opt" data-status="progress">In Progress</div>
                     <div class="status-opt" data-status="hold">On Hold</div>
                     <div class="status-opt" data-status="done">Done</div>
+                    <div hidden class="nt-empty-hint" id="rectNote" style="color: var(--red);">⚠ This task has been set for correction.</div>
                 </div>
+            </div>
+
+            <div class="d-section" id="rectRow" hidden>
+                <div class="d-section-title">Rectify Task</div>
+                <div class="status-select-row" id="statusRow">
+                    <div class="status-opt" data-status="rectify">Rectify</div>
+                </div>
+                <div class="nt-empty-hint">Note: Once rectified, the task status will be set to TO DO with a rectification note.</div>
             </div>
 
             <div class="d-section">
@@ -565,7 +574,7 @@
                 <select class="reassign-select" id="reassignSelect">
                     <option value="">Choose a technician…</option>
                 </select>
-                <label class="field-label" for="reassignNote">Note (optional)</label>
+                <label class="field-label" for="reassignNote">Reassignment Reason (Required)</label>
                 <textarea class="reassign-textarea" id="reassignNote"
                     placeholder="e.g. Moving this to Elena since she owns the checkout flow."></textarea>
                 <div class="reassign-error" id="reassignError">Pick a technician before reassigning this task.</div>
@@ -630,8 +639,11 @@
             </div>
         </div>
         <div class="comment-input">
-            <input type="text" id="commentInput" placeholder="Add a comment…">
-            <button type="button" id="commentSendBtn">Send</button>
+            <input type="text" id="commentInput" placeholder="Add a turnover note or comment...">
+            <button type="button" id="commentSendBtn">Submit</button>
+        </div>
+        <div class="close-drawer">
+            <button class="close-drawer_" type="button" id="closeDrawer">Close</button>
         </div>
     </aside>
     <?php require __DIR__ . "/modals/coc_modal.php";?>

@@ -6,13 +6,29 @@
 
     $task = new Task;
     $task = DB::prepare($task,$data["id"]);
-    $task->status = $data["status"];
+    if($data["status"] == "todo"){
+        $response = [
+            "status" => false,
+            "type" => "error",
+            "message" => "Tasks can't be moved back to To Do."
+        ];
+        echo json_encode($response);
+        exit;
+    }
+    if($data["status"] == "rectify"){
+        $task->status = "todo";
+        $task->rectify = "1";
+        $message = "Task has been rectified, and status set to TO DO.";
+    }else{
+        $task->status = $data["status"];
+        $message = "Task status has been updated.";
+    }
     DB::update($task);
 
     $response = [
         "status" => true,
         "type" => "success",
-        "message" => "Task status has been updated."
+        "message" => $message
     ];
 
     echo json_encode($response);
