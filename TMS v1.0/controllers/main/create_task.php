@@ -8,8 +8,10 @@
     $description = $_POST['description'];
     $project_id  = $_POST['project_id'];
     $user_id     = $_POST['user_id'];
+    $created_by  = $_SESSION['userid'];
     $priority    = $_POST['priority'];
     $status      = $_POST['status'];
+    $task_budy   = $_POST['task_budy'];
     $rectify     = "0";
     $start_date  = $_POST['start_date'];
     $due_date    = $_POST['due_date'];
@@ -29,8 +31,11 @@
     $task->description = $description;
     $task->project_id = $project_id;
     $task->user_id = $user_id;
+    $task->created_by = $created_by;
     $task->priority = $priority;
     $task->status = $status;
+    $task->task_budy = $task_budy;
+    $task->rectify = $rectify;
     $task->start_date = $start_date;
     $task->due_date = $due_date;
     $task_id = DB::save($task);

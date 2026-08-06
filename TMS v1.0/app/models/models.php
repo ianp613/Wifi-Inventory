@@ -55,22 +55,26 @@
             "description",
             "priority",
             "status",
+            "task_budy",
             "rectify",
             "start_date",
             "due_date",
             "project_id",
-            "user_id"
+            "user_id",
+            "created_by"
         ];
 
         public string $title;
         public string $description;
         public string $priority;
         public string $status;
+        public string $task_budy;
         public string $rectify;
         public string $start_date;
         public string $due_date;
         public string $project_id;
         public string $user_id;
+        public string $created_by;
     }
 
     class ChecklistItem

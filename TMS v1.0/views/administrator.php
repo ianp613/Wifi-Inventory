@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../assets/css/main/css2.css">
     <link rel="stylesheet" href="../assets/css/main/style.css">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="shortcut icon" href="../assets/img/LEYTE-PULSE.png" type="image/x-icon">
 </head>
 
 <body>
@@ -257,9 +258,16 @@
                         <select id="ntProject"></select>
                     </div>
                     <div class="field-group">
-                        <label class="field-label" for="ntAssignee">Assign to</label>
+                        <label class="field-label" for="ntAssignee">Assign to (Taskmaster)</label>
                         <select id="ntAssignee"></select>
                     </div>
+                </div>
+                <div class="field-group">
+                    <div class="field-group">
+                        <label class="field-label" for="ntTaskBudy">Task Budy (Affiliate)</label>
+                        <select id="ntTaskBudy"></select>
+                    </div>
+                    <div id="ntBudyList" style="margin-top:8px;"></div>
                 </div>
                 <div class="field-row2">
                     <div class="field-group">
@@ -327,7 +335,7 @@
                 </div>
                 <div class="field-group">
                     <label class="field-label" for="utDesc">Description</label>
-                    <textarea id="utDesc"></textarea>
+                    <textarea id="utDesc" placeholder="Add any details the assignee will need…"></textarea>
                 </div>
                 <div class="field-row2">
                     <div class="field-group">
@@ -335,9 +343,16 @@
                         <select id="utProject"></select>
                     </div>
                     <div class="field-group">
-                        <label class="field-label" for="utAssignee">Assign to</label>
+                        <label class="field-label" for="utAssignee">Assign to (Taskmaster)</label>
                         <select id="utAssignee"></select>
                     </div>
+                </div>
+                <div class="field-group">
+                    <div class="field-group">
+                        <label class="field-label" for="utTaskBudy">Task Budy (Affiliate)</label>
+                        <select id="utTaskBudy"></select>
+                    </div>
+                    <div id="utBudyList" style="margin-top:8px;"></div>
                 </div>
                 <div class="field-row2">
                     <div class="field-group">
@@ -518,11 +533,11 @@
     <aside class="drawer" id="drawer">
         <div class="drawer-head">
             <div class="drawer-head-actions">
-                <button class="project-icon-btn" id="drawerEditBtn" aria-label="Edit task"><svg viewBox="0 0 24 24"
+                <button hidden class="utManageBtn" id="drawerEditBtn" aria-label="Edit task"><svg viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z" />
                     </svg></button>
-                <button class="project-icon-btn danger" id="drawerDeleteBtn" aria-label="Delete task"><svg
+                <button hidden class="utManageBtn danger" id="drawerDeleteBtn" aria-label="Delete task"><svg
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z" />
                     </svg></button>
@@ -569,7 +584,7 @@
                 <div class="d-section-title">Reassign task</div>
                 <div class="assignee-row">Currently with <div class="avatar" id="dAssigneeAvatar"></div> <strong
                         id="dAssigneeName"></strong></div>
-                <label class="field-label" for="reassignSelect">Reassign to</label>
+                <label class="field-label" for="reassignSelect">Reassign to (Taskmaster)</label>
                 <select class="reassign-select" id="reassignSelect">
                     <option value="">Choose a technician…</option>
                 </select>
@@ -593,6 +608,11 @@
                     </svg>
                     <span id="reassignConfirmText">Task reassigned.</span>
                 </div>
+            </div>
+
+            <div class="d-section">
+                <div class="d-section-title">Task Budy (Affiliate)</div>
+                <div id="budyBox"></div>
             </div>
 
             <div class="d-section">
@@ -626,6 +646,8 @@
                 <div class="d-section-title" id="checklistTitle">Checklist</div>
                 <div id="checklistBox"></div>
             </div>
+
+
 
             <div class="d-section">
                 <div class="d-section-title">Attachments</div>

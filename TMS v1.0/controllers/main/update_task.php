@@ -8,12 +8,15 @@
     $task = DB::prepare($task,$data["id"]);
     $task->title = $data["title"];
     $task->description = $data["description"];
+    $task->task_budy = $data["task_budy"] ? $data["task_budy"] : "-";
     $task->project_id = $data["project_id"];
     $task->user_id = $data["user_id"];
     $task->priority = $data["priority"];
     $task->start_date = $data["start_date"];
     $task->due_date = $data["due_date"];
     DB::update($task);
+
+    error_log($task->task_budy);
 
     $response = [
         "status" => true,

@@ -52,7 +52,7 @@
         }
 
         $t["files"] = $at_count;
-
+        $t["task_budy"] = $t["task_budy"] != "-" ? $t["task_budy"] : "";
         array_push($task_,$t);
     }
 

@@ -56,12 +56,14 @@
             Migrate::string("description");
             Migrate::string("priority");
             Migrate::string("status");
+            Migrate::string("task_budy");
             Migrate::string("rectify");
             Migrate::string("start_date");
             Migrate::string("due_date");
             Migrate::string("completed_at");
             Migrate::string("project_id");
             Migrate::string("user_id"); //Team Member
+            Migrate::string("created_by");
         }
     }
 

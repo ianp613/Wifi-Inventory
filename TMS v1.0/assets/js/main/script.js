@@ -71,6 +71,7 @@ function fetchTasks(){
           priority: t.priority,
           status: t.status,
           rectify: t.rectify,
+          task_budy: t.task_budy ? t.task_budy.split("|") : [],
           start_date: t.start_date,
           due_date: t.due_date,
           due: formatTaskDate(t.due_date),
@@ -171,7 +172,6 @@ function populateAssigneeFilterOptions(){
 function renderTicket(t){
   const pct = Math.round((t.checklist[0]/t.checklist[1])*100) || 0;
   const info = resolveAssignee(t.user_id);   // was: memberInfo(t.assignee)
-  console.log(t)
   return `
   <div class="ticket" onclick="openDrawer(${t.id})">
     <div class="ticket-stub"><div class="avatar" style="background:${info.color}">${info.initials}</div></div>
@@ -206,10 +206,27 @@ function renderList(){
   const q = document.getElementById('searchInput').value.toLowerCase();
   const filtered = TASKS.filter(t => {
     const info = resolveAssignee(t.user_id);
-    return (activeFilter==='all' || t.status===activeFilter) &&
-      (activeAssignee==='all' || String(t.user_id)===String(activeAssignee)) &&
-      (t.title.toLowerCase().includes(q) || t.project.toLowerCase().includes(q) || info.name.toLowerCase().includes(q));
+
+    const matchesStatus = activeFilter==='all' || t.status===activeFilter;
+
+    const matchesAssignee = activeAssignee==='all' ||
+      String(t.user_id)===String(activeAssignee) ||
+      !!(t.task_budy && t.task_budy.some(id => parseInt(id) === parseInt(activeAssignee)));
+
+    const budyMatchesSearch = t.task_budy && t.task_budy.some(id=>{
+      const u = USERS.find(x=>x.id===parseInt(id));
+      return u && fullName(u).toLowerCase().includes(q);
+    });
+
+    const matchesSearch = !q ||
+      t.title.toLowerCase().includes(q) ||
+      t.project.toLowerCase().includes(q) ||
+      info.name.toLowerCase().includes(q) ||
+      budyMatchesSearch;
+
+    return matchesStatus && matchesAssignee && matchesSearch;
   });
+
   list.innerHTML = filtered.length ? filtered.map(renderTicket).join('') :
     `<div style="text-align:center;padding:50px 0;color:var(--ink-faint);font-size:13px;">No tasks match this filter.</div>`;
 
@@ -458,6 +475,7 @@ function renderDrawerComments(t){
 
 // ---------------- Edit task ----------------
 const updateTaskModalOverlay = document.getElementById('updateTaskModalOverlay');
+let utTaskBudyList = [];
 
 function openUpdateTaskModal(){
   const t = TASKS.find(x=>x.id===currentDrawerTaskId);
@@ -478,10 +496,74 @@ function openUpdateTaskModal(){
   assigneeSel.innerHTML = '<option value="-">-- Select Technician --</option>' + assignableUsers().map(m=>`<option value="${m.id}">${localStorage.getItem("userid") == m.id ? "Yourself" : fullName(m)}</option>`).join('');
   assigneeSel.value = t.user_id || "-";
 
+  const taskBudySel = document.getElementById('utTaskBudy');
+  taskBudySel.innerHTML = '<option value="-">-- Select Technician --</option>' + assignableUsers().map(m=>`<option value="${m.id}">${fullName(m)}</option>`).join('');
+
   document.querySelectorAll('#utPriority .priority-opt').forEach(o=>o.classList.toggle('sel', o.dataset.p===t.priority));
 
   updateTaskModalOverlay.classList.add('open');
+
+  renderUtTaskBudyList();
 }
+
+const assigneeSel_ = document.getElementById('utAssignee');
+assigneeSel_.addEventListener("change", ()=> {
+  if(assigneeSel_.value == "-") return;
+  id = parseInt(assigneeSel_.value);
+  utTaskBudyList = utTaskBudyList.filter(user => user.id !== id);
+  renderUtTaskBudyList();
+})
+
+document.getElementById('utBudyList').addEventListener('click', e=>{
+  const btn = e.target.closest('[data-remove-budylist]');
+  if(!btn) return;
+  utTaskBudyList = utTaskBudyList.filter(u => u.id !== parseInt(btn.dataset.removeBudylist))
+  renderUtTaskBudyList();
+});
+
+function addUtTaskBudy(){
+  const select = document.getElementById('utTaskBudy');
+  if(select.value == "-") return;
+  const id = parseInt(select.value.trim());
+  const name = select.selectedOptions[0].innerText
+  if(id == "-" || id == parseInt(utAssignee.value)) return;
+  if(!utTaskBudyList.find(u => u.id === id)){
+    utTaskBudyList.push({id:id,name:name})
+  }
+  select.value = "-";
+  renderUtTaskBudyList();
+  select.focus();
+}
+document.getElementById('utTaskBudy').addEventListener('change', addUtTaskBudy);
+
+function renderUtTaskBudyList(){
+  const box = document.getElementById('utBudyList');
+  if(!utTaskBudyList.length){
+    box.innerHTML = `<div class="nt-empty-hint">No budy yet — select task budy.</div>`;
+    return;
+  }
+  utTaskBudyList = utTaskBudyList.filter(user => user.id != parseInt(assigneeSel_.value))
+  box.innerHTML = utTaskBudyList.map(user =>`
+    <div class="nt-list-item">
+      <span>${user.name}</span>
+      <button type="button" data-remove-budylist="${user.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>`).join('');
+}
+
+function renderUtTaskBudyListDrawer(){
+  const box = document.getElementById('budyBox');
+  if(!utTaskBudyList.length){
+    box.innerHTML = `<div class="nt-empty-hint">No task budy assigned.</div>`;
+    return;
+  }
+  utTaskBudyList = utTaskBudyList.filter(user => user.id != parseInt(drawerAssigneeID))
+  box.innerHTML = utTaskBudyList.map(user =>`
+    <div class="nt-list-item">
+      <span>${user.name}</span>
+    </div>`).join('');
+}
+
+
 function closeUpdateTaskModal(){ updateTaskModalOverlay.classList.remove('open'); }
 
 document.getElementById('drawerEditBtn').addEventListener('click', openUpdateTaskModal);
@@ -535,6 +617,7 @@ document.getElementById('utSave').addEventListener('click', ()=>{
     id: currentDrawerTaskId,
     title : title,
     description: document.getElementById('utDesc').value.trim() || 'No description provided.',
+    task_budy : utTaskBudyList.map(u => u.id).join('|'),
     project_id: projectId,
     user_id: assignee,
     priority: priorityOpt ? priorityOpt.dataset.p : 'medium',
@@ -592,8 +675,11 @@ document.getElementById('taskDeleteConfirmBtn').addEventListener('click', ()=>{
     });
 });
 
+let drawerAssigneeID;
 function openDrawer(id){
   currentDrawerTaskId = id;
+  utTaskBudyList = [];
+
   const t = TASKS.find(x=>x.id===id) || TASKS[0];
   if(t.status == "done"){
     document.getElementById("utsRow").hidden = true
@@ -607,6 +693,24 @@ function openDrawer(id){
     document.getElementById("utsRow").hidden = false
     document.getElementById("rectRow").hidden = true
   }
+
+  if(localStorage.getItem("privileges") == "Technician"){
+    if(parseInt(localStorage.getItem("userid")) == t.user_id){
+      let utManageBtn = document.getElementsByClassName("utManageBtn")
+      for (let i = 0; i < utManageBtn.length; i++) {
+        utManageBtn[i].hidden = false;
+        utManageBtn[i].classList.add("project-icon-btn")
+      }
+    }
+  }else{
+      let utManageBtn = document.getElementsByClassName("utManageBtn")
+      for (let i = 0; i < utManageBtn.length; i++) {
+        utManageBtn[i].hidden = false;
+        utManageBtn[i].classList.add("project-icon-btn")
+      }
+  }
+
+  utTaskBudyList = t.task_budy.map(id => ({id : USERS.find(u => u.id === parseInt(id)).id , name : USERS.find(u => u.id === parseInt(id)).fullname}));
 
   document.getElementById('dProj').textContent = t.project;
   document.getElementById('dTitle').textContent = t.title;
@@ -628,10 +732,13 @@ function openDrawer(id){
   document.getElementById('taskDeleteConfirmSection').style.display = 'none';
 
   const info = resolveAssignee(t.user_id);
+  drawerAssigneeID = t.user_id
   document.getElementById('dAssignedTo').textContent = info.name;
   document.getElementById('dAssigneeAvatar').textContent = info.initials;
   document.getElementById('dAssigneeAvatar').style.background = info.color;
   document.getElementById('dAssigneeName').textContent = info.name;
+
+  renderUtTaskBudyListDrawer();
 
   const assignedUser = USERS.find(u => u.id === t.user_id);
   const dept = assignedUser ? DEPARTMENTS.find(d => d.id === assignedUser.dept_id) : null;
@@ -706,7 +813,6 @@ document.querySelectorAll('.status-opt').forEach(opt=>{
     const t = TASKS.find(x=>x.id===currentDrawerTaskId);
     if(!t) return;
     const newStatus = opt.dataset.status;
-    console.log(newStatus)
     if(newStatus === t.status) return; // no-op, nothing changed
 
     document.querySelectorAll('.status-opt').forEach(o=>o.disabled = true);
@@ -853,6 +959,7 @@ function deptForAssignee(userId){
 // ---------------- New task modal ----------------
 const modalOverlay = document.getElementById('modalOverlay');
 let ntChecklistItems = [];
+let ntTaskBudyList = [];
 let ntAttachments = [];
 
 function formatFileSize(bytes){
@@ -871,6 +978,19 @@ function renderNtChecklist(){
     <div class="nt-list-item">
       <span>${text}</span>
       <button type="button" data-remove-checklist="${i}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>`).join('');
+}
+
+function renderNtTaskBudyList(){
+  const box = document.getElementById('ntBudyList');
+  if(!ntTaskBudyList.length){
+    box.innerHTML = `<div class="nt-empty-hint">No budy yet — select task budy.</div>`;
+    return;
+  }
+  box.innerHTML = ntTaskBudyList.map(user =>`
+    <div class="nt-list-item">
+      <span>${user.name}</span>
+      <button type="button" data-remove-budylist="${user.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     </div>`).join('');
 }
 
@@ -897,7 +1017,22 @@ function addNtChecklistItem(){
   renderNtChecklist();
   input.focus();
 }
+
+function addTaskBudy(){
+  const select = document.getElementById('ntTaskBudy');
+  if(select.value == "-") return;
+  const id = parseInt(select.value.trim());
+  const name = select.selectedOptions[0].innerText
+  if(id == "-" || id == parseInt(ntAssignee.value)) return;
+  if(!ntTaskBudyList.find(u => u.id === id)){
+    ntTaskBudyList.push({id:id,name:name})
+  }
+  select.value = "-";
+  renderNtTaskBudyList();
+  select.focus();
+}
 document.getElementById('ntChecklistAdd').addEventListener('click', addNtChecklistItem);
+document.getElementById('ntTaskBudy').addEventListener('change', addTaskBudy);
 document.getElementById('ntChecklistInput').addEventListener('keydown', e=>{
   if(e.key==='Enter'){ e.preventDefault(); addNtChecklistItem(); }
 });
@@ -906,6 +1041,13 @@ document.getElementById('ntChecklistList').addEventListener('click', e=>{
   if(!btn) return;
   ntChecklistItems.splice(parseInt(btn.dataset.removeChecklist), 1);
   renderNtChecklist();
+});
+
+document.getElementById('ntBudyList').addEventListener('click', e=>{
+  const btn = e.target.closest('[data-remove-budylist]');
+  if(!btn) return;
+  ntTaskBudyList = ntTaskBudyList.filter(u => u.id !== parseInt(btn.dataset.removeBudylist))
+  renderNtTaskBudyList();
 });
 
 document.getElementById('ntFileInput').addEventListener('change', e=>{
@@ -933,10 +1075,22 @@ function openModal(){
 
   const assigneeSelect = document.getElementById('ntAssignee');
   assigneeSelect.innerHTML = '<option value="-">-- Select Technician --</option>'+assignableUsers().map(m=>`<option value="${m.id}">${localStorage.getItem("userid") == m.id ? "Yourself" : m.fname + " " + m.lname}</option>`).join('');
+  
+  assigneeSelect.addEventListener("change", ()=> {
+    if(assigneeSelect.value == "-") return;
+    id = parseInt(assigneeSelect.value);
+    ntTaskBudyList = ntTaskBudyList.filter(user => user.id !== id);
+    renderNtTaskBudyList();
+  })
+  
+  const taskBudySelect = document.getElementById('ntTaskBudy');
+  taskBudySelect.innerHTML = '<option value="-">-- Select Technician --</option>'+assignableUsers().map(m=>`<option value="${m.id}">${localStorage.getItem("userid") == m.id ? "Yourself" : m.fname + " " + m.lname}</option>`).join('');
 
   ntChecklistItems = [];
+  ntTaskBudyList = [];
   ntAttachments = [];
   renderNtChecklist();
+  renderNtTaskBudyList();
   renderNtAttachments();
 
   modalOverlay.classList.add('open');
@@ -996,6 +1150,7 @@ document.getElementById('modalCreate').addEventListener('click', ()=>{
   formData.append('user_id', assignee);
   formData.append('priority', priority);
   formData.append('status', 'todo');
+  formData.append('task_budy', ntTaskBudyList.map(user => user.id).join('|'));
   formData.append('start_date', startRaw);
   formData.append('due_date', dueRaw);
   formData.append('checklist', JSON.stringify(ntChecklistItems));
@@ -1478,6 +1633,7 @@ function fetchUsers(){
           id: u.id,
           fname: u.fname,
           lname: u.lname,
+          fullname: `${u.fname} ${u.lname}`,
           role: u.privileges,
           dept_id: u.dept_id != "-" ? parseInt(u.dept_id) : u.dept_id,
           status: u.status,
@@ -1520,8 +1676,8 @@ function populateDeptFilterOptions(){
   const sel = document.getElementById('deptFilter');
   const current = sel.value;
   sel.innerHTML = '<option value="all">All departments</option>' +
-    DEPARTMENTS.map(d=>`<option value="${d.name}">${d.name}</option>`).join('');
-  if(current && (current==='all' || DEPARTMENTS.some(d=>d.name===current))) sel.value = current;
+    DEPARTMENTS.map(d=>`<option value="${d.id}">${d.name}</option>`).join('');
+  if(current && (current==='all' || DEPARTMENTS.some(d=>String(d.id)===String(current)))) sel.value = current;
 }
 function populatePmDeptOptions(){
   const sel = document.getElementById('pmDept');
@@ -1544,6 +1700,7 @@ function populateUmDeptOptions(){
 // ---------------- Users (create / edit / delete / assign department) ----------------
 const userModalOverlay = document.getElementById('userModalOverlay');
 let umEditingId = null;
+let userEdit = null;
 let umSelectedStatus = 'active';
 let activeRoleFilter = 'all';
 let activeDeptFilter = 'all';
@@ -1560,7 +1717,7 @@ function renderUserList(){
   const filtered = USERS.filter(u=>{
     const dept = DEPARTMENTS.find(d=>d.id===u.dept_id);
     return (activeRoleFilter==='all' || u.role===activeRoleFilter) &&
-      (activeDeptFilter==='all' || u.dept_id===activeDeptFilter) &&
+      (activeDeptFilter==='all' || String(u.dept_id)===String(activeDeptFilter)) &&
       (fullName(u).toLowerCase().includes(q) || (dept ? dept.name.toLowerCase().includes(q) : false));
   });
 
@@ -1598,10 +1755,13 @@ function renderUserList(){
           <span class="user-status ${u.status==='inactive'?'inactive':''}"><span class="dot"></span>${u.status==='active'?'Active':'Inactive'}</span>
         </div>
       </div>
-      <div class="user-actions">
-        <button type="button" class="project-icon-btn" data-edit-user="${u.id}" aria-label="Edit user"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
-        ${localStorage.getItem("userid") == u.id ? "" : `<button type="button" class="project-icon-btn danger" data-delete-user="${u.id}" aria-label="Delete user"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>`}
-      </div>
+      ${u.role == "Administrator" && u.id != localStorage.getItem("userid") ? `<span class="nt-empty-hint" style="color: var(--red);">⚠ You do not have permision to edit the account.</span>` : `
+        <div class="user-actions">
+          <button type="button" class="project-icon-btn" data-edit-user="${u.id}" aria-label="Edit user"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
+          ${localStorage.getItem("userid") == u.id ? "" : `<button type="button" class="project-icon-btn danger" data-delete-user="${u.id}" aria-label="Delete user"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>`}
+        </div>
+      `}
+      
     </div>`;
   }).join('');
 }
@@ -1649,9 +1809,8 @@ document.getElementById('userList').addEventListener('click', e=>{
 
         ss.toast(null, res.type, res.message, null, "#1B2A22");
         userDeleteConfirmId = null;
-        fetchUsers(); // re-renders userList, workload, and stats internally
-        renderList();
-        renderKanban();
+        fetchUsers();
+        fetchTasks();
       })
       .catch(err => {
         confirmBtn.disabled = false;
@@ -1677,6 +1836,7 @@ function openUserModal(editId){
 
   if(umEditingId){
     const u = USERS.find(x=>x.id===umEditingId);
+    userEdit = USERS.find(x=>x.id===umEditingId);
     document.getElementById('umModalTitle').textContent = 'Edit user';
     document.getElementById('umSave').textContent = 'Save changes';
     document.getElementById('umInviteHint').style.display = 'none';
@@ -1695,6 +1855,7 @@ function openUserModal(editId){
     document.getElementById('umFname').value = '';
     document.getElementById('umLname').value = '';
     document.getElementById('umRole').value = 'Technician';
+    document.getElementById('umDept').value = '-';
     document.getElementById('umCredentialField').hidden = false;
     document.getElementById('umCredentialField').classList.add('field-row2');
     document.getElementById('umPasswordHint').textContent = 'The user must change their password after their first sign-in.';
@@ -1716,7 +1877,6 @@ document.getElementById('umSave').addEventListener('click', ()=>{
   const role = document.getElementById('umRole').value;
   const department = document.getElementById('umDept').value;
   const errorEl = document.getElementById('umError');
-
   const usernameValid = /^[a-zA-Z0-9._-]{3,}$/.test(username);
 
   if(!fname || !lname || (!umEditingId && !usernameValid)){
@@ -1731,31 +1891,81 @@ document.getElementById('umSave').addEventListener('click', ()=>{
   saveBtn.disabled = true;
 
   if(umEditingId){
-    sole.post("../../controllers/main/update_user.php", {
-      id: umEditingId,
-      fname,
-      lname,
-      privileges: role,
-      dept_id: department,
-      status: umSelectedStatus
-    }).then(res => {
-      saveBtn.disabled = false;
+    if(userEdit.role == "Administrator" && role != userEdit.role){
+      Swal.fire({
+          title: `Administrative privileges will be removed.`,
+          text: `Please note that you cannot change your role back to an administrator. Ask your system administrator or developer to update your permissions.`,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          confirmButtonText: "Confirm",
+          customClass: {
+              popup: 'my-custom-popup',
+              actions: 'my-right-buttons'
+          }
+      }).then((result) => {
+        if (result.isConfirmed){
+          sole.post("../../controllers/main/update_user.php", {
+            id: umEditingId,
+            fname,
+            lname,
+            privileges: role,
+            dept_id: department,
+            status: umSelectedStatus
+          }).then(res => {
+            saveBtn.disabled = false;
+            localStorage.setItem("privileges",role)
+            setTimeout(() => {
+              window.location.reload()
+            }, 3000);
 
-      if(!res.status){
-        errorEl.textContent = res.message;
+            if(!res.status){
+              errorEl.textContent = res.message;
+              errorEl.classList.add('show');
+              return;
+            }
+
+            ss.toast(null, res.type, res.message, null, "#1B2A22");
+            closeUserModal();
+            fetchUsers();
+          }).catch(err => {
+            saveBtn.disabled = false;
+            errorEl.textContent = 'Could not reach the server. Please try again.';
+            errorEl.classList.add('show');
+            console.error(err);
+          });
+        }else{
+          saveBtn.disabled = false;
+        }
+      });
+    }else{
+      sole.post("../../controllers/main/update_user.php", {
+        id: umEditingId,
+        fname,
+        lname,
+        privileges: role,
+        dept_id: department,
+        status: umSelectedStatus
+      }).then(res => {
+        saveBtn.disabled = false;
+
+        if(!res.status){
+          errorEl.textContent = res.message;
+          errorEl.classList.add('show');
+          return;
+        }
+
+        ss.toast(null, res.type, res.message, null, "#1B2A22");
+        closeUserModal();
+        fetchUsers();
+      }).catch(err => {
+        saveBtn.disabled = false;
+        errorEl.textContent = 'Could not reach the server. Please try again.';
         errorEl.classList.add('show');
-        return;
-      }
-
-      ss.toast(null, res.type, res.message, null, "#1B2A22");
-      closeUserModal();
-      fetchUsers();
-    }).catch(err => {
-      saveBtn.disabled = false;
-      errorEl.textContent = 'Could not reach the server. Please try again.';
-      errorEl.classList.add('show');
-      console.error(err);
-    });
+        console.error(err);
+      });
+    }
+    
     return;
   }
 

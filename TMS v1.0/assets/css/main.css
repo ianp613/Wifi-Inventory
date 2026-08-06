@@ -34,3 +34,14 @@
   .coc-modal-body img{max-height:calc(100vh - 54px);}
 }
 
+  /* Nesting ensures the browser prioritizes your right-alignment */
+  .swal2-popup.my-custom-popup .swal2-actions.my-right-buttons {
+    justify-content: flex-end !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding-right: 1.5em !important;
+  }
+
+  .left-align-swal {
+  text-align: left !important;
+}
