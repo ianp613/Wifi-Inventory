@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../assets/css/main/css2.css">
     <link rel="stylesheet" href="../assets/css/main/style.css">
     <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="shortcut icon" href="../assets/img/LEYTE-PULSE.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../assets/img/EVSU-PULSE.png" type="image/x-icon">
 </head>
 
 <body>
