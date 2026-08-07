@@ -36,6 +36,7 @@ document.getElementById('signinForm').addEventListener('submit', e => {
         rem_user : false
     }).then(res => {
         if(res.status){
+            localStorage.setItem("activeView","list")
             localStorage.setItem("greet","enabled")
             localStorage.setItem("userid",res.userid)
             localStorage.setItem("fname",res.fname)
@@ -43,7 +44,6 @@ document.getElementById('signinForm').addEventListener('submit', e => {
             localStorage.setItem("avatar",res.avatar)
             localStorage.setItem("privileges",res.privileges)
             localStorage.setItem("auth",true)
-            localStorage.removeItem("activeView")
             window.location.replace("../"+res.privileges.toLowerCase())
         }
         ss.toast(null,res.type,res.message,null,"#1B2A22")

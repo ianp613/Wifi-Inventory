@@ -49,7 +49,7 @@
         $ci = new ChecklistItem;
         $ci->task_id = $task_id;
         $ci->text = $item;
-        $ci->is_done = "false";
+        $ci->is_done = "0";
         $ci->position = "0";
         DB::save($ci);
     }

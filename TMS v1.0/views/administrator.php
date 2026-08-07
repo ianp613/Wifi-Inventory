@@ -561,7 +561,7 @@
                     <button type="button" class="project-delete-cancel-btn" id="taskDeleteCancelBtn">Cancel</button>
                 </div>
             </div>
-            <div class="d-section" id="utsRow">
+            <div class="d-section" id="utsRow" hidden>
                 <div class="d-section-title">Update status</div>
                 <div class="status-select-row" id="statusRow">
                     <div class="status-opt" data-status="todo">To Do</div>
@@ -580,7 +580,7 @@
                 <div class="nt-empty-hint">Note: Once rectified, the task status will be set to TO DO with a rectification note.</div>
             </div>
 
-            <div class="d-section">
+            <div id="reassignTaskSection" class="d-section" hidden>
                 <div class="d-section-title">Reassign task</div>
                 <div class="assignee-row">Currently with <div class="avatar" id="dAssigneeAvatar"></div> <strong
                         id="dAssigneeName"></strong></div>
@@ -590,8 +590,8 @@
                 </select>
                 <label class="field-label" for="reassignNote">Reassignment Reason (Required)</label>
                 <textarea class="reassign-textarea" id="reassignNote"
-                    placeholder="e.g. Moving this to Elena since she owns the checkout flow."></textarea>
-                <div class="reassign-error" id="reassignError">Pick a technician before reassigning this task.</div>
+                    placeholder="e.g. Moving this to Juan Dela Cruz since he owns the checkout flow."></textarea>
+                <div class="reassign-error" id="reassignError"></div>
                 <button class="reassign-btn" id="reassignBtn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M17 1l4 4-4 4" />
@@ -608,6 +608,11 @@
                     </svg>
                     <span id="reassignConfirmText">Task reassigned.</span>
                 </div>
+            </div>
+
+            <div hidden id="currentlyWithSection" class="d-section">
+                <div class="assignee-row">Currently with <div class="avatar" id="dAssigneeAvatar_"></div> <strong
+                    id="dAssigneeName_"></strong></div>
             </div>
 
             <div class="d-section">
@@ -664,7 +669,9 @@
             <button type="button" id="commentSendBtn">Submit</button>
         </div>
         <div class="close-drawer">
-            <button class="close-drawer_" type="button" id="closeDrawer">Close</button>
+            <button class="close-btn" id="closeDrawer">
+                Close
+            </button>
         </div>
     </aside>
     <?php require __DIR__ . "/modals/coc_modal.php";?>

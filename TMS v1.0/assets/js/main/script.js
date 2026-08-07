@@ -681,6 +681,7 @@ function openDrawer(id){
   utTaskBudyList = [];
 
   const t = TASKS.find(x=>x.id===id) || TASKS[0];
+  utTaskBudyList = t.task_budy.map(id => ({id : USERS.find(u => u.id === parseInt(id)).id , name : USERS.find(u => u.id === parseInt(id)).fullname}));
   if(t.status == "done"){
     document.getElementById("utsRow").hidden = true
     if(localStorage.getItem("privileges").toLocaleLowerCase() != "technician"){
@@ -690,16 +691,38 @@ function openDrawer(id){
     if(t.rectify == "1"){
       document.getElementById("rectNote").hidden = false
     }
-    document.getElementById("utsRow").hidden = false
+    if(parseInt(t.user_id) == parseInt(localStorage.getItem("userid")) || utTaskBudyList.find(u => u.id == parseInt(localStorage.getItem("userid"))) ||localStorage.getItem("privileges").toLocaleLowerCase() != "technician"){
+      document.getElementById("utsRow").hidden = false
+    }else{
+      document.getElementById("utsRow").hidden = true
+    }
     document.getElementById("rectRow").hidden = true
   }
 
+  if(parseInt(t.user_id) == parseInt(localStorage.getItem("userid")) || localStorage.getItem("privileges").toLocaleLowerCase() != "technician"){
+    if(t.status != "done"){
+      document.getElementById("reassignTaskSection").hidden = false
+      document.getElementById("currentlyWithSection").hidden = true
+    }else{
+      document.getElementById("reassignTaskSection").hidden = true
+      document.getElementById("currentlyWithSection").hidden = false
+    }
+  }else{
+    document.getElementById("reassignTaskSection").hidden = true
+    document.getElementById("currentlyWithSection").hidden = false
+  }
+
   if(localStorage.getItem("privileges") == "Technician"){
+    let utManageBtn = document.getElementsByClassName("utManageBtn")
     if(parseInt(localStorage.getItem("userid")) == t.user_id){
-      let utManageBtn = document.getElementsByClassName("utManageBtn")
       for (let i = 0; i < utManageBtn.length; i++) {
         utManageBtn[i].hidden = false;
         utManageBtn[i].classList.add("project-icon-btn")
+      }
+    }else{
+      for (let i = 0; i < utManageBtn.length; i++) {
+        utManageBtn[i].hidden = true;
+        utManageBtn[i].classList.remove("project-icon-btn")
       }
     }
   }else{
@@ -710,7 +733,6 @@ function openDrawer(id){
       }
   }
 
-  utTaskBudyList = t.task_budy.map(id => ({id : USERS.find(u => u.id === parseInt(id)).id , name : USERS.find(u => u.id === parseInt(id)).fullname}));
 
   document.getElementById('dProj').textContent = t.project;
   document.getElementById('dTitle').textContent = t.title;
@@ -737,6 +759,10 @@ function openDrawer(id){
   document.getElementById('dAssigneeAvatar').textContent = info.initials;
   document.getElementById('dAssigneeAvatar').style.background = info.color;
   document.getElementById('dAssigneeName').textContent = info.name;
+
+  document.getElementById('dAssigneeAvatar_').textContent = info.initials;
+  document.getElementById('dAssigneeAvatar_').style.background = info.color;
+  document.getElementById('dAssigneeName_').textContent = info.name;
 
   renderUtTaskBudyListDrawer();
 
@@ -894,6 +920,13 @@ function reassignTask(){
   const newUserId = select.value;
 
   if(!newUserId){
+    errorEl.innerText = "Pick a technician before reassigning this task."
+    errorEl.classList.add('show');
+    return;
+  }
+
+  if(!noteEl.value){
+    errorEl.innerText = "Please add a reassignment reason."
     errorEl.classList.add('show');
     return;
   }
@@ -923,6 +956,11 @@ function reassignTask(){
     avatarEl.textContent = info.initials;
     avatarEl.style.background = info.color;
     document.getElementById('dAssigneeName').textContent = info.name;
+
+    const avatarEl_ = document.getElementById('dAssigneeAvatar_');
+    avatarEl_.textContent = info.initials;
+    avatarEl_.style.background = info.color;
+    document.getElementById('dAssigneeName_').textContent = info.name;
 
     const assignedUser = USERS.find(u => u.id === t.user_id);
     const dept = assignedUser ? DEPARTMENTS.find(d => d.id === assignedUser.dept_id) : null;

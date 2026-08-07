@@ -1,0 +1,13 @@
+<?php
+    if(array_key_exists("argv",$_SERVER)){
+        if(count($_SERVER["argv"]) < 2){
+            error_log("Error: Invalid Command");
+            exit;
+        }else{
+            if(strtolower($_SERVER["argv"][1]) != "serve"){
+                error_log("Error: Invalid Command");
+                exit;
+            }
+        }
+        shell_exec("php -S 192.168.33.221:8890 pulse.php");
+    }
