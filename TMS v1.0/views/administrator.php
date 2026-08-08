@@ -70,7 +70,7 @@
                 <div class="nav-label-row">
                     <span class="nav-label" style="margin:0;">Sites</span>
                     <button class="nav-add-btn show_tech" style="display: none !important;" id="manageDeptsBtn"
-                        title="Manage departments" aria-label="Manage departments">
+                        title="Manage sites" aria-label="Manage sites">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M12 5v14M5 12h14" />
                         </svg>
@@ -86,6 +86,13 @@
                     <div class="email">DDC PULSE 2026 © Paul Ian</div>
                 </div>
                 <div class="sidebar-foot-menu" id="sidebarFootMenu">
+                    <button type="button" class="sidebar-foot-menu-item" id="sidebarAccountBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        Account
+                    </button>
                     <button type="button" class="sidebar-foot-menu-item" id="sidebarSettingsBtn">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="3" />
@@ -129,7 +136,7 @@
                         <h1 id="greetings"></h1>
                         <p>You manage <strong id="greetProjectCount">0 projects</strong> and <strong
                                 id="greetUserCount">0 users</strong> across <strong id="greetDeptCount">0
-                                departments</strong>. <span class="date-stub" id="greetDate"></span></p>
+                                sites</strong>. <span class="date-stub" id="greetDate"></span></p>
                     </div>
                 </div>
                 <div class="top-actions">
@@ -199,6 +206,12 @@
                         <option value="all">All technicians</option>
                     </select>
                     <div class="filter-spacer"></div>
+                    <select class="select-filter" id="pageSizeSelect">
+                        <option value="5">5 rows</option>
+                        <option value="10">10 rows</option>
+                        <option value="25">25 rows</option>
+                        <option value="50">50 rows</option>
+                    </select>
                     <select class="sort-select">
                         <option>Sort: Due date</option>
                         <option>Sort: Priority</option>
@@ -206,6 +219,7 @@
                     </select>
                 </div>
                 <div class="ticket-list" id="ticketList"></div>
+                <div class="pagination-row" id="ticketPagination"></div>
             </section>
 
             <!-- -------- KANBAN VIEW -------- -->
@@ -221,12 +235,18 @@
                     <div class="chip" data-role-filter="Supervisor">Supervisor</div>
                     <div class="chip" data-role-filter="Technician">Technician</div>
                     <select class="select-filter" id="deptFilter">
-                        <option value="all">All departments</option>
+                        <option value="all">All sites</option>
                     </select>
                     <div class="filter-spacer"></div>
-                    <button class="btn-secondary" id="newUserBtnInline">+ New user</button>
+                    <select class="select-filter" id="userPageSizeSelect">
+                        <option value="5">5 rows</option>
+                        <option value="10">10 rows</option>
+                        <option value="25">25 rows</option>
+                        <option value="50">50 rows</option>
+                    </select>
                 </div>
                 <div class="ticket-list" id="userList"></div>
+                <div class="pagination-row" id="userPagination"></div>
             </section>
         </main>
     </div>
@@ -398,7 +418,7 @@
                     <input type="text" id="pmName" placeholder="e.g. Product Launch">
                 </div>
                 <div class="field-group">
-                    <label class="field-label" for="pmDept">Department</label>
+                    <label class="field-label" for="pmDept">Site</label>
                     <select id="pmDept"></select>
                 </div>
                 <div class="field-group">
@@ -470,18 +490,18 @@
                         </select>
                     </div>
                     <div class="field-group">
-                        <label class="field-label" for="umDept">Department</label>
+                        <label class="field-label" for="umDept">Site</label>
                         <select id="umDept"></select>
                     </div>
                 </div>
-                <div class="field-group">
+                <div id="umAccountStatus" class="field-group">
                     <label class="field-label">Status</label>
                     <div class="priority-picker" id="umStatus">
                         <div class="priority-opt sel low" data-status="active">Active</div>
                         <div class="priority-opt medium" data-status="inactive">Inactive</div>
                     </div>
                 </div>
-                <div class="reassign-error" id="umError">Add a name, username, and department before saving.</div>
+                <div class="reassign-error" id="umError">Add a name, username, and site before saving.</div>
                 <div style="font-size:11.5px;color:var(--ink-faint);margin-top:2px;" id="umInviteHint">This account will
                     be ready to sign in with the username and password above.</div>
             </div>
@@ -492,11 +512,68 @@
         </div>
     </div>
 
-    <!-- ================= MANAGE DEPARTMENTS MODAL ================= -->
+    <!-- ================= ACCOUNT MODAL ================= -->
+    <div class="modal-overlay" id="accountModalOverlay">
+        <div class="modal">
+            <div class="modal-head">
+                <h2>Account information</h2>
+                <button class="modal-close" id="accountModalClose"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg></button>
+            </div>
+            <div class="modal-body">
+                <div class="field-row2">
+                    <div class="field-group">
+                        <label class="field-label" for="acctFname">First Name</label>
+                        <input type="text" id="acctFname" autocomplete="off">
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label" for="acctLname">Last Name</label>
+                        <input type="text" id="acctLname" autocomplete="off">
+                    </div>
+                </div>
+                <div class="field-row2">
+                    <div class="field-group">
+                        <label class="field-label" for="acctRole">Role</label>
+                        <select id="acctRole">
+                            <option value="Technician">Technician</option>
+                            <option value="Supervisor">Supervisor</option>
+                            <option value="Administrator">Administrator</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label" for="acctDept">Site</label>
+                        <select id="acctDept"></select>
+                    </div>
+                </div>
+                <hr class="project-divider">
+                <div class="field-row2">
+                    <div class="field-group">
+                        <label class="field-label" for="acctPassword">New password</label>
+                        <input type="password" id="acctPassword" autocomplete="new-password"
+                            placeholder="Leave blank to keep current password">
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label" for="acctPasswordConfirm">Confirm new password</label>
+                        <input type="password" id="acctPasswordConfirm" autocomplete="new-password"
+                            placeholder="Only required if changing password">
+                    </div>
+                </div>
+                <div class="reassign-error" id="acctError"></div>
+            </div>
+            <div class="modal-foot">
+                <button class="btn-secondary" id="accountModalCancel">Cancel</button>
+                <button class="btn-primary-modal" id="acctSave">Save changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MANAGE SITES MODAL ================= -->
     <div class="modal-overlay" id="deptModalOverlay">
         <div class="modal">
             <div class="modal-head">
-                <h2>Manage departments</h2>
+                <h2>Manage sites</h2>
                 <button class="modal-close" id="deptModalClose"><svg viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2">
                         <path d="M18 6L6 18M6 6l12 12" />
@@ -504,22 +581,22 @@
             </div>
             <div class="modal-body">
                 <div class="field-group">
-                    <label class="field-label" for="dmName" id="dmFormLabel">New department</label>
-                    <input type="text" id="dmName" placeholder="e.g. IT Department">
+                    <label class="field-label" for="dmName" id="dmFormLabel">New site</label>
+                    <input type="text" id="dmName" placeholder="e.g. Wifi Team Techroom">
                 </div>
                 <div class="field-group">
                     <label class="field-label">Color</label>
                     <div class="swatch-row" id="dmColorPicker"></div>
                 </div>
-                <div class="reassign-error" id="dmError">Give the department a name before saving.</div>
+                <div class="reassign-error" id="dmError">Give the site a name before saving.</div>
                 <div class="project-form-btns">
                     <button class="btn-secondary" id="dmCancelEdit" style="display:none;">Cancel edit</button>
-                    <button class="btn-primary-modal" id="dmSave">Add department</button>
+                    <button class="btn-primary-modal" id="dmSave">Add site</button>
                 </div>
 
                 <hr class="project-divider">
 
-                <div class="field-label" style="margin-bottom:10px;">Existing departments</div>
+                <div class="field-label" style="margin-bottom:10px;">Existing sites</div>
                 <div id="deptManageList"></div>
             </div>
             <div class="modal-foot">
@@ -568,7 +645,8 @@
                     <div class="status-opt" data-status="progress">In Progress</div>
                     <div class="status-opt" data-status="hold">On Hold</div>
                     <div class="status-opt" data-status="done">Done</div>
-                    <div hidden class="nt-empty-hint" id="rectNote" style="color: var(--red);">⚠ This task has been set for correction.</div>
+                    <div hidden class="nt-empty-hint" id="rectNote" style="color: var(--red);">⚠ This task has been set
+                        for correction.</div>
                 </div>
             </div>
 
@@ -577,7 +655,8 @@
                 <div class="status-select-row" id="statusRow">
                     <div class="status-opt" data-status="rectify">Rectify</div>
                 </div>
-                <div class="nt-empty-hint">Note: Once rectified, the task status will be set to TO DO with a rectification note.</div>
+                <div class="nt-empty-hint">Note: Once rectified, the task status will be set to TO DO with a
+                    rectification note.</div>
             </div>
 
             <div id="reassignTaskSection" class="d-section" hidden>
@@ -612,7 +691,7 @@
 
             <div hidden id="currentlyWithSection" class="d-section">
                 <div class="assignee-row">Currently with <div class="avatar" id="dAssigneeAvatar_"></div> <strong
-                    id="dAssigneeName_"></strong></div>
+                        id="dAssigneeName_"></strong></div>
             </div>
 
             <div class="d-section">
@@ -637,7 +716,7 @@
                         <div class="v" id="dDue"></div>
                     </div>
                     <div class="d-meta-item">
-                        <div class="k">Technician Department</div>
+                        <div class="k">Technician Site</div>
                         <div class="v" id="dDept"></div>
                     </div>
                     <div class="d-meta-item">

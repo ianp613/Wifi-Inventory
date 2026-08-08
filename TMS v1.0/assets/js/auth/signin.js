@@ -45,8 +45,9 @@ document.getElementById('signinForm').addEventListener('submit', e => {
             localStorage.setItem("privileges",res.privileges)
             localStorage.setItem("auth",true)
             window.location.replace("../"+res.privileges.toLowerCase())
+        }else{
+            ss.toast(null,res.type,res.message,null,"#1B2A22")
         }
-        ss.toast(null,res.type,res.message,null,"#1B2A22")
     })
 });
 

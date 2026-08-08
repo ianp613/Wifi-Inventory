@@ -50,6 +50,7 @@ function fetchProjects(){
           dept_id: p.dept_id != "-" ? parseInt(p.dept_id) : ""
         });
       });
+      updateAdminStats();
       refreshProjectDependents();
       renderWorkload();
     });
@@ -153,10 +154,27 @@ function renderWorkload(){
       ${overdue ? `<div class="workload-flag">⚠ ${overdue} overdue</div>` : ''}
     </div>`;
   }).join('');
+  capWorkloadRows(3);
+}
+function capWorkloadRows(maxRows = 3){
+  const strip = document.getElementById('workloadStrip');
+  const firstCard = strip.querySelector('.workload-card');
+  if(!firstCard){
+    strip.style.maxHeight = '';
+    strip.style.overflowY = '';
+    return;
+  }
+  const cardHeight = firstCard.getBoundingClientRect().height;
+  const styles = getComputedStyle(strip);
+  const rowGap = parseFloat(styles.rowGap || styles.gap) || 0;
+
+  strip.style.maxHeight = `${(cardHeight * maxRows) + (rowGap * (maxRows - 1))}px`;
+  strip.style.overflowY = 'auto';
 }
 function toggleAssigneeFilter(userId){
   activeAssignee = (activeAssignee===userId) ? 'all' : userId;
   document.getElementById('assigneeFilter').value = activeAssignee;
+  currentPage = 1;
   renderWorkload();
   renderList();
 }
@@ -201,6 +219,9 @@ function renderTicket(t){
   </div>`;
 }
 
+let currentPage = 1;
+let pageSize = 5;
+
 function renderList(){
   const list = document.getElementById('ticketList');
   const q = document.getElementById('searchInput').value.toLowerCase();
@@ -227,8 +248,18 @@ function renderList(){
     return matchesStatus && matchesAssignee && matchesSearch;
   });
 
-  list.innerHTML = filtered.length ? filtered.map(renderTicket).join('') :
+  const totalItems = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  if(currentPage > totalPages) currentPage = totalPages;
+  if(currentPage < 1) currentPage = 1;
+
+  const startIdx = (currentPage - 1) * pageSize;
+  const pageItems = filtered.slice(startIdx, startIdx + pageSize);
+
+  list.innerHTML = pageItems.length ? pageItems.map(renderTicket).join('') :
     `<div style="text-align:center;padding:50px 0;color:var(--ink-faint);font-size:13px;">No tasks match this filter.</div>`;
+
+  renderPagination(totalItems, totalPages);
 
   document.getElementById('statTotal').textContent = TASKS.filter(t=>t.status=='progress').length;
   document.getElementById('statOverdue').textContent = TASKS.filter(t=>t.overdue).length;
@@ -237,20 +268,57 @@ function renderList(){
   document.getElementById('allTasksNavCount').textContent = countTask;
 }
 
+function renderPagination(totalItems, totalPages){
+  const el = document.getElementById('ticketPagination');
+  if(!el) return;
+
+  if(totalItems === 0){
+    el.innerHTML = '';
+    return;
+  }
+
+  const startItem = (currentPage - 1) * pageSize + 1;
+  const endItem = Math.min(currentPage * pageSize, totalItems);
+
+  el.innerHTML = `
+    <span class="pagination-info">Showing ${startItem}–${endItem} of ${totalItems}</span>
+    <div class="pagination-btns">
+      <button type="button" class="pagination-btn" id="pagPrev" ${currentPage<=1?'disabled':''} aria-label="Previous page">‹</button>
+      <span class="pagination-page">Page ${currentPage} of ${totalPages}</span>
+      <button type="button" class="pagination-btn" id="pagNext" ${currentPage>=totalPages?'disabled':''} aria-label="Next page">›</button>
+    </div>`;
+
+  document.getElementById('pagPrev').addEventListener('click', ()=>{
+    if(currentPage > 1){ currentPage--; renderList(); }
+  });
+  document.getElementById('pagNext').addEventListener('click', ()=>{
+    if(currentPage < totalPages){ currentPage++; renderList(); }
+  });
+}
+
+document.getElementById('pageSizeSelect').addEventListener('change', e=>{
+  pageSize = parseInt(e.target.value);
+  currentPage = 1;
+  renderList();
+});
+
 document.querySelectorAll('.chip[data-filter]').forEach(c=>{
   c.addEventListener('click', ()=>{
     c.parentElement.querySelectorAll('.chip[data-filter]').forEach(x=>x.classList.remove('active'));
     c.classList.add('active');
     activeFilter = c.dataset.filter;
+    currentPage = 1;
     renderList();
   });
 });
 document.getElementById('searchInput').addEventListener('input', ()=>{
   const activeView = document.querySelector('.view-tab.active').dataset.view;
-  if(activeView === 'users') renderUserList(); else renderList();
+  if(activeView === 'users'){ userCurrentPage = 1; renderUserList(); }
+  else{ currentPage = 1; renderList(); }
 });
 document.getElementById('assigneeFilter').addEventListener('change', e=>{
   activeAssignee = e.target.value;
+  currentPage = 1;
   renderWorkload();
   renderList();
 });
@@ -1138,7 +1206,6 @@ document.getElementById('newTaskBtn').addEventListener('click', ()=>{
   const activeView = document.querySelector('.view-tab.active').dataset.view;
   if(activeView === 'users') openUserModal(); else openModal();
 });
-document.getElementById('newUserBtnInline').addEventListener('click', ()=>openUserModal());
 document.getElementById('modalClose').addEventListener('click', closeModal);
 document.getElementById('modalCancel').addEventListener('click', closeModal);
 modalOverlay.addEventListener('click', e=>{ if(e.target===modalOverlay) closeModal(); });
@@ -1465,7 +1532,7 @@ function renderDeptNav(){
   const nav = document.getElementById('deptNavList');
   nav.innerHTML = DEPARTMENTS.length ? DEPARTMENTS.map(d=>`
     <a class="nav-item"><span style="width:8px;height:8px;border-radius:2px;background:${d.color};display:inline-block;"></span>${d.name}</a>
-  `).join('') : `<div style="padding:6px 10px;font-size:11.5px;color:#7C8B80;">No departments yet.</div>`;
+  `).join('') : `<div style="padding:6px 10px;font-size:11.5px;color:#7C8B80;">No sites yet.</div>`;
 }
 
 function renderDeptColorSwatches(){
@@ -1484,7 +1551,7 @@ document.getElementById('dmColorPicker').addEventListener('click', e=>{
 function renderDeptManageList(){
   const list = document.getElementById('deptManageList');
   if(!DEPARTMENTS.length){
-    list.innerHTML = `<div class="project-empty">No departments yet — add one above.</div>`;
+    list.innerHTML = `<div class="project-empty">No sites yet — add one above.</div>`;
     return;
   }
   list.innerHTML = DEPARTMENTS.map(d=>{
@@ -1713,7 +1780,7 @@ deptModalOverlay.addEventListener('click', e=>{ if(e.target===deptModalOverlay) 
 function populateDeptFilterOptions(){
   const sel = document.getElementById('deptFilter');
   const current = sel.value;
-  sel.innerHTML = '<option value="all">All departments</option>' +
+  sel.innerHTML = '<option value="all">All sites</option>' +
     DEPARTMENTS.map(d=>`<option value="${d.id}">${d.name}</option>`).join('');
   if(current && (current==='all' || DEPARTMENTS.some(d=>String(d.id)===String(current)))) sel.value = current;
 }
@@ -1735,6 +1802,150 @@ function populateUmDeptOptions(){
   if(DEPARTMENTS.some(d=>String(d.id)===String(current))) sel.value = current;
 }
 
+// ---------------- Self-service Account modal ----------------
+const accountModalOverlay = document.getElementById('accountModalOverlay');
+let acctOriginalRole = null;
+
+function populateAcctDeptOptions(){
+  const sel = document.getElementById('acctDept');
+  const current = sel.value;
+  sel.innerHTML = '<option value="-">-- Select Department --</option>' +
+    DEPARTMENTS.map(d=>`<option value="${d.id}">${d.name}</option>`).join('');
+  if(DEPARTMENTS.some(d=>String(d.id)===String(current))) sel.value = current;
+}
+
+function openAccountModal(){
+  sidebarFootEl.classList.remove('open');
+
+  const myId = parseInt(localStorage.getItem('userid'));
+  const me = USERS.find(u => u.id === myId);
+  if(!me){
+    ss.toast(null, 'error', 'Could not load your account details.', null, "#1B2A22");
+    return;
+  }
+
+  populateAcctDeptOptions();
+
+  document.getElementById('acctFname').value = me.fname;
+  document.getElementById('acctLname').value = me.lname;
+  document.getElementById('acctRole').value = me.role;
+  document.getElementById('acctDept').value = me.dept_id;
+  document.getElementById('acctPassword').value = '';
+  document.getElementById('acctPasswordConfirm').value = '';
+  document.getElementById('acctError').classList.remove('show');
+
+  acctOriginalRole = me.role;
+
+  accountModalOverlay.classList.add('open');
+}
+function closeAccountModal(){ accountModalOverlay.classList.remove('open'); }
+
+document.getElementById('sidebarAccountBtn').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  openAccountModal();
+});
+document.getElementById('accountModalClose').addEventListener('click', closeAccountModal);
+document.getElementById('accountModalCancel').addEventListener('click', closeAccountModal);
+accountModalOverlay.addEventListener('click', e=>{ if(e.target===accountModalOverlay) closeAccountModal(); });
+
+function submitAccountUpdate(){
+  const myId = parseInt(localStorage.getItem('userid'));
+  const fname = document.getElementById('acctFname').value.trim();
+  const lname = document.getElementById('acctLname').value.trim();
+  const role = document.getElementById('acctRole').value;
+  const dept = document.getElementById('acctDept').value;
+  const password = document.getElementById('acctPassword').value;
+  const passwordConfirm = document.getElementById('acctPasswordConfirm').value;
+  const errorEl = document.getElementById('acctError');
+
+  if(!fname || !lname){
+    errorEl.textContent = 'Add a complete name before saving.';
+    errorEl.classList.add('show');
+    return;
+  }
+
+  // Password is optional — only validated if the user actually typed one
+  if(password || passwordConfirm){
+    if(password.length < 5){
+      errorEl.textContent = 'New password must be at least 5 characters.';
+      errorEl.classList.add('show');
+      return;
+    }
+    if(password !== passwordConfirm){
+      errorEl.textContent = 'New password and confirmation do not match.';
+      errorEl.classList.add('show');
+      return;
+    }
+  }
+
+  errorEl.classList.remove('show');
+
+  const payload = {
+    id: myId,
+    fname: fname,
+    lname: lname,
+    privileges: role,
+    dept_id: dept
+  };
+  if(password) payload.password = password;
+
+  const doUpdate = () => {
+    const saveBtn = document.getElementById('acctSave');
+    saveBtn.disabled = true;
+
+    sole.post("../../controllers/main/update_account.php", payload).then(res => {
+      saveBtn.disabled = false;
+
+      if(!res.status){
+        errorEl.textContent = res.message || 'Something went wrong updating your account.';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      ss.toast(null, res.type, res.message, null, "#1B2A22");
+      localStorage.setItem('fname', fname);
+      localStorage.setItem('lname', lname);
+      document.getElementById('sbfname').innerText = `${fname} ${lname}`;
+
+      if(role !== acctOriginalRole){
+        localStorage.setItem('privileges', role);
+        closeAccountModal();
+        setTimeout(()=>{ window.location.reload(); }, 1200);
+        return;
+      }
+
+      closeAccountModal();
+      fetchUsers();
+    }).catch(err => {
+      saveBtn.disabled = false;
+      errorEl.textContent = 'Could not reach the server. Please try again.';
+      errorEl.classList.add('show');
+      console.error(err);
+    });
+  };
+
+  // Same downgrade warning your admin edit-user flow already uses, applied to self-editing
+  if(acctOriginalRole === 'Administrator' && role !== acctOriginalRole){
+    Swal.fire({
+        title: `Administrative privileges will be removed.`,
+        text: `You are changing your own role away from Administrator. You will be signed out of admin features after saving. This cannot be undone by yourself — ask another administrator to restore it if needed.`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        confirmButtonText: "Confirm",
+        customClass: {
+            popup: 'my-custom-popup',
+            actions: 'my-right-buttons'
+        }
+    }).then((result) => {
+      if(result.isConfirmed) doUpdate();
+    });
+  } else {
+    doUpdate();
+  }
+}
+document.getElementById('acctSave').addEventListener('click', submitAccountUpdate);
+
 // ---------------- Users (create / edit / delete / assign department) ----------------
 const userModalOverlay = document.getElementById('userModalOverlay');
 let umEditingId = null;
@@ -1749,6 +1960,9 @@ function roleBadgeClass(role){
   if(role==='Supervisor') return 'role-supervisor';
   return 'role-member';
 }
+let userCurrentPage = 1;
+let userPageSize = 5;
+
 function renderUserList(){
   const list = document.getElementById('userList');
   const q = document.getElementById('searchInput').value.toLowerCase();
@@ -1761,10 +1975,19 @@ function renderUserList(){
 
   if(!filtered.length){
     list.innerHTML = `<div style="text-align:center;padding:50px 0;color:var(--ink-faint);font-size:13px;">No users match this filter.</div>`;
+    renderUserPagination(0, 1);
     return;
   }
 
-  list.innerHTML = filtered.map(u=>{
+  const totalItems = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / userPageSize));
+  if(userCurrentPage > totalPages) userCurrentPage = totalPages;
+  if(userCurrentPage < 1) userCurrentPage = 1;
+
+  const startIdx = (userCurrentPage - 1) * userPageSize;
+  const pageItems = filtered.slice(startIdx, startIdx + userPageSize);
+
+  list.innerHTML = pageItems.map(u=>{
     const name = fullName(u);
     const dept = DEPARTMENTS.find(d=>d.id===u.dept_id);
     if(userDeleteConfirmId === u.id){
@@ -1802,7 +2025,43 @@ function renderUserList(){
       
     </div>`;
   }).join('');
+
+  renderUserPagination(totalItems, totalPages);
 }
+
+function renderUserPagination(totalItems, totalPages){
+  const el = document.getElementById('userPagination');
+  if(!el) return;
+
+  if(totalItems === 0){
+    el.innerHTML = '';
+    return;
+  }
+
+  const startItem = (userCurrentPage - 1) * userPageSize + 1;
+  const endItem = Math.min(userCurrentPage * userPageSize, totalItems);
+
+  el.innerHTML = `
+    <span class="pagination-info">Showing ${startItem}–${endItem} of ${totalItems}</span>
+    <div class="pagination-btns">
+      <button type="button" class="pagination-btn" id="userPagPrev" ${userCurrentPage<=1?'disabled':''} aria-label="Previous page">‹</button>
+      <span class="pagination-page">Page ${userCurrentPage} of ${totalPages}</span>
+      <button type="button" class="pagination-btn" id="userPagNext" ${userCurrentPage>=totalPages?'disabled':''} aria-label="Next page">›</button>
+    </div>`;
+
+  document.getElementById('userPagPrev').addEventListener('click', ()=>{
+    if(userCurrentPage > 1){ userCurrentPage--; renderUserList(); }
+  });
+  document.getElementById('userPagNext').addEventListener('click', ()=>{
+    if(userCurrentPage < totalPages){ userCurrentPage++; renderUserList(); }
+  });
+}
+
+document.getElementById('userPageSizeSelect').addEventListener('change', e=>{
+  userPageSize = parseInt(e.target.value);
+  userCurrentPage = 1;
+  renderUserList();
+});
 
 document.querySelectorAll('.chip[data-role-filter]').forEach(c=>{
   c.addEventListener('click', ()=>{
@@ -1847,6 +2106,7 @@ document.getElementById('userList').addEventListener('click', e=>{
 
         ss.toast(null, res.type, res.message, null, "#1B2A22");
         userDeleteConfirmId = null;
+        userCurrentPage = 1;
         fetchUsers();
         fetchTasks();
       })
@@ -1899,6 +2159,11 @@ function openUserModal(editId){
     document.getElementById('umPasswordHint').textContent = 'The user must change their password after their first sign-in.';
     umSelectedStatus = 'active';
   }
+  if(umEditingId == parseInt(localStorage.getItem("userid"))){
+    document.getElementById("umAccountStatus").hidden = true
+  }else{
+    document.getElementById("umAccountStatus").hidden = false
+  }
   document.querySelectorAll('#umStatus .priority-opt').forEach(o=>o.classList.toggle('sel', o.dataset.status===umSelectedStatus));
 
   userModalOverlay.classList.add('open');
@@ -1932,7 +2197,7 @@ document.getElementById('umSave').addEventListener('click', ()=>{
     if(userEdit.role == "Administrator" && role != userEdit.role){
       Swal.fire({
           title: `Administrative privileges will be removed.`,
-          text: `Please note that you cannot change your role back to an administrator. Ask your system administrator or developer to update your permissions.`,
+          text: `You are changing your own role away from Administrator. You will be signed out of admin features after saving. This cannot be undone by yourself — ask another administrator to restore it if needed.`,
           icon: "warning",
           showCancelButton: true,
           confirmButtonColor: "#d33",
@@ -2043,6 +2308,7 @@ function updateAdminStats(){
   document.getElementById('greetUserCount').textContent = `${USERS.length} user${USERS.length===1?'':'s'}`;
   document.getElementById('greetDeptCount').textContent = `${DEPARTMENTS.length} department${DEPARTMENTS.length===1?'':'s'}`;
   document.getElementById('greetProjectCount').textContent = `${PROJECTS.length} project${PROJECTS.length===1?'':'s'}`;
+  console.log(PROJECTS.length)
 }
 function updateGreetingDate(){
   const today = new Date();
@@ -2062,17 +2328,20 @@ document.getElementById("sbfname").innerText = `${localStorage.getItem("fname")}
 const savedView = localStorage.getItem(VIEW_STORAGE_KEY);
 if(savedView) activateView(savedView);
 
-renderProjectNav();
+fetchUsers();
 fetchProjects();
 fetchDepartments();
-fetchUsers();
 fetchTasks();
+renderProjectNav();
 renderUserList();
 renderWorkload();
-renderList();
 renderKanban();
 updateAdminStats();
 updateGreetingDate();
+
+setTimeout(() => {
+  renderList();
+}, 200);
 
 
 const show_tech = document.getElementsByClassName("show_tech");

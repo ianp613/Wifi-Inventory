@@ -22,7 +22,7 @@
      */
     class DB{
         public static $DB_HOST = "localhost";
-        public static $DB_DATABASE = "inventory_system";
+        public static $DB_DATABASE = "ddc_pulse";
         public static $DB_USERNAME = "root";
         public static $DB_PASSWORD = "";
         public static $br = "";
