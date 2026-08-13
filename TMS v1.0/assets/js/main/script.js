@@ -371,9 +371,19 @@ const KCOLS = [
   {key:'done', label:'Done'},
 ];
 function renderKanban(){
+  const myId = parseInt(localStorage.getItem('userid'));
+  const myPrivileges = (localStorage.getItem('privileges') || '').toLowerCase();
+
+  const visibleTasks = myPrivileges === 'technician'
+    ? TASKS.filter(t =>
+        parseInt(t.user_id) === myId ||
+        (t.task_budy && t.task_budy.some(id => parseInt(id) === myId))
+      )
+    : TASKS;
+
   const board = document.getElementById('kanbanBoard');
   board.innerHTML = KCOLS.map(col=>{
-    const items = TASKS.filter(t=>t.status===col.key);
+    const items = visibleTasks.filter(t=>t.status===col.key);
     return `
     <div class="kcol" data-col="${col.key}">
       <div class="kcol-head"><span class="kcol-title">${col.label}</span><span class="kcol-count">${items.length}</span></div>
@@ -755,6 +765,8 @@ function openDrawer(id){
     if(localStorage.getItem("privileges").toLocaleLowerCase() != "technician"){
       document.getElementById("rectRow").hidden = false
     }
+    document.getElementById("comment_input").hidden = true
+    document.getElementById("comment_input").classList.remove("comment-input")
   }else{
     if(t.rectify == "1"){
       document.getElementById("rectNote").hidden = false
@@ -765,6 +777,8 @@ function openDrawer(id){
       document.getElementById("utsRow").hidden = true
     }
     document.getElementById("rectRow").hidden = true
+      document.getElementById("comment_input").hidden = false
+    document.getElementById("comment_input").classList.add("comment-input")
   }
 
   if(parseInt(t.user_id) == parseInt(localStorage.getItem("userid")) || localStorage.getItem("privileges").toLocaleLowerCase() != "technician"){
@@ -780,8 +794,8 @@ function openDrawer(id){
     document.getElementById("currentlyWithSection").hidden = false
   }
 
+  let utManageBtn = document.getElementsByClassName("utManageBtn")
   if(localStorage.getItem("privileges") == "Technician"){
-    let utManageBtn = document.getElementsByClassName("utManageBtn")
     if(parseInt(localStorage.getItem("userid")) == t.user_id){
       for (let i = 0; i < utManageBtn.length; i++) {
         utManageBtn[i].hidden = false;
@@ -794,11 +808,17 @@ function openDrawer(id){
       }
     }
   }else{
-      let utManageBtn = document.getElementsByClassName("utManageBtn")
+    if(t.status == "done"){
+      for (let i = 0; i < utManageBtn.length; i++) {
+        utManageBtn[i].hidden = true;
+        utManageBtn[i].classList.remove("project-icon-btn")
+      }  
+    }else{
       for (let i = 0; i < utManageBtn.length; i++) {
         utManageBtn[i].hidden = false;
         utManageBtn[i].classList.add("project-icon-btn")
       }
+    }
   }
 
 
@@ -1016,34 +1036,20 @@ function reassignTask(){
       return;
     }
 
-    t.user_id = parseInt(newUserId);
-    const info = resolveAssignee(t.user_id);
-
-    document.getElementById('dAssignedTo').textContent = info.name;
-    const avatarEl = document.getElementById('dAssigneeAvatar');
-    avatarEl.textContent = info.initials;
-    avatarEl.style.background = info.color;
-    document.getElementById('dAssigneeName').textContent = info.name;
-
-    const avatarEl_ = document.getElementById('dAssigneeAvatar_');
-    avatarEl_.textContent = info.initials;
-    avatarEl_.style.background = info.color;
-    document.getElementById('dAssigneeName_').textContent = info.name;
-
-    const assignedUser = USERS.find(u => u.id === t.user_id);
-    const dept = assignedUser ? DEPARTMENTS.find(d => d.id === assignedUser.dept_id) : null;
-    document.getElementById('dDept').textContent = dept ? dept.name : 'Unassigned';
-
-    select.innerHTML = '<option value="">Choose a technician…</option>' +
-      assignableUsers().filter(m=>m.id!==t.user_id).map(m=>`<option value="${m.id}">${fullName(m)}</option>`).join('');
-    noteEl.value = '';
-
     ss.toast(null, res.type, res.message, null, "#1B2A22");
-    const confirmEl = document.getElementById('reassignConfirm');
-    document.getElementById('reassignConfirmText').textContent = `Reassigned to ${info.name}.`;
-    confirmEl.classList.add('show');
+    document.getElementById('reassignNote').value = '';
 
-    renderList();
+    // The endpoint mutates task_budy (previous assignee becomes a budy, new
+    // assignee is removed from budy if present) — refetch instead of guessing
+    // that transformation client-side, then re-render the drawer with fresh data.
+    fetchTasks().then(() => {
+      openDrawer(currentDrawerTaskId);
+      const confirmEl = document.getElementById('reassignConfirm');
+      const info = resolveAssignee(parseInt(newUserId));
+      document.getElementById('reassignConfirmText').textContent = `Reassigned to ${info.name}.`;
+      confirmEl.classList.add('show');
+    });
+
     renderKanban();
     renderWorkload();
   }).catch(err => {
@@ -1578,8 +1584,8 @@ function renderDeptManageList(){
       <span class="project-row-count">${count} user${count===1?'':'s'}</span>
       <span class="project-row-count">${count_projects} project${count_projects===1?'':'s'}</span>
       <div class="project-row-actions">
-        <button type="button" class="project-icon-btn" data-edit-dept="${d.id}" aria-label="Edit department"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
-        <button type="button" class="project-icon-btn danger" data-delete-dept="${d.id}" aria-label="Delete department"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>
+        <button type="button" class="project-icon-btn" data-edit-dept="${d.id}" aria-label="Edit site"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
+        <button type="button" class="project-icon-btn danger" data-delete-dept="${d.id}" aria-label="Delete site"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>
       </div>
     </div>`;
   }).join('');
@@ -1597,7 +1603,7 @@ document.getElementById('deptManageList').addEventListener('click', e=>{
     dmEditingId = d.id;
     dmSelectedColor = d.color;
     document.getElementById('dmName').value = d.name;
-    document.getElementById('dmFormLabel').textContent = 'Edit department';
+    document.getElementById('dmFormLabel').textContent = 'Edit site';
     document.getElementById('dmSave').textContent = 'Save changes';
     document.getElementById('dmCancelEdit').style.display = 'inline-flex';
     document.getElementById('dmError').classList.remove('show');
@@ -1638,8 +1644,8 @@ function resetDeptForm(){
   dmEditingId = null;
   dmSelectedColor = randomPaletteColor();
   document.getElementById('dmName').value = '';
-  document.getElementById('dmFormLabel').textContent = 'New department';
-  document.getElementById('dmSave').textContent = 'Add department';
+  document.getElementById('dmFormLabel').textContent = 'New site';
+  document.getElementById('dmSave').textContent = 'Add site';
   document.getElementById('dmCancelEdit').style.display = 'none';
   document.getElementById('dmError').classList.remove('show');
   renderDeptColorSwatches();
@@ -1650,13 +1656,13 @@ document.getElementById('dmSave').addEventListener('click', ()=>{
   const name = document.getElementById('dmName').value.trim();
   const errorEl = document.getElementById('dmError');
   if(!name){
-    errorEl.textContent = 'Give the department a name before saving.';
+    errorEl.textContent = 'Give the site a name before saving.';
     errorEl.classList.add('show');
     return;
   }
   const dup = DEPARTMENTS.find(d=>d.name.toLowerCase()===name.toLowerCase() && d.id!==dmEditingId);
   if(dup){
-    errorEl.textContent = 'A department with that name already exists.';
+    errorEl.textContent = 'A site with that name already exists.';
     errorEl.classList.add('show');
     return;
   }
@@ -1674,7 +1680,7 @@ document.getElementById('dmSave').addEventListener('click', ()=>{
       saveBtn.disabled = false;
 
       if(!res.status){
-        errorEl.textContent = res.message || 'Something went wrong updating the department.';
+        errorEl.textContent = res.message || 'Something went wrong updating the site.';
         errorEl.classList.add('show');
         return;
       }
@@ -1694,7 +1700,7 @@ document.getElementById('dmSave').addEventListener('click', ()=>{
     saveBtn.disabled = false;
 
     if(!res.status){
-      errorEl.textContent = res.message || 'Something went wrong saving the department.';
+      errorEl.textContent = res.message || 'Something went wrong saving the site.';
       errorEl.classList.add('show');
       return;
     }
@@ -1788,7 +1794,7 @@ function populatePmDeptOptions(){
   const sel = document.getElementById('pmDept');
   if(!sel) return;
   const current = sel.value;
-  sel.innerHTML = '<option value="-">-- Select Department --</option>' +
+  sel.innerHTML = '<option value="-">-- Select Site --</option>' +
     DEPARTMENTS.map(d=>`<option value="${d.id}">${d.name}</option>`).join('');
   if(DEPARTMENTS.some(d=>String(d.id)===String(current))) sel.value = current;
 }
@@ -1797,7 +1803,7 @@ function populateUmDeptOptions(){
   const sel = document.getElementById('umDept');
   if(!sel) return;
   const current = sel.value;
-  sel.innerHTML = '<option value="-">-- Select Department --</option>' +
+  sel.innerHTML = '<option value="-">-- Select Site --</option>' +
     DEPARTMENTS.map(d=>`<option value="${d.id}">${d.name}</option>`).join('');
   if(DEPARTMENTS.some(d=>String(d.id)===String(current))) sel.value = current;
 }
@@ -1809,7 +1815,7 @@ let acctOriginalRole = null;
 function populateAcctDeptOptions(){
   const sel = document.getElementById('acctDept');
   const current = sel.value;
-  sel.innerHTML = '<option value="-">-- Select Department --</option>' +
+  sel.innerHTML = '<option value="-">-- Select Site --</option>' +
     DEPARTMENTS.map(d=>`<option value="${d.id}">${d.name}</option>`).join('');
   if(DEPARTMENTS.some(d=>String(d.id)===String(current))) sel.value = current;
 }
@@ -2390,3 +2396,56 @@ document.getElementById('sidebarLogsBtn').addEventListener('click', (e)=>{
   sidebarFootEl.classList.remove('open');
   ss.toast(null, 'info', 'Activity logs are not available yet.', null, '#1B2A22');
 });
+
+
+(function(){
+  const wrap = document.getElementById('cocZoomWrap');
+  const img = document.getElementById('cocImage');
+  const lens = document.getElementById('cocZoomLens');
+
+  const ZOOM = 2.5;      // magnification factor
+  const LENS_SIZE = 360; // lens width/height in px
+
+  function setupLens(){
+    const rect = img.getBoundingClientRect();
+    lens.style.width = LENS_SIZE + 'px';
+    lens.style.height = LENS_SIZE + 'px';
+    lens.style.backgroundImage = `url('${img.src}')`;
+    lens.style.backgroundSize = `${rect.width * ZOOM}px ${rect.height * ZOOM}px`;
+  }
+
+  function moveLens(e){
+    const rect = img.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
+
+    // Clamp cursor within the image itself
+    x = Math.max(0, Math.min(x, rect.width));
+    y = Math.max(0, Math.min(y, rect.height));
+
+    // Keep the lens box fully inside the image bounds, centered on the cursor
+    let lensX = Math.max(0, Math.min(x - LENS_SIZE / 2, rect.width - LENS_SIZE));
+    let lensY = Math.max(0, Math.min(y - LENS_SIZE / 2, rect.height - LENS_SIZE));
+    lens.style.left = lensX + 'px';
+    lens.style.top = lensY + 'px';
+
+    // Shift the zoomed background so the point under the cursor stays centered in the lens
+    const bgX = -(x * ZOOM - LENS_SIZE / 2);
+    const bgY = -(y * ZOOM - LENS_SIZE / 2);
+    lens.style.backgroundPosition = `${bgX}px ${bgY}px`;
+  }
+
+  wrap.addEventListener('mouseenter', ()=>{
+    setupLens();
+    lens.style.display = 'block';
+  });
+  wrap.addEventListener('mousemove', moveLens);
+  wrap.addEventListener('mouseleave', ()=>{
+    lens.style.display = 'none';
+  });
+
+  // Recalculate if the image loads after this script runs, or the window resizes
+  // (rendered image size changes → background-size must be recalculated to stay accurate)
+  if(img.complete){ setupLens(); } else { img.addEventListener('load', setupLens); }
+  window.addEventListener('resize', ()=>{ if(lens.style.display === 'block') setupLens(); });
+})();

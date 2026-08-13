@@ -34,14 +34,45 @@
   .coc-modal-body img{max-height:calc(100vh - 54px);}
 }
 
-  /* Nesting ensures the browser prioritizes your right-alignment */
-  .swal2-popup.my-custom-popup .swal2-actions.my-right-buttons {
-    justify-content: flex-end !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-    padding-right: 1.5em !important;
-  }
+/* Nesting ensures the browser prioritizes your right-alignment */
+.swal2-popup.my-custom-popup .swal2-actions.my-right-buttons {
+  justify-content: flex-end !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding-right: 1.5em !important;
+}
 
-  .left-align-swal {
+.left-align-swal {
   text-align: left !important;
+}
+
+.coc-zoom-wrap{
+  position:relative;
+  display:inline-block;
+  max-width:100%;
+  max-height:calc(92vh - 54px);
+  cursor:crosshair;
+}
+.coc-zoom-wrap img{
+  display:block;
+  max-width:100%;
+  max-height:calc(92vh - 54px);
+  width:auto;height:auto;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+.coc-zoom-lens{
+  position:absolute;
+  border:2px solid var(--surface);
+  border-radius:8px;
+  box-shadow:0 6px 20px rgba(27,42,34,.35);
+  background-repeat:no-repeat;
+  background-color:var(--surface-alt);
+  pointer-events:none;
+  display:none;
+  z-index:5;
+}
+@media (max-width:520px){
+  .coc-zoom-wrap img{max-height:calc(100vh - 54px);}
+  .coc-zoom-lens{display:none !important;} /* hover doesn't exist on touch — see note below */
 }

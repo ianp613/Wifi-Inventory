@@ -74,7 +74,7 @@
 
         <!-- <div class="switch-cta">Don't have an account? <a href="signup.html">Create one</a></div> -->
 
-        <div class="form-foot">DDC PULSE — Project Updates, Logging &amp; Scheduling Engine 2026 © Paul Ian</div>
+        <div class="form-foot">DDC PULSE — Project Updates, Logging &amp; Scheduling Engine 2026 © Ian Paul</div>
     </div>
     <script src="../../assets/js/sweetalert2/sweetalert2.all.min.js"></script>
     <script src="../../assets/js/sole.js"></script>

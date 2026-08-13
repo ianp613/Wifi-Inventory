@@ -7,7 +7,10 @@
       </button>
     </div>
     <div class="coc-modal-body">
-      <img src="/assets/img/code_of_conduct.png" alt="DDC PULSE Code of Conduct" id="cocImage">
+      <div class="coc-zoom-wrap" id="cocZoomWrap">
+        <img src="/assets/img/code_of_conduct.png" alt="DDC PULSE Code of Conduct" id="cocImage" draggable="false">
+        <div class="coc-zoom-lens" id="cocZoomLens"></div>
+      </div>
     </div>
   </div>
 </div>

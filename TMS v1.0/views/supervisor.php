@@ -59,7 +59,7 @@
                     <button class="nav-add-btn show_sup show_tech" style="display: none !important;"
                         id="manageProjectsBtn" title="Manage projects" aria-label="Manage projects">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 5v14M5 12h14" />
+                            <path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z" />
                         </svg>
                     </button>
                 </div>
@@ -70,9 +70,9 @@
                 <div class="nav-label-row">
                     <span class="nav-label" style="margin:0;">Sites</span>
                     <button class="nav-add-btn show_tech" style="display: none !important;" id="manageDeptsBtn"
-                        title="Manage departments" aria-label="Manage departments">
+                        title="Manage sites" aria-label="Manage sites">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 5v14M5 12h14" />
+                            <path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z" />
                         </svg>
                     </button>
                 </div>
@@ -82,8 +82,8 @@
             <div class="sidebar-foot" id="sidebarFoot">
                 <div class="avatar" id="sbfavatar">PI</div>
                 <div class="who">
-                    <div id="sbfname" class="name">Paul Ian Dumdum</div>
-                    <div class="email">DDC PULSE 2026 © Paul Ian</div>
+                    <div id="sbfname" class="name">Paul Ian A. Dumdum</div>
+                    <div class="email">DDC PULSE 2026 © Ian Paul</div>
                 </div>
                 <div class="sidebar-foot-menu" id="sidebarFootMenu">
                     <button type="button" class="sidebar-foot-menu-item" id="sidebarAccountBtn">
@@ -136,7 +136,7 @@
                         <h1 id="greetings"></h1>
                         <p>You manage <strong id="greetProjectCount">0 projects</strong> and <strong
                                 id="greetUserCount">0 users</strong> across <strong id="greetDeptCount">0
-                                departments</strong>. <span class="date-stub" id="greetDate"></span></p>
+                                sites</strong>. <span class="date-stub" id="greetDate"></span></p>
                     </div>
                 </div>
                 <div class="top-actions">
@@ -235,7 +235,7 @@
                     <div class="chip" data-role-filter="Supervisor">Supervisor</div>
                     <div class="chip" data-role-filter="Technician">Technician</div>
                     <select class="select-filter" id="deptFilter">
-                        <option value="all">All departments</option>
+                        <option value="all">All sites</option>
                     </select>
                     <div class="filter-spacer"></div>
                     <select class="select-filter" id="userPageSizeSelect">
@@ -418,7 +418,7 @@
                     <input type="text" id="pmName" placeholder="e.g. Product Launch">
                 </div>
                 <div class="field-group">
-                    <label class="field-label" for="pmDept">Department</label>
+                    <label class="field-label" for="pmDept">Site</label>
                     <select id="pmDept"></select>
                 </div>
                 <div class="field-group">
@@ -490,7 +490,7 @@
                         </select>
                     </div>
                     <div class="field-group">
-                        <label class="field-label" for="umDept">Department</label>
+                        <label class="field-label" for="umDept">Site</label>
                         <select id="umDept"></select>
                     </div>
                 </div>
@@ -501,7 +501,7 @@
                         <div class="priority-opt medium" data-status="inactive">Inactive</div>
                     </div>
                 </div>
-                <div class="reassign-error" id="umError">Add a name, username, and department before saving.</div>
+                <div class="reassign-error" id="umError">Add a name, username, and site before saving.</div>
                 <div style="font-size:11.5px;color:var(--ink-faint);margin-top:2px;" id="umInviteHint">This account will
                     be ready to sign in with the username and password above.</div>
             </div>
@@ -543,7 +543,7 @@
                         </select>
                     </div>
                     <div class="field-group">
-                        <label class="field-label" for="acctDept">Department</label>
+                        <label class="field-label" for="acctDept">Site</label>
                         <select id="acctDept"></select>
                     </div>
                 </div>
@@ -569,11 +569,11 @@
         </div>
     </div>
 
-    <!-- ================= MANAGE DEPARTMENTS MODAL ================= -->
+    <!-- ================= MANAGE SITES MODAL ================= -->
     <div class="modal-overlay" id="deptModalOverlay">
         <div class="modal">
             <div class="modal-head">
-                <h2>Manage departments</h2>
+                <h2>Manage sites</h2>
                 <button class="modal-close" id="deptModalClose"><svg viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2">
                         <path d="M18 6L6 18M6 6l12 12" />
@@ -581,22 +581,22 @@
             </div>
             <div class="modal-body">
                 <div class="field-group">
-                    <label class="field-label" for="dmName" id="dmFormLabel">New department</label>
-                    <input type="text" id="dmName" placeholder="e.g. IT Department">
+                    <label class="field-label" for="dmName" id="dmFormLabel">New site</label>
+                    <input type="text" id="dmName" placeholder="e.g. Wifi Team Techroom">
                 </div>
                 <div class="field-group">
                     <label class="field-label">Color</label>
                     <div class="swatch-row" id="dmColorPicker"></div>
                 </div>
-                <div class="reassign-error" id="dmError">Give the department a name before saving.</div>
+                <div class="reassign-error" id="dmError">Give the site a name before saving.</div>
                 <div class="project-form-btns">
                     <button class="btn-secondary" id="dmCancelEdit" style="display:none;">Cancel edit</button>
-                    <button class="btn-primary-modal" id="dmSave">Add department</button>
+                    <button class="btn-primary-modal" id="dmSave">Add site</button>
                 </div>
 
                 <hr class="project-divider">
 
-                <div class="field-label" style="margin-bottom:10px;">Existing departments</div>
+                <div class="field-label" style="margin-bottom:10px;">Existing sites</div>
                 <div id="deptManageList"></div>
             </div>
             <div class="modal-foot">
@@ -716,7 +716,7 @@
                         <div class="v" id="dDue"></div>
                     </div>
                     <div class="d-meta-item">
-                        <div class="k">Technician Department</div>
+                        <div class="k">Technician Site</div>
                         <div class="v" id="dDept"></div>
                     </div>
                     <div class="d-meta-item">
@@ -743,7 +743,7 @@
                 <div id="commentsBox"></div>
             </div>
         </div>
-        <div class="comment-input">
+        <div hidden id="comment_input" class="">
             <input type="text" id="commentInput" placeholder="Add a turnover note or comment...">
             <button type="button" id="commentSendBtn">Submit</button>
         </div>

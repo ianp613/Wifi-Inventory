@@ -59,7 +59,7 @@
                     <button class="nav-add-btn show_sup show_tech" style="display: none !important;"
                         id="manageProjectsBtn" title="Manage projects" aria-label="Manage projects">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 5v14M5 12h14" />
+                            <path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z" />
                         </svg>
                     </button>
                 </div>
@@ -72,7 +72,7 @@
                     <button class="nav-add-btn show_tech" style="display: none !important;" id="manageDeptsBtn"
                         title="Manage sites" aria-label="Manage sites">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 5v14M5 12h14" />
+                            <path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z" />
                         </svg>
                     </button>
                 </div>
@@ -82,8 +82,8 @@
             <div class="sidebar-foot" id="sidebarFoot">
                 <div class="avatar" id="sbfavatar">PI</div>
                 <div class="who">
-                    <div id="sbfname" class="name">Paul Ian Dumdum</div>
-                    <div class="email">DDC PULSE 2026 © Paul Ian</div>
+                    <div id="sbfname" class="name">Paul Ian A. Dumdum</div>
+                    <div class="email">DDC PULSE 2026 © Ian Paul</div>
                 </div>
                 <div class="sidebar-foot-menu" id="sidebarFootMenu">
                     <button type="button" class="sidebar-foot-menu-item" id="sidebarAccountBtn">
@@ -743,7 +743,7 @@
                 <div id="commentsBox"></div>
             </div>
         </div>
-        <div class="comment-input">
+        <div hidden id="comment_input" class="">
             <input type="text" id="commentInput" placeholder="Add a turnover note or comment...">
             <button type="button" id="commentSendBtn">Submit</button>
         </div>
