@@ -1,5 +1,5 @@
 const CURRENT_USER = "Morgan Reyes";
-const COLOR_PALETTE = ["#3B6FA0","#C98A2E","#2F6F5E","#B75B39","#A23B3B","#8A6FB0","#5B6B60","#3A8FA0","#6E8B3D","#B08968","#4F6D7A","#9A6B9E","#7A8450","#C4692F","#5C7C99"];
+const COLOR_PALETTE = ["#3B6FA0","#C98A2E","#2F6F5E","#B75B39","#A23B3B","#8A6FB0","#5B6B60","#3A8FA0","#6E8B3D","#B08968","#4F6D7A","#9A6B9E","#7A8450","#C4692F"];
 
 function randomPaletteColor(){
   return COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE.length)];
@@ -75,6 +75,7 @@ function fetchTasks(){
           task_budy: t.task_budy ? t.task_budy.split("|") : [],
           start_date: t.start_date,
           due_date: t.due_date,
+          updated_at: t.updated_at || null,
           due: formatTaskDate(t.due_date),
           overdue: isOverdue(t.due_date, t.status),
           dueSoon: isDueSoon(t.due_date),
@@ -221,6 +222,7 @@ function renderTicket(t){
 
 let currentPage = 1;
 let pageSize = 5;
+let currentSort = 'due';
 
 function renderList(){
   const list = document.getElementById('ticketList');
@@ -248,6 +250,8 @@ function renderList(){
     return matchesStatus && matchesAssignee && matchesSearch;
   });
 
+  sortTasks(filtered, currentSort);
+
   const totalItems = filtered.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
   if(currentPage > totalPages) currentPage = totalPages;
@@ -267,6 +271,34 @@ function renderList(){
   document.getElementById('allTasksNavCount').hidden = countTask ? false : true
   document.getElementById('allTasksNavCount').textContent = countTask;
 }
+
+const PRIORITY_RANK = { critical: 0, high: 1, medium: 2, low: 3 };
+
+function sortTasks(tasks, sortKey){
+  if(sortKey === 'due'){
+    tasks.sort((a, b) => {
+      if(!a.due_date && !b.due_date) return 0;
+      if(!a.due_date) return 1;
+      if(!b.due_date) return -1;
+      return new Date(a.due_date) - new Date(b.due_date);
+    });
+  } else if(sortKey === 'priority'){
+    tasks.sort((a, b) => (PRIORITY_RANK[a.priority] ?? 99) - (PRIORITY_RANK[b.priority] ?? 99));
+  } else if(sortKey === 'updated'){
+    tasks.sort((a, b) => {
+      // Tasks with no updated_at yet sort last regardless of direction
+      if(!a.updated_at && !b.updated_at) return 0;
+      if(!a.updated_at) return 1;
+      if(!b.updated_at) return -1;
+      return new Date(b.updated_at) - new Date(a.updated_at); // newest first
+    });
+  }
+}
+document.getElementById('sortSelect').addEventListener('change', e=>{
+  currentSort = e.target.value;
+  currentPage = 1;
+  renderList();
+});
 
 function renderPagination(totalItems, totalPages){
   const el = document.getElementById('ticketPagination');
@@ -1620,23 +1652,26 @@ document.getElementById('deptManageList').addEventListener('click', e=>{
   }
   if(confirmBtn){
     const id = parseInt(confirmBtn.dataset.confirmDeleteDept);
+    const dept_name = DEPARTMENTS.find(d => id == id).name
     confirmBtn.disabled = true;
 
-    sole.post("../../controllers/main/delete_department.php", { id : id })
-      .then(res => {
-        confirmBtn.disabled = false;
+    sole.post("../../controllers/main/delete_department.php", { 
+      id : id,
+      dept_name : dept_name
+    }).then(res => {
+      confirmBtn.disabled = false;
 
-        if(!res.status){
-          ss.toast(null, res.type, res.message, null, "#1B2A22");
-          return;
-        }
-
+      if(!res.status){
         ss.toast(null, res.type, res.message, null, "#1B2A22");
-        dmDeleteConfirmId = null;
-        if(dmEditingId===id) resetDeptForm();
-        fetchDepartments();
-        fetchUsers();
-      })
+        return;
+      }
+
+      ss.toast(null, res.type, res.message, null, "#1B2A22");
+      dmDeleteConfirmId = null;
+      if(dmEditingId===id) resetDeptForm();
+      fetchDepartments();
+      fetchUsers();
+    })
   }
 });
 
@@ -2314,7 +2349,6 @@ function updateAdminStats(){
   document.getElementById('greetUserCount').textContent = `${USERS.length} user${USERS.length===1?'':'s'}`;
   document.getElementById('greetDeptCount').textContent = `${DEPARTMENTS.length} department${DEPARTMENTS.length===1?'':'s'}`;
   document.getElementById('greetProjectCount').textContent = `${PROJECTS.length} project${PROJECTS.length===1?'':'s'}`;
-  console.log(PROJECTS.length)
 }
 function updateGreetingDate(){
   const today = new Date();
@@ -2394,7 +2428,127 @@ document.getElementById('sidebarSettingsBtn').addEventListener('click', (e)=>{
 document.getElementById('sidebarLogsBtn').addEventListener('click', (e)=>{
   e.stopPropagation();
   sidebarFootEl.classList.remove('open');
-  ss.toast(null, 'info', 'Activity logs are not available yet.', null, '#1B2A22');
+  openLogsModal();
+});
+
+// ---------------- Activity Logs ----------------
+const logsModalOverlay = document.getElementById('logsModalOverlay');
+let LOGS = [];
+let logsFilterValue = 'all';
+
+function openLogsModal(){
+  logsModalOverlay.classList.add('open');
+  document.getElementById('logsSearchInput').value = '';
+  populateLogsUserFilter();
+  fetchLogs();
+}
+function closeLogsModal(){ logsModalOverlay.classList.remove('open'); }
+
+document.getElementById('logsModalClose').addEventListener('click', closeLogsModal);
+document.getElementById('logsModalDone').addEventListener('click', closeLogsModal);
+logsModalOverlay.addEventListener('click', e=>{ if(e.target===logsModalOverlay) closeLogsModal(); });
+
+function fetchLogs(){
+  return sole.get("../../controllers/main/get_logs.php").then(res=>{
+    LOGS = Array.isArray(res) ? res : [];
+    renderLogsTable();
+  }).catch(err=>{
+    ss.toast(null, "error", "Could not load logs.", null, "#1B2A22");
+    console.error(err);
+  });
+}
+
+function populateLogsUserFilter(){
+  const sel = document.getElementById('logsUserFilter');
+  const current = sel.value || 'all';
+
+  const sortedUsers = [...USERS].sort((a, b) => fullName(a).localeCompare(fullName(b)));
+
+  sel.innerHTML = '<option value="all">Show all logs</option>' +
+    '<option value="mine">Your logs</option>' +
+    sortedUsers.map(u => `<option value="${u.id}">${fullName(u)}</option>`).join('');
+
+  if([...sel.options].some(o => o.value === current)) sel.value = current;
+  logsFilterValue = sel.value;
+}
+
+document.getElementById('logsUserFilter').addEventListener('change', e=>{
+  logsFilterValue = e.target.value;
+  renderLogsTable();
+});
+document.getElementById('logsSearchInput').addEventListener('input', renderLogsTable);
+
+function personalizeLogText(text, fname){
+  if(!fname || !text) return text;
+
+  // Escape regex special chars in case the name has any (e.g. periods, apostrophes)
+  const escaped = fname.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const nameRegex = new RegExp(`\\b${escaped}\\b`, 'g');
+
+  // Capitalize "You" only if the match sits at the very start of the string,
+  // lowercase "you" everywhere else (mid-sentence usage)
+  let result = text.replace(nameRegex, (match, offset) => offset === 0 ? 'You' : 'you');
+
+  // Fix subject-verb agreement now that the subject became 2nd person:
+  // "Luz has" -> "You has" -> corrected to "You have"
+  result = result.replace(/\b(You|you) has\b/g, (match, subject) => `${subject} have`);
+
+  return result;
+}
+
+function renderLogsTable(){
+  const body = document.getElementById('logsTableBody');
+  const q = document.getElementById('logsSearchInput').value.toLowerCase();
+  const myId = localStorage.getItem('userid');
+  const myFname = localStorage.getItem('fname');
+
+  const filtered = LOGS.filter(l=>{
+    let matchesUser = true;
+    if(logsFilterValue === 'mine'){
+      matchesUser = l.user_id === '*' || String(l.user_id) === String(myId);
+    } else if(logsFilterValue !== 'all'){
+      matchesUser = l.user_id === '*' || String(l.user_id) === String(logsFilterValue);
+    }
+    const matchesSearch = !q || (l.log || '').toLowerCase().includes(q);
+    return matchesUser && matchesSearch;
+  });
+
+  if(!filtered.length){
+    body.innerHTML = `<tr><td colspan="2" style="text-align:center;padding:30px 0;color:var(--ink-faint);">No logs found.</td></tr>`;
+    return;
+  }
+
+  body.innerHTML = filtered.map(l => `
+    <tr>
+      <td>${personalizeLogText(l.log, myFname)}</td>
+      <td class="logs-date-col">${l.created_at || ''}</td>
+    </tr>`).join('');
+}
+
+document.getElementById('logsClearBtn').addEventListener('click', ()=>{
+  Swal.fire({
+    title: 'Clear all logs?',
+    text: 'This will permanently delete all activity logs for every user. This cannot be undone.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    confirmButtonText: 'Clear logs',
+    customClass: { popup: 'my-custom-popup', actions: 'my-right-buttons' }
+  }).then(result=>{
+    if(!result.isConfirmed) return;
+
+    sole.post("../../controllers/main/clear_logs.php", {}).then(res=>{
+      if(!res.status){
+        ss.toast(null, res.type, res.message || 'Could not clear logs.', null, "#1B2A22");
+        return;
+      }
+      ss.toast(null, res.type, res.message, null, "#1B2A22");
+      fetchLogs();
+    }).catch(err=>{
+      ss.toast(null, "error", "Could not reach the server. Please try again.", null, "#1B2A22");
+      console.error(err);
+    });
+  });
 });
 
 

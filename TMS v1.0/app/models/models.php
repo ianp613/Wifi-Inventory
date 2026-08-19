@@ -61,7 +61,8 @@
             "due_date",
             "project_id",
             "user_id",
-            "created_by"
+            "created_by",
+            "trigger_update"
         ];
 
         public string $title;
@@ -75,6 +76,7 @@
         public string $project_id;
         public string $user_id;
         public string $created_by;
+        public string $trigger_update;
     }
 
     class ChecklistItem
@@ -123,6 +125,17 @@
         public string $task_id;
         public string $user_id;
         public string $comment_text;
+    }
+    
+    class Log{
+        public $table = "pl_log";
+        public $fillable = [
+            "show_to",
+            "log"
+        ];
+
+        public string $show_to;
+        public string $log;
     }
 
 ?>

@@ -3,11 +3,18 @@
         if(count($_SERVER["argv"]) < 2){
             error_log("Error: Invalid Command");
             exit;
-        }else{
-            if(strtolower($_SERVER["argv"][1]) != "serve"){
-                error_log("Error: Invalid Command");
-                exit;
-            }
         }
-        shell_exec("php -S 192.168.33.221:8889 pulse.php");
+
+        $command = strtolower($_SERVER["argv"][1]);
+
+        if($command == "serve"){
+            shell_exec("php -S 192.168.33.221:8889 pulse.php");
+        }elseif($command == "migrate"){
+            include_once("app/migrator/config.php");
+            include_once("app/migrator/migrator.php");
+            Migrate::index();
+        }else{
+            error_log("Error: Invalid Command");
+            exit;
+        }
     }

@@ -7,8 +7,7 @@
         "ChecklistItemMigration",
         "AttachmentMigration",
         "CommentMigration",
-        "ActivityLogMigration",
-        "NotificationMigration"
+        "LogMigration"
     ];
 
     class UserMigration
@@ -64,6 +63,7 @@
             Migrate::string("project_id");
             Migrate::string("user_id"); //Team Member
             Migrate::string("created_by");
+            Migrate::string("trigger_update");
         }
     }
 
@@ -104,20 +104,15 @@
         }
     }
 
-    // class ActivityLogMigration
-    // {
-    //     public static function index(){
-    //         Migrate::attrib_table("pl_activity_log");
-    //         Migrate::attrib_string(1000);
-    //         Migrate::string("task_id");
-    //         Migrate::string("user_id");
-    //         Migrate::string("action");
-    //         Migrate::string("field_name");
-    //         Migrate::string("old_value");
-    //         Migrate::string("new_value");
-    //         Migrate::string("created_at");
-    //     }
-    // }
+    class LogMigration
+    {
+        public static function index(){
+            Migrate::attrib_table("pl_log");
+            Migrate::attrib_string(1000);
+            Migrate::string("show_to");
+            Migrate::string("log");
+        }
+    }
 
     // class NotificationMigration
     // {

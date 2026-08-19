@@ -43,4 +43,10 @@
         "message" => "Department has been deleted."
     ];
 
+    $log = new Log;
+    $log->show_to = $_SESSION["privileges"] == "Administrator" ? "*_" : "*";
+    $log->log = $_SESSION["fname"] . " deleted a site " . $data["dept_name"] . ".";
+    DB::save($log);
+
+
     echo json_encode($response);

@@ -9,6 +9,11 @@
     $checklist->is_done = $data["is_done"];
     DB::update($checklist);
 
+    $task = new Task;
+    $task_ = DB::prepare($task,$checklist->task_id);
+    $task_->trigger_update = $task_->trigger_update == "ping" ? "pong" : "ping";
+    DB::update($task_);
+
     $response = [
         "status" => true,
         "type" => "success",

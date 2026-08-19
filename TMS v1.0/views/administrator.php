@@ -212,10 +212,10 @@
                         <option value="25">25 rows</option>
                         <option value="50">50 rows</option>
                     </select>
-                    <select class="sort-select">
-                        <option>Sort: Due date</option>
-                        <option>Sort: Priority</option>
-                        <option>Sort: Recently updated</option>
+                    <select class="sort-select" id="sortSelect">
+                        <option value="due">Sort: Due date</option>
+                        <option value="priority">Sort: Priority</option>
+                        <option value="updated">Sort: Recently updated</option>
                     </select>
                 </div>
                 <div class="ticket-list" id="ticketList"></div>
@@ -754,6 +754,7 @@
         </div>
     </aside>
     <?php require __DIR__ . "/modals/coc_modal.php";?>
+    <?php require __DIR__ . "/modals/log_modal.php";?>
     <script src="../../assets/js/sweetalert2/sweetalert2.all.min.js"></script>
     <script src="../../assets/js/sole.js"></script>
     <script src="../../assets/js/sole.swal.js"></script>

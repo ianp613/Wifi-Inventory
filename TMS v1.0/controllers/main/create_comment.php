@@ -11,6 +11,16 @@
     $comment->comment_text = $data["comment_text"];
     DB::save($comment);
 
+    $task = new Task;
+    $task_ = DB::prepare($task,$comment->task_id);
+    $task_->trigger_update = $task_->trigger_update == "ping" ? "pong" : "ping";
+    DB::update($task_);
+    
+    $log = new Log;
+    $log->show_to = $_SESSION["privileges"] == "Administrator" ? "*_" : "*";
+    $log->log = $_SESSION["fname"] . " added a comment to task " . $task_->title . ".";
+    DB::save($log);
+
     $response = [
         "status" => true,
         "type" => "success",

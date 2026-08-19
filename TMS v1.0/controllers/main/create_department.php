@@ -20,6 +20,11 @@
     $dept->dept_color = $data["dept_color"];
     DB::save($dept);
 
+    $log = new Log;
+    $log->show_to = $_SESSION["privileges"] == "Administrator" ? "*_" : "*";
+    $log->log = $_SESSION["fname"] . " added a site " . $dept->dept_name . ".";
+    DB::save($log);
+
     $response = [
         "status" => true,
         "type" => "success",
