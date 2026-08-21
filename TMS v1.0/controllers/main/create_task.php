@@ -38,6 +38,7 @@
     $task->rectify = $rectify;
     $task->start_date = $start_date;
     $task->due_date = $due_date;
+    $task->trigger_update = "ping";
     $task_id = DB::save($task);
 
     // ASSUMPTION: DB::save() populates an ->id property on the object after inserting.
@@ -83,6 +84,12 @@
             }
         }
     }
+
+    $log = new Log;
+    $log->user_id = $_SESSION["userid"];
+    $log->show_to = $_SESSION["privileges"] == "Administrator" ? "*_" : "*";
+    $log->log = $_SESSION["fname"] . " created a task <span class=\"task_log\" data-show-task=\"".$task_id."\">" . $task->title . "</span>.";
+    DB::save($log);
 
     $response = [
         "status" => true,

@@ -130,10 +130,12 @@
     class Log{
         public $table = "pl_log";
         public $fillable = [
+            "user_id",
             "show_to",
             "log"
         ];
 
+        public string $user_id;
         public string $show_to;
         public string $log;
     }

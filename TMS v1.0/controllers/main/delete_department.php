@@ -44,6 +44,7 @@
     ];
 
     $log = new Log;
+    $log->user_id = $_SESSION["userid"];
     $log->show_to = $_SESSION["privileges"] == "Administrator" ? "*_" : "*";
     $log->log = $_SESSION["fname"] . " deleted a site " . $data["dept_name"] . ".";
     DB::save($log);

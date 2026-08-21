@@ -21,6 +21,12 @@
     $project->dept_id = $data["dept_id"];
     DB::save($project);
 
+    $log = new Log;
+    $log->user_id = $_SESSION["userid"];
+    $log->show_to = $_SESSION["privileges"] == "Administrator" ? "*_" : "*";
+    $log->log = $_SESSION["fname"] . " added a project " . $project->project_name . ".";
+    DB::save($log);
+
     $response = [
         "status" => true,
         "type" => "success",

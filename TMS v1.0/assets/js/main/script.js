@@ -294,11 +294,22 @@ function sortTasks(tasks, sortKey){
     });
   }
 }
+
 document.getElementById('sortSelect').addEventListener('change', e=>{
   currentSort = e.target.value;
   currentPage = 1;
   renderList();
 });
+
+function markTaskUpdatedNow(taskId){
+  const t = TASKS.find(x=>x.id===taskId);
+  if(t) t.updated_at = new Date().toISOString();
+
+  currentSort = 'updated';
+  const sortSel = document.getElementById('sortSelect');
+  if(sortSel) sortSel.value = 'updated';
+  currentPage = 1;
+}
 
 function renderPagination(totalItems, totalPages){
   const el = document.getElementById('ticketPagination');
@@ -477,6 +488,7 @@ function attachDragEvents(){
 
       task.status = newStatus;
       task.overdue = isOverdue(task.due_date, task.status);
+      markTaskUpdatedNow(id);
       renderKanban();
       renderList();
       renderWorkload();
@@ -510,6 +522,7 @@ function moveCard(id, dir){
 
   task.status = newStatus;
   task.overdue = isOverdue(task.due_date, task.status);
+  markTaskUpdatedNow(id);
   renderKanban();
   renderList();
   renderWorkload();
@@ -585,6 +598,8 @@ function renderDrawerComments(t){
 
 // ---------------- Edit task ----------------
 const updateTaskModalOverlay = document.getElementById('updateTaskModalOverlay');
+let oldProjectId = "-";
+let oldAssigneeId = "-";
 let utTaskBudyList = [];
 
 function openUpdateTaskModal(){
@@ -601,10 +616,13 @@ function openUpdateTaskModal(){
   projSel.innerHTML = '<option value="-">-- Select Project --</option>' +
     PROJECTS.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
   projSel.value = t.project_id || '-';
+  oldProjectId = t.project_id || '-';
+
 
   const assigneeSel = document.getElementById('utAssignee');
   assigneeSel.innerHTML = '<option value="-">-- Select Technician --</option>' + assignableUsers().map(m=>`<option value="${m.id}">${localStorage.getItem("userid") == m.id ? "Yourself" : fullName(m)}</option>`).join('');
   assigneeSel.value = t.user_id || "-";
+  oldAssigneeId = t.user_id || "-";
 
   const taskBudySel = document.getElementById('utTaskBudy');
   taskBudySel.innerHTML = '<option value="-">-- Select Technician --</option>' + assignableUsers().map(m=>`<option value="${m.id}">${fullName(m)}</option>`).join('');
@@ -638,7 +656,7 @@ function addUtTaskBudy(){
   const name = select.selectedOptions[0].innerText
   if(id == "-" || id == parseInt(utAssignee.value)) return;
   if(!utTaskBudyList.find(u => u.id === id)){
-    utTaskBudyList.push({id:id,name:name})
+    utTaskBudyList.push({id:id,name:name,fname:USERS.find(u => u.id === id).fname})
   }
   select.value = "-";
   renderUtTaskBudyList();
@@ -728,8 +746,13 @@ document.getElementById('utSave').addEventListener('click', ()=>{
     title : title,
     description: document.getElementById('utDesc').value.trim() || 'No description provided.',
     task_budy : utTaskBudyList.map(u => u.id).join('|'),
+    task_budy_list : utTaskBudyList,
     project_id: projectId,
+    project_name_old: oldProjectId != "-" ? PROJECTS.find(p => p.id == parseInt(oldProjectId)).name : "",
+    project_name_new: projectId != "-" ? PROJECTS.find(p => p.id == parseInt(projectId)).name : "",
     user_id: assignee,
+    assignee_old: oldAssigneeId != "-" ? USERS.find(p => p.id == parseInt(oldAssigneeId)).fname : "",
+    assignee_new: assignee != "-" ? USERS.find(p => p.id == parseInt(assignee)).fname : "",
     priority: priorityOpt ? priorityOpt.dataset.p : 'medium',
     start_date: startRaw_,
     due_date: dueRaw_
@@ -744,6 +767,7 @@ document.getElementById('utSave').addEventListener('click', ()=>{
 
     ss.toast(null, res.type, res.message, null, "#1B2A22");
     closeUpdateTaskModal();
+    markTaskUpdatedNow(currentDrawerTaskId);
     fetchTasks().then(() => openDrawer(currentDrawerTaskId)); // wait for fresh data before re-rendering the drawer
   }).catch(err => {
     saveBtn.disabled = false;
@@ -791,7 +815,7 @@ function openDrawer(id){
   utTaskBudyList = [];
 
   const t = TASKS.find(x=>x.id===id) || TASKS[0];
-  utTaskBudyList = t.task_budy.map(id => ({id : USERS.find(u => u.id === parseInt(id)).id , name : USERS.find(u => u.id === parseInt(id)).fullname}));
+  utTaskBudyList = t.task_budy.map(id => ({id : USERS.find(u => u.id === parseInt(id)).id , name : USERS.find(u => u.id === parseInt(id)).fullname , fname : USERS.find(u => u.id === parseInt(id)).fname}));
   if(t.status == "done"){
     document.getElementById("utsRow").hidden = true
     if(localStorage.getItem("privileges").toLocaleLowerCase() != "technician"){
@@ -975,6 +999,7 @@ document.querySelectorAll('.status-opt').forEach(opt=>{
       }
 
       ss.toast(null, res.type, res.message, null, "#1B2A22");
+      markTaskUpdatedNow(t.id);
       fetchTasks().then(() => openDrawer(currentDrawerTaskId)); // wait for fresh data before re-rendering the drawer
     }).catch(err => {
       document.querySelectorAll('.status-opt').forEach(o=>o.disabled = false);
@@ -1009,6 +1034,8 @@ document.getElementById('checklistBox').addEventListener('change', e=>{
   t.checklist = [t.checklistItems.filter(i=>i.done).length, t.checklistItems.length];
   cb.closest('.checklist-item').classList.toggle('checked', newDone);
   document.getElementById('checklistTitle').textContent = `Checklist — ${t.checklist[0]} of ${t.checklist[1]}`;
+
+  markTaskUpdatedNow(t.id);
   renderList();
   renderKanban();
 
@@ -1074,6 +1101,7 @@ function reassignTask(){
     // The endpoint mutates task_budy (previous assignee becomes a budy, new
     // assignee is removed from budy if present) — refetch instead of guessing
     // that transformation client-side, then re-render the drawer with fresh data.
+    markTaskUpdatedNow(t.id);
     fetchTasks().then(() => {
       openDrawer(currentDrawerTaskId);
       const confirmEl = document.getElementById('reassignConfirm');
@@ -1293,7 +1321,7 @@ document.getElementById('modalCreate').addEventListener('click', ()=>{
   formData.append('user_id', assignee);
   formData.append('priority', priority);
   formData.append('status', 'todo');
-  formData.append('task_budy', ntTaskBudyList.map(user => user.id).join('|'));
+  formData.append('task_budy', ntTaskBudyList.length ? ntTaskBudyList.map(user => user.id).join('|') : '-');
   formData.append('start_date', startRaw);
   formData.append('due_date', dueRaw);
   formData.append('checklist', JSON.stringify(ntChecklistItems));
@@ -1420,29 +1448,32 @@ document.getElementById('projectManageList').addEventListener('click', e=>{
   }
   if(confirmBtn){
     const id = parseInt(confirmBtn.dataset.confirmDelete);
+    const project_name = PROJECTS.find(p => p.id == id).name
     confirmBtn.disabled = true;
 
-    sole.post("../../controllers/main/delete_project.php", { id: id })
-      .then(res => {
-        confirmBtn.disabled = false;
+    sole.post("../../controllers/main/delete_project.php", { 
+      id: id,
+      project_name: project_name
+    }).then(res => {
+      confirmBtn.disabled = false;
 
-        if(!res.status){
-          ss.toast(null, res.type, res.message, null, "#1B2A22");
-          return;
-        }
-
+      if(!res.status){
         ss.toast(null, res.type, res.message, null, "#1B2A22");
-        pmDeleteConfirmId = null;
-        if(pmEditingId===id) resetProjectForm();
+        return;
+      }
 
-        fetchProjects();
-        fetchTasks();
-      })
-      .catch(err => {
-        confirmBtn.disabled = false;
-        ss.toast(null, "error", "Could not reach the server. Please try again.", null, "#1B2A22");
-        console.error(err);
-      });
+      ss.toast(null, res.type, res.message, null, "#1B2A22");
+      pmDeleteConfirmId = null;
+      if(pmEditingId===id) resetProjectForm();
+
+      fetchProjects();
+      fetchTasks();
+    })
+    .catch(err => {
+      confirmBtn.disabled = false;
+      ss.toast(null, "error", "Could not reach the server. Please try again.", null, "#1B2A22");
+      console.error(err);
+    });
   }
 });
 
@@ -1557,7 +1588,7 @@ function populateNtProjectOptions(){
   const current = sel.value;
   sel.innerHTML = '<option value="-">-- Select Project --</option>' +
     PROJECTS.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
-  if(PROJECTS.some(p=>String(p.id)===String(current))) sel.value = current;
+  // if(PROJECTS.some(p=>String(p.id)===String(current))) sel.value = current;
 }
 
 // ---------------- Departments (create / edit / delete) ----------------
@@ -1652,7 +1683,7 @@ document.getElementById('deptManageList').addEventListener('click', e=>{
   }
   if(confirmBtn){
     const id = parseInt(confirmBtn.dataset.confirmDeleteDept);
-    const dept_name = DEPARTMENTS.find(d => id == id).name
+    const dept_name = DEPARTMENTS.find(d => d.id == id).name
     confirmBtn.disabled = true;
 
     sole.post("../../controllers/main/delete_department.php", { 
@@ -2524,6 +2555,36 @@ function renderLogsTable(){
       <td class="logs-date-col">${l.created_at || ''}</td>
     </tr>`).join('');
 }
+
+document.getElementById('logsTableBody').addEventListener('click', e=>{
+  const taskLink = e.target.closest('[data-show-task]');
+  const assigneeLink = e.target.closest('[data-show-assignee]');
+
+  if(taskLink){
+    const taskId = parseInt(taskLink.dataset.showTask);
+    const task = TASKS.find(t => t.id === taskId);
+
+    if(!task){
+      ss.toast(null, "error", "That task no longer exists.", null, "#1B2A22");
+      return;
+    }
+    closeLogsModal();
+    openDrawer(taskId);
+  }
+
+  if(assigneeLink){
+    const userId = parseInt(assigneeLink.dataset.showAssignee);
+    const user = USERS.find(u => u.id === userId);
+
+    if(!user){
+      ss.toast(null, "error", "That account no longer exists.", null, "#1B2A22");
+      return;
+    }
+
+    closeLogsModal();
+    openUserModal(userId);
+  }
+});
 
 document.getElementById('logsClearBtn').addEventListener('click', ()=>{
   Swal.fire({

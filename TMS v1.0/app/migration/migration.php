@@ -109,6 +109,7 @@
         public static function index(){
             Migrate::attrib_table("pl_log");
             Migrate::attrib_string(1000);
+            Migrate::string("user_id");
             Migrate::string("show_to");
             Migrate::string("log");
         }
