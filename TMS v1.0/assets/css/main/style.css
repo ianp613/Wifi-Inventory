@@ -24,6 +24,7 @@
     --shadow-sm: 0 1px 2px rgba(27,42,34,0.06);
     --shadow-md: 0 6px 20px rgba(27,42,34,0.09);
     --shadow-lg: 0 20px 60px rgba(27,42,34,0.22);
+    --font-mono:      'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -271,6 +272,11 @@
   }
 
   /* ---------- Task ticket list ---------- */
+  .ticket-jo-code{
+    color: var(--amber);
+    font-family: var(--font-mono);
+    font-weight: bolder;
+  }
   .ticket-list{display:flex;flex-direction:column;gap:10px;}
   .ticket{
     display:flex;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
@@ -511,6 +517,7 @@
     border:1px solid var(--line);background:var(--surface);display:flex;align-items:center;justify-content:center;}
   .drawer-close svg{width:14px;height:14px;}
   .drawer-proj{font-size:11px;color:var(--blue);font-weight:700;text-transform:uppercase;letter-spacing:.04em;}
+  .drawer-jo-code{color: var(--amber);font-family: var(--font-mono);font-weight: bolder;cursor: copy;}
   .drawer-title{font-family:'Fraunces',serif;font-size:19px;font-weight:600;margin:6px 60px 10px 0;line-height:1.3;}
   .drawer-tags{display:flex;gap:8px;flex-wrap:wrap;}
   .drawer-body{padding:16px 22px;overflow-y:auto;flex:1;}

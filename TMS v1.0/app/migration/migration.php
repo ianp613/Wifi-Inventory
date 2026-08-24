@@ -51,6 +51,7 @@
         public static function index(){
             Migrate::attrib_table("pl_task");
             Migrate::attrib_string(1000);
+            Migrate::string("jo_code");
             Migrate::string("title");
             Migrate::string("description");
             Migrate::string("priority");
@@ -109,6 +110,7 @@
         public static function index(){
             Migrate::attrib_table("pl_log");
             Migrate::attrib_string(1000);
+            Migrate::string("search_code");
             Migrate::string("user_id");
             Migrate::string("show_to");
             Migrate::string("log");

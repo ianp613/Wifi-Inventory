@@ -5,28 +5,28 @@
     $data = json_decode(file_get_contents('php://input'), true);
 
 
-function task_map($task_budy_list) {
-    $count = count($task_budy_list);
-    if ($count === 0) {
-        return "none";
-    }
-    $res = "";
-    for ($i = 0; $i < $count; $i++) {
-        $res .= '<span class="task_log" data-show-assignee="' .
-                $task_budy_list[$i]["id"] . '">' .
-                $task_budy_list[$i]["fname"] .
-                '</span>';
-        if ($count > 1) {
-            if ($i < $count - 2) {
-                $res .= ", ";
-            }
-            elseif ($i == $count - 2) {
-                $res .= " and ";
+    function task_map($task_budy_list) {
+        $count = count($task_budy_list);
+        if ($count === 0) {
+            return "none";
+        }
+        $res = "";
+        for ($i = 0; $i < $count; $i++) {
+            $res .= '<span class="task_log" data-show-assignee="' .
+                    $task_budy_list[$i]["id"] . '">' .
+                    $task_budy_list[$i]["fname"] .
+                    '</span>';
+            if ($count > 1) {
+                if ($i < $count - 2) {
+                    $res .= ", ";
+                }
+                elseif ($i == $count - 2) {
+                    $res .= " and ";
+                }
             }
         }
+        return $res;
     }
-    return $res;
-}
 
 
     $task = new Task;
@@ -52,8 +52,12 @@ function task_map($task_budy_list) {
     $task->trigger_update = $task->trigger_update == "ping" ? "pong" : "ping";
     DB::update($task);
 
+    error_log($data["jo_code"]);
+
+
     $log = new Log;
     $log->user_id = $_SESSION["userid"];
+    $log->search_code = $data["jo_code"];
     $log->show_to = $_SESSION["privileges"] == "Administrator" ? "*_" : "*";
 
     if($task_title_temp != $data["title"]){

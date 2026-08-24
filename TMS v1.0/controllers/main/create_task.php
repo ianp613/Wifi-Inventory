@@ -27,6 +27,11 @@
     }
 
     $task = new Task;
+    $code = Data::generate(6,"alphanumeric");
+    while (!DB::validate($task,"jo_code",$code)) {
+        $code = Data::generate(6,"alphanumeric");
+    }
+    $task->jo_code = strtoupper($code);
     $task->title = $title;
     $task->description = $description;
     $task->project_id = $project_id;

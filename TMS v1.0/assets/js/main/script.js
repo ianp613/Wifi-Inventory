@@ -64,6 +64,7 @@ function fetchTasks(){
       res.forEach(t => {
         TASKS.push({
           id: t.id,
+          jo_code: t.jo_code,
           title: t.title,
           desc: t.description || 'No description provided.',
           project : projectById(t.project_id).name,
@@ -197,6 +198,7 @@ function renderTicket(t){
     <div class="ticket-body">
       <div class="ticket-top">
         <div>
+          <div class="ticket-jo-code">JO No.: ${t.jo_code}</div>
           <div class="ticket-proj">${t.project}</div>
           <h3 class="ticket-title">${t.title}</h3>
         </div>
@@ -242,6 +244,7 @@ function renderList(){
     });
 
     const matchesSearch = !q ||
+      t.jo_code.toLowerCase().includes(q) ||
       t.title.toLowerCase().includes(q) ||
       t.project.toLowerCase().includes(q) ||
       info.name.toLowerCase().includes(q) ||
@@ -743,6 +746,7 @@ document.getElementById('utSave').addEventListener('click', ()=>{
 
   sole.post("../../controllers/main/update_task.php", {
     id: currentDrawerTaskId,
+    jo_code : TASKS.find(t => t.id == currentDrawerTaskId).jo_code,
     title : title,
     description: document.getElementById('utDesc').value.trim() || 'No description provided.',
     task_budy : utTaskBudyList.map(u => u.id).join('|'),
@@ -878,6 +882,7 @@ function openDrawer(id){
   }
 
 
+  document.getElementById('dJoCode').textContent = "JO No.: " + t.jo_code;
   document.getElementById('dProj').textContent = t.project;
   document.getElementById('dTitle').textContent = t.title;
   document.getElementById('dDesc').textContent = t.desc;
@@ -924,6 +929,37 @@ function openDrawer(id){
   document.getElementById('overlay').classList.add('open');
   document.getElementById('drawer').classList.add('open');
 }
+document.getElementById('dJoCode').addEventListener("click", function() {
+  let code = this.innerText.split(":")[1].trim();
+
+  function fallbackCopy(text) {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand("copy");
+      ss.toast(null, "info", `JO No.: ${text} has been copied to clipboard.`, null, "#1B2A22");
+    } catch (err) {
+      ss.toast(null, "error", "Failed to copy JO No.", null, "#1B2A22");
+    }
+    document.body.removeChild(textarea);
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(code)
+      .then(() => {
+        ss.toast(null, "info", `JO No.: ${code} has been copied to clipboard.`, null, "#1B2A22");
+      })
+      .catch(err => {
+        ss.toast(null, "error", "Failed to copy JO No.", null, "#1B2A22");
+      });
+  } else {
+    fallbackCopy(code);
+  }
+})
 function formatTaskDateFull(dateStr){
   if(!dateStr) return 'Not set';
   return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
@@ -948,6 +984,7 @@ function postComment(){
   sendBtn.disabled = true;
 
   sole.post("../../controllers/main/create_comment.php", {
+    jo_code: t.jo_code,
     task_id: t.id,
     comment_text: text
   }).then(res => {
@@ -2540,7 +2577,7 @@ function renderLogsTable(){
     } else if(logsFilterValue !== 'all'){
       matchesUser = l.user_id === '*' || String(l.user_id) === String(logsFilterValue);
     }
-    const matchesSearch = !q || (l.log || '').toLowerCase().includes(q);
+    const matchesSearch = !q || (l.log || '').toLowerCase().includes(q) || l.search_code.toLowerCase().includes(q);
     return matchesUser && matchesSearch;
   });
 

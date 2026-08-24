@@ -51,6 +51,7 @@
     {
         public $table = "pl_task";
         public $fillable = [
+            "jo_code",
             "title",
             "description",
             "priority",
@@ -130,11 +131,13 @@
     class Log{
         public $table = "pl_log";
         public $fillable = [
+            "search_code",
             "user_id",
             "show_to",
             "log"
         ];
 
+        public string $search_code;
         public string $user_id;
         public string $show_to;
         public string $log;

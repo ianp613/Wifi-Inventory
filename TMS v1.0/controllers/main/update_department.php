@@ -24,6 +24,7 @@
     DB::update($dept);
 
     $log = new Log;
+    $log->search_code = "*_";
     $log->user_id = $_SESSION["userid"];
     $log->show_to = $_SESSION["privileges"] == "Administrator" ? "*_" : "*";
     if($dept_name_temp != $data["dept_name"]){
