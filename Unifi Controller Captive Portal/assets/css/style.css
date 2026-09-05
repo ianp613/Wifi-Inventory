@@ -806,3 +806,8 @@ canvas {
     height: 200px;
     padding: 10px;
 }
+
+.disabled{
+    pointer-events: none;
+    opacity: 0.5;
+}
