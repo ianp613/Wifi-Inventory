@@ -372,9 +372,9 @@
                                         hostname : hostname,
                                         date_time : date_time
                                     }).then(res => {
+                                        alert("You can now access the internet!")
                                         captive_submit.innerHTML = `Get Wifi Access`
                                         captive_submit.classList.remove("disabled") 
-                                        alert("You can now access the internet!")
                                         checkLockout("reset")
                                         
                                         captive_subtitle.setAttribute("hidden","true")
@@ -392,6 +392,8 @@
                                 } else {
                                     checkLockout("post")
                                     alert('Authorization failed.');
+                                    captive_submit.classList.remove("disabled") 
+                                    alert("You can now access the internet!")
                                 }
                             } catch (e) {
                                 console.log(e)
@@ -409,6 +411,8 @@
                         let display = "";
                         display += (days > 0 ? days + "d " : "") + (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") + (seconds > 0 ? seconds + "s" : "")
                         alert("Please try again after " + display)
+                        captive_submit.innerHTML = `Get Wifi Access`
+                        captive_submit.classList.remove("disabled") 
                     }
                 }
                 
