@@ -372,6 +372,8 @@
                                         hostname : hostname,
                                         date_time : date_time
                                     }).then(res => {
+                                        captive_submit.innerHTML = `Get Wifi Access`
+                                        captive_submit.classList.remove("disabled") 
                                         alert("You can now access the internet!")
                                         checkLockout("reset")
                                         
@@ -424,8 +426,6 @@
                     sole.post(urlOrigin + "/controllers/captive_portal/get_client.php",{
                         mac : mac
                     }).then(res => {
-                        captive_submit.innerHTML = `Get Wifi Access`
-                        captive_submit.classList.remove("disabled")
                         if(res.status){
                             const targetMinutes = res.authentication.target; // you can set this dynamically
                             const startTime = new Date(res.client[0].time);
