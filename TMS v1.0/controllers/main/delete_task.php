@@ -31,6 +31,13 @@
     $task = new Task;
     DB::delete($task,$data["id"]);
 
+    $log = new Log;
+    $log->search_code = $data["jo_code"];
+    $log->user_id = $_SESSION["userid"];
+    $log->show_to = $_SESSION["privileges"] == "Administrator" ? "*_" : "*";
+    $log->log = $_SESSION["fname"] . " deleted a task <span class=\"task_log\" data-show-task=\"".$data["id"]."\">" . $data["title"] . "</span>.";
+    DB::save($log);
+
     $response = [
         "status" => true,
         "type" => "info",

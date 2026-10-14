@@ -30,7 +30,7 @@
     $response = [
         "status" => true,
         "type" => "success",
-        "message" => "Department has been created."
+        "message" => "Site has been created."
     ];
 
     echo json_encode($response);

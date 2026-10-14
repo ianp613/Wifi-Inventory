@@ -91,6 +91,7 @@
     }
 
     $log = new Log;
+    $log->search_code = $code;
     $log->user_id = $_SESSION["userid"];
     $log->show_to = $_SESSION["privileges"] == "Administrator" ? "*_" : "*";
     $log->log = $_SESSION["fname"] . " created a task <span class=\"task_log\" data-show-task=\"".$task_id."\">" . $task->title . "</span>.";

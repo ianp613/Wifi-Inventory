@@ -792,25 +792,28 @@ document.getElementById('taskDeleteConfirmBtn').addEventListener('click', ()=>{
   const confirmBtn = document.getElementById('taskDeleteConfirmBtn');
   confirmBtn.disabled = true;
 
-  sole.post("../../controllers/main/delete_task.php", { id: currentDrawerTaskId })
-    .then(res => {
-      confirmBtn.disabled = false;
+  sole.post("../../controllers/main/delete_task.php", { 
+    id: currentDrawerTaskId,
+    title: TASKS.find(t => t.id == currentDrawerTaskId).title,
+    jo_code: TASKS.find(t => t.id == currentDrawerTaskId).jo_code
+  }).then(res => {
+    confirmBtn.disabled = false;
 
-      if(!res.status){
-        ss.toast(null, res.type, res.message, null, "#1B2A22");
-        return;
-      }
-
+    if(!res.status){
       ss.toast(null, res.type, res.message, null, "#1B2A22");
-      document.getElementById('taskDeleteConfirmSection').style.display = 'none';
-      closeDrawer();
-      fetchTasks();
-    })
-    .catch(err => {
-      confirmBtn.disabled = false;
-      ss.toast(null, "error", "Could not reach the server. Please try again.", null, "#1B2A22");
-      console.error(err);
-    });
+      return;
+    }
+
+    ss.toast(null, res.type, res.message, null, "#1B2A22");
+    document.getElementById('taskDeleteConfirmSection').style.display = 'none';
+    closeDrawer();
+    fetchTasks();
+  })
+  .catch(err => {
+    confirmBtn.disabled = false;
+    ss.toast(null, "error", "Could not reach the server. Please try again.", null, "#1B2A22");
+    console.error(err);
+  });
 });
 
 let drawerAssigneeID;
@@ -819,7 +822,7 @@ function openDrawer(id){
   utTaskBudyList = [];
 
   const t = TASKS.find(x=>x.id===id) || TASKS[0];
-  utTaskBudyList = t.task_budy.map(id => ({id : USERS.find(u => u.id === parseInt(id)).id , name : USERS.find(u => u.id === parseInt(id)).fullname , fname : USERS.find(u => u.id === parseInt(id)).fname}));
+  utTaskBudyList = t.task_budy.map(id => resolveBudy(parseInt(id)));
   if(t.status == "done"){
     document.getElementById("utsRow").hidden = true
     if(localStorage.getItem("privileges").toLocaleLowerCase() != "technician"){
@@ -928,6 +931,11 @@ function openDrawer(id){
 
   document.getElementById('overlay').classList.add('open');
   document.getElementById('drawer').classList.add('open');
+}
+function resolveBudy(userId){
+  const u = USERS.find(x => x.id === userId);
+  if(u) return { id: u.id, name: u.fullname, fname: u.fname };
+  return { id: userId, name: 'Deleted Account', fname: 'Deleted' };
 }
 document.getElementById('dJoCode').addEventListener("click", function() {
   let code = this.innerText.split(":")[1].trim();
@@ -1119,9 +1127,24 @@ function reassignTask(){
   const reassignBtn = document.getElementById('reassignBtn');
   reassignBtn.disabled = true;
 
+  let old_assignee = USERS.find(u => u.id == t.user_id);
+  let with_old = false;
+  let old_user_id = null;
+  let old_user_name = null;
+  if(old_assignee){
+    with_old = true;
+    old_user_id = old_assignee.id;
+    old_user_name = old_assignee.fname;
+  }
+
   sole.post("../../controllers/main/reassign_task.php", {
     id: t.id,
+    title: t.title,
+    with_old: with_old,
+    old_user_id: old_user_id,
+    old_user_name: old_user_name,
     user_id: newUserId,
+    user_name: USERS.find(u => u.id == newUserId).fname,
     note: noteEl.value.trim()
   }).then(res => {
     reassignBtn.disabled = false;

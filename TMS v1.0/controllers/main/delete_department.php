@@ -40,7 +40,7 @@
     $response = [
         "status" => true,
         "type" => "info",
-        "message" => "Department has been deleted."
+        "message" => "Site has been deleted."
     ];
 
     $log = new Log;

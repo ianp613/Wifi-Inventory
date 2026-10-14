@@ -38,7 +38,7 @@
     $response = [
         "status" => true,
         "type" => "success",
-        "message" => "Department has been updated."
+        "message" => "Site has been updated."
     ];
 
     echo json_encode($response);
