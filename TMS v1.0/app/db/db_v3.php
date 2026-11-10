@@ -23,9 +23,10 @@
     class DB{
         public static $DB_HOST = "localhost";
         public static $DB_DATABASE = "ddc_pulse";
-        public static $DB_USERNAME = "root";
-        public static $DB_PASSWORD = "";
+        public static $DB_USERNAME = "ddc_artisan";
+        public static $DB_PASSWORD = "DB*33253983";
         public static $br = "";
+
 
         /**
          * --------------------------------------------------------------------------------

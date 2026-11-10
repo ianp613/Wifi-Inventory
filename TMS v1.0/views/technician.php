@@ -623,6 +623,7 @@
                         <path d="M18 6L6 18M6 6l12 12" />
                     </svg></button>
             </div>
+            <div class="drawer-jo-code" id="dJoCode"></div>
             <div class="drawer-proj" id="dProj"></div>
             <div class="drawer-title" id="dTitle"></div>
             <div class="drawer-tags">
