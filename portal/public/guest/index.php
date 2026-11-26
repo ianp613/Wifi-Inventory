@@ -9,6 +9,7 @@ $s = settings();
 $preview = isset($_GET['preview']) && admin_logged_in();
 $view = 'form';
 $remaining = 0;
+$why = '';
 $ctxToken = '';
 $netName = '';
 
@@ -22,6 +23,16 @@ if ($preview) {
     $net = $siteId !== '' ? network_by_site($siteId) : null;
     if (!$net || !$mac) {
         $view = 'nodevice';
+        if (!$mac && isset($_GET['ec'])) {
+            $why = 'The controller sent an encrypted link (ec=). Admin: turn off "Encrypted URL" in the UniFi Hotspot settings.';
+        } elseif (!$mac) {
+            $why = 'No device address (id=) was received from the controller.';
+        } elseif (!$net) {
+            $why = 'Site "' . $siteId . '" is not set up in the portal (check the Site ID on the Networks page).';
+        }
+        if (isset($why)) {
+            log_activity($net ? (int)$net['id'] : null, null, 'portal_opened_without_device', $why);
+        }
     } else {
         $netName = $net['name'];
         $ctxToken = make_ctx([
@@ -101,8 +112,8 @@ body{font-family:var(--font);color:var(--text);background:<?= bg_css($s) ?>;disp
 h1{font-size:1.9rem;margin:0 0 6px;line-height:1.25}
 .sub{color:var(--text);margin:0 0 6px;font-size:.95rem;line-height:1.45}.sub:empty{display:none}
 label{display:block;text-align:center;font-size:1rem;font-weight:700;margin:18px 0 10px}
-.otp{display:flex;gap:10px;justify-content:center;margin:6px 0 4px}
-.otp input{width:44px;height:48px;text-align:center;font-size:1.4rem;font-weight:600;border:1px solid rgba(70,90,100,.55);border-radius:8px;background:rgba(255,255,255,.18);color:var(--text);outline:none;padding:0;font-family:inherit}
+.otp{display:flex;gap:clamp(4px,2vw,10px);justify-content:center;margin:6px 0 4px;width:100%}
+.otp input{flex:1 1 0;min-width:0;max-width:48px;width:100%;height:48px;text-align:center;font-size:1.4rem;font-weight:600;border:1px solid rgba(70,90,100,.55);border-radius:8px;background:rgba(255,255,255,.18);color:var(--text);outline:none;padding:0;font-family:inherit}
 .otp input:focus{border-color:var(--primary);background:rgba(255,255,255,.4);box-shadow:0 0 0 3px rgba(21,116,130,.25)}
 .btn{margin-top:24px;width:100%;padding:11px;font-size:1rem;font-weight:400;border:0;border-radius:calc(var(--radius) * .6);background:var(--primary);color:var(--btntext);cursor:pointer}
 .btn:disabled{opacity:.6;cursor:wait}
@@ -112,6 +123,7 @@ label{display:block;text-align:center;font-size:1rem;font-weight:700;margin:18px
 .big{font-size:2.1rem;font-weight:800;margin:12px 0;font-variant-numeric:tabular-nums}
 .icon{font-size:3rem;line-height:1}
 .hidden{display:none!important}
+@media(max-width:400px){.card{padding:26px 16px}.otp input{height:44px;font-size:1.25rem}}
 <?= str_ireplace('</style', '', $s['portal_custom_css']) ?>
 </style>
 </head>
@@ -164,6 +176,7 @@ label{display:block;text-align:center;font-size:1rem;font-weight:700;margin:18px
     <div class="icon">&#x1F4F6;</div>
     <h1>Connect to the WiFi first</h1>
     <p class="sub">This page is opened automatically after you join the WiFi network. Please connect to the network, then open any website.</p>
+    <?php if (!empty($why)): ?><p class="sub" style="font-size:.75rem;opacity:.7;margin-top:14px"><?= h($why) ?></p><?php endif; ?>
   </section>
 
   <div class="foot <?= $s['portal_footer'] === '' ? 'hidden' : '' ?>" id="foot" data-bind="portal_footer"><?= h($s['portal_footer']) ?></div>
