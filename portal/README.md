@@ -8,6 +8,12 @@ PHP 8.1+ with `pdo_sqlite`, `curl`, `mbstring`, `json`; Apache (mod_rewrite) or 
 The web server must be able to reach every controller on its API port (8443), and the controllers'
 guests must be able to reach this server (port 80/443) **before** they are authorized.
 
+## Quick start without Apache/nginx (PHP built-in server)
+If the 404 page says "The requested resource ... was not found on this server", the site is running on `php -S`, which ignores `.htaccess`.
+Start it with the router instead: `start-server.bat` (Windows) or `./start-server.sh` (Linux), or by hand:
+`php -S 0.0.0.0:8080 -t public dev/router.php`
+The router maps `/guest/s/<site>/` to the portal. Put a reverse proxy / tunnel for `https://<your-domain>` in front of that port. For heavy use prefer Apache or nginx.
+
 ## Install
 1. Copy the folder to the server (e.g. `/var/www/unifi-portal`) and point the web root at **`public/`**.
    `app/`, `data/` and `bin/` must stay outside the web root (they hold the SQLite file and the controller passwords).
