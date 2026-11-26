@@ -13,7 +13,7 @@ guests must be able to reach this server (port 80/443) **before** they are autho
    `app/`, `data/` and `bin/` must stay outside the web root (they hold the SQLite file and the controller passwords).
 2. Make `data/` and `public/uploads/` writable by the web user: `chown -R www-data data public/uploads`.
 3. Apache: `public/.htaccess` already contains the rewrite. nginx: see `nginx.conf.example`.
-4. Open `http://<server>/admin/` and sign in with **admin / admin123**, then change the password (Account page).
+4. Open `http://<server>/admin/` and sign in with **Administrator / CmoS23826867** (change it on the Account page).
    Your four controllers from `app/config/controllers.json` are imported on first run; after that they are managed on the **Networks** page.
 5. Cron (every minute) - expires sessions and makes sure controllers drop guests whose time is over:
    `* * * * * php /var/www/unifi-portal/bin/maintenance.php`
@@ -21,8 +21,30 @@ guests must be able to reach this server (port 80/443) **before** they are autho
 ## UniFi controller setup (do this on each controller / site)
 Settings -> Guest Hotspot (or Hotspot -> Hotspot Portal):
 - Authentication: **External Portal Server** -> the IP or hostname of this server.
-- Pre-Authorization Access: allow this server's IP (if it is not added automatically).
+- Pre-Authorization Access: add this server's IP/domain so guests can open the portal **before** they have internet (required when the portal is hosted outside your LAN).
 - Enable the guest portal on the guest SSID (e.g. "DDC Free Wifi").
+**The External Portal Server field only accepts a plain IPv4 address** (no `https://`, no domain, no port, no path).
+UniFi then sends guests to `http://<that-IP>/guest/s/<site-id>/?id=...` - always on port 80 at the web root of that IP.
+So the server must answer **plain HTTP on that IP** at `/guest/s/<site-id>/`. If the app lives in a sub-folder (e.g. `/portal/public/`), add a rewrite at the web root of the site that answers on the IP:
+
+Apache (`.htaccess` in the document root, or in the vhost for the IP):
+```
+RewriteEngine On
+RewriteRule ^guest/s/([^/]+)/?$ portal/public/guest/index.php?site=$1 [QSA,L]
+```
+nginx:
+```
+location ~ ^/guest/s/([^/]+)/? {
+    fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME /var/www/html/portal/public/guest/index.php;
+    fastcgi_param SCRIPT_NAME /portal/public/guest/index.php;
+    fastcgi_param QUERY_STRING site=$1&$args;
+}
+```
+Test from a phone/PC: `http://<IP>/guest/s/default/?id=aa:bb:cc:dd:ee:ff` must show the portal. If the domain is behind a proxy/CDN (e.g. Cloudflare), use the origin server's real IPv4, and make sure port 80 answers for that IP.
+(If the page's logo/API calls ever 404, set the env var `PORTAL_BASE=/portal/public`.)
+
 Guests are redirected to `/guest/s/<site-id>/?id=<mac>&ap=<ap-mac>&ssid=...&url=...`.
 **Site IDs must be unique across controllers** (yours are: default, z1qqymab, 5n1pz4m9, dqevxwsa) - the portal uses the site ID to find the network.
 

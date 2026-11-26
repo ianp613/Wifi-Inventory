@@ -39,6 +39,17 @@ if ($preview) {
     }
 }
 
+/* ---------- base URL of the app (works when UniFi hits /guest/s/<site>/ via a rewrite, or in a sub-folder) ---------- */
+$base = '';
+if (preg_match('#^(.*)/guest/index\.php$#', (string)($_SERVER['SCRIPT_NAME'] ?? ''), $m)) {
+    $base = $m[1];
+} elseif (preg_match('#^(.*?)/guest/#', (string)parse_url((string)($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH), $m)) {
+    $base = $m[1];
+}
+if (getenv('PORTAL_BASE') !== false) {
+    $base = rtrim((string)getenv('PORTAL_BASE'), '/');
+}
+
 /* ---------- theme ---------- */
 function hex_rgb(string $hex): string
 {
@@ -48,7 +59,7 @@ function hex_rgb(string $hex): string
 function bg_css(array $s): string
 {
     if ($s['portal_bg_type'] === 'image' && $s['portal_bg_image'] !== '') {
-        return "url('../uploads/" . h($s['portal_bg_image']) . "') center/cover no-repeat fixed, " . $s['portal_bg_color'];
+        return "url('" . h($GLOBALS['base']) . "/uploads/" . h($s['portal_bg_image']) . "') center/cover no-repeat fixed, " . $s['portal_bg_color'];
     }
     if ($s['portal_bg_type'] === 'gradient') {
         return 'linear-gradient(135deg,' . $s['portal_bg_color'] . ',' . $s['portal_bg_color2'] . ') fixed';
@@ -62,8 +73,8 @@ $fonts = [
     'mono' => 'ui-monospace,Menlo,Consolas,monospace',
 ];
 $sub = str_replace('{network}', $netName, $s['portal_subtitle']);
-$logo = $s['portal_logo'] !== '' ? '../uploads/' . $s['portal_logo'] : '';
-$state = ['view' => $view, 'remaining' => $remaining, 'ctx' => $ctxToken, 'preview' => $preview,
+$logo = $s['portal_logo'] !== '' ? $base . '/uploads/' . $s['portal_logo'] : '';
+$state = ['base' => $base, 'view' => $view, 'remaining' => $remaining, 'ctx' => $ctxToken, 'preview' => $preview,
     'success' => ['title' => $s['portal_success_title'], 'message' => $s['portal_success_message']],
     'cooldownMsg' => $s['portal_cooldown_message']];
 ?>
@@ -185,7 +196,7 @@ label{display:block;text-align:center;font-size:1rem;font-weight:700;margin:18px
   }
   function post(body) {
     body.ctx = S.ctx;
-    return fetch('../portal/api.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+    return fetch(S.base + '/portal/api.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
       .then(function (r) { return r.json(); });
   }
   function connected(res) {
@@ -222,7 +233,7 @@ label{display:block;text-align:center;font-size:1rem;font-weight:700;margin:18px
       r.setProperty('--font', { system: 'system-ui,-apple-system,"Segoe UI",Roboto,sans-serif', serif: 'Georgia,serif', rounded: '"Trebuchet MS","Segoe UI",sans-serif', mono: 'ui-monospace,Menlo,Consolas,monospace' }[s.portal_font]);
       var bg = s.portal_bg_color;
       if (s.portal_bg_type === 'gradient') bg = 'linear-gradient(135deg,' + s.portal_bg_color + ',' + s.portal_bg_color2 + ') fixed';
-      if (s.portal_bg_type === 'image' && s.portal_bg_image) bg = "url('../uploads/" + s.portal_bg_image + "') center/cover no-repeat fixed, " + s.portal_bg_color;
+      if (s.portal_bg_type === 'image' && s.portal_bg_image) bg = "url('" + S.base + "/uploads/" + s.portal_bg_image + "') center/cover no-repeat fixed, " + s.portal_bg_color;
       document.body.style.background = bg;
       document.querySelectorAll('[data-bind]').forEach(function (el) {
         var k = el.getAttribute('data-bind'); if (s[k] !== undefined) el.textContent = s[k];
@@ -232,7 +243,7 @@ label{display:block;text-align:center;font-size:1rem;font-weight:700;margin:18px
       $('cd-msg').textContent = s.portal_cooldown_message.replace('{time}', '29m');
       $('terms').classList.toggle('hidden', !s.portal_terms); $('foot').classList.toggle('hidden', !s.portal_footer);
       r.setProperty('--footer', s.portal_footer_color); r.setProperty('--shadow', +s.portal_card_opacity < 5 ? 'none' : '0 20px 60px rgba(0,0,0,.28)');
-      $('logo').classList.toggle('hidden', !s.portal_logo); if (s.portal_logo) $('logo').src = '../uploads/' + s.portal_logo;
+      $('logo').classList.toggle('hidden', !s.portal_logo); if (s.portal_logo) $('logo').src = S.base + '/uploads/' + s.portal_logo;
       $('custom-css').textContent = (s.portal_custom_css || '').replace(/<\/style/gi, '');
       if (view) show(view);
     }

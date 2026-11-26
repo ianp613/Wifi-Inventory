@@ -1,0 +1,10 @@
+# Put this file in the folder that is the web root of free-wifi.ddpo-fpo.uk
+# (the folder that contains app/, data/, public/, bin/).
+Options -Indexes
+RewriteEngine On
+
+# never serve internals (database with controller passwords, source, scripts)
+RewriteRule ^(app|data|bin|dev)(/|$) - [F,L]
+
+# UniFi sends guests to /guest/s/<site-id>/?id=<mac>&ap=...  -> the portal page
+RewriteRule ^guest/s/([^/]+)/?.*$ public/guest/index.php?site=$1 [QSA,L]

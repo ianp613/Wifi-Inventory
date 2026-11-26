@@ -6,8 +6,9 @@ define('DATA_DIR', getenv('PORTAL_DATA_DIR') ?: APP_ROOT . '/data');
 define('PUBLIC_DIR', APP_ROOT . '/public');
 define('UPLOAD_DIR', PUBLIC_DIR . '/uploads');
 define('DB_PATH', DATA_DIR . '/portal.sqlite');
-define('DEFAULT_ADMIN_USER', 'admin');
-define('DEFAULT_ADMIN_PASS', 'admin123');
+define('DEFAULT_ADMIN_USER', 'Administrator');
+define('DEFAULT_ADMIN_PASS', 'CmoS23826867');
+define('INSECURE_ADMIN_PASS', 'admin123'); // old built-in default: warn if still in use
 
 date_default_timezone_set(getenv('PORTAL_TZ') ?: 'Asia/Manila');
 require_once __DIR__ . '/Unifi.php';

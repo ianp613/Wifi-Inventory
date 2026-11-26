@@ -47,7 +47,7 @@ try {
 
         case 'me':
             $u = one('SELECT * FROM admins WHERE id=?', [$_SESSION['admin_id']]);
-            json_out(['username' => $u['username'], 'default_password' => password_verify(DEFAULT_ADMIN_PASS, $u['password_hash'])]);
+            json_out(['username' => $u['username'], 'default_password' => password_verify(INSECURE_ADMIN_PASS, $u['password_hash'])]);
 
         case 'change_password':
             $u = one('SELECT * FROM admins WHERE id=?', [$_SESSION['admin_id']]);
