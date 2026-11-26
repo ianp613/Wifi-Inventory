@@ -18,9 +18,14 @@ async function api(action, { params = {}, body = null } = {}) {
     else { opt.headers['Content-Type'] = 'application/json'; opt.body = JSON.stringify(body); }
   }
   const r = await fetch('api.php?' + qs, opt);
-  let j;
-  try { j = await r.json(); } catch { throw new Error('Unexpected server response'); }
+  const text = await r.text();
+  let j = null;
+  try { j = JSON.parse(text); } catch { /* not JSON */ }
   if (r.status === 401) { location.reload(); throw new Error('Signed out'); }
+  if (!j || typeof j !== 'object') {
+    const snippet = text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 160);
+    throw new Error(`Server returned HTTP ${r.status}${snippet ? ': ' + snippet : ' with an empty reply (the web server or proxy stopped before PHP answered)'}`);
+  }
   if (!r.ok || j.error) throw new Error(j.error || 'HTTP ' + r.status);
   return j;
 }
